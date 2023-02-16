@@ -200,8 +200,7 @@ def test_save_json_file_unsupported_type(json_test_file: str) -> None:
 def test_load_json_file_non_exist(json_test_file: str) -> None:
     """Test the load_json_file function with non existing file"""
     assert not os.path.isfile(json_test_file)
-    content = load_json_file(json_test_file)
-    assert not content
+    assert not load_json_file(json_test_file)
 
 
 # Start testing the yaml file_helper functions
@@ -292,8 +291,7 @@ def test_save_yaml_file_unsupported_type(yaml_test_file: str) -> None:
 def test_load_yaml_file_non_exist(yaml_test_file: str) -> None:
     """Test the load_yaml_file function with non existing file"""
     assert not os.path.isfile(yaml_test_file)
-    content = load_yaml_file(yaml_test_file)
-    assert not content
+    assert not load_yaml_file(yaml_test_file)
 
 
 # Start testing the create_dir function
