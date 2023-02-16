@@ -1,0 +1,37 @@
+- type: count
+  scope: vdom
+  path: /leaf_81/leaf_82
+  checks:
+    gt: 1
+    eq: 2
+    lt: 3
+
+- type: exist
+  scope: global
+  path: /system/global
+  checks: 
+    option_1: true
+    option_2: true
+    option_99: false
+
+- type: value
+  name: value_everything_ok
+  scope: global
+  path: /system/global
+  checks: 
+    option_1: value_1
+    option_2: value_2
+    option_3: 3
+
+- type: value_in_list
+  name: check_if_value_in_list
+  scope: vdom
+  path: /leaf_81/leaf_82
+  checks:
+    id: 1
+
+- type: exist
+  scope: vdom
+  path: /system/vdom_setting
+  checks: 
+    option_1: true

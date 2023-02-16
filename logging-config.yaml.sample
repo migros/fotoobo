@@ -1,0 +1,96 @@
+---
+version: 1
+# WARNING: This is only needed for extended logging needs!
+# Basic logging can be configured in fotoobo.yaml
+#
+# This is a detailed logging configuration for fotoobo
+#
+# See https://docs.python.org/3/library/logging.config.html#configuration-dictionary-schema
+# for details on the configuration file format.
+#
+# Please note following specifics to fotoobo logging:
+# - fotoobo uses the following two loggers:
+#     - "audit" for audit logs
+#     - "fotoobo" for any other logs
+# - The following external loggers may also be configured up to your desire:
+#     - "requests"
+#     - "urllib3"
+#     - "urllib3.connectionpool" (Note: this one is very, very chatty if the loglevel is set to
+#        anything other than "CRITICAL")
+
+loggers:
+  # Configure the fotoobo logger
+  fotoobo:
+    level: DEBUG
+    handlers: [console, file, syslog]
+    propagate: no
+
+  # Configure the fotoobo audit logger
+  audit:
+    level: DEBUG
+    handlers: [console, audit_file, audit_syslog]
+    propagate: no
+
+
+handlers:
+  # For console output
+  console:
+    class: logging.StreamHandler
+    level: DEBUG
+    formatter: simple
+    stream: ext://sys.stdout
+
+  # Output logs to a file
+  file:
+    class: logging.handlers.RotatingFileHandler
+    level: DEBUG
+    formatter: precise
+    filename: fotoobo.log
+    maxBytes: 10485760 # 10 MByte
+    backupCount: 3
+
+  # Output logs to syslog
+  syslog:
+    class: logging.handlers.SysLogHandler
+    level: DEBUG
+    formatter: syslog
+    address:
+      - 'localhost'
+      - 514
+    socktype: 2   # Use 1 for TCP and 2 for UDP
+
+  # Output audit logs to a (separate) file
+  audit_file:
+    class: logging.handlers.RotatingFileHandler
+    level: INFO
+    formatter: precise_audit
+    filename: fotoobo-audit.log
+    maxBytes: 10485760 # 10 MByte
+    backupCount: 5
+
+  # Output audit logs to syslog
+  audit_syslog:
+    class: logging.handlers.SysLogHandler
+    level: DEBUG
+    formatter: syslog_audit
+    address:
+      - 'localhost'
+      - 514
+    socktype: 2   # Use 1 for TCP and 2 for UDP
+
+formatters:
+  # A simple formatter, usually needed for console output
+  simple:
+    format: '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+  # A precise formatter, usually needed for file output
+  precise:
+    format: '%(asctime)s - %(name)s - %(levelname)s - %(filename)s:%(lineno)d: %(message)s'
+  # A precise formatter for audit logs, usually needed for file output
+  precise_audit:
+    format: '%(asctime)s - AUDIT - %(filename)s:%(lineno)d: %(message)s'
+  # The syslog formatter for general log messages
+  syslog:
+    format: '%(levelname)s:%(name)s:%(message)s'
+  # The syslog formatter for audit logs
+  syslog_audit:
+    format: 'AUDIT:fotoobo:%(message)s'

@@ -1,0 +1,171 @@
+"""
+Testing the cli app
+"""
+# pylint: disable=redefined-outer-name
+from typing import Generator, List
+from unittest.mock import MagicMock
+
+import pytest
+from _pytest.monkeypatch import MonkeyPatch
+from typer.testing import CliRunner
+
+from fotoobo.cli.main import app
+from fotoobo.helpers.cli import parse_help_output
+
+runner = CliRunner()
+
+
+@pytest.fixture
+def fix_config() -> Generator[None, None, None]:
+    """
+    This fixture is used to fix a broken config after a test.
+
+    Whenever a test is invoked which uses a broken config all subsequent test would fail because
+    of that broken config. This fixture is here to load a valid config again."""
+    yield
+    runner.invoke(app, ["-c", "tests/fotoobo.yaml", "greet"])
+
+
+@pytest.fixture
+def greet_string() -> str:
+    """The string printed when the hidden command greet is used"""
+    string = "🌼Aloha🌼, ⚽Hola⚽, ✨Bonjour✨, ⚡Hallo⚡,"
+    string += " ☀Ciao☀, 🌟Konnichiwa🌟, 🎉Howdy-doody🎉!"
+    return string
+
+
+def test_cli_app_no_args() -> None:
+    """Test main cli without issuing any arguments"""
+    result = runner.invoke(app, [])
+    assert result.exit_code == 2
+    assert "Usage: callback [OPTIONS] COMMAND [ARGS]..." in result.stdout
+    assert "Try 'callback -h' for help." in result.stdout
+    assert "Error" in result.stdout
+    assert "Missing command" in result.stdout
+
+
+def test_cli_app_help() -> None:
+    """Test main cli help"""
+    result = runner.invoke(app, ["-h"])
+    assert result.exit_code == 0
+    arguments, options, commands = parse_help_output(result.stdout)
+    assert not arguments
+    assert options == {
+        "-c",
+        "--config",
+        "-h",
+        "--help",
+        "--install-completion",
+        "-l",
+        "--log",
+        "--loglevel",
+        "--nologo",
+        "--show-completion",
+        "-V",
+        "--version",
+    }
+    assert set(commands) == {"convert", "ems", "faz", "fgt", "fmg", "get"}
+
+
+def test_cli_app_get_help() -> None:
+    """Test cli help for get"""
+    result = runner.invoke(app, ["get", "-h"])
+    assert result.exit_code == 0
+    arguments, options, commands = parse_help_output(result.stdout)
+    assert not arguments
+    assert options == {"-h", "--help"}
+    assert set(commands) == {"commands", "inventory", "version"}
+
+
+@pytest.mark.parametrize(
+    "cli_call",
+    (
+        pytest.param(["get", "version"], id="get version"),
+        pytest.param(["-V"], id="option -V"),
+        pytest.param(["--version"], id="option --version"),
+    ),
+)
+def test_cli_app_get_version(cli_call: List[str]) -> None:
+    """Test main cli command: get version"""
+    result = runner.invoke(app, cli_call)
+    assert result.exit_code == 0
+    assert "fotoobo version" in result.stdout
+
+
+def test_cli_app_get_inventory(monkeypatch: MonkeyPatch) -> None:
+    """Test main cli command: show inventory"""
+    monkeypatch.setattr(
+        "fotoobo.inventory.inventory.load_yaml_file",
+        MagicMock(return_value={"dummy": {"hostname": "dummy.local"}}),
+    )
+    result = runner.invoke(app, ["get", "inventory"])
+    assert result.exit_code == 0
+    assert "fotoobo inventory" in result.stdout
+
+
+def test_cli_app_greet(greet_string: str) -> None:
+    """Test cli app greet"""
+    result = runner.invoke(app, ["greet"])
+    assert result.exit_code == 0
+    assert greet_string in result.stdout
+
+
+def test_cli_app_greet_alice(greet_string: str) -> None:
+    """Test cli app greet alice"""
+    result = runner.invoke(app, ["greet", "Alice"])
+    assert result.exit_code == 0
+    assert "Hi Alice, " + greet_string in result.stdout
+
+
+def test_cli_app_greet_with_bye(greet_string: str) -> None:
+    """Test cli app greet with option --bye set"""
+    result = runner.invoke(app, ["greet", "-b"])
+    assert result.exit_code == 0
+    assert greet_string in result.stdout
+    assert "Good Bye" in result.stdout
+
+
+def test_cli_app_greet_help() -> None:
+    """Test cli help for greet"""
+    result = runner.invoke(app, ["greet", "-h"])
+    assert result.exit_code == 0
+    arguments, options, commands = parse_help_output(result.stdout)
+    assert set(arguments) == {"name"}
+    assert options == {"-b", "--bye", "-l", "--log", "-h", "--help"}
+    assert not commands
+
+
+def test_cli_main_logging() -> None:
+    """test the logging switch"""
+    result = runner.invoke(app, ["greet"])
+    assert result.exit_code == 0
+    result = runner.invoke(app, ["-l", "greet"])
+    assert result.exit_code == 0
+
+
+def test_cli_main_logging_log_level() -> None:
+    """test the log level setting"""
+    result = runner.invoke(app, ["-l", "--loglevel", "INFO", "greet"])
+    assert result.exit_code == 0
+    result = runner.invoke(app, ["-l", "--loglevel", "DUMMY", "greet"])
+    assert result.exit_code == 1
+
+
+def test_cli_main_logo() -> None:
+    """test the logo presence"""
+    result = runner.invoke(app, ["get", "version"])
+    assert result.exit_code == 0
+    assert " f o t o o b o " in result.stdout
+
+
+def test_cli_main_no_logo() -> None:
+    """test the logo absence with --nologo"""
+    result = runner.invoke(app, ["--nologo", "get", "version"])
+    assert result.exit_code == 0
+    assert not " f o t o o b o " in result.stdout
+
+
+def test_cli_main_broken(fix_config: None) -> None:  # pylint: disable=unused-argument
+    """Test when invoking with broken fotoobo.yaml config"""
+    result = runner.invoke(app, ["-c", "tests/fotoobo_broken.yaml", "greet"])
+    assert result.exit_code == 1

@@ -1,0 +1,1508 @@
+<svg host="65bd71144e" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="882px" height="3091px" viewBox="-0.5 -0.5 882 3091" content="&lt;mxfile&gt;&lt;diagram id=&quot;tGxWOeggkSYwsEDS8Mhp&quot; name=&quot;Seite-1&quot;&gt;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&lt;/diagram&gt;&lt;/mxfile&gt;">
+    <defs/>
+    <g>
+        <rect x="360" y="80" width="520" height="240" fill="none" stroke="rgb(0, 0, 0)" pointer-events="all"/>
+        <g fill="rgb(0, 0, 0)" font-family="Lucida Console" font-size="10px">
+            <text x="366.5" y="95.5">
+                :[
+            </text>
+            <text x="366.5" y="107.5">
+                :    {
+            </text>
+            <text x="366.5" y="119.5">
+                :        "method": "set",
+            </text>
+            <text x="366.5" y="131.5">
+                :        "params": [
+            </text>
+            <text x="366.5" y="143.5">
+                :            {
+            </text>
+            <text x="366.5" y="155.5">
+                :                "data": {
+            </text>
+            <text x="366.5" y="167.5">
+                :                    "name": "host_name",
+            </text>
+            <text x="366.5" y="179.5">
+                :                    "comment": "host comment",
+            </text>
+            <text x="366.5" y="191.5">
+                :                    "subnet": "10.20.30.40/32",
+            </text>
+            <text x="366.5" y="203.5">
+                :                    "uuid": "1111-1111-1111-1111"
+            </text>
+            <text x="366.5" y="215.5">
+                :                },
+            </text>
+            <text x="366.5" y="227.5">
+                :                "url": "/pm/config/{adom}/obj/firewall/address/host_name"
+            </text>
+            <text x="366.5" y="239.5">
+                :            }
+            </text>
+            <text x="366.5" y="251.5">
+                :        ],
+            </text>
+            <text x="366.5" y="263.5">
+                :        "session": "",
+            </text>
+            <text x="366.5" y="275.5">
+                :        "id": 1
+            </text>
+            <text x="366.5" y="287.5">
+                :    }
+            </text>
+            <text x="366.5" y="299.5">
+                :]
+            </text>
+        </g>
+        <path d="M 280 170 L 473.63 170" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="stroke"/>
+        <path d="M 478.88 170 L 471.88 173.5 L 473.63 170 L 471.88 166.5 Z" fill="rgb(0, 0, 0)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="all"/>
+        <path d="M 280 180 L 473.63 180" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="stroke"/>
+        <path d="M 478.88 180 L 471.88 183.5 L 473.63 180 L 471.88 176.5 Z" fill="rgb(0, 0, 0)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="all"/>
+        <path d="M 280 192 L 473.63 192" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="stroke"/>
+        <path d="M 478.88 192 L 471.88 195.5 L 473.63 192 L 471.88 188.5 Z" fill="rgb(0, 0, 0)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="all"/>
+        <path d="M 640 160 L 770 160 Q 780 160 780 170 L 780 203.63" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="stroke"/>
+        <path d="M 780 208.88 L 776.5 201.88 L 780 203.63 L 783.5 201.88 Z" fill="rgb(0, 0, 0)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="all"/>
+        <rect x="0" y="120" width="320" height="140" fill="none" stroke="rgb(0, 0, 0)" pointer-events="all"/>
+        <g fill="rgb(0, 0, 0)" font-family="Lucida Console" font-size="10px">
+            <text x="1.5" y="135.5">
+                :{
+            </text>
+            <text x="1.5" y="147.5">
+                :    "hosts": [
+            </text>
+            <text x="1.5" y="159.5">
+                :        {
+            </text>
+            <text x="1.5" y="171.5">
+                :            "name": "host_name",
+            </text>
+            <text x="1.5" y="183.5">
+                :            "comments": "host comment",
+            </text>
+            <text x="1.5" y="195.5">
+                :            "ipv4-address": "10.20.30.40",
+            </text>
+            <text x="1.5" y="207.5">
+                :            "uid": "1111-1111-1111-1111"
+            </text>
+            <text x="1.5" y="219.5">
+                :        }
+            </text>
+            <text x="1.5" y="231.5">
+                :    ]
+            </text>
+            <text x="1.5" y="243.5">
+                :}
+            </text>
+        </g>
+        <rect x="0" y="100" width="200" height="20" fill="none" stroke="rgb(0, 0, 0)" pointer-events="all"/>
+        <g transform="translate(-0.5 -0.5)">
+            <switch>
+                <foreignObject pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility" style="overflow: visible; text-align: left;">
+                    <div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe center; justify-content: unsafe flex-start; width: 193px; height: 1px; padding-top: 110px; margin-left: 7px;">
+                        <div data-drawio-colors="color: rgb(0, 0, 0); " style="box-sizing: border-box; font-size: 0px; text-align: left;">
+                            <div style="display: inline-block; font-size: 10px; font-family: &quot;Lucida Console&quot;; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">
+                                exported json from Checkpoint
+                            </div>
+                        </div>
+                    </div>
+                </foreignObject>
+                <text x="7" y="113" fill="rgb(0, 0, 0)" font-family="Lucida Console" font-size="10px">
+                    exported json from Checkpoint
+                </text>
+            </switch>
+        </g>
+        <rect x="360" y="60" width="200" height="20" fill="none" stroke="rgb(0, 0, 0)" pointer-events="all"/>
+        <g transform="translate(-0.5 -0.5)">
+            <switch>
+                <foreignObject pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility" style="overflow: visible; text-align: left;">
+                    <div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe center; justify-content: unsafe flex-start; width: 193px; height: 1px; padding-top: 70px; margin-left: 367px;">
+                        <div data-drawio-colors="color: rgb(0, 0, 0); " style="box-sizing: border-box; font-size: 0px; text-align: left;">
+                            <div style="display: inline-block; font-size: 10px; font-family: &quot;Lucida Console&quot;; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">
+                                converted json for Fortinet
+                            </div>
+                        </div>
+                    </div>
+                </foreignObject>
+                <text x="367" y="73" fill="rgb(0, 0, 0)" font-family="Lucida Console" font-size="10px">
+                    converted json for Fortinet
+                </text>
+            </switch>
+        </g>
+        <rect x="0" y="0" width="320" height="40" fill="none" stroke="none" pointer-events="all"/>
+        <g transform="translate(-0.5 -0.5)">
+            <switch>
+                <foreignObject pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility" style="overflow: visible; text-align: left;">
+                    <div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe center; justify-content: unsafe flex-start; width: 318px; height: 1px; padding-top: 20px; margin-left: 2px;">
+                        <div data-drawio-colors="color: rgb(0, 0, 0); " style="box-sizing: border-box; font-size: 0px; text-align: left;">
+                            <div style="display: inline-block; font-size: 30px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; text-decoration: underline; white-space: normal; overflow-wrap: normal;">
+                                Hosts
+                            </div>
+                        </div>
+                    </div>
+                </foreignObject>
+                <text x="2" y="29" fill="rgb(0, 0, 0)" font-family="Helvetica" font-size="30px" text-decoration="underline">
+                    Hosts
+                </text>
+            </switch>
+        </g>
+        <rect x="0" y="320" width="320" height="40" fill="none" stroke="none" pointer-events="all"/>
+        <g transform="translate(-0.5 -0.5)">
+            <switch>
+                <foreignObject pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility" style="overflow: visible; text-align: left;">
+                    <div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe center; justify-content: unsafe flex-start; width: 318px; height: 1px; padding-top: 340px; margin-left: 2px;">
+                        <div data-drawio-colors="color: rgb(0, 0, 0); " style="box-sizing: border-box; font-size: 0px; text-align: left;">
+                            <div style="display: inline-block; font-size: 30px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; text-decoration: underline; white-space: normal; overflow-wrap: normal;">
+                                Networks
+                            </div>
+                        </div>
+                    </div>
+                </foreignObject>
+                <text x="2" y="349" fill="rgb(0, 0, 0)" font-family="Helvetica" font-size="30px" text-decoration="underline">
+                    Networks
+                </text>
+            </switch>
+        </g>
+        <rect x="0" y="640" width="320" height="40" fill="none" stroke="none" pointer-events="all"/>
+        <g transform="translate(-0.5 -0.5)">
+            <switch>
+                <foreignObject pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility" style="overflow: visible; text-align: left;">
+                    <div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe center; justify-content: unsafe flex-start; width: 318px; height: 1px; padding-top: 660px; margin-left: 2px;">
+                        <div data-drawio-colors="color: rgb(0, 0, 0); " style="box-sizing: border-box; font-size: 0px; text-align: left;">
+                            <div style="display: inline-block; font-size: 30px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; text-decoration: underline; white-space: normal; overflow-wrap: normal;">
+                                Ranges
+                            </div>
+                        </div>
+                    </div>
+                </foreignObject>
+                <text x="2" y="669" fill="rgb(0, 0, 0)" font-family="Helvetica" font-size="30px" text-decoration="underline">
+                    Ranges
+                </text>
+            </switch>
+        </g>
+        <rect x="0" y="960" width="320" height="40" fill="none" stroke="none" pointer-events="all"/>
+        <g transform="translate(-0.5 -0.5)">
+            <switch>
+                <foreignObject pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility" style="overflow: visible; text-align: left;">
+                    <div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe center; justify-content: unsafe flex-start; width: 318px; height: 1px; padding-top: 980px; margin-left: 2px;">
+                        <div data-drawio-colors="color: rgb(0, 0, 0); " style="box-sizing: border-box; font-size: 0px; text-align: left;">
+                            <div style="display: inline-block; font-size: 30px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; text-decoration: underline; white-space: normal; overflow-wrap: normal;">
+                                Groups
+                            </div>
+                        </div>
+                    </div>
+                </foreignObject>
+                <text x="2" y="989" fill="rgb(0, 0, 0)" font-family="Helvetica" font-size="30px" text-decoration="underline">
+                    Groups
+                </text>
+            </switch>
+        </g>
+        <rect x="0" y="2040" width="320" height="40" fill="none" stroke="none" pointer-events="all"/>
+        <g transform="translate(-0.5 -0.5)">
+            <switch>
+                <foreignObject pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility" style="overflow: visible; text-align: left;">
+                    <div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe center; justify-content: unsafe flex-start; width: 318px; height: 1px; padding-top: 2060px; margin-left: 2px;">
+                        <div data-drawio-colors="color: rgb(0, 0, 0); " style="box-sizing: border-box; font-size: 0px; text-align: left;">
+                            <div style="display: inline-block; font-size: 30px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; text-decoration: underline; white-space: normal; overflow-wrap: normal;">
+                                Services TCP
+                            </div>
+                        </div>
+                    </div>
+                </foreignObject>
+                <text x="2" y="2069" fill="rgb(0, 0, 0)" font-family="Helvetica" font-size="30px" text-decoration="underline">
+                    Services TCP
+                </text>
+            </switch>
+        </g>
+        <rect x="0" y="440" width="320" height="140" fill="none" stroke="rgb(0, 0, 0)" pointer-events="all"/>
+        <g fill="rgb(0, 0, 0)" font-family="Lucida Console" font-size="10px">
+            <text x="1.5" y="455.5">
+                :{
+            </text>
+            <text x="1.5" y="467.5">
+                :    "networks": [
+            </text>
+            <text x="1.5" y="479.5">
+                :        {
+            </text>
+            <text x="1.5" y="491.5">
+                :            "name": "network_name",
+            </text>
+            <text x="1.5" y="503.5">
+                :            "comments": "network comment",
+            </text>
+            <text x="1.5" y="515.5">
+                :            "subnet4": "10.20.30.0",
+            </text>
+            <text x="1.5" y="527.5">
+                :            "mask-length4": 24,
+            </text>
+            <text x="1.5" y="539.5">
+                :            "uid": "1111-1111-1111-1111"
+            </text>
+            <text x="1.5" y="551.5">
+                :        }
+            </text>
+            <text x="1.5" y="563.5">
+                :    ]
+            </text>
+            <text x="1.5" y="575.5">
+                :}
+            </text>
+        </g>
+        <rect x="0" y="420" width="200" height="20" fill="none" stroke="rgb(0, 0, 0)" pointer-events="all"/>
+        <g transform="translate(-0.5 -0.5)">
+            <switch>
+                <foreignObject pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility" style="overflow: visible; text-align: left;">
+                    <div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe center; justify-content: unsafe flex-start; width: 193px; height: 1px; padding-top: 430px; margin-left: 7px;">
+                        <div data-drawio-colors="color: rgb(0, 0, 0); " style="box-sizing: border-box; font-size: 0px; text-align: left;">
+                            <div style="display: inline-block; font-size: 10px; font-family: &quot;Lucida Console&quot;; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">
+                                exported json from Checkpoint
+                            </div>
+                        </div>
+                    </div>
+                </foreignObject>
+                <text x="7" y="433" fill="rgb(0, 0, 0)" font-family="Lucida Console" font-size="10px">
+                    exported json from Checkpoint
+                </text>
+            </switch>
+        </g>
+        <rect x="360" y="400" width="520" height="240" fill="none" stroke="rgb(0, 0, 0)" pointer-events="all"/>
+        <g fill="rgb(0, 0, 0)" font-family="Lucida Console" font-size="10px">
+            <text x="366.5" y="415.5">
+                :[
+            </text>
+            <text x="366.5" y="427.5">
+                :    {
+            </text>
+            <text x="366.5" y="439.5">
+                :        "method": "set",
+            </text>
+            <text x="366.5" y="451.5">
+                :        "params": [
+            </text>
+            <text x="366.5" y="463.5">
+                :            {
+            </text>
+            <text x="366.5" y="475.5">
+                :                "data": {
+            </text>
+            <text x="366.5" y="487.5">
+                :                    "name": "network_name",
+            </text>
+            <text x="366.5" y="499.5">
+                :                    "comment": "network comment",
+            </text>
+            <text x="366.5" y="511.5">
+                :                    "subnet": "10.20.30.0/24",
+            </text>
+            <text x="366.5" y="523.5">
+                :
+            </text>
+            <text x="366.5" y="535.5">
+                :                    "uuid": "1111-1111-1111-1111"
+            </text>
+            <text x="366.5" y="547.5">
+                :                },
+            </text>
+            <text x="366.5" y="559.5">
+                :                "url": "/pm/config/{adom}/obj/firewall/address/network_name"
+            </text>
+            <text x="366.5" y="571.5">
+                :            }
+            </text>
+            <text x="366.5" y="583.5">
+                :        ],
+            </text>
+            <text x="366.5" y="595.5">
+                :        "session": "",
+            </text>
+            <text x="366.5" y="607.5">
+                :        "id": 1
+            </text>
+            <text x="366.5" y="619.5">
+                :    }
+            </text>
+            <text x="366.5" y="631.5">
+                :}
+            </text>
+        </g>
+        <rect x="360" y="380" width="200" height="20" fill="none" stroke="rgb(0, 0, 0)" pointer-events="all"/>
+        <g transform="translate(-0.5 -0.5)">
+            <switch>
+                <foreignObject pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility" style="overflow: visible; text-align: left;">
+                    <div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe center; justify-content: unsafe flex-start; width: 193px; height: 1px; padding-top: 390px; margin-left: 367px;">
+                        <div data-drawio-colors="color: rgb(0, 0, 0); " style="box-sizing: border-box; font-size: 0px; text-align: left;">
+                            <div style="display: inline-block; font-size: 10px; font-family: &quot;Lucida Console&quot;; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">
+                                converted json for Fortinet
+                            </div>
+                        </div>
+                    </div>
+                </foreignObject>
+                <text x="367" y="393" fill="rgb(0, 0, 0)" font-family="Lucida Console" font-size="10px">
+                    converted json for Fortinet
+                </text>
+            </switch>
+        </g>
+        <path d="M 280 490 L 473.63 490" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="stroke"/>
+        <path d="M 478.88 490 L 471.88 493.5 L 473.63 490 L 471.88 486.5 Z" fill="rgb(0, 0, 0)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="all"/>
+        <path d="M 280 500 L 473.63 500" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="stroke"/>
+        <path d="M 478.88 500 L 471.88 503.5 L 473.63 500 L 471.88 496.5 Z" fill="rgb(0, 0, 0)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="all"/>
+        <path d="M 280 510 L 473.63 510" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="stroke"/>
+        <path d="M 478.88 510 L 471.88 513.5 L 473.63 510 L 471.88 506.5 Z" fill="rgb(0, 0, 0)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="all"/>
+        <path d="M 280 520 L 320 520 Q 330 520 338.94 515.53 L 344.47 512.76 Q 350 510 360 510 L 473.63 510" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="stroke"/>
+        <path d="M 478.88 510 L 471.88 513.5 L 473.63 510 L 471.88 506.5 Z" fill="rgb(0, 0, 0)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="all"/>
+        <path d="M 680 480 L 770 480 Q 780 480 780 490 L 780 533.63" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="stroke"/>
+        <path d="M 780 538.88 L 776.5 531.88 L 780 533.63 L 783.5 531.88 Z" fill="rgb(0, 0, 0)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="all"/>
+        <rect x="0" y="760" width="320" height="160" fill="none" stroke="rgb(0, 0, 0)" pointer-events="all"/>
+        <g fill="rgb(0, 0, 0)" font-family="Lucida Console" font-size="10px">
+            <text x="1.5" y="775.5">
+                :{
+            </text>
+            <text x="1.5" y="787.5">
+                :    "address_ranges": [
+            </text>
+            <text x="1.5" y="799.5">
+                :        {
+            </text>
+            <text x="1.5" y="811.5">
+                :            "name": "range_name",
+            </text>
+            <text x="1.5" y="823.5">
+                :            "comments": "range comment",
+            </text>
+            <text x="1.5" y="847.5">
+                :            "ipv4-address-first": "10.20.30.44",
+            </text>
+            <text x="1.5" y="859.5">
+                :            "ipv4-address-last": "10.20.30.55",
+            </text>
+            <text x="1.5" y="871.5">
+                :            "uid": "1111-1111-1111-1111"
+            </text>
+            <text x="1.5" y="883.5">
+                :        }
+            </text>
+            <text x="1.5" y="895.5">
+                :    ]
+            </text>
+            <text x="1.5" y="907.5">
+                :}
+            </text>
+        </g>
+        <rect x="0" y="740" width="200" height="20" fill="none" stroke="rgb(0, 0, 0)" pointer-events="all"/>
+        <g transform="translate(-0.5 -0.5)">
+            <switch>
+                <foreignObject pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility" style="overflow: visible; text-align: left;">
+                    <div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe center; justify-content: unsafe flex-start; width: 193px; height: 1px; padding-top: 750px; margin-left: 7px;">
+                        <div data-drawio-colors="color: rgb(0, 0, 0); " style="box-sizing: border-box; font-size: 0px; text-align: left;">
+                            <div style="display: inline-block; font-size: 10px; font-family: &quot;Lucida Console&quot;; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">
+                                exported json from Checkpoint
+                            </div>
+                        </div>
+                    </div>
+                </foreignObject>
+                <text x="7" y="753" fill="rgb(0, 0, 0)" font-family="Lucida Console" font-size="10px">
+                    exported json from Checkpoint
+                </text>
+            </switch>
+        </g>
+        <rect x="360" y="720" width="520" height="260" fill="none" stroke="rgb(0, 0, 0)" pointer-events="all"/>
+        <g fill="rgb(0, 0, 0)" font-family="Lucida Console" font-size="10px">
+            <text x="366.5" y="735.5">
+                :[
+            </text>
+            <text x="366.5" y="747.5">
+                :    {
+            </text>
+            <text x="366.5" y="759.5">
+                :        "method": "set",
+            </text>
+            <text x="366.5" y="771.5">
+                :        "params": [
+            </text>
+            <text x="366.5" y="783.5">
+                :            {
+            </text>
+            <text x="366.5" y="795.5">
+                :                "data": {
+            </text>
+            <text x="366.5" y="807.5">
+                :                    "name": "range_name",
+            </text>
+            <text x="366.5" y="819.5">
+                :                    "comment": "range comment",
+            </text>
+            <text x="366.5" y="831.5">
+                :                    "type": "iprange",
+            </text>
+            <text x="366.5" y="843.5">
+                :                    "start-ip": "10.20.30.44",
+            </text>
+            <text x="366.5" y="855.5">
+                :                    "end-ip": "10.20.30.55",
+            </text>
+            <text x="366.5" y="867.5">
+                :                    "uuid": "1111-1111-1111-1111"
+            </text>
+            <text x="366.5" y="879.5">
+                :                },
+            </text>
+            <text x="366.5" y="891.5">
+                :                "url": "/pm/config/{adom}/obj/firewall/address/range_name"
+            </text>
+            <text x="366.5" y="903.5">
+                :            }
+            </text>
+            <text x="366.5" y="915.5">
+                :        ],
+            </text>
+            <text x="366.5" y="927.5">
+                :        "session": "",
+            </text>
+            <text x="366.5" y="939.5">
+                :        "id": 1
+            </text>
+            <text x="366.5" y="951.5">
+                :    }
+            </text>
+            <text x="366.5" y="963.5">
+                :]
+            </text>
+        </g>
+        <rect x="360" y="700" width="200" height="20" fill="none" stroke="rgb(0, 0, 0)" pointer-events="all"/>
+        <g transform="translate(-0.5 -0.5)">
+            <switch>
+                <foreignObject pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility" style="overflow: visible; text-align: left;">
+                    <div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe center; justify-content: unsafe flex-start; width: 193px; height: 1px; padding-top: 710px; margin-left: 367px;">
+                        <div data-drawio-colors="color: rgb(0, 0, 0); " style="box-sizing: border-box; font-size: 0px; text-align: left;">
+                            <div style="display: inline-block; font-size: 10px; font-family: &quot;Lucida Console&quot;; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">
+                                converted json for Fortinet
+                            </div>
+                        </div>
+                    </div>
+                </foreignObject>
+                <text x="367" y="713" fill="rgb(0, 0, 0)" font-family="Lucida Console" font-size="10px">
+                    converted json for Fortinet
+                </text>
+            </switch>
+        </g>
+        <path d="M 260 810 L 473.63 810" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="stroke"/>
+        <path d="M 478.88 810 L 471.88 813.5 L 473.63 810 L 471.88 806.5 Z" fill="rgb(0, 0, 0)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="all"/>
+        <path d="M 260 820 L 473.63 820" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="stroke"/>
+        <path d="M 478.88 820 L 471.88 823.5 L 473.63 820 L 471.88 816.5 Z" fill="rgb(0, 0, 0)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="all"/>
+        <path d="M 300 840 L 473.63 840" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="stroke"/>
+        <path d="M 478.88 840 L 471.88 843.5 L 473.63 840 L 471.88 836.5 Z" fill="rgb(0, 0, 0)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="all"/>
+        <path d="M 300 850 L 473.63 850" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="stroke"/>
+        <path d="M 478.88 850 L 471.88 853.5 L 473.63 850 L 471.88 846.5 Z" fill="rgb(0, 0, 0)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="all"/>
+        <path d="M 680 800 L 770 800 Q 780 800 780 810 L 780 863.63" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="stroke"/>
+        <path d="M 780 868.88 L 776.5 861.88 L 780 863.63 L 783.5 861.88 Z" fill="rgb(0, 0, 0)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="all"/>
+        <rect x="0" y="1080" width="320" height="180" fill="none" stroke="rgb(0, 0, 0)" pointer-events="all"/>
+        <g fill="rgb(0, 0, 0)" font-family="Lucida Console" font-size="10px">
+            <text x="1.5" y="1095.5">
+                :{
+            </text>
+            <text x="1.5" y="1107.5">
+                :    "groups": [
+            </text>
+            <text x="1.5" y="1119.5">
+                :        {
+            </text>
+            <text x="1.5" y="1131.5">
+                :            "name": "group_name",
+            </text>
+            <text x="1.5" y="1143.5">
+                :            "comments": "group comment",
+            </text>
+            <text x="1.5" y="1155.5">
+                :            "members": [
+            </text>
+            <text x="1.5" y="1167.5">
+                :                "11111111-1111-111111111111",
+            </text>
+            <text x="1.5" y="1179.5">
+                :                "22222222-2222-222222222222"
+            </text>
+            <text x="1.5" y="1191.5">
+                :            ],
+            </text>
+            <text x="1.5" y="1203.5">
+                :            "uid": "1111-1111-1111-1111"
+            </text>
+            <text x="1.5" y="1215.5">
+                :        }
+            </text>
+            <text x="1.5" y="1227.5">
+                :    ]
+            </text>
+            <text x="1.5" y="1239.5">
+                :}
+            </text>
+        </g>
+        <rect x="0" y="1060" width="200" height="20" fill="none" stroke="rgb(0, 0, 0)" pointer-events="all"/>
+        <g transform="translate(-0.5 -0.5)">
+            <switch>
+                <foreignObject pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility" style="overflow: visible; text-align: left;">
+                    <div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe center; justify-content: unsafe flex-start; width: 193px; height: 1px; padding-top: 1070px; margin-left: 7px;">
+                        <div data-drawio-colors="color: rgb(0, 0, 0); " style="box-sizing: border-box; font-size: 0px; text-align: left;">
+                            <div style="display: inline-block; font-size: 10px; font-family: &quot;Lucida Console&quot;; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">
+                                exported json from Checkpoint
+                            </div>
+                        </div>
+                    </div>
+                </foreignObject>
+                <text x="7" y="1073" fill="rgb(0, 0, 0)" font-family="Lucida Console" font-size="10px">
+                    exported json from Checkpoint
+                </text>
+            </switch>
+        </g>
+        <rect x="360" y="1040" width="520" height="260" fill="none" stroke="rgb(0, 0, 0)" pointer-events="all"/>
+        <g fill="rgb(0, 0, 0)" font-family="Lucida Console" font-size="10px">
+            <text x="366.5" y="1055.5">
+                :[
+            </text>
+            <text x="366.5" y="1067.5">
+                :    {
+            </text>
+            <text x="366.5" y="1079.5">
+                :        "method": "set",
+            </text>
+            <text x="366.5" y="1091.5">
+                :        "params": [
+            </text>
+            <text x="366.5" y="1103.5">
+                :            {
+            </text>
+            <text x="366.5" y="1115.5">
+                :                "data": {
+            </text>
+            <text x="366.5" y="1127.5">
+                :                    "name": "group_name",
+            </text>
+            <text x="366.5" y="1139.5">
+                :                    "comment": "group comment",
+            </text>
+            <text x="366.5" y="1151.5">
+                :                    "member": [
+            </text>
+            <text x="366.5" y="1163.5">
+                :                        "group_member_1",
+            </text>
+            <text x="366.5" y="1175.5">
+                :                        "group_member_2"
+            </text>
+            <text x="366.5" y="1187.5">
+                :                    ],
+            </text>
+            <text x="366.5" y="1199.5">
+                :                    "uuid": "1111-1111-1111-1111"
+            </text>
+            <text x="366.5" y="1211.5">
+                :                },
+            </text>
+            <text x="366.5" y="1223.5">
+                :                "url": "/pm/config/{adom}/obj/firewall/addrgrp/group_name"
+            </text>
+            <text x="366.5" y="1235.5">
+                :            }
+            </text>
+            <text x="366.5" y="1247.5">
+                :        ],
+            </text>
+            <text x="366.5" y="1259.5">
+                :        "session": "",
+            </text>
+            <text x="366.5" y="1271.5">
+                :        "id": 1
+            </text>
+            <text x="366.5" y="1283.5">
+                :    }
+            </text>
+            <text x="366.5" y="1295.5">
+                :]
+            </text>
+        </g>
+        <rect x="360" y="1020" width="200" height="20" fill="none" stroke="rgb(0, 0, 0)" pointer-events="all"/>
+        <g transform="translate(-0.5 -0.5)">
+            <switch>
+                <foreignObject pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility" style="overflow: visible; text-align: left;">
+                    <div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe center; justify-content: unsafe flex-start; width: 193px; height: 1px; padding-top: 1030px; margin-left: 367px;">
+                        <div data-drawio-colors="color: rgb(0, 0, 0); " style="box-sizing: border-box; font-size: 0px; text-align: left;">
+                            <div style="display: inline-block; font-size: 10px; font-family: &quot;Lucida Console&quot;; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">
+                                converted json for Fortinet
+                            </div>
+                        </div>
+                    </div>
+                </foreignObject>
+                <text x="367" y="1033" fill="rgb(0, 0, 0)" font-family="Lucida Console" font-size="10px">
+                    converted json for Fortinet
+                </text>
+            </switch>
+        </g>
+        <path d="M 680 1120 L 770 1120 Q 780 1120 780 1130 L 780 1203.63" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="stroke"/>
+        <path d="M 780 1208.88 L 776.5 1201.88 L 780 1203.63 L 783.5 1201.88 Z" fill="rgb(0, 0, 0)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="all"/>
+        <path d="M 260 1130 L 473.63 1130" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="stroke"/>
+        <path d="M 478.88 1130 L 471.88 1133.5 L 473.63 1130 L 471.88 1126.5 Z" fill="rgb(0, 0, 0)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="all"/>
+        <path d="M 260 1140 L 473.63 1140" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="stroke"/>
+        <path d="M 478.88 1140 L 471.88 1143.5 L 473.63 1140 L 471.88 1136.5 Z" fill="rgb(0, 0, 0)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="all"/>
+        <path d="M 280 1164 L 493.63 1164" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="stroke"/>
+        <path d="M 498.88 1164 L 491.88 1167.5 L 493.63 1164 L 491.88 1160.5 Z" fill="rgb(0, 0, 0)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="all"/>
+        <path d="M 280 1174 L 493.63 1174" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="stroke"/>
+        <path d="M 498.88 1174 L 491.88 1177.5 L 493.63 1174 L 491.88 1170.5 Z" fill="rgb(0, 0, 0)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="all"/>
+        <rect x="0" y="2160" width="320" height="160" fill="none" stroke="rgb(0, 0, 0)" pointer-events="all"/>
+        <g fill="rgb(0, 0, 0)" font-family="Lucida Console" font-size="10px">
+            <text x="1.5" y="2175.5">
+                :{
+            </text>
+            <text x="1.5" y="2187.5">
+                :    "services_tcp": [
+            </text>
+            <text x="1.5" y="2199.5">
+                :        {
+            </text>
+            <text x="1.5" y="2211.5">
+                :            "name": "service_name",
+            </text>
+            <text x="1.5" y="2223.5">
+                :            "comments": "service comment",
+            </text>
+            <text x="1.5" y="2247.5">
+                :            "port": "8088",
+            </text>
+            <text x="1.5" y="2259.5">
+                :            "use-default-session-timeout": false,
+            </text>
+            <text x="1.5" y="2271.5">
+                :            "session-timeout": 14400
+            </text>
+            <text x="1.5" y="2283.5">
+                :        }
+            </text>
+            <text x="1.5" y="2295.5">
+                :    ]
+            </text>
+            <text x="1.5" y="2307.5">
+                :}
+            </text>
+        </g>
+        <rect x="0" y="2140" width="200" height="20" fill="none" stroke="rgb(0, 0, 0)" pointer-events="all"/>
+        <g transform="translate(-0.5 -0.5)">
+            <switch>
+                <foreignObject pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility" style="overflow: visible; text-align: left;">
+                    <div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe center; justify-content: unsafe flex-start; width: 193px; height: 1px; padding-top: 2150px; margin-left: 7px;">
+                        <div data-drawio-colors="color: rgb(0, 0, 0); " style="box-sizing: border-box; font-size: 0px; text-align: left;">
+                            <div style="display: inline-block; font-size: 10px; font-family: &quot;Lucida Console&quot;; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">
+                                exported json from Checkpoint
+                            </div>
+                        </div>
+                    </div>
+                </foreignObject>
+                <text x="7" y="2153" fill="rgb(0, 0, 0)" font-family="Lucida Console" font-size="10px">
+                    exported json from Checkpoint
+                </text>
+            </switch>
+        </g>
+        <rect x="360" y="2120" width="520" height="240" fill="none" stroke="rgb(0, 0, 0)" pointer-events="all"/>
+        <g fill="rgb(0, 0, 0)" font-family="Lucida Console" font-size="10px">
+            <text x="366.5" y="2135.5">
+                :[
+            </text>
+            <text x="366.5" y="2147.5">
+                :    {
+            </text>
+            <text x="366.5" y="2159.5">
+                :        "method": "set",
+            </text>
+            <text x="366.5" y="2171.5">
+                :        "params": [
+            </text>
+            <text x="366.5" y="2183.5">
+                :            {
+            </text>
+            <text x="366.5" y="2195.5">
+                :                "data": {
+            </text>
+            <text x="366.5" y="2207.5">
+                :                    "name": "service_name",
+            </text>
+            <text x="366.5" y="2219.5">
+                :                    "comment": "service comment",
+            </text>
+            <text x="366.5" y="2231.5">
+                :                    "protocol": "TCP/UDP/SCTP",
+            </text>
+            <text x="366.5" y="2243.5">
+                :                    "tcp-portrange": "8088",
+            </text>
+            <text x="366.5" y="2255.5">
+                :                    "session-ttl": "14400"
+            </text>
+            <text x="366.5" y="2267.5">
+                :                },
+            </text>
+            <text x="366.5" y="2279.5">
+                :                "url": "/pm/config/{adom}/obj/firewall/service/custom/service_name"
+            </text>
+            <text x="366.5" y="2291.5">
+                :            }
+            </text>
+            <text x="366.5" y="2303.5">
+                :        ],
+            </text>
+            <text x="366.5" y="2315.5">
+                :        "session": "",
+            </text>
+            <text x="366.5" y="2327.5">
+                :        "id": 1
+            </text>
+            <text x="366.5" y="2339.5">
+                :    }
+            </text>
+            <text x="366.5" y="2351.5">
+                :]
+            </text>
+        </g>
+        <rect x="360" y="2100" width="200" height="20" fill="none" stroke="rgb(0, 0, 0)" pointer-events="all"/>
+        <g transform="translate(-0.5 -0.5)">
+            <switch>
+                <foreignObject pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility" style="overflow: visible; text-align: left;">
+                    <div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe center; justify-content: unsafe flex-start; width: 193px; height: 1px; padding-top: 2110px; margin-left: 367px;">
+                        <div data-drawio-colors="color: rgb(0, 0, 0); " style="box-sizing: border-box; font-size: 0px; text-align: left;">
+                            <div style="display: inline-block; font-size: 10px; font-family: &quot;Lucida Console&quot;; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">
+                                converted json for Fortinet
+                            </div>
+                        </div>
+                    </div>
+                </foreignObject>
+                <text x="367" y="2113" fill="rgb(0, 0, 0)" font-family="Lucida Console" font-size="10px">
+                    converted json for Fortinet
+                </text>
+            </switch>
+        </g>
+        <path d="M 280 2220.04 L 473.63 2220" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="stroke"/>
+        <path d="M 478.88 2220 L 471.88 2223.5 L 473.63 2220 L 471.88 2216.5 Z" fill="rgb(0, 0, 0)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="all"/>
+        <path d="M 280 2210 L 473.63 2210" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="stroke"/>
+        <path d="M 478.88 2210 L 471.88 2213.5 L 473.63 2210 L 471.88 2206.5 Z" fill="rgb(0, 0, 0)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="all"/>
+        <path d="M 280 2239.7 L 473.63 2239.99" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="stroke"/>
+        <path d="M 478.88 2240 L 471.88 2243.49 L 473.63 2239.99 L 471.89 2236.49 Z" fill="rgb(0, 0, 0)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="all"/>
+        <path d="M 310 2250 L 473.63 2250" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="stroke"/>
+        <path d="M 478.88 2250 L 471.88 2253.5 L 473.63 2250 L 471.88 2246.5 Z" fill="rgb(0, 0, 0)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="all"/>
+        <path d="M 680 2200 L 830 2200 Q 840 2200 840 2210 L 840 2253.63" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="stroke"/>
+        <path d="M 840 2258.88 L 836.5 2251.88 L 840 2253.63 L 843.5 2251.88 Z" fill="rgb(0, 0, 0)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="all"/>
+        <path d="M 240 2270 L 320 2270 Q 330 2270 337.07 2262.93 L 343.54 2256.46 Q 350 2250 360 2250 L 473.63 2250" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="stroke"/>
+        <path d="M 478.88 2250 L 471.88 2253.5 L 473.63 2250 L 471.88 2246.5 Z" fill="rgb(0, 0, 0)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="all"/>
+        <g transform="translate(-0.5 -0.5)">
+            <switch>
+                <foreignObject pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility" style="overflow: visible; text-align: left;">
+                    <div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 1px; height: 1px; padding-top: 2251px; margin-left: 421px;">
+                        <div data-drawio-colors="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); " style="box-sizing: border-box; font-size: 0px; text-align: center;">
+                            <div style="display: inline-block; font-size: 11px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; background-color: rgb(255, 255, 255); white-space: nowrap;">
+                                optional (if false)
+                            </div>
+                        </div>
+                    </div>
+                </foreignObject>
+                <text x="421" y="2254" fill="rgb(0, 0, 0)" font-family="Helvetica" font-size="11px" text-anchor="middle">
+                    optional (if false)
+                </text>
+            </switch>
+        </g>
+        <rect x="0" y="2401" width="320" height="40" fill="none" stroke="none" pointer-events="all"/>
+        <g transform="translate(-0.5 -0.5)">
+            <switch>
+                <foreignObject pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility" style="overflow: visible; text-align: left;">
+                    <div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe center; justify-content: unsafe flex-start; width: 318px; height: 1px; padding-top: 2421px; margin-left: 2px;">
+                        <div data-drawio-colors="color: rgb(0, 0, 0); " style="box-sizing: border-box; font-size: 0px; text-align: left;">
+                            <div style="display: inline-block; font-size: 30px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; text-decoration: underline; white-space: normal; overflow-wrap: normal;">
+                                Services UDP
+                            </div>
+                        </div>
+                    </div>
+                </foreignObject>
+                <text x="2" y="2430" fill="rgb(0, 0, 0)" font-family="Helvetica" font-size="30px" text-decoration="underline">
+                    Services UDP
+                </text>
+            </switch>
+        </g>
+        <rect x="0" y="2520" width="320" height="160" fill="none" stroke="rgb(0, 0, 0)" pointer-events="all"/>
+        <g fill="rgb(0, 0, 0)" font-family="Lucida Console" font-size="10px">
+            <text x="1.5" y="2535.5">
+                :{
+            </text>
+            <text x="1.5" y="2547.5">
+                :    "services_udp": [
+            </text>
+            <text x="1.5" y="2559.5">
+                :        {
+            </text>
+            <text x="1.5" y="2571.5">
+                :            "name": "service_name",
+            </text>
+            <text x="1.5" y="2583.5">
+                :            "comments": "service comment",
+            </text>
+            <text x="1.5" y="2607.5">
+                :            "port": "9099",
+            </text>
+            <text x="1.5" y="2619.5">
+                :            "use-default-session-timeout": false,
+            </text>
+            <text x="1.5" y="2631.5">
+                :            "session-timeout": 14400
+            </text>
+            <text x="1.5" y="2643.5">
+                :        }
+            </text>
+            <text x="1.5" y="2655.5">
+                :    ]
+            </text>
+            <text x="1.5" y="2667.5">
+                :}
+            </text>
+        </g>
+        <rect x="0" y="2500" width="200" height="20" fill="none" stroke="rgb(0, 0, 0)" pointer-events="all"/>
+        <g transform="translate(-0.5 -0.5)">
+            <switch>
+                <foreignObject pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility" style="overflow: visible; text-align: left;">
+                    <div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe center; justify-content: unsafe flex-start; width: 193px; height: 1px; padding-top: 2510px; margin-left: 7px;">
+                        <div data-drawio-colors="color: rgb(0, 0, 0); " style="box-sizing: border-box; font-size: 0px; text-align: left;">
+                            <div style="display: inline-block; font-size: 10px; font-family: &quot;Lucida Console&quot;; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">
+                                exported json from Checkpoint
+                            </div>
+                        </div>
+                    </div>
+                </foreignObject>
+                <text x="7" y="2513" fill="rgb(0, 0, 0)" font-family="Lucida Console" font-size="10px">
+                    exported json from Checkpoint
+                </text>
+            </switch>
+        </g>
+        <rect x="360" y="2480" width="520" height="240" fill="none" stroke="rgb(0, 0, 0)" pointer-events="all"/>
+        <g fill="rgb(0, 0, 0)" font-family="Lucida Console" font-size="10px">
+            <text x="366.5" y="2495.5">
+                :[
+            </text>
+            <text x="366.5" y="2507.5">
+                :    {
+            </text>
+            <text x="366.5" y="2519.5">
+                :        "method": "set",
+            </text>
+            <text x="366.5" y="2531.5">
+                :        "params": [
+            </text>
+            <text x="366.5" y="2543.5">
+                :            {
+            </text>
+            <text x="366.5" y="2555.5">
+                :                "data": {
+            </text>
+            <text x="366.5" y="2567.5">
+                :                    "name": "service_name",
+            </text>
+            <text x="366.5" y="2579.5">
+                :                    "comment": "service comment",
+            </text>
+            <text x="366.5" y="2591.5">
+                :                    "protocol": "TCP/UDP/SCTP",
+            </text>
+            <text x="366.5" y="2603.5">
+                :                    "udp-portrange": "9099",
+            </text>
+            <text x="366.5" y="2615.5">
+                :                    "session-ttl": "14400"
+            </text>
+            <text x="366.5" y="2627.5">
+                :                },
+            </text>
+            <text x="366.5" y="2639.5">
+                :                "url": "/pm/config/{adom}/obj/firewall/service/custom/service_name"
+            </text>
+            <text x="366.5" y="2651.5">
+                :            }
+            </text>
+            <text x="366.5" y="2663.5">
+                :        ],
+            </text>
+            <text x="366.5" y="2675.5">
+                :        "session": "",
+            </text>
+            <text x="366.5" y="2687.5">
+                :        "id": 1
+            </text>
+            <text x="366.5" y="2699.5">
+                :    }
+            </text>
+            <text x="366.5" y="2711.5">
+                :]
+            </text>
+        </g>
+        <rect x="360" y="2460" width="200" height="20" fill="none" stroke="rgb(0, 0, 0)" pointer-events="all"/>
+        <g transform="translate(-0.5 -0.5)">
+            <switch>
+                <foreignObject pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility" style="overflow: visible; text-align: left;">
+                    <div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe center; justify-content: unsafe flex-start; width: 193px; height: 1px; padding-top: 2470px; margin-left: 367px;">
+                        <div data-drawio-colors="color: rgb(0, 0, 0); " style="box-sizing: border-box; font-size: 0px; text-align: left;">
+                            <div style="display: inline-block; font-size: 10px; font-family: &quot;Lucida Console&quot;; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">
+                                converted json for Fortinet
+                            </div>
+                        </div>
+                    </div>
+                </foreignObject>
+                <text x="367" y="2473" fill="rgb(0, 0, 0)" font-family="Lucida Console" font-size="10px">
+                    converted json for Fortinet
+                </text>
+            </switch>
+        </g>
+        <path d="M 280 2580.04 L 473.63 2580" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="stroke"/>
+        <path d="M 478.88 2580 L 471.88 2583.5 L 473.63 2580 L 471.88 2576.5 Z" fill="rgb(0, 0, 0)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="all"/>
+        <path d="M 280 2570 L 473.63 2570" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="stroke"/>
+        <path d="M 478.88 2570 L 471.88 2573.5 L 473.63 2570 L 471.88 2566.5 Z" fill="rgb(0, 0, 0)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="all"/>
+        <path d="M 280 2599.7 L 473.63 2599.99" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="stroke"/>
+        <path d="M 478.88 2600 L 471.88 2603.49 L 473.63 2599.99 L 471.89 2596.49 Z" fill="rgb(0, 0, 0)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="all"/>
+        <path d="M 310 2610 L 473.63 2610" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="stroke"/>
+        <path d="M 478.88 2610 L 471.88 2613.5 L 473.63 2610 L 471.88 2606.5 Z" fill="rgb(0, 0, 0)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="all"/>
+        <path d="M 680 2560 L 830 2560 Q 840 2560 840 2570 L 840 2613.63" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="stroke"/>
+        <path d="M 840 2618.88 L 836.5 2611.88 L 840 2613.63 L 843.5 2611.88 Z" fill="rgb(0, 0, 0)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="all"/>
+        <path d="M 240 2630 L 320 2630 Q 330 2630 337.07 2622.93 L 343.54 2616.46 Q 350 2610 360 2610 L 473.63 2610" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="stroke"/>
+        <path d="M 478.88 2610 L 471.88 2613.5 L 473.63 2610 L 471.88 2606.5 Z" fill="rgb(0, 0, 0)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="all"/>
+        <g transform="translate(-0.5 -0.5)">
+            <switch>
+                <foreignObject pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility" style="overflow: visible; text-align: left;">
+                    <div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 1px; height: 1px; padding-top: 2611px; margin-left: 419px;">
+                        <div data-drawio-colors="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); " style="box-sizing: border-box; font-size: 0px; text-align: center;">
+                            <div style="display: inline-block; font-size: 11px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; background-color: rgb(255, 255, 255); white-space: nowrap;">
+                                optional (if false)
+                            </div>
+                        </div>
+                    </div>
+                </foreignObject>
+                <text x="419" y="2614" fill="rgb(0, 0, 0)" font-family="Helvetica" font-size="11px" text-anchor="middle">
+                    optional (if false)
+                </text>
+            </switch>
+        </g>
+        <rect x="0" y="2430" width="320" height="30" fill="none" stroke="none" pointer-events="all"/>
+        <g transform="translate(-0.5 -0.5)">
+            <switch>
+                <foreignObject pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility" style="overflow: visible; text-align: left;">
+                    <div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe flex-start; justify-content: unsafe flex-start; width: 318px; height: 1px; padding-top: 2437px; margin-left: 2px;">
+                        <div data-drawio-colors="color: rgb(0, 0, 0); " style="box-sizing: border-box; font-size: 0px; text-align: left;">
+                            <div style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">
+                                (It's almost the same as 'Services TCP')
+                            </div>
+                        </div>
+                    </div>
+                </foreignObject>
+                <text x="2" y="2449" fill="rgb(0, 0, 0)" font-family="Helvetica" font-size="12px">
+                    (It's almost the same as 'Services TCP')
+                </text>
+            </switch>
+        </g>
+        <rect x="0" y="1440" width="320" height="140" fill="none" stroke="rgb(0, 0, 0)" pointer-events="all"/>
+        <g fill="rgb(0, 0, 0)" font-family="Lucida Console" font-size="10px">
+            <text x="1.5" y="1455.5">
+                :{
+            </text>
+            <text x="1.5" y="1467.5">
+                :    "services_icmp": [
+            </text>
+            <text x="1.5" y="1479.5">
+                :        {
+            </text>
+            <text x="1.5" y="1491.5">
+                :            "name": "service_name",
+            </text>
+            <text x="1.5" y="1503.5">
+                :            "comments": "service comment",
+            </text>
+            <text x="1.5" y="1515.5">
+                :            "type": "service-icmp",
+            </text>
+            <text x="1.5" y="1527.5">
+                :            "icmp-type": 3,
+            </text>
+            <text x="1.5" y="1539.5">
+                :            "icmp-code": 3
+            </text>
+            <text x="1.5" y="1551.5">
+                :        }
+            </text>
+            <text x="1.5" y="1563.5">
+                :    ]
+            </text>
+            <text x="1.5" y="1575.5">
+                :}
+            </text>
+        </g>
+        <rect x="0" y="1320" width="320" height="40" fill="none" stroke="none" pointer-events="all"/>
+        <g transform="translate(-0.5 -0.5)">
+            <switch>
+                <foreignObject pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility" style="overflow: visible; text-align: left;">
+                    <div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe center; justify-content: unsafe flex-start; width: 318px; height: 1px; padding-top: 1340px; margin-left: 2px;">
+                        <div data-drawio-colors="color: rgb(0, 0, 0); " style="box-sizing: border-box; font-size: 0px; text-align: left;">
+                            <div style="display: inline-block; font-size: 30px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; text-decoration: underline; white-space: normal; overflow-wrap: normal;">
+                                Services ICMP
+                            </div>
+                        </div>
+                    </div>
+                </foreignObject>
+                <text x="2" y="1349" fill="rgb(0, 0, 0)" font-family="Helvetica" font-size="30px" text-decoration="underline">
+                    Services ICMP
+                </text>
+            </switch>
+        </g>
+        <rect x="360" y="1400" width="520" height="240" fill="none" stroke="rgb(0, 0, 0)" pointer-events="all"/>
+        <g fill="rgb(0, 0, 0)" font-family="Lucida Console" font-size="10px">
+            <text x="366.5" y="1415.5">
+                :[
+            </text>
+            <text x="366.5" y="1427.5">
+                :    {
+            </text>
+            <text x="366.5" y="1439.5">
+                :        "method": "set",
+            </text>
+            <text x="366.5" y="1451.5">
+                :        "params": [
+            </text>
+            <text x="366.5" y="1463.5">
+                :            {
+            </text>
+            <text x="366.5" y="1475.5">
+                :                "data": {
+            </text>
+            <text x="366.5" y="1487.5">
+                :                    "name": "service_name",
+            </text>
+            <text x="366.5" y="1499.5">
+                :                    "comment": "service comment",
+            </text>
+            <text x="366.5" y="1511.5">
+                :                    "protocol": "ICMP",
+            </text>
+            <text x="366.5" y="1523.5">
+                :                    "icmptype": 3,
+            </text>
+            <text x="366.5" y="1535.5">
+                :                    "icmpcode": 3
+            </text>
+            <text x="366.5" y="1547.5">
+                :                },
+            </text>
+            <text x="366.5" y="1559.5">
+                :                "url": "/pm/config/{adom}/obj/firewall/service/custom/service_name"
+            </text>
+            <text x="366.5" y="1571.5">
+                :            }
+            </text>
+            <text x="366.5" y="1583.5">
+                :        ],
+            </text>
+            <text x="366.5" y="1595.5">
+                :        "session": "",
+            </text>
+            <text x="366.5" y="1607.5">
+                :        "id": 1
+            </text>
+            <text x="366.5" y="1619.5">
+                :    }
+            </text>
+            <text x="366.5" y="1631.5">
+                :]
+            </text>
+        </g>
+        <path d="M 280 1500.04 L 473.63 1500" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="stroke"/>
+        <path d="M 478.88 1500 L 471.88 1503.5 L 473.63 1500 L 471.88 1496.5 Z" fill="rgb(0, 0, 0)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="all"/>
+        <path d="M 280 1490 L 473.63 1490" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="stroke"/>
+        <path d="M 478.88 1490 L 471.88 1493.5 L 473.63 1490 L 471.88 1486.5 Z" fill="rgb(0, 0, 0)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="all"/>
+        <path d="M 200 1530 L 473.63 1530" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="stroke"/>
+        <path d="M 478.88 1530 L 471.88 1533.5 L 473.63 1530 L 471.88 1526.5 Z" fill="rgb(0, 0, 0)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="all"/>
+        <g transform="translate(-0.5 -0.5)">
+            <switch>
+                <foreignObject pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility" style="overflow: visible; text-align: left;">
+                    <div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 1px; height: 1px; padding-top: 1531px; margin-left: 340px;">
+                        <div data-drawio-colors="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); " style="box-sizing: border-box; font-size: 0px; text-align: center;">
+                            <div style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; background-color: rgb(255, 255, 255); white-space: nowrap;">
+                                optional (if exists)
+                            </div>
+                        </div>
+                    </div>
+                </foreignObject>
+                <text x="340" y="1534" fill="rgb(0, 0, 0)" font-family="Helvetica" font-size="12px" text-anchor="middle">
+                    optional (if exists)
+                </text>
+            </switch>
+        </g>
+        <path d="M 200 1519 L 473.63 1519.98" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="stroke"/>
+        <path d="M 478.88 1520 L 471.87 1523.47 L 473.63 1519.98 L 471.89 1516.47 Z" fill="rgb(0, 0, 0)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="all"/>
+        <path d="M 680 1480 L 830 1480 Q 840 1480 840 1490 L 840 1500 Q 840 1510 840 1520 L 840 1533.63" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="stroke"/>
+        <path d="M 840 1538.88 L 836.5 1531.88 L 840 1533.63 L 843.5 1531.88 Z" fill="rgb(0, 0, 0)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="all"/>
+        <rect x="0" y="2879" width="320" height="160" fill="none" stroke="rgb(0, 0, 0)" pointer-events="all"/>
+        <g fill="rgb(0, 0, 0)" font-family="Lucida Console" font-size="10px">
+            <text x="1.5" y="2894.5">
+                :{
+            </text>
+            <text x="1.5" y="2906.5">
+                :    "service_groups": [
+            </text>
+            <text x="1.5" y="2918.5">
+                :        {
+            </text>
+            <text x="1.5" y="2930.5">
+                :            "name": "group_name",
+            </text>
+            <text x="1.5" y="2942.5">
+                :            "comments": "group comment"
+            </text>
+            <text x="1.5" y="2954.5">
+                :            "members": [
+            </text>
+            <text x="1.5" y="2966.5">
+                :                "11111111-1111-111111111111",
+            </text>
+            <text x="1.5" y="2978.5">
+                :                "22222222-2222-222222222222"
+            </text>
+            <text x="1.5" y="2990.5">
+                :            ],
+            </text>
+            <text x="1.5" y="3002.5">
+                :        }
+            </text>
+            <text x="1.5" y="3014.5">
+                :    ]
+            </text>
+            <text x="1.5" y="3026.5">
+                :}
+            </text>
+        </g>
+        <rect x="0" y="2760" width="320" height="40" fill="none" stroke="none" pointer-events="all"/>
+        <g transform="translate(-0.5 -0.5)">
+            <switch>
+                <foreignObject pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility" style="overflow: visible; text-align: left;">
+                    <div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe center; justify-content: unsafe flex-start; width: 318px; height: 1px; padding-top: 2780px; margin-left: 2px;">
+                        <div data-drawio-colors="color: rgb(0, 0, 0); " style="box-sizing: border-box; font-size: 0px; text-align: left;">
+                            <div style="display: inline-block; font-size: 30px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; text-decoration: underline; white-space: normal; overflow-wrap: normal;">
+                                Groups
+                            </div>
+                        </div>
+                    </div>
+                </foreignObject>
+                <text x="2" y="2789" fill="rgb(0, 0, 0)" font-family="Helvetica" font-size="30px" text-decoration="underline">
+                    Groups
+                </text>
+            </switch>
+        </g>
+        <rect x="0" y="2859" width="200" height="20" fill="none" stroke="rgb(0, 0, 0)" pointer-events="all"/>
+        <g transform="translate(-0.5 -0.5)">
+            <switch>
+                <foreignObject pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility" style="overflow: visible; text-align: left;">
+                    <div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe center; justify-content: unsafe flex-start; width: 193px; height: 1px; padding-top: 2869px; margin-left: 7px;">
+                        <div data-drawio-colors="color: rgb(0, 0, 0); " style="box-sizing: border-box; font-size: 0px; text-align: left;">
+                            <div style="display: inline-block; font-size: 10px; font-family: &quot;Lucida Console&quot;; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">
+                                exported json from Checkpoint
+                            </div>
+                        </div>
+                    </div>
+                </foreignObject>
+                <text x="7" y="2872" fill="rgb(0, 0, 0)" font-family="Lucida Console" font-size="10px">
+                    exported json from Checkpoint
+                </text>
+            </switch>
+        </g>
+        <rect x="360" y="2840" width="520" height="250" fill="none" stroke="rgb(0, 0, 0)" pointer-events="all"/>
+        <g fill="rgb(0, 0, 0)" font-family="Lucida Console" font-size="10px">
+            <text x="366.5" y="2855.5">
+                :[
+            </text>
+            <text x="366.5" y="2867.5">
+                :    {
+            </text>
+            <text x="366.5" y="2879.5">
+                :        "method": "set",
+            </text>
+            <text x="366.5" y="2891.5">
+                :        "params": [
+            </text>
+            <text x="366.5" y="2903.5">
+                :            {
+            </text>
+            <text x="366.5" y="2915.5">
+                :                "data": {
+            </text>
+            <text x="366.5" y="2927.5">
+                :                    "name": "group_name",
+            </text>
+            <text x="366.5" y="2939.5">
+                :                    "comment": "group comment",
+            </text>
+            <text x="366.5" y="2951.5">
+                :                    "member": [
+            </text>
+            <text x="366.5" y="2963.5">
+                :                        "group_member_1",
+            </text>
+            <text x="366.5" y="2975.5">
+                :                        "group_member_2"
+            </text>
+            <text x="366.5" y="2987.5">
+                :                    ]
+            </text>
+            <text x="366.5" y="2999.5">
+                :                },
+            </text>
+            <text x="366.5" y="3011.5">
+                :                "url": "/pm/config/{adom}/obj/firewall/service/group/group_name"
+            </text>
+            <text x="366.5" y="3023.5">
+                :            }
+            </text>
+            <text x="366.5" y="3035.5">
+                :        ],
+            </text>
+            <text x="366.5" y="3047.5">
+                :        "session": "",
+            </text>
+            <text x="366.5" y="3059.5">
+                :        "id": 1
+            </text>
+            <text x="366.5" y="3071.5">
+                :    }
+            </text>
+            <text x="366.5" y="3083.5">
+                :]
+            </text>
+        </g>
+        <rect x="360" y="2820" width="200" height="20" fill="none" stroke="rgb(0, 0, 0)" pointer-events="all"/>
+        <g transform="translate(-0.5 -0.5)">
+            <switch>
+                <foreignObject pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility" style="overflow: visible; text-align: left;">
+                    <div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe center; justify-content: unsafe flex-start; width: 193px; height: 1px; padding-top: 2830px; margin-left: 367px;">
+                        <div data-drawio-colors="color: rgb(0, 0, 0); " style="box-sizing: border-box; font-size: 0px; text-align: left;">
+                            <div style="display: inline-block; font-size: 10px; font-family: &quot;Lucida Console&quot;; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">
+                                converted json for Fortinet
+                            </div>
+                        </div>
+                    </div>
+                </foreignObject>
+                <text x="367" y="2833" fill="rgb(0, 0, 0)" font-family="Lucida Console" font-size="10px">
+                    converted json for Fortinet
+                </text>
+            </switch>
+        </g>
+        <path d="M 260 2939 L 473.63 2939.97" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="stroke"/>
+        <path d="M 478.88 2939.99 L 471.87 2943.46 L 473.63 2939.97 L 471.9 2936.46 Z" fill="rgb(0, 0, 0)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="all"/>
+        <path d="M 260 2929 L 473.63 2929.97" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="stroke"/>
+        <path d="M 478.88 2929.99 L 471.87 2933.46 L 473.63 2929.97 L 471.9 2926.46 Z" fill="rgb(0, 0, 0)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="all"/>
+        <path d="M 280 2958.68 L 493.63 2958.99" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="stroke"/>
+        <path d="M 498.88 2959 L 491.88 2962.49 L 493.63 2958.99 L 491.89 2955.49 Z" fill="rgb(0, 0, 0)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="all"/>
+        <path d="M 280 2969 L 493.63 2969.97" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="stroke"/>
+        <path d="M 498.88 2969.99 L 491.87 2973.46 L 493.63 2969.97 L 491.9 2966.46 Z" fill="rgb(0, 0, 0)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="all"/>
+        <path d="M 678.64 2919 L 810 2919 Q 820 2919 820 2929 L 820 2992.63" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="stroke"/>
+        <path d="M 820 2997.88 L 816.5 2990.88 L 820 2992.63 L 823.5 2990.88 Z" fill="rgb(0, 0, 0)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="all"/>
+        <rect x="0" y="1800" width="320" height="140" fill="none" stroke="rgb(0, 0, 0)" pointer-events="all"/>
+        <g fill="rgb(0, 0, 0)" font-family="Lucida Console" font-size="10px">
+            <text x="1.5" y="1815.5">
+                :{
+            </text>
+            <text x="1.5" y="1827.5">
+                :    "services_icmp6": [
+            </text>
+            <text x="1.5" y="1839.5">
+                :        {
+            </text>
+            <text x="1.5" y="1851.5">
+                :            "name": "service name",
+            </text>
+            <text x="1.5" y="1863.5">
+                :            "comments": "service comment",
+            </text>
+            <text x="1.5" y="1875.5">
+                :            "type": "service-icmp6",
+            </text>
+            <text x="1.5" y="1887.5">
+                :            "icmp-type": 111
+            </text>
+            <text x="1.5" y="1899.5">
+                :        }
+            </text>
+            <text x="1.5" y="1911.5">
+                :    ]
+            </text>
+            <text x="1.5" y="1923.5">
+                :}
+            </text>
+        </g>
+        <rect x="0" y="1680" width="320" height="40" fill="none" stroke="none" pointer-events="all"/>
+        <g transform="translate(-0.5 -0.5)">
+            <switch>
+                <foreignObject pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility" style="overflow: visible; text-align: left;">
+                    <div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe center; justify-content: unsafe flex-start; width: 318px; height: 1px; padding-top: 1700px; margin-left: 2px;">
+                        <div data-drawio-colors="color: rgb(0, 0, 0); " style="box-sizing: border-box; font-size: 0px; text-align: left;">
+                            <div style="display: inline-block; font-size: 30px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; text-decoration: underline; white-space: normal; overflow-wrap: normal;">
+                                Services ICMP6
+                            </div>
+                        </div>
+                    </div>
+                </foreignObject>
+                <text x="2" y="1709" fill="rgb(0, 0, 0)" font-family="Helvetica" font-size="30px" text-decoration="underline">
+                    Services ICMP6
+                </text>
+            </switch>
+        </g>
+        <rect x="360" y="1760" width="520" height="240" fill="none" stroke="rgb(0, 0, 0)" pointer-events="all"/>
+        <g fill="rgb(0, 0, 0)" font-family="Lucida Console" font-size="10px">
+            <text x="366.5" y="1775.5">
+                :[
+            </text>
+            <text x="366.5" y="1787.5">
+                :    {
+            </text>
+            <text x="366.5" y="1799.5">
+                :        "method": "set",
+            </text>
+            <text x="366.5" y="1811.5">
+                :        "params": [
+            </text>
+            <text x="366.5" y="1823.5">
+                :            {
+            </text>
+            <text x="366.5" y="1835.5">
+                :                "data": {
+            </text>
+            <text x="366.5" y="1847.5">
+                :                    "name": "service_name",
+            </text>
+            <text x="366.5" y="1859.5">
+                :                    "comment": "service comment",
+            </text>
+            <text x="366.5" y="1871.5">
+                :                    "protocol": "ICMP6",
+            </text>
+            <text x="366.5" y="1883.5">
+                :                    "icmptype": 111
+            </text>
+            <text x="366.5" y="1895.5">
+                :                },
+            </text>
+            <text x="366.5" y="1907.5">
+                :                "url": "/pm/config/{adom}/obj/firewall/service/custom/service_name"
+            </text>
+            <text x="366.5" y="1919.5">
+                :            }
+            </text>
+            <text x="366.5" y="1931.5">
+                :        ],
+            </text>
+            <text x="366.5" y="1943.5">
+                :        "session": "",
+            </text>
+            <text x="366.5" y="1955.5">
+                :        "id": 1
+            </text>
+            <text x="366.5" y="1967.5">
+                :    }
+            </text>
+            <text x="366.5" y="1979.5">
+                :]
+            </text>
+        </g>
+        <path d="M 280 1860.04 L 473.63 1860" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="stroke"/>
+        <path d="M 478.88 1860 L 471.88 1863.5 L 473.63 1860 L 471.88 1856.5 Z" fill="rgb(0, 0, 0)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="all"/>
+        <path d="M 280 1850 L 473.63 1850" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="stroke"/>
+        <path d="M 478.88 1850 L 471.88 1853.5 L 473.63 1850 L 471.88 1846.5 Z" fill="rgb(0, 0, 0)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="all"/>
+        <path d="M 280 1879.7 L 473.63 1879.99" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="stroke"/>
+        <path d="M 478.88 1880 L 471.88 1883.49 L 473.63 1879.99 L 471.89 1876.49 Z" fill="rgb(0, 0, 0)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="all"/>
+        <path d="M 680 1840 L 830 1840 Q 840 1840 840 1850 L 840 1883.63" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="stroke"/>
+        <path d="M 840 1888.88 L 836.5 1881.88 L 840 1883.63 L 843.5 1881.88 Z" fill="rgb(0, 0, 0)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="all"/>
+        <rect x="0" y="1420" width="200" height="20" fill="none" stroke="rgb(0, 0, 0)" pointer-events="all"/>
+        <g transform="translate(-0.5 -0.5)">
+            <switch>
+                <foreignObject pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility" style="overflow: visible; text-align: left;">
+                    <div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe center; justify-content: unsafe flex-start; width: 193px; height: 1px; padding-top: 1430px; margin-left: 7px;">
+                        <div data-drawio-colors="color: rgb(0, 0, 0); " style="box-sizing: border-box; font-size: 0px; text-align: left;">
+                            <div style="display: inline-block; font-size: 10px; font-family: &quot;Lucida Console&quot;; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">
+                                exported json from Checkpoint
+                            </div>
+                        </div>
+                    </div>
+                </foreignObject>
+                <text x="7" y="1433" fill="rgb(0, 0, 0)" font-family="Lucida Console" font-size="10px">
+                    exported json from Checkpoint
+                </text>
+            </switch>
+        </g>
+        <rect x="360" y="1380" width="200" height="20" fill="none" stroke="rgb(0, 0, 0)" pointer-events="all"/>
+        <g transform="translate(-0.5 -0.5)">
+            <switch>
+                <foreignObject pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility" style="overflow: visible; text-align: left;">
+                    <div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe center; justify-content: unsafe flex-start; width: 193px; height: 1px; padding-top: 1390px; margin-left: 367px;">
+                        <div data-drawio-colors="color: rgb(0, 0, 0); " style="box-sizing: border-box; font-size: 0px; text-align: left;">
+                            <div style="display: inline-block; font-size: 10px; font-family: &quot;Lucida Console&quot;; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">
+                                converted json for Fortinet
+                            </div>
+                        </div>
+                    </div>
+                </foreignObject>
+                <text x="367" y="1393" fill="rgb(0, 0, 0)" font-family="Lucida Console" font-size="10px">
+                    converted json for Fortinet
+                </text>
+            </switch>
+        </g>
+        <rect x="0" y="1780" width="200" height="20" fill="none" stroke="rgb(0, 0, 0)" pointer-events="all"/>
+        <g transform="translate(-0.5 -0.5)">
+            <switch>
+                <foreignObject pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility" style="overflow: visible; text-align: left;">
+                    <div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe center; justify-content: unsafe flex-start; width: 193px; height: 1px; padding-top: 1790px; margin-left: 7px;">
+                        <div data-drawio-colors="color: rgb(0, 0, 0); " style="box-sizing: border-box; font-size: 0px; text-align: left;">
+                            <div style="display: inline-block; font-size: 10px; font-family: &quot;Lucida Console&quot;; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">
+                                exported json from Checkpoint
+                            </div>
+                        </div>
+                    </div>
+                </foreignObject>
+                <text x="7" y="1793" fill="rgb(0, 0, 0)" font-family="Lucida Console" font-size="10px">
+                    exported json from Checkpoint
+                </text>
+            </switch>
+        </g>
+        <rect x="360" y="1740" width="200" height="20" fill="none" stroke="rgb(0, 0, 0)" pointer-events="all"/>
+        <g transform="translate(-0.5 -0.5)">
+            <switch>
+                <foreignObject pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility" style="overflow: visible; text-align: left;">
+                    <div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe center; justify-content: unsafe flex-start; width: 193px; height: 1px; padding-top: 1750px; margin-left: 367px;">
+                        <div data-drawio-colors="color: rgb(0, 0, 0); " style="box-sizing: border-box; font-size: 0px; text-align: left;">
+                            <div style="display: inline-block; font-size: 10px; font-family: &quot;Lucida Console&quot;; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">
+                                converted json for Fortinet
+                            </div>
+                        </div>
+                    </div>
+                </foreignObject>
+                <text x="367" y="1753" fill="rgb(0, 0, 0)" font-family="Lucida Console" font-size="10px">
+                    converted json for Fortinet
+                </text>
+            </switch>
+        </g>
+        <path d="M 280 202 L 473.63 202" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="stroke"/>
+        <path d="M 478.88 202 L 471.88 205.5 L 473.63 202 L 471.88 198.5 Z" fill="rgb(0, 0, 0)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="all"/>
+        <path d="M 280 530 L 473.63 530" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="stroke"/>
+        <path d="M 478.88 530 L 471.88 533.5 L 473.63 530 L 471.88 526.5 Z" fill="rgb(0, 0, 0)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="all"/>
+        <path d="M 260.16 870.08 L 473.63 870" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="stroke"/>
+        <path d="M 478.88 870 L 471.88 873.5 L 473.63 870 L 471.88 866.5 Z" fill="rgb(0, 0, 0)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="all"/>
+        <path d="M 260 1200 L 473.63 1200" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="stroke"/>
+        <path d="M 478.88 1200 L 471.88 1203.5 L 473.63 1200 L 471.88 1196.5 Z" fill="rgb(0, 0, 0)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="all"/>
+    </g>
+    <switch>
+        <g requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"/>
+        <a transform="translate(0,-5)" xlink:href="https://www.diagrams.net/doc/faq/svg-export-text-problems" target="_blank">
+            <text text-anchor="middle" font-size="10px" x="50%" y="100%">
+                Text is not SVG - cannot display
+            </text>
+        </a>
+    </switch>
+</svg>

@@ -1,0 +1,63 @@
+---
+# Note: All paths may be absolute or relative. If they are given relative, it is
+#       from the cwd where fotoobo has been run.
+
+# This is the path where fotoobo will write the config backups to
+backup_dir: ""
+
+# The path to a
+inventory: inventory.yaml
+
+# Hide the fotoobo logo
+no_logo: false
+
+# The SNMP Community to use for SNMPv2 calls
+snmp_community: ""
+
+# Configure how fotoobo logs
+# - Each section ("log_file", "log_console" and "log_syslog") can be commented out
+#   to disable this output completely
+# - The log level given on the command line will overwrite all given log-levels for
+#   each output configuration.
+logging:
+    # Globally enable or disable logging
+    enabled: false
+    # The log level
+    level: INFO
+
+    # Log to the console
+    log_console:
+
+    # The file where fotoobo should log to
+    log_file:
+        name: fotoobo.log
+
+    # Log to a syslog server
+#    log_syslog:
+#        host: localhost
+#        port: 514
+#        protocol: UDP   # UDP or TCP
+
+    # If you need more complex logging, provide a python logging configuration
+    # by yourself. See the "logging-config.yaml.sample" for more information.
+    # NOTE: This will overwrite all the above settings!
+#    log_configuration_file: "logging-config.yaml"
+
+
+## Configure how fotoobo handles audit logs
+# Each section ("log_file", "log_console" and "log_syslog") can be commented out
+# to disable this output completely
+# NOTE: If you have given a log_configuration_file above, the options given here have no effect
+#audit_logging:
+#    # Globally enable or disable audit logging
+#    enabled: false
+#
+#    # File to log audit logs to
+#    log_file:
+#        name: fotoobo_audit.log
+#
+#    # Syslog server to log audit logs to
+#    log_syslog:
+#        host: localhost
+#        port: 514
+#        protocol: UDP   # UDP or TCP

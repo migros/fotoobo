@@ -1,0 +1,27 @@
+# pycharm idea dir
+.idea/
+# visual studio code configuration
+.vscode/
+
+#virtual environment
+.venv/
+
+# caches
+__pycache__
+.pytest_chache/
+.tox/
+.coverage
+
+# files and directories
+/tests/data/testlog.txt
+/tests/temp/
+/*.yaml
+/data/
+/traceback.txt
+*.log
+
+# try*.py files are used to do some spontaneous tests and experiments
+try*.py
+
+# documentation /docs/build is ignored as it is generated only when needed
+/docs/build/

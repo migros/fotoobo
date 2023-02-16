@@ -1,0 +1,4 @@
+---
+inventory: tests/data/inventory.yaml
+log_file: tests/data/testlog.txt
+log_level: debug
