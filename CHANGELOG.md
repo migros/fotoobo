@@ -10,6 +10,8 @@ For examples and guidelines see [https://keepachangelog.com/](https://keepachang
 
 ### Changed
 
+- Update pytest to ~7.2.0 because of dependabot security warning
+
 
 ## [Released]
 
@@ -18,7 +20,7 @@ For examples and guidelines see [https://keepachangelog.com/](https://keepachang
 
 ### Changed
 
-- fix poetry dependencies with old poetry versions
+- Fix poetry dependencies with old poetry versions
 
 
 ## [0.4.0] - 2023-02-06
