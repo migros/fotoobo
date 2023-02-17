@@ -198,7 +198,7 @@ class Log:
         Create an audit log message
         """
 
-        audit_logger.info(":".join([f"username={USER}", f"hostname={HOSTNAME}", message]))
+        audit_logger.info(" ".join([f"username={USER}", f"hostname={HOSTNAME}", message]))
 
 
 logger.audit = Log.audit  # type: ignore
