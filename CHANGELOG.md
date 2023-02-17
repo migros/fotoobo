@@ -11,6 +11,7 @@ For examples and guidelines see [https://keepachangelog.com/](https://keepachang
 ### Changed
 
 - Update pytest to ~7.2.0 because of dependabot security warning
+- Update tox, requests & pygount to get rid of module py
 
 
 ## [Released]
