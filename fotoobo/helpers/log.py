@@ -32,19 +32,6 @@ class Log:
     """
 
     @staticmethod
-    def add_file_logger() -> None:
-        """
-        Additionally log to a file if one is given.
-        """
-        if config.log_file:
-            formatter = logging.Formatter(
-                "%(asctime)s, %(levelname)s, %(message)s", "%d.%m.%Y %H:%M:%S"
-            )
-            file_handler = logging.FileHandler(config.log_file)
-            file_handler.setFormatter(formatter)
-            logger.addHandler(file_handler)
-
-    @staticmethod
     def configure_logging(log_switch: Union[bool, None], log_level: Union[str, None]) -> None:
         """
         This function will configure the logging for fotoobo
