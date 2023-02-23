@@ -119,8 +119,8 @@ commands = poetry export --without-hashes --format=requirements.txt --output=doc
 [testenv:docs]
 description = Create the documentation with sphinx
 skip_install = True
-allowlist_externals = poetry
-commands_pre = poetry install, sphinx-build
+allowlist_externals = poetry, sphinx-build
+commands_pre = poetry install
 commands = sphinx-build -aEW -b html docs/source docs/build
 
 [testenv:stats]
