@@ -3,6 +3,8 @@
 # fotoobo | Fortinet Toolbox
 **make IT easy**
 
+![CI Tests](https://github.com/migros/fotoobo/actions/workflows/tests.yaml/badge.svg)
+
 This is fotoobo, the mighty **Fo**rtinet **too**l**bo**x for managing your Fortinet environment. It
 is meant to be extendable to your needs.
 
