@@ -1,7 +1,7 @@
 name: testing
 run-name: testing workflow invoked by ${{ github.actor }}
 
-on: [push]
+on: [push, pull_request]
 
 jobs:
   tests:
