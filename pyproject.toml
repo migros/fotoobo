@@ -78,35 +78,35 @@ commands = pylint {posargs} fotoobo
 [testenv:mypy]
 description = Check typing with mypy
 skip_install = true
-allowlist_externals = poetry
+allowlist_externals = poetry, mypy
 commands_pre = poetry install
 commands = mypy fotoobo tests {posargs}
 
 [testenv:black]
 description = Check formatting with black
 skip_install = true
-allowlist_externals = poetry
+allowlist_externals = poetry, black
 commands_pre = poetry install
 commands = black --check --diff {posargs} .
 
 [testenv:pytest]
 description = do unit tests with pytest
 skip_install = true
-allowlist_externals = poetry
+allowlist_externals = poetry, pytest
 commands_pre = poetry install
 commands = pytest --basetemp=tests/temp/ {posargs}
 
 [testenv:coverage-integration]
 description = check pytest coverage for integration tests (which are under tests/cli)
 skip_install = true
-allowlist_externals = poetry
+allowlist_externals = poetry, pytest
 commands_pre = poetry install
 commands = pytest --cov-report term-missing --cov-fail-under 80 --cov=fotoobo/cli tests/cli {posargs}
 
 [testenv:coverage]
 description = check pytest coverage for unit tests (without cli because these are unit-tests)
 skip_install = true
-allowlist_externals = poetry
+allowlist_externals = poetry, pytest
 commands_pre = poetry install
 commands = pytest --cov-report term-missing --cov-fail-under 80 --cov=fotoobo --cov-config=.coverage_unittests_rc --ignore=tests/cli tests/ {posargs}
 
@@ -120,12 +120,13 @@ commands = poetry export --without-hashes --format=requirements.txt --output=doc
 description = Create the documentation with sphinx
 skip_install = True
 allowlist_externals = poetry
-commands = poetry run sphinx-build -aEW -b html docs/source docs/build
+commands_pre = poetry install, sphinx-build
+commands = sphinx-build -aEW -b html docs/source docs/build
 
 [testenv:stats]
 description = display pygount statistics
 skip_install = true
-allowlist_externals = poetry
+allowlist_externals = poetry, pygount
 commands_pre = poetry install
 commands = pygount -f summary -s py,toml,json,yaml,md -d -F [...],data
 """
