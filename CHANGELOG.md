@@ -8,8 +8,13 @@ For examples and guidelines see [https://keepachangelog.com/](https://keepachang
 
 ### Added
 
+- Pull request rules
+
 ### Changed
 
+- Change syslog format to conform with RFC5424
+- Move project from internal GIT to GitHub
+- Github action to use multiple Python versions
 - Update pytest to ~7.2.0 because of dependabot security warning
 - Update tox, requests & pygount to get rid of module py
 
