@@ -1,4 +1,4 @@
-name: testing
+name: tests
 run-name: testing workflow invoked by ${{ github.actor }}
 
 on: [push, pull_request]
