@@ -8,8 +8,10 @@ import logging.config
 import os
 import pwd
 import socket
+from datetime import datetime
 from logging.handlers import RotatingFileHandler, SysLogHandler
-from typing import Union
+from typing import Optional, Union
+from syslog import LOG_AUTH, LOG_CRIT, LOG_DEBUG, LOG_ERR, LOG_INFO, LOG_USER, LOG_WARNING
 
 from rich.logging import RichHandler
 
@@ -20,29 +22,81 @@ from fotoobo.helpers.files import load_yaml_file
 logger = logging.getLogger("fotoobo")
 audit_logger = logging.getLogger("audit")
 
-# Need to do this like this, to have the GitLab pipeline work
-# See https://stackoverflow.com/questions/4399617/python-os-getlogin-problem
-USER = pwd.getpwuid(os.getuid())[0]
-HOSTNAME = socket.gethostname()
+
+class SysLogFormatter(logging.Formatter):
+    """
+    Handles syslog formats
+    """
+
+    def __init__(self, facility: int, fmt: str = "%(message)s", datefmt: Optional[str] = None):
+        """
+        Initialize the logger
+
+        Args:
+            facility:
+        """
+        self.facility = facility
+
+        # Need to do this like this, to have the GitLab pipeline work
+        # See https://stackoverflow.com/questions/4399617/python-os-getlogin-problem
+        self.user = pwd.getpwuid(os.getuid())[0]
+        self.hostname = socket.gethostname()
+
+        super().__init__(fmt=fmt, datefmt=datefmt)
+
+    def format(self, record: logging.LogRecord) -> str:
+        """
+        Format the message
+
+        Args:
+            record:
+
+        Returns:
+
+        """
+
+        if record.levelname == "DEBUG":
+            level: int = LOG_DEBUG
+        elif record.levelname == "INFO":
+            level = LOG_INFO
+        elif record.levelname == "WARNING":
+            level = LOG_WARNING
+        elif record.levelname == "ERROR":
+            level = LOG_ERR
+        elif record.levelname == "CRITICAL":
+            level = LOG_CRIT
+        else:
+            raise NotImplementedError(f"Loglevel {record.levelname} cannot be processed!")
+
+        msg_id = "AUDIT" if self.facility == LOG_AUTH else "-"
+
+        prival = self.facility + level
+        timestamp = datetime.fromtimestamp(record.created).astimezone().isoformat()
+
+        return (
+            " ".join(
+                [
+                    # Syslog header parts
+                    f"<{prival}>1",
+                    timestamp,
+                    "fotoobo",
+                    f"{self.hostname}",
+                    f"{record.process}",
+                    msg_id,
+                    "-",
+                    # Syslog message parts
+                    f"username={self.user}",
+                ]
+            )
+            + " "
+            + super().format(record)
+        )
 
 
 class Log:
     """
     The logger class for log control.
     """
-
-    @staticmethod
-    def add_file_logger() -> None:
-        """
-        Additionally log to a file if one is given.
-        """
-        if config.log_file:
-            formatter = logging.Formatter(
-                "%(asctime)s, %(levelname)s, %(message)s", "%d.%m.%Y %H:%M:%S"
-            )
-            file_handler = logging.FileHandler(config.log_file)
-            file_handler.setFormatter(formatter)
-            logger.addHandler(file_handler)
 
     @staticmethod
     def configure_logging(log_switch: Union[bool, None], log_level: Union[str, None]) -> None:
@@ -157,9 +211,7 @@ class Log:
                             else socket.SOCK_DGRAM,
                         )
 
-                        syslog_handler.setFormatter(
-                            logging.Formatter("%(levelname)s:%(name)s:%(message)s")
-                        )
+                        syslog_handler.setFormatter(SysLogFormatter(LOG_USER))
 
                         logger.addHandler(syslog_handler)
 
@@ -191,14 +243,13 @@ class Log:
                                 config.audit_logging["log_syslog"]["host"],
                                 int(config.audit_logging["log_syslog"]["port"]),
                             ),
+                            facility=LOG_AUTH,
                             socktype=socket.SOCK_STREAM
                             if config.audit_logging["log_syslog"]["protocol"] == "TCP"
                             else socket.SOCK_DGRAM,
                         )
 
-                        audit_syslog_handler.setFormatter(
-                            logging.Formatter("AUDIT:fotoobo:%(message)s")
-                        )
+                        audit_syslog_handler.setFormatter(SysLogFormatter(LOG_AUTH))
 
                         audit_logger.addHandler(audit_syslog_handler)
 
@@ -211,7 +262,7 @@ class Log:
         Create an audit log message
         """
 
-        audit_logger.info(":".join([f"username={USER}", f"hostname={HOSTNAME}", message]))
+        audit_logger.info(message)
 
 
 logger.audit = Log.audit  # type: ignore
