@@ -9,9 +9,11 @@ For examples and guidelines see [https://keepachangelog.com/](https://keepachang
 ### Added
 
 - Pull request rules
+- Add documentation to readthedocs.io as [fotoobo.readthedocs.io](https://fotoobo.readthedocs.io/)
 
 ### Changed
 
+- Change traceback.txt to traceback.log
 - Change syslog format to conform with RFC5424
 - Move project from internal GIT to GitHub
 - Github action to use multiple Python versions
