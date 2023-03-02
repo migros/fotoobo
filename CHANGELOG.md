@@ -9,7 +9,14 @@ For examples and guidelines see [https://keepachangelog.com/](https://keepachang
 
 ## [Released]
 
-## [0.4.6] - 2023-03-02
+## [0.5.0] - 2023-03-02
+
+### Added
+
+- fotoobo is now on the official PyPI
+- 
+
+## [0.4.3-6] - 2023-03-02
 
 ### Added
 
