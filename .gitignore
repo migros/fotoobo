@@ -12,6 +12,9 @@ __pycache__
 .tox/
 .coverage
 
+# Builds
+dist/
+
 # files and directories
 /tests/data/testlog.txt
 /tests/temp/
