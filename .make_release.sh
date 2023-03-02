@@ -51,7 +51,12 @@ git add pyproject.toml
 git add fotoobo/__init__.py
 git add CHANGELOG.md
 
+echo 'Committing version bump...'
 git commit -m ":bookmark: Commit version v$new_version"
 git push
+echo 'Create and push tag...'
 git tag -a "v$new_version" -m "Version v$new_version"
 git push origin "v$new_version"
+
+echo "Done. Version $new_version is now released on GitHub (and soon on PyPi, etc.)."
+echo -e "Congratulations \U2728"

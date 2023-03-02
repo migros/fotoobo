@@ -58,10 +58,10 @@ If you did not install the module you may achieve the same with running the modu
 Termination
 -----------
 
-fotoobo exits with defined status codes. You can show the status code in bash with `echo $?`. The
+fotoobo exits with defined status codes. You can show the status code in bash with ``echo $?``. The
 fotoobo status code values are based on the
-[levels from the Python logging module](https://docs.python.org/3/library/logging.html#logging-levels).
-The cli application (made with [typer](https://typer.tiangolo.com/)) exits with its own exit codes
+`levels from the Python logging module <https://docs.python.org/3/library/logging.html#logging-levels>`_.
+The cli application (made with `typer <https://typer.tiangolo.com/>`_) exits with its own exit codes
 which do not correspond with the Python logging levels.
 
 .. code-block:: bash
@@ -92,4 +92,4 @@ The following status codes are defined and used in fotoobo:
     - critical termination with exception and traceback
 
 After a critical termination with exit code 50 you may find the traceback information in the file
-traceback.txt in the local directory.
+traceback.log in the local directory.

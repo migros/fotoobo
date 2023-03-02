@@ -16,9 +16,11 @@ For examples and guidelines see [https://keepachangelog.com/](https://keepachang
 
 - Pull request rules on GitHub repo
 - Possibility to make a release by script
+- Add documentation to readthedocs.io as [fotoobo.readthedocs.io](https://fotoobo.readthedocs.io/)
 
 ### Changed
 
+- Change traceback.txt to traceback.log
 - Change syslog format to conform with RFC5424
 - Move project from internal GIT to GitHub
 - GitHub action to use multiple Python versions
