@@ -15,7 +15,11 @@ jobs:
           python-version: "3.10"
       - name: Install poetry
         run: pip install poetry
+      - name: Use TEST-PYPI
+        run: poetry config repositories.test-pypi https://test.pypi.org/legacy/
+      - name: Configure API token for TEST-PYPI
+        run: poetry config pypi-token.test-pypi "${{ secrets.PYPI_API_TOKEN }}"
       - name: Configure API token
         run: poetry config pypi-token.pypi "${{ secrets.PYPI_API_TOKEN }}"
       - name: Build and then publish Fotoobo to PyPI
-        run: poetry publish --build
+        run: poetry publish --build -r test-pypi
