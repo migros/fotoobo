@@ -9,7 +9,7 @@ For examples and guidelines see [https://keepachangelog.com/](https://keepachang
 
 ## [Released]
 
-## [0.4.4] - 2023-03-02
+## [0.4.5] - 2023-03-02
 
 ### Added
 
