@@ -53,6 +53,7 @@ git add CHANGELOG.md
 
 echo 'Committing version bump...'
 git commit -m ":bookmark: Commit version v$new_version"
+echo 'Pushing version bump...'
 git push
 
 echo "1st step done. Now create a pull request to the upstream repository and ask a maintainer to create the tag for you."
