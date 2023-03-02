@@ -53,10 +53,7 @@ git add CHANGELOG.md
 
 echo 'Committing version bump...'
 git commit -m ":bookmark: Commit version v$new_version"
+echo 'Pushing version bump...'
 git push
-echo 'Create and push tag...'
-git tag -a "v$new_version" -m "Version v$new_version"
-git push origin "v$new_version"
 
-echo "Done. Version $new_version is now released on GitHub (and soon on PyPi, etc.)."
-echo -e "Congratulations \U2728"
+echo "1st step done. Now create a pull request to the upstream repository and ask a maintainer to create the tag for you."

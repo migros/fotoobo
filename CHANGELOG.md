@@ -9,6 +9,12 @@ For examples and guidelines see [https://keepachangelog.com/](https://keepachang
 
 ## [Released]
 
+## [0.4.3] - 2023-03-02
+
+### Added
+
+- GitHub actions to automatically deploy to (Test-)PyPi and create a GitHub release
+
 
 ## [0.4.2] - 2023-03-02
 
