@@ -1,0 +1,16 @@
+name: Create a fotoobo release 📦 on GitHub
+
+on: push
+
+jobs:
+  release-on-github:
+    if: startsWith(github.ref, 'refs/tags')
+    name: Release on GitHub
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Release on Github
+        uses: softprops/action-gh-release@v1
+        with:
+          body_path: CHANGELOG.md
