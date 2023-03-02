@@ -6,7 +6,7 @@ build-backend = "poetry.core.masonry.api"
 name = "fotoobo"
 version = "0.5.0"
 description = "The awesome Fortinet Toolbox"
-authors = ["Patrik Spiess <patrik.spiess@mgb.ch>"]
+authors = ["Patrik Spiess <patrik.spiess@mgb.ch>", "Lukas Murer-Jäckle <lukas.murer@mgb.ch>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
