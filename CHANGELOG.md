@@ -6,20 +6,24 @@ For examples and guidelines see [https://keepachangelog.com/](https://keepachang
 
 ## [Unreleased]
 
+
+## [Released]
+
+
+## [0.4.2] - 2023-03-02
+
 ### Added
 
-- Pull request rules
+- Pull request rules on GitHub repo
+- Possibility to make a release by script
 
 ### Changed
 
 - Change syslog format to conform with RFC5424
 - Move project from internal GIT to GitHub
-- Github action to use multiple Python versions
+- GitHub action to use multiple Python versions
 - Update pytest to ~7.2.0 because of dependabot security warning
 - Update tox, requests & pygount to get rid of module py
-
-
-## [Released]
 
 
 ## [0.4.1] - 2023-02-06
