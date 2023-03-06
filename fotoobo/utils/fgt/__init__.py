@@ -2,7 +2,7 @@
 utils fgt
 """
 
-from . import check, get
+from . import check, config, get
 from .backup_ import backup
 
-__all__ = ["backup", "check", "get"]
+__all__ = ["backup", "check", "config", "get"]
