@@ -14,7 +14,7 @@ This is fotoobo, the mighty **Fo**\ rtinet **too**\ l\ **bo**\ x for managing yo
 environment. The tool consists of several useful utilities with functionality which is not covered
 by the standard Fortinet management suite. It is meant to be extendable to your needs. So feel free
 to add or update the utilities as needed but please be aware that there are some guidelines on how
-to contribute to the development.
+to `contribute <https://github.com/migros/fotoobo/blob/main/CONTRIBUTING.md>`_ to the development.
 
 .. toctree::
   :maxdepth: 1
