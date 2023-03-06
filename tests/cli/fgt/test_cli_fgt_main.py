@@ -16,4 +16,4 @@ def test_cli_app_fgt_help() -> None:
     arguments, options, commands = parse_help_output(result.stdout)
     assert not arguments
     assert options == {"-h", "--help"}
-    assert set(commands) == {"backup", "check", "get", "confcheck"}
+    assert set(commands) == {"backup", "check", "get", "config"}
