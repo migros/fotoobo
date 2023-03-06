@@ -15,7 +15,7 @@ For detailed documentation see [fotoobo.readthedocs.io](https://fotoobo.readthed
 
 # Contribution
 
-The contribute in this project please start by reading and accepting our
+To [contribute](CONTRIBUTING.md) in this project please start by reading and accepting our
 [Collective Code Construction Contract](https://fotoobo.readthedocs.io/en/latest/developer/c4.html).
 
 
@@ -38,4 +38,3 @@ This documentation has not yet been migrated to the Sphinx documentation.
 
 - [The FortiGate configuration structure in fotoobo](docs_legacy/fortinet/fortigate_config.md)
 - [FortiGate configuration check](docs_legacy/fortinet/fortigate_config_check.md)
-- [The fotoobo configuration object converter](docs_legacy/convert.md)
