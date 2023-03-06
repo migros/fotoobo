@@ -6,7 +6,7 @@ Testing the cli get app
 from typer.testing import CliRunner
 
 from fotoobo.cli.main import app
-from fotoobo.helpers.cli import parse_help_output
+from tests.helper import parse_help_output
 
 runner = CliRunner()
 
