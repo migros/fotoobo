@@ -1,5 +1,5 @@
 """
-Testing the cli fgt confcheck
+Testing the cli fgt config check
 """
 
 from unittest.mock import MagicMock, patch
@@ -12,9 +12,9 @@ from tests.helper import parse_help_output
 runner = CliRunner()
 
 
-def test_cli_app_fgt_confcheck_help() -> None:
-    """Test cli help for fgt confcheck help"""
-    result = runner.invoke(app, ["fgt", "confcheck", "-h"])
+def test_cli_app_fgt_config_check_help() -> None:
+    """Test cli help for fgt config check help"""
+    result = runner.invoke(app, ["fgt", "config", "check", "-h"])
     assert result.exit_code == 0
     arguments, options, commands = parse_help_output(result.stdout)
     assert set(arguments) == {"configuration", "bundles"}
@@ -22,19 +22,20 @@ def test_cli_app_fgt_confcheck_help() -> None:
     assert not commands
 
 
-def test_cli_app_fgt_confcheck_no_args() -> None:
-    """Test fgt confcheck with no arguments"""
-    result = runner.invoke(app, ["fgt", "confcheck"])
+def test_cli_app_fgt_config_check_no_args() -> None:
+    """Test fgt config check with no arguments"""
+    result = runner.invoke(app, ["fgt", "config", "check"])
     assert result.exit_code == 2
 
 
-def test_cli_app_fgt_confcheck() -> None:
-    """Test fgt confcheck"""
+def test_cli_app_fgt_config_check() -> None:
+    """Test fgt config check"""
     result = runner.invoke(
         app,
         [
             "fgt",
-            "confcheck",
+            "config",
+            "check",
             "tests/data/fortigate_config_single.conf",
             "tests/data/fortigate_checks.yaml",
         ],
@@ -43,7 +44,7 @@ def test_cli_app_fgt_confcheck() -> None:
 
 
 @patch(
-    "fotoobo.utils.fgt.confcheck.load_yaml_file",
+    "fotoobo.utils.fgt.config.check.load_yaml_file",
     MagicMock(
         return_value=[
             {
@@ -55,13 +56,14 @@ def test_cli_app_fgt_confcheck() -> None:
         ]
     ),
 )
-def test_cli_app_fgt_confcheck_failed() -> None:
-    """Test fgt confcheck when there are failed checks"""
+def test_cli_app_fgt_config_check_failed() -> None:
+    """Test fgt config check when there are failed checks"""
     result = runner.invoke(
         app,
         [
             "fgt",
-            "confcheck",
+            "config",
+            "check",
             "tests/data/fortigate_config_single.conf",
             "tests/data/fortigate_checks.yaml",
         ],
@@ -69,13 +71,14 @@ def test_cli_app_fgt_confcheck_failed() -> None:
     assert result.exit_code == 0
 
 
-def test_cli_app_fgt_confcheck_empty_config() -> None:
-    """Test cli options and commands for fgt confcheck with an empty configuration"""
+def test_cli_app_fgt_config_check_empty_config() -> None:
+    """Test cli options and commands for fgt config check with an empty configuration"""
     result = runner.invoke(
         app,
         [
             "fgt",
-            "confcheck",
+            "config",
+            "check",
             "tests/data/fortigate_config_empty.conf",
             "tests/data/fortigate_checks.yaml",
         ],
@@ -83,13 +86,14 @@ def test_cli_app_fgt_confcheck_empty_config() -> None:
     assert result.exit_code == 0
 
 
-def test_cli_app_fgt_confcheck_nonexist_config_file() -> None:
-    """Test cli options and commands for fgt confcheck with an nonexisting configuration"""
+def test_cli_app_fgt_config_check_nonexist_config_file() -> None:
+    """Test cli options and commands for fgt config check with an nonexisting configuration"""
     result = runner.invoke(
         app,
         [
             "fgt",
-            "confcheck",
+            "config",
+            "check",
             "tests/data/fortigate_config_nonexist.conf",
             "tests/data/fortigate_checks.yaml",
         ],
@@ -97,13 +101,14 @@ def test_cli_app_fgt_confcheck_nonexist_config_file() -> None:
     assert result.exit_code == 1
 
 
-def test_cli_app_fgt_confcheck_dir() -> None:
-    """Test cli options and commands for fgt confcheck if a directory is given as config source"""
+def test_cli_app_fgt_config_check_dir() -> None:
+    """Test cli options and commands for fgt config check if a directory is given"""
     result = runner.invoke(
         app,
         [
             "fgt",
-            "confcheck",
+            "config",
+            "check",
             "tests/data",
             "tests/data/fortigate_checks.yaml",
         ],
@@ -111,13 +116,14 @@ def test_cli_app_fgt_confcheck_dir() -> None:
     assert result.exit_code == 0
 
 
-def test_cli_app_fgt_confcheck_invalid_bundle_file() -> None:
-    """Test cli options and commands for fgt confcheck with an invalid check bundle file"""
+def test_cli_app_fgt_config_check_invalid_bundle_file() -> None:
+    """Test cli options and commands for fgt config check with an invalid check bundle file"""
     result = runner.invoke(
         app,
         [
             "fgt",
-            "confcheck",
+            "config",
+            "check",
             "tests/data/fortigate_config_single.conf",
             "tests/data/fortigate_checks_invalid.yaml",
         ],

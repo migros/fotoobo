@@ -10,6 +10,8 @@ For examples and guidelines see [https://keepachangelog.com/](https://keepachang
 ### Changed
 
 - Switch from easysnmp to pysnmp because pysnmp is pure Python
+- Split the cli command `fgt` `confcheck` to subcommand: `fgt` `config` `check` as there will be
+  more subcommands in the future
 
 
 ## [Released]
