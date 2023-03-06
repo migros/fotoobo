@@ -39,7 +39,7 @@ Changelog
 ---------
 
 The changelog for this project is maintained in the repository and can be found here:
-`<https://github.com/patrikspiess/fotoobo/blob/main/CHANGELOG.md>`_
+`<https://github.com/migros/fotoobo/blob/main/CHANGELOG.md>`_
 
 
 Indices and tables
