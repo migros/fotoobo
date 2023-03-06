@@ -7,6 +7,11 @@ For examples and guidelines see [https://keepachangelog.com/](https://keepachang
 ## [Unreleased]
 
 
+### Changed
+
+- Switch from easysnmp to pysnmp because pysnmp is pure Python
+
+
 ## [Released]
 
 ## [0.5.0] - 2023-03-02
@@ -14,7 +19,6 @@ For examples and guidelines see [https://keepachangelog.com/](https://keepachang
 ### Added
 
 - fotoobo is now on the official PyPI
-- 
 
 ## [0.4.3-6] - 2023-03-02
 

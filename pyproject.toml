@@ -15,8 +15,8 @@ typer = "~0.6.0"
 rich = "~12.5.1"
 PyYAML = "~6.0.0"
 requests = "~2.28.2"
-easysnmp = "~0.2.6"
 Jinja2 = "~3.1.2"
+pysnmp = "^4.4.12"
 
 [tool.poetry.dev-dependencies]
 pytest = "~7.2.0"
