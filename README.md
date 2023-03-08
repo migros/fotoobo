@@ -15,7 +15,7 @@ For detailed documentation see [fotoobo.readthedocs.io](https://fotoobo.readthed
 
 # Contribution
 
-The contribute in this project please start by reading and accepting our
+To contribute to this project please start by reading and accepting our
 [Collective Code Construction Contract](https://fotoobo.readthedocs.io/en/latest/developer/c4.html).
 
 
