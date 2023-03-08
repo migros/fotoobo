@@ -6,7 +6,7 @@
 [![GitHub release (latest by date)](https://img.shields.io/github/v/release/migros/fotoobo?style=plastic)](https://github.com/migros/fotoobo/releases)
 [![GitHub License](https://img.shields.io/github/license/migros/fotoobo?style=plastic)](https://github.com/migros/fotoobo/blob/main/LICENSE)
 ![PyPi Python versions](https://img.shields.io/pypi/pyversions/fotoobo?style=plastic) \
-[![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/migros/fotoobo/tests.yaml?label=tests)](https://github.com/migros/fotoobo/actions)
+[![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/migros/fotoobo/tests.yaml?label=tests&style=plastic)](https://github.com/migros/fotoobo/actions)
 [![GitHub open issues](https://img.shields.io/github/issues-raw/migros/fotoobo?style=plastic)](https://github.com/migros/fotoobo/issues?q=is%3Aissue+is%3Aopen)
 [![GitHub closed issues](https://img.shields.io/github/issues-closed-raw/migros/fotoobo?style=plastic)](https://github.com/migros/fotoobo/issues?q=is%3Aissue+is%3Aclosed) \
 [![GitHub Repo stars](https://img.shields.io/github/stars/migros/fotoobo?style=plastic)](https://github.com/migros/fotoobo/stargazers)
