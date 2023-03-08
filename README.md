@@ -3,9 +3,15 @@
 # fotoobo | Fortinet Toolbox
 **make IT easy**
 
-![CI Tests](https://github.com/migros/fotoobo/actions/workflows/tests.yaml/badge.svg)
-[![License](https://img.shields.io/github/license/migros/fotoobo)](https://github.com/migros/fotoobo/blob/main/LICENSE)
-![GitHub contributors](https://img.shields.io/github/contributors/migros/fotoobo)
+[![GitHub release (latest by date)](https://img.shields.io/github/v/release/migros/fotoobo?style=plastic)](https://github.com/migros/fotoobo/releases)
+[![GitHub License](https://img.shields.io/github/license/migros/fotoobo?style=plastic)](https://github.com/migros/fotoobo/blob/main/LICENSE) \
+[![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/migros/fotoobo/tests.yaml?label=tests)](https://github.com/migros/fotoobo/actions)
+[![GitHub open issues](https://img.shields.io/github/issues-raw/migros/fotoobo?style=plastic)](https://github.com/migros/fotoobo/issues)
+[![GitHub closed issues](https://img.shields.io/github/issues-closed-raw/migros/fotoobo?style=plastic)](https://github.com/migros/fotoobo/issues) \
+[![GitHub Repo stars](https://img.shields.io/github/stars/migros/fotoobo?style=plastic)](https://github.com/migros/fotoobo/stargazers)
+[![GitHub watchers](https://img.shields.io/github/watchers/migros/fotoobo?style=plastic)](https://github.com/migros/fotoobo/watchers)
+[![GitHub forks](https://img.shields.io/github/forks/migros/fotoobo?style=plastic)](https://github.com/migros/fotoobo/forks)
+[![GitHub contributors](https://img.shields.io/github/contributors/migros/fotoobo?style=plastic)](https://github.com/migros/fotoobo/graphs/contributors)
 
 This is fotoobo, the mighty **Fo**rtinet **too**l**bo**x for managing your Fortinet environment. It
 is meant to be extendable to your needs.
@@ -15,7 +21,7 @@ For detailed documentation see [fotoobo.readthedocs.io](https://fotoobo.readthed
 
 # Contribution
 
-The contribute in this project please start by reading and accepting our
+To [contribute](CONTRIBUTING.md) in this project please start by reading and accepting our
 [Collective Code Construction Contract](https://fotoobo.readthedocs.io/en/latest/developer/c4.html).
 
 
@@ -38,4 +44,3 @@ This documentation has not yet been migrated to the Sphinx documentation.
 
 - [The FortiGate configuration structure in fotoobo](docs_legacy/fortinet/fortigate_config.md)
 - [FortiGate configuration check](docs_legacy/fortinet/fortigate_config_check.md)
-- [The fotoobo configuration object converter](docs_legacy/convert.md)
