@@ -10,7 +10,7 @@ authors = ["Patrik Spiess <patrik.spiess@mgb.ch>", "Lukas Murer-Jäckle <lukas.m
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = ">=3.8.0, <3.11"
+python = ">=3.8.0, <3.12"
 typer = "~0.6.0"
 rich = "~12.5.1"
 PyYAML = "~6.0.0"
