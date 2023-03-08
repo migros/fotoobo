@@ -8,8 +8,6 @@ from typing import Any, Dict, List, Optional
 
 import requests
 
-from fotoobo.exceptions import GeneralError
-
 from .fortinet import Fortinet
 
 log = logging.getLogger("fotoobo")
@@ -135,8 +133,7 @@ class FortiManager(Fortinet):
                     response.json()["result"][0]["status"]["message"],
                 )
                 task_id = 0
-        else:
-            log.debug("no assign task created due to an error")
+
         return task_id
 
     def get_adoms(self, ignored_adoms: Optional[List[str]] = None) -> List[Any]:
@@ -153,13 +150,9 @@ class FortiManager(Fortinet):
         fmg_adoms: List[Any] = []
         payload = {"method": "get", "params": [{"url": "/dvmdb/adom"}]}
         response = self.api("post", payload=payload)
-        if response.status_code == 200:
-            for adom in response.json()["result"][0]["data"]:
-                if not adom["name"] in ignored_adoms:
-                    fmg_adoms.append(adom)
-
-        else:
-            raise GeneralError(f"HTTP error {response.status_code} while getting ADOM list")
+        for adom in response.json()["result"][0]["data"]:
+            if not adom["name"] in ignored_adoms:
+                fmg_adoms.append(adom)
 
         return fmg_adoms
 
@@ -263,15 +256,10 @@ class FortiManager(Fortinet):
                 )
 
             response = self.api("post", payload=payload, timeout=10)
-            if response.status_code == 200:
-                for result in response.json()["result"]:
-                    if result["status"]["code"] != 0:
-                        log.error("%s: %s", result["status"]["message"], result["url"])
-                        errors += 1
-
-            else:
-                log.error("response status code %s", response.status_code)
-                errors += 1
+            for result in response.json()["result"]:
+                if result["status"]["code"] != 0:
+                    log.error("%s: %s", result["status"]["message"], result["url"])
+                    errors += 1
 
         return errors
 
@@ -285,7 +273,7 @@ class FortiManager(Fortinet):
             timeout (int): Timeout in seconds
 
         Returns:
-            Message list or something
+            List: Message list
         """
         log.debug("waiting for task id %s", task_id)
         messages: List[Any] = []
