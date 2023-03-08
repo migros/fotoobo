@@ -51,7 +51,7 @@ def version(verbose: bool = False) -> None:
     log.debug("printing fotoobo version information: %s", __version__)
     versions = [{"module": "fotoobo", "version": __version__}]
 
-    modules = ["easysnmp", "jinja2", "PyYAML", "requests", "rich", "typer"]
+    modules = ["pysnmp", "jinja2", "PyYAML", "requests", "rich", "typer"]
     if verbose:
         for module in modules:
             versions.append({"module": module, "version": importlib.metadata.version(module)})
