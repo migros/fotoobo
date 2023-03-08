@@ -10,7 +10,7 @@ Prerequisites
 
 This fotoobo package assumes you have
 
-* Python with Poetry installed (linux preferred)
+* A Linux environment
 * Network access to Fortinet products
 * Administrative access to the Fortinet products (username/password, api key, snmp community)
 * Fundamental knowledge of what you are doing
@@ -19,16 +19,14 @@ This fotoobo package assumes you have
 Installing fotoobo
 ------------------
 
-Please install fotoobo on any \*ux machine or container with Python and Poetry on it. Although
-Python is an os independent programming language fotoobo is not meant to be installed and is not
-tested on any Windows machine. Not yet.
+Please install fotoobo on any Linux machine or container with Python on it. Although Python is an os
+independent programming language fotoobo is not meant to be installed and is not tested on any
+Windows machine. Not yet. If you want to use Windows then run fotoobo in
+`WSL <https://learn.microsoft.com/de-de/windows/wsl/>`_.
 
 .. code-block:: bash
 
-  * clone the project from https://git.intern.migros.net/mits-m-telekom/fortinet/fotoobo
-  * poetry install
-  * poetry shell
-  * pip install .
+  * pip install fotoobo
 
 
 Execution
@@ -48,12 +46,6 @@ An overview of all available fotoobo commands can be shown with:
 
   fotoobo get commands
 
-If you did not install the module you may achieve the same with running the module with Poetry:
-
-.. code-block:: bash
-
-  poetry run fotoobo --help
-
 
 Termination
 -----------
@@ -67,7 +59,7 @@ which do not correspond with the Python logging levels.
 .. code-block:: bash
 
   fotoobo$ fotoobo ems get version
-  FortiClient EMS version: 7.0.2
+  FortiClient EMS version: 1.2.3
   fotoobo$ echo $?
   0
 
