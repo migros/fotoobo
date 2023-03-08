@@ -6,6 +6,7 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 import requests
+from _pytest.monkeypatch import MonkeyPatch
 
 from fotoobo.exceptions import APIError, GeneralWarning
 from fotoobo.fortinet.forticlientems import FortiClientEMS
@@ -16,60 +17,70 @@ class TestFortiClientEMS:
     """Test the FortiClientEMS class"""
 
     @staticmethod
-    @patch(
-        "fotoobo.fortinet.fortinet.requests.Session.post",
-        MagicMock(
-            return_value=ResponseMock(
-                json={"result": {"retval": 1, "message": "Login successful."}}, status=200
-            )
-        ),
-    )
-    def test_login_without_cookie() -> None:
+    def test_login_without_cookie(monkeypatch: MonkeyPatch) -> None:
         """Test the login to a FortiClient EMS with no session cookie given"""
+        monkeypatch.setattr(
+            "fotoobo.fortinet.forticlientems.requests.Session.post",
+            MagicMock(
+                return_value=ResponseMock(
+                    json={"result": {"retval": 1, "message": "Login successful."}}, status=200
+                )
+            ),
+        )
         ems = FortiClientEMS("ems_dummy", "dummy_user", "dummy_pass", ssl_verify=False)
         assert ems.api_url == "https://ems_dummy/api/v1"
+        assert ems.login() == 200
 
     @staticmethod
-    @patch(
-        "fotoobo.fortinet.fortinet.requests.Session.get",
-        MagicMock(return_value=ResponseMock(json={"result": {"retval": 1}}, status=200)),
-    )
-    def test_login_with_valid_cookie() -> None:
+    def test_login_with_valid_cookie(monkeypatch: MonkeyPatch) -> None:
         """Test the login to a FortiClient EMS with valid session cookie path given"""
+        monkeypatch.setattr(
+            "fotoobo.fortinet.forticlientems.requests.Session.get",
+            MagicMock(
+                return_value=ResponseMock(
+                    json={"result": {"retval": 1, "message": "Login successful."}}, status=200
+                )
+            ),
+        )
         ems = FortiClientEMS(
             "ems_dummy", "dummy_user", "dummy_pass", "tests/data/", ssl_verify=False
         )
         assert ems.api_url == "https://ems_dummy/api/v1"
+        assert ems.login() == 200
 
     @staticmethod
-    @patch(
-        "fotoobo.fortinet.forticlientems.FortiClientEMS.api",
-        MagicMock(
-            return_value=ResponseMock(
-                json={
-                    "result": {"retval": -4, "message": "Session has expired or does not exist."},
-                },
-                status=401,
-            )
-        ),
-    )
-    @patch(
-        "fotoobo.fortinet.fortinet.requests.Session.post",
-        MagicMock(
-            return_value=ResponseMock(
-                json={
-                    "result": {"retval": 1, "message": "Login successful."},
-                },
-                status=200,
-            ),
-        ),
-    )
-    def test_login_with_invalid_cookie() -> None:
+    def test_login_with_invalid_cookie(monkeypatch: MonkeyPatch) -> None:
         """Test the login to a FortiClient EMS with no session cookie given"""
+        monkeypatch.setattr(
+            "fotoobo.fortinet.forticlientems.requests.Session.get",
+            MagicMock(
+                return_value=ResponseMock(
+                    json={
+                        "result": {
+                            "retval": -4,
+                            "message": "Session has expired or does not exist.",
+                        },
+                    },
+                    status=401,
+                )
+            ),
+        )
+        monkeypatch.setattr(
+            "fotoobo.fortinet.forticlientems.requests.Session.post",
+            MagicMock(
+                return_value=ResponseMock(
+                    json={
+                        "result": {"retval": 1, "message": "Login successful."},
+                    },
+                    status=200,
+                ),
+            ),
+        )
         ems = FortiClientEMS(
             "ems_dummy", "dummy_user", "dummy_pass", "tests/data/", ssl_verify=False
         )
         assert ems.api_url == "https://ems_dummy/api/v1"
+        assert ems.login() == 200
 
     @staticmethod
     @patch(
@@ -87,6 +98,7 @@ class TestFortiClientEMS:
         """Test the login to a FortiClient EMS with an invalid cookie path"""
         ems = FortiClientEMS("ems_dummy", "dummy_user", "dummy_pass", temp_dir, ssl_verify=False)
         assert ems.api_url == "https://ems_dummy/api/v1"
+        assert ems.login() == 200
 
     @staticmethod
     @patch("fotoobo.fortinet.forticlientems.FortiClientEMS.login", MagicMock(return_value=200))
@@ -153,3 +165,14 @@ class TestFortiClientEMS:
             verify=False,
             timeout=3,
         )
+
+    @staticmethod
+    def test_get_version_api_error(monkeypatch: MonkeyPatch) -> None:
+        """Test the get_version method with an APIError exception"""
+        monkeypatch.setattr(
+            "fotoobo.fortinet.forticlientems.FortiClientEMS.api",
+            MagicMock(side_effect=APIError(999)),
+        )
+        ems = FortiClientEMS("dummy_ems", "dummy_user", "dummy_pass", ssl_verify=False)
+        with pytest.raises(GeneralWarning, match=r"dummy_ems returned: unknown"):
+            ems.get_version()
