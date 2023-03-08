@@ -7,6 +7,7 @@ import typer
 
 from fotoobo import utils
 from fotoobo.cli.fgt import check_commands as check
+from fotoobo.cli.fgt import config_commands as config
 from fotoobo.cli.fgt import get_commands as get
 from fotoobo.helpers import cli_path
 
@@ -28,6 +29,7 @@ def callback(context: typer.Context) -> None:
 
 app.add_typer(get.app, name="get", help="FortiGate get commands")
 app.add_typer(check.app, name="check", help="FortiGate check commands")
+app.add_typer(config.app, name="config", help="FortiGate config file commands")
 
 
 @app.command()
@@ -49,18 +51,3 @@ def backup(
     Backup one or more FortiGate(s)
     """
     utils.fgt.backup(host, ftp_server, smtp_server)
-
-
-@app.command()
-def confcheck(
-    configuration: str = typer.Argument(
-        ..., help="The FortiGate configuration file or directory", metavar="[config]"
-    ),
-    bundles: str = typer.Argument(
-        ..., help="Filename of the file containing the check bundles", metavar="[bundles]"
-    ),
-) -> None:
-    """
-    Check one or more FortiGate configuration files
-    """
-    utils.fgt_confcheck(configuration, bundles)

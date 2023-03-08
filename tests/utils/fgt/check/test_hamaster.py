@@ -6,7 +6,6 @@ from unittest.mock import MagicMock
 
 import pytest
 from _pytest.monkeypatch import MonkeyPatch
-from easysnmp.variables import SNMPVariable
 
 from fotoobo.utils.fgt.check import hamaster
 from tests.helper import ResponseMock
@@ -41,7 +40,6 @@ def fmg_logout(monkeypatch: MonkeyPatch) -> None:
     (
         pytest.param("dummy_1", "not OK", id="not OK"),
         pytest.param("dummy_2", "OK", id="OK"),
-        pytest.param("NOSUCHINSTANCE", "unknown", id="unknown"),
     ),
 )
 def test_hamaster(monkeypatch: MonkeyPatch, ret_val: str, expected: str) -> None:
@@ -73,7 +71,7 @@ def test_hamaster(monkeypatch: MonkeyPatch, ret_val: str, expected: str) -> None
     )
     monkeypatch.setattr(
         "fotoobo.utils.fgt.check.hamaster_.snmp_get",
-        MagicMock(return_value=SNMPVariable(value=ret_val)),
+        MagicMock(return_value=ret_val),
     )
     monkeypatch.setattr("fotoobo.helpers.output.Output.send_mail", MagicMock(return_value=None))
     data = hamaster("test_fmg", smtp_server="test_smtp")
