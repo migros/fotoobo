@@ -5,8 +5,8 @@ import logging
 
 import typer
 
-from fotoobo import utils
 from fotoobo.helpers import cli_path
+from fotoobo.utils import convert
 
 app = typer.Typer()
 log = logging.getLogger("fotoobo")
@@ -57,4 +57,4 @@ def checkpoint(
     The Checkpoint objects have to be prepared in a json file. See convert.md for the syntax.
     The argument [type] defines what object type to convert.
     """
-    utils.convert_checkpoint(infile, outfile, obj_type, cache_dir)
+    convert.checkpoint(infile, outfile, obj_type, cache_dir)
