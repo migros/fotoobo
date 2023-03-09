@@ -1,8 +1,9 @@
 """
 Testing the cli app
 """
-from unittest.mock import MagicMock, patch
+from unittest.mock import MagicMock
 
+from _pytest.monkeypatch import MonkeyPatch
 from typer.testing import CliRunner
 
 from fotoobo.cli.main import app
@@ -31,16 +32,16 @@ def test_cli_app_faz_get_version_help() -> None:
     assert not commands
 
 
-@patch(
-    "fotoobo.fortinet.fortinet.requests.Session.post",
-    MagicMock(
-        return_value=ResponseMock(
-            json={"result": [{"data": {"Version": "v1.1.1-build1111 111111 (GA)"}}]}, status=200
-        )
-    ),
-)
-def test_cli_app_faz_get_version() -> None:
+def test_cli_app_faz_get_version(monkeypatch: MonkeyPatch) -> None:
     """Test cli options and commands for faz get version"""
+    monkeypatch.setattr(
+        "fotoobo.fortinet.fortinet.requests.Session.post",
+        MagicMock(
+            return_value=ResponseMock(
+                json={"result": [{"data": {"Version": "v1.1.1-build1111 111111 (GA)"}}]}, status=200
+            )
+        ),
+    )
     result = runner.invoke(app, ["-c", "tests/fotoobo.yaml", "faz", "get", "version", "test_faz"])
     assert result.exit_code == 0
     assert result.stdout.count("1.1.1") == 1
@@ -52,14 +53,14 @@ def test_cli_app_faz_get_version_dummy() -> None:
     assert result.exit_code == 1
 
 
-@patch(
-    "fotoobo.fortinet.fortinet.requests.Session.post",
-    MagicMock(
-        return_value=ResponseMock(json={"result": [{"data": {"Version": "dummy"}}]}, status=200)
-    ),
-)
-def test_cli_app_faz_get_version_none() -> None:
+def test_cli_app_faz_get_version_none(monkeypatch: MonkeyPatch) -> None:
     """Test cli options and commands for faz get version when there is no version in the response"""
+    monkeypatch.setattr(
+        "fotoobo.fortinet.fortinet.requests.Session.post",
+        MagicMock(
+            return_value=ResponseMock(json={"result": [{"data": {"Version": "dummy"}}]}, status=200)
+        ),
+    )
     result = runner.invoke(
         app, ["-c", "tests/dummy_fotoobo.yaml", "faz", "get", "version", "test_faz"]
     )
