@@ -32,6 +32,7 @@ to `contribute <https://github.com/migros/fotoobo/blob/main/CONTRIBUTING.md>`_ t
   developer/c4
   developer/package_structure
   developer/fortinet/classes
+  developer/how_to_release
   code
    
 
