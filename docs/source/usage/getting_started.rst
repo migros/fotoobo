@@ -26,7 +26,7 @@ Windows machine. Not yet. If you want to use Windows then run fotoobo in
 
 .. code-block:: bash
 
-  * pip install fotoobo
+  pip install fotoobo
 
 
 Execution
@@ -46,6 +46,40 @@ An overview of all available fotoobo commands can be shown with:
 
   fotoobo get commands
 
+
+Configuration
+-------------
+
+Start by creating a configuration file named `fotoobo.yaml`. At least give it a path to your
+inventory.
+
+.. code-block:: yaml
+
+  # The path to the inventory file
+  inventory: inventory.yaml
+
+And of course you must also create the inventory file which in this case is called `inventory.yaml`.
+
+.. code-block:: yaml
+
+  demo-fortigate:
+    hostname: <YOUR FORTIGATE DNS NAME OR IP-ADDRESS>
+    ssl_verify: false
+    token: <YOUR FORTIGATE API ACCESS TOKEN>
+    type: fortigate
+
+Now you can run fotoobo commands to the configured FortiGate. As an example you can get the FortiOS
+version from the FortiGate by issuing the following command:
+
+.. code-block:: bash
+
+  fotoobo fgt get version demo-fortigate
+
+The same way you may access any other supported Fortinet product in your network. Other products
+might need other or additional configuration. For detailed information see:
+
+  * :ref:`usage_configuration`
+  * :ref:`usage_inventory`
 
 Termination
 -----------
