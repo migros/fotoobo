@@ -24,7 +24,7 @@ from fotoobo.inventory import Inventory
 log = logging.getLogger("fotoobo")
 
 
-def snmp_get(  # pylint: disable=too-many-arguments
+def _snmp_get(  # pylint: disable=too-many-arguments
     oid: str, hostname: str, community: str, version: int = 2, timeout: int = 2, retries: int = 2
 ) -> str:
     """
@@ -123,7 +123,7 @@ def hamaster(  # pylint: disable=too-many-locals
         master_status: str = "unknown"
 
         try:
-            ha_master = snmp_get(
+            ha_master = _snmp_get(
                 "iso.3.6.1.4.1.12356.101.13.2.1.1.11.1",
                 hostname=firewall["ip"],
                 community=config.snmp_community,

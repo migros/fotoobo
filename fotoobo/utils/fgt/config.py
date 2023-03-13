@@ -18,7 +18,7 @@ app = typer.Typer()
 log = logging.getLogger("fotoobo")
 
 
-def fgt_config_check(config: str, bundles: str) -> None:
+def check(config: str, bundles: str) -> None:
     """
     The FortiGate configuration check
 

@@ -2,7 +2,7 @@
 Test the FortiManager class
 """
 # pylint: disable=no-member
-from unittest.mock import MagicMock, patch
+from unittest.mock import MagicMock
 
 import pytest
 import requests
@@ -17,25 +17,25 @@ class TestFortiManager:
     """Test the FortiManager class"""
 
     @staticmethod
-    @patch(
-        "fotoobo.fortinet.fortinet.requests.Session.post",
-        MagicMock(
-            return_value=ResponseMock(
-                json={
-                    "result": [
-                        {
-                            "data": {"task": 111},
-                            "status": {"code": 0, "message": "OK"},
-                            "url": "/securityconsole/assign/package",
-                        }
-                    ]
-                },
-                status=200,
-            )
-        ),
-    )
-    def test_assign_all_objects() -> None:
+    def test_assign_all_objects(monkeypatch: MonkeyPatch) -> None:
         """Test assign_all_objects"""
+        monkeypatch.setattr(
+            "fotoobo.fortinet.fortinet.requests.Session.post",
+            MagicMock(
+                return_value=ResponseMock(
+                    json={
+                        "result": [
+                            {
+                                "data": {"task": 111},
+                                "status": {"code": 0, "message": "OK"},
+                                "url": "/securityconsole/assign/package",
+                            }
+                        ]
+                    },
+                    status=200,
+                )
+            ),
+        )
         assert FortiManager("", "", "").assign_all_objects("DUMMY") == 111
         requests.Session.post.assert_called_with(  # type: ignore
             "https:///jsonrpc",
@@ -59,12 +59,12 @@ class TestFortiManager:
         )
 
     @staticmethod
-    @patch(
-        "fotoobo.fortinet.fortinet.requests.Session.post",
-        MagicMock(return_value=ResponseMock(json={}, status=404)),
-    )
-    def test_assign_all_objects_http_404() -> None:
+    def test_assign_all_objects_http_404(monkeypatch: MonkeyPatch) -> None:
         """Test assign_all_objects with http error 404"""
+        monkeypatch.setattr(
+            "fotoobo.fortinet.fortinet.requests.Session.post",
+            MagicMock(return_value=ResponseMock(json={}, status=404)),
+        )
         with pytest.raises(APIError) as err:
             FortiManager("", "", "").assign_all_objects("DUMMY")
         assert "HTTP/404 Resource Not Found" in str(err.value)
@@ -90,25 +90,25 @@ class TestFortiManager:
         )
 
     @staticmethod
-    @patch(
-        "fotoobo.fortinet.fortinet.requests.Session.post",
-        MagicMock(
-            return_value=ResponseMock(
-                json={
-                    "result": [
-                        {
-                            "data": {},
-                            "status": {"code": 22, "message": "NOT-OK"},
-                            "url": "/securityconsole/assign/package",
-                        }
-                    ]
-                },
-                status=200,
-            )
-        ),
-    )
-    def test_assign_all_objects_status_not_ok() -> None:
+    def test_assign_all_objects_status_not_ok(monkeypatch: MonkeyPatch) -> None:
         """Test assign_all_objects with status code != 0"""
+        monkeypatch.setattr(
+            "fotoobo.fortinet.fortinet.requests.Session.post",
+            MagicMock(
+                return_value=ResponseMock(
+                    json={
+                        "result": [
+                            {
+                                "data": {},
+                                "status": {"code": 22, "message": "NOT-OK"},
+                                "url": "/securityconsole/assign/package",
+                            }
+                        ]
+                    },
+                    status=200,
+                )
+            ),
+        )
         assert FortiManager("", "", "").assign_all_objects("DUMMY") == 0
         requests.Session.post.assert_called_with(  # type: ignore
             "https:///jsonrpc",
@@ -132,14 +132,16 @@ class TestFortiManager:
         )
 
     @staticmethod
-    @patch(
-        "fotoobo.fortinet.fortinet.requests.Session.post",
-        MagicMock(
-            return_value=ResponseMock(json={"result": [{"data": [{"name": "dummy"}]}]}, status=200)
-        ),
-    )
-    def test_get_adoms() -> None:
+    def test_get_adoms(monkeypatch: MonkeyPatch) -> None:
         """Test fmg get adoms"""
+        monkeypatch.setattr(
+            "fotoobo.fortinet.fortinet.requests.Session.post",
+            MagicMock(
+                return_value=ResponseMock(
+                    json={"result": [{"data": [{"name": "dummy"}]}]}, status=200
+                )
+            ),
+        )
         assert FortiManager("", "", "").get_adoms() == [{"name": "dummy"}]
         requests.Session.post.assert_called_with(  # type:ignore
             "https:///jsonrpc",
@@ -150,12 +152,12 @@ class TestFortiManager:
         )
 
     @staticmethod
-    @patch(
-        "fotoobo.fortinet.fortinet.requests.Session.post",
-        MagicMock(return_value=ResponseMock(json={}, status=400)),
-    )
-    def test_get_adoms_http_error() -> None:
+    def test_get_adoms_http_error(monkeypatch: MonkeyPatch) -> None:
         """Test fmg get adoms with a status != 200"""
+        monkeypatch.setattr(
+            "fotoobo.fortinet.fortinet.requests.Session.post",
+            MagicMock(return_value=ResponseMock(json={}, status=400)),
+        )
         with pytest.raises(APIError) as err:
             FortiManager("", "", "").get_adoms()
         assert "HTTP/400 Bad Request" in str(err.value)
@@ -188,21 +190,23 @@ class TestFortiManager:
         )
 
     @staticmethod
-    @patch(
-        "fotoobo.fortinet.fortinet.requests.Session.post",
-        MagicMock(
-            return_value=ResponseMock(
-                json={
-                    "id": 1,
-                    "result": [{"status": {"code": 0, "message": "OK"}, "url": "/sys/login/user"}],
-                    "session": "dummy_session",
-                },
-                status=200,
-            )
-        ),
-    )
-    def test_login() -> None:
+    def test_login(monkeypatch: MonkeyPatch) -> None:
         """Test the login to a fortimanager"""
+        monkeypatch.setattr(
+            "fotoobo.fortinet.fortinet.requests.Session.post",
+            MagicMock(
+                return_value=ResponseMock(
+                    json={
+                        "id": 1,
+                        "result": [
+                            {"status": {"code": 0, "message": "OK"}, "url": "/sys/login/user"}
+                        ],
+                        "session": "dummy_session",
+                    },
+                    status=200,
+                )
+            ),
+        )
         fmg = FortiManager("host", "user", "pass")
         assert fmg.login() == 200
         requests.Session.post.assert_called_with(  # type: ignore
@@ -218,22 +222,24 @@ class TestFortiManager:
         )
 
     @staticmethod
-    @patch("fotoobo.fortinet.fortimanager.FortiManager.login", MagicMock(return_value=200))
-    @patch(
-        "fotoobo.fortinet.fortinet.requests.Session.post",
-        MagicMock(
-            return_value=ResponseMock(
-                json={
-                    "method": "exec",
-                    "params": [{"url": "/sys/logout"}],
-                    "session": "dummy_session",
-                },
-                status=200,
-            )
-        ),
-    )
-    def test_logout() -> None:
+    def test_logout(monkeypatch: MonkeyPatch) -> None:
         """Test the logout of a fortimanager"""
+        monkeypatch.setattr(
+            "fotoobo.fortinet.fortimanager.FortiManager.login", MagicMock(return_value=200)
+        )
+        monkeypatch.setattr(
+            "fotoobo.fortinet.fortinet.requests.Session.post",
+            MagicMock(
+                return_value=ResponseMock(
+                    json={
+                        "method": "exec",
+                        "params": [{"url": "/sys/logout"}],
+                        "session": "dummy_session",
+                    },
+                    status=200,
+                )
+            ),
+        )
         fortimanager = FortiManager("host", "user", "pass")
         assert fortimanager.logout() == 200
         requests.Session.post.assert_called_with(  # type: ignore
@@ -245,14 +251,14 @@ class TestFortiManager:
         )
 
     @staticmethod
-    @patch(
-        "fotoobo.fortinet.fortinet.requests.Session.post",
-        MagicMock(
-            return_value=ResponseMock(json={"result": [{"status": {"code": 0}}]}, status=200)
-        ),
-    )
-    def test_set_single() -> None:
+    def test_set_single(monkeypatch: MonkeyPatch) -> None:
         """Test fmg set with a single dict"""
+        monkeypatch.setattr(
+            "fotoobo.fortinet.fortinet.requests.Session.post",
+            MagicMock(
+                return_value=ResponseMock(json={"result": [{"status": {"code": 0}}]}, status=200)
+            ),
+        )
         assert FortiManager("", "", "").set("ADOM", {"params": [{"url": "{adom}"}]}) == 0
         requests.Session.post.assert_called_with(  # type:ignore
             "https:///jsonrpc",
@@ -263,14 +269,14 @@ class TestFortiManager:
         )
 
     @staticmethod
-    @patch(
-        "fotoobo.fortinet.fortinet.requests.Session.post",
-        MagicMock(
-            return_value=ResponseMock(json={"result": [{"status": {"code": 0}}]}, status=200)
-        ),
-    )
-    def test_set_multiple() -> None:
+    def test_set_multiple(monkeypatch: MonkeyPatch) -> None:
         """Test fmg set with a list of dicts"""
+        monkeypatch.setattr(
+            "fotoobo.fortinet.fortinet.requests.Session.post",
+            MagicMock(
+                return_value=ResponseMock(json={"result": [{"status": {"code": 0}}]}, status=200)
+            ),
+        )
         assert FortiManager("", "", "").set("ADOM", [{"params": [{"url": "{adom}"}]}]) == 0
         requests.Session.post.assert_called_with(  # type:ignore
             "https:///jsonrpc",
@@ -281,14 +287,14 @@ class TestFortiManager:
         )
 
     @staticmethod
-    @patch(
-        "fotoobo.fortinet.fortinet.requests.Session.post",
-        MagicMock(
-            return_value=ResponseMock(json={"result": [{"status": {"code": 0}}]}, status=200)
-        ),
-    )
-    def test_set_single_global() -> None:
+    def test_set_single_global(monkeypatch: MonkeyPatch) -> None:
         """Test fmg set with a single dict"""
+        monkeypatch.setattr(
+            "fotoobo.fortinet.fortinet.requests.Session.post",
+            MagicMock(
+                return_value=ResponseMock(json={"result": [{"status": {"code": 0}}]}, status=200)
+            ),
+        )
         assert FortiManager("", "", "").set("global", {"params": [{"url": "{adom}"}]}) == 0
         requests.Session.post.assert_called_with(  # type:ignore
             "https:///jsonrpc",
@@ -299,17 +305,19 @@ class TestFortiManager:
         )
 
     @staticmethod
-    @patch(
-        "fotoobo.fortinet.fortinet.requests.Session.post",
-        MagicMock(
-            return_value=ResponseMock(
-                json={"result": [{"status": {"code": 444, "message": "dummy"}, "url": "dummy"}]},
-                status=200,
-            )
-        ),
-    )
-    def test_set_response_error() -> None:
+    def test_set_response_error(monkeypatch: MonkeyPatch) -> None:
         """Test fmg set with en error in the response"""
+        monkeypatch.setattr(
+            "fotoobo.fortinet.fortinet.requests.Session.post",
+            MagicMock(
+                return_value=ResponseMock(
+                    json={
+                        "result": [{"status": {"code": 444, "message": "dummy"}, "url": "dummy"}]
+                    },
+                    status=200,
+                )
+            ),
+        )
         assert FortiManager("", "", "").set("ADOM", [{"params": [{"url": "{adom}"}]}]) == 1
         requests.Session.post.assert_called_with(  # type:ignore
             "https:///jsonrpc",
@@ -320,12 +328,12 @@ class TestFortiManager:
         )
 
     @staticmethod
-    @patch(
-        "fotoobo.fortinet.fortinet.requests.Session.post",
-        MagicMock(return_value=ResponseMock(json={}, status=444)),
-    )
-    def test_set_http_error() -> None:
+    def test_set_http_error(monkeypatch: MonkeyPatch) -> None:
         """Test fmg set with an error in the response"""
+        monkeypatch.setattr(
+            "fotoobo.fortinet.fortinet.requests.Session.post",
+            MagicMock(return_value=ResponseMock(json={}, status=444)),
+        )
         with pytest.raises(APIError) as err:
             FortiManager("", "", "").set("ADOM", [{"params": [{"url": "{adom}"}]}])
         assert "HTTP/444 general API Error" in str(err.value)
@@ -338,36 +346,36 @@ class TestFortiManager:
         )
 
     @staticmethod
-    @patch(
-        "fotoobo.fortinet.fortinet.requests.Session.post",
-        MagicMock(
-            return_value=ResponseMock(
-                json={
-                    "result": [
-                        {
-                            "data": [
-                                {
-                                    "history": [
-                                        {"detail": "detail 1", "percent": 10},
-                                        {"detail": "detail 2", "percent": 20},
-                                    ],
-                                    "state": 4,
-                                    "percent": 100,
-                                    "detail": "main detail",
-                                    "task_id": 222,
-                                },
-                            ],
-                            "status": {"code": 0, "message": "OK"},
-                            "url": "/task/task/222/line",
-                        }
-                    ]
-                },
-                status=200,
-            )
-        ),
-    )
-    def test_wait_for_task() -> None:
+    def test_wait_for_task(monkeypatch: MonkeyPatch) -> None:
         """Test wait_for_task"""
+        monkeypatch.setattr(
+            "fotoobo.fortinet.fortinet.requests.Session.post",
+            MagicMock(
+                return_value=ResponseMock(
+                    json={
+                        "result": [
+                            {
+                                "data": [
+                                    {
+                                        "history": [
+                                            {"detail": "detail 1", "percent": 10},
+                                            {"detail": "detail 2", "percent": 20},
+                                        ],
+                                        "state": 4,
+                                        "percent": 100,
+                                        "detail": "main detail",
+                                        "task_id": 222,
+                                    },
+                                ],
+                                "status": {"code": 0, "message": "OK"},
+                                "url": "/task/task/222/line",
+                            }
+                        ]
+                    },
+                    status=200,
+                )
+            ),
+        )
         messages = FortiManager("", "", "").wait_for_task(222, 0)
         assert isinstance(messages, list)
         assert messages[0]["task_id"] == 222

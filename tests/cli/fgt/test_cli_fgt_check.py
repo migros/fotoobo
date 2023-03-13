@@ -1,7 +1,7 @@
 """
 Testing the cli fgt check
 """
-from unittest.mock import MagicMock, patch
+from unittest.mock import MagicMock
 
 from _pytest.monkeypatch import MonkeyPatch
 from typer.testing import CliRunner
@@ -32,12 +32,12 @@ def test_cli_app_fgt_check_hamaster_help() -> None:
     assert not commands
 
 
-@patch(
-    "fotoobo.fortinet.fortinet.requests.Session.get",
-    MagicMock(return_value=ResponseMock(json={"version": "v1.1.1"}, status=200)),
-)
-def test_cli_app_fgt_get_version() -> None:
+def test_cli_app_fgt_get_version(monkeypatch: MonkeyPatch) -> None:
     """Test cli options and commands for fgt get version"""
+    monkeypatch.setattr(
+        "fotoobo.fortinet.fortinet.requests.Session.get",
+        MagicMock(return_value=ResponseMock(json={"version": "v1.1.1"}, status=200)),
+    )
     result = runner.invoke(app, ["-c", "tests/fotoobo.yaml", "fgt", "get", "version", "test_fgt_1"])
     assert result.exit_code == 0
     assert result.stdout.count("1.1.1") == 1
@@ -49,12 +49,12 @@ def test_cli_app_fgt_get_version_dummy() -> None:
     assert result.exit_code == 1
 
 
-@patch(
-    "fotoobo.fortinet.fortinet.requests.Session.get",
-    MagicMock(return_value=ResponseMock(json={"version": "v1.1.1"}, status=200)),
-)
-def test_cli_app_fgt_get_version_all() -> None:
+def test_cli_app_fgt_get_version_all(monkeypatch: MonkeyPatch) -> None:
     """Test cli options and commands for fgt get version without specifying a host"""
+    monkeypatch.setattr(
+        "fotoobo.fortinet.fortinet.requests.Session.get",
+        MagicMock(return_value=ResponseMock(json={"version": "v1.1.1"}, status=200)),
+    )
     result = runner.invoke(app, ["-c", "tests/fotoobo.yaml", "fgt", "get", "version"])
     assert result.exit_code == 0
     assert result.stdout.count("1.1.1") == 2

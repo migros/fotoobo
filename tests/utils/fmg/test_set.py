@@ -37,7 +37,7 @@ def fmg_logout(monkeypatch: MonkeyPatch) -> None:
 def test_set(monkeypatch: MonkeyPatch) -> None:
     """Test set"""
     monkeypatch.setattr(
-        "fotoobo.utils.fmg.set_.load_json_file", MagicMock(return_value={"dummy": "dummy"})
+        "fotoobo.utils.fmg.main.load_json_file", MagicMock(return_value={"dummy": "dummy"})
     )
     monkeypatch.setattr(
         "fotoobo.fortinet.fortimanager.FortiManager.set", MagicMock(return_value=None)

@@ -55,7 +55,7 @@ def test_version_exception_from_fortigate(side_effect: Any, monkeypatch: MonkeyP
 def test_version_no_fortigates(monkeypatch: MonkeyPatch) -> None:
     """Test get version with no FortiGates in inventory"""
     monkeypatch.setattr(
-        "fotoobo.utils.fgt.get.version_.Inventory._load_inventory", MagicMock(return_value=None)
+        "fotoobo.utils.fgt.get.Inventory._load_inventory", MagicMock(return_value=None)
     )
     with pytest.raises(GeneralWarning, match=r"no asset of type 'fortigate' was found in.*"):
         version("")

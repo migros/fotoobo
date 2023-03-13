@@ -2,8 +2,9 @@
 Testing the cli fgt config check
 """
 
-from unittest.mock import MagicMock, patch
+from unittest.mock import MagicMock
 
+from _pytest.monkeypatch import MonkeyPatch
 from typer.testing import CliRunner
 
 from fotoobo.cli.main import app
@@ -43,21 +44,21 @@ def test_cli_app_fgt_config_check() -> None:
     assert result.exit_code == 0
 
 
-@patch(
-    "fotoobo.utils.fgt.config.check.load_yaml_file",
-    MagicMock(
-        return_value=[
-            {
-                "type": "count",
-                "scope": "vdom",
-                "path": "/root/leaf_81/leaf_82",
-                "checks": {"eq": 100},
-            }
-        ]
-    ),
-)
-def test_cli_app_fgt_config_check_failed() -> None:
+def test_cli_app_fgt_config_check_failed(monkeypatch: MonkeyPatch) -> None:
     """Test fgt config check when there are failed checks"""
+    monkeypatch.setattr(
+        "fotoobo.utils.fgt.config.load_yaml_file",
+        MagicMock(
+            return_value=[
+                {
+                    "type": "count",
+                    "scope": "vdom",
+                    "path": "/root/leaf_81/leaf_82",
+                    "checks": {"eq": 100},
+                }
+            ]
+        ),
+    )
     result = runner.invoke(
         app,
         [

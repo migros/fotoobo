@@ -22,7 +22,7 @@ The file `fotoobo.yaml.sample`_ provides a skeleton of a `fotoobo.yaml` configur
 possible options and the respective documentation for it. Use this as a starting point for your own
 configuration.
 
-.. _fotoobo.yaml.sample: https://git.intern.migros.net/mits-m-telekom/fortinet/fotoobo/-/blob/dev/fotoobo.yaml.sample
+.. _fotoobo.yaml.sample: https://github.com/migros/fotoobo/blob/main/fotoobo.yaml.sample
 
 
 CLI-Options
@@ -133,8 +133,8 @@ log_syslog
 
 *default: disabled (commented out)*
 
-The configuration to log to syslog. If you need this, remove the comment values (``#``) and set the values of
-``host``, ``port`` and ``protocol`` to the correct values.
+The configuration to log to syslog. If you need this, remove the comment values (``#``) and set the
+values of ``host``, ``port`` and ``protocol`` to the correct values.
 
 .. _log_configuration_file:
 
@@ -143,10 +143,10 @@ log_configuration_file
 
 *default: disabled (commented out)*
 
-If you want to finetune logging even more, you can provide an own python logging configuration file. There is
-a `logging.config.sample`_ where you can find more information about this.
-Uncomment the line and point it to your ``logging.config`` -file to have the custom logging configuration take
-effect.
+If you want to fine tune logging even more, you can provide an own python logging configuration
+file. There is a `logging.config.sample`_ where you can find more information about this.
+Uncomment the line and point it to your ``logging.config`` -file to have the custom logging
+configuration take effect.
 
 NOTE:
   * If this settings is set, all the above (including :ref:`logging_enabled`) will be ignored.
@@ -154,14 +154,14 @@ NOTE:
     Mixing logging configurations from ``fotoobo.yaml`` and a custom ``logging.config`` is not
     supported.
 
-.. _logging.config.sample: https://git.intern.migros.net/mits-m-telekom/fortinet/fotoobo/-/blob/dev/logging-config.yaml.sample
+.. _logging.config.sample: https://github.com/migros/fotoobo/blob/main/logging-config.yaml.sample
 
 
 Audit-Logging
 ^^^^^^^^^^^^^
 
-fotoobo can produce audit log trails (usually this is just which user called what fotoobo
-commandline from which host when).
+fotoobo can produce audit log trails (usually this is just which user called what fotoobo command
+line from which host when).
 
 The configuration options work the same as described in :ref:`logging`.
 
