@@ -6,7 +6,7 @@ import json
 import logging
 import os
 import re
-from ftplib import FTP
+from ftplib import FTP, FTP_TLS
 from typing import Any, Dict, List, Union
 from zipfile import ZIP_DEFLATED, ZipFile
 
@@ -37,7 +37,7 @@ def create_dir(directory: str) -> None:
 
 def file_to_ftp(file: str, server: Any) -> int:
     """
-    Upload a file to an ftp server.
+    Upload a file to a ftp server.
 
     Args:
         file (str): the source file to upload
@@ -48,19 +48,38 @@ def file_to_ftp(file: str, server: Any) -> int:
             * directory
             * username
             * password
+            * protocol (default="sftp")
 
     Returns:
         int: return code
     """
     retcode = 0
     if os.path.isfile(file):
-        with FTP(server.hostname, server.username, server.password) as ftp:
-            ftp.cwd(server.directory)
-            with open(file, "rb") as ftp_file:
-                response = ftp.storbinary(f"STOR {os.path.basename(file)}", ftp_file)
-                if response != "226 Transfer complete.":
-                    if code := re.search(r"^([0-9]{0,3})\s", response):
-                        retcode = int(code[1])
+        if hasattr(server, "protocol"):
+            protocol = server.protocol
+        else:
+            protocol = "sftp"
+
+        if protocol == "sftp":
+            with FTP_TLS(server.hostname, server.username, server.password) as ftp:
+                ftp.cwd(server.directory)
+                with open(file, "rb") as ftp_file:
+                    response = ftp.storbinary(f"STOR {os.path.basename(file)}", ftp_file)
+                    if response != "226 Transfer complete.":
+                        if code := re.search(r"^([0-9]{0,3})\s", response):
+                            retcode = int(code[1])
+
+        elif protocol == "ftp":
+            with FTP(server.hostname, server.username, server.password) as ftp:
+                ftp.cwd(server.directory)
+                with open(file, "rb") as ftp_file:
+                    response = ftp.storbinary(f"STOR {os.path.basename(file)}", ftp_file)
+                    if response != "226 Transfer complete.":
+                        if code := re.search(r"^([0-9]{0,3})\s", response):
+                            retcode = int(code[1])
+
+        else:
+            raise GeneralError(f'Unknown FTP protocol "{protocol}" for server "{server.hostname}"')
 
     else:
         retcode = 666

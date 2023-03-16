@@ -22,7 +22,7 @@ For detailed documentation see [fotoobo.readthedocs.io](https://fotoobo.readthed
 
 # Contribution
 
-To [contribute](CONTRIBUTING.md) in this project please start by reading and accepting our
+To [contribute](CONTRIBUTING.md) to this project please start by reading and accepting our
 [Collective Code Construction Contract](https://fotoobo.readthedocs.io/en/latest/developer/c4.html).
 
 
