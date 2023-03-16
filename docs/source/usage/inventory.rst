@@ -164,11 +164,16 @@ ftp
 
 An ftp server may be used to upload configuration backups.
 
+**hostname** *string* (required)
+  The hostname or ip address of the desired ftp server.
+
+**protocol** *string* (optional, default: sftp)
+  Either 'sftp' or 'ftp', defaults to 'sftp'.
+
 **directory** *string* (required)
   Define the directory on the ftp server in which to upload the data to.
 
-**hostname** *string* (required)
-  The hostname or ip address of the desired ftp server.
+**username** *string* (required)
 
 **password** *string* (required)
   The password used to login to the ftp server.
@@ -176,14 +181,13 @@ An ftp server may be used to upload configuration backups.
 **type** *string* (optional, default: generic)
   For ftp servers always use 'ftp' as type.
 
-**username** *string* (required)
-
 **example**
 
 .. code-block:: yaml
 
   myftp:
     hostname: ftp.local
+    protocol: sftp
     directory: dir1/dir2/
     username: username
     password: password
