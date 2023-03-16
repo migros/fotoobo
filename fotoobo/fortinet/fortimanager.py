@@ -29,7 +29,7 @@ class FortiManager(Fortinet):
             **kwargs (dict): see Fortinet class for available arguments
         """
         super().__init__(hostname, **kwargs)
-        self.api_url = f"https://{self.hostname}/jsonrpc"
+        self.api_url = f"https://{self.hostname}:{self.https_port}/jsonrpc"
         self.password = password
         self.sessionkey: str = ""
         self.username = username

@@ -6,6 +6,9 @@ For examples and guidelines see [https://keepachangelog.com/](https://keepachang
 
 ## [Unreleased]
 
+### Added
+
+- Define the port number to connect to a Fortinet device with the new inventory option https_port
 
 ### Changed
 
