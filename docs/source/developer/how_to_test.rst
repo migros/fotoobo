@@ -5,6 +5,8 @@
 How to Test
 ===========
 
+To test the code we use pytest `pytest <https://docs.pytest.org/>`_.
+
 Static Data
 -----------
 
