@@ -32,10 +32,12 @@ class Fortinet(ABC):
         Args:
             hostname (str): the hostname of the Fortinet device to connect to
             **kwargs: additional arguments from the following list:
+                https_port (int): The tcp port number to connect to the https api
+                    If you do not specify a port number it is set to 443 by default.
                 proxy (str): proxy server to use to connect to the Fortinet device
                     If you need to connect to your Fortinet device through a proxy server you can
                     set it here as as string. If needed you may append the proxy server port with a
-                    column to the proxy server. e.g. "proxy.local:8000"
+                    column to the proxy server. e.g. "proxy.local:8000".
                 ssl_verify (bool): enable/disable SSL certificate check
                     When ssl_verify is enabled you have to install a trusted SSL certificate onto
                     the device you wish to connect to. If you set ssl_verify to false it will also
@@ -43,10 +45,11 @@ class Fortinet(ABC):
                     logged.
                 timeout (float): connection timeout in seconds
         """
+        self.api_url: str = ""
+        self.hostname: str = hostname
+        self.https_port: int = kwargs.get("https_port", 443)
         self.session = requests.Session()
         self.session.trust_env = False
-        self.api_url: str = ""
-        self.hostname: str = hostname.strip("/")
         self.session.proxies: Dict[str, Any] = {"http": None, "https": None}  # type: ignore
         if proxy := kwargs.get("proxy", ""):
             self.session.proxies = {"http": f"{proxy}", "https": f"{proxy}"}

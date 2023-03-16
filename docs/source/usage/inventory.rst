@@ -26,7 +26,8 @@ The entry for each device begins with its name which can be used in the fotoobo 
     token: the_api_key_from_the_device
     type: fortigate
   my-fortigate2:
-    hostname: myfortigate2.manage.it:8443
+    hostname: myfortigate2.manage.it
+    https_port: 8443
     token: the_api_key_from_the_device
     type: fortigate
 
@@ -47,25 +48,32 @@ To connect to FortiGate devices you do not login with a username and password. I
 an API access token in every request.
 
 **hostname** *string* (required)
-  The hostname or IP address of the FortiGate device. May be followed by its connection port if
-  it's not 443. Due to security reasons the connection to a FortiGate is always done with the
-  protocol https.
+
+  The hostname or IP address of the FortiGate device. Do not add the protocol before or the port
+  number after, just the hostname or ip address. Due to security reasons the connection to a
+  FortiGate is always done with the protocol https.
 
   * ``myfortigate1.mydomain.local``
-  * ``myfortigate1.mydomain.local:8443``
-  * ``10.20.30.40:9443``
+  * ``10.20.30.40``
+
+**https_port** *number* (optional, default 443)
+
+  The port number to use for accessing the https api.
 
 **ssl_verify** *bool* (optional, default: true)
+
   Check hosts SSL certificate (true) or not (false). Please be aware that disabling SSL certificate
   verification is a security risk and should not be used in a production environment.
   `Don't say I didn't tell you <https://www.youtube.com/watch?v=1bVy1sLVasY>`_.
 
 **token** *string* (required)
+
   The API access token from the FortiGate. Please read the
   `FortiOS documentation <https://docs.fortinet.com/product/fortigate/>`_ for learning how to
   create an API access token.
 
 **type** *string* (required)
+
   Specifies the type of device. Use 'fortigate' for FortiGate devices. It is used if fotoobo has to
   search for specific types of devices, e.g. when it should iterate over all FortiGate devices in
   the inventory.
@@ -75,7 +83,8 @@ an API access token in every request.
 .. code-block:: yaml
 
   myfortigate1:
-    hostname: fortigate-test.mydomain.local:9443
+    hostname: fortigate-test.mydomain.local
+    https_port: 4443
     ssl_verify: false
     token: 2d85x75cv_example_4wl6ns7xd4o
     type: fortigate
@@ -85,21 +94,29 @@ FortiManager / FortiAnalyzer Devices
 ------------------------------------
 
 **hostname** *string* (required)
-  The hostname or ip address of the FortiManager or FortiAnalyzer device. May be followed by its
-  connection port if it's not 443. Due to security reasons the connection to a FortiManager or
-  FortiAnalyzer is always done with the protocol https.
+
+  The hostname or ip address of the FortiManager or FortiAnalyzer device. Do not add the protocol
+  before or the port number after, just the hostname or ip address. Due to security reasons the
+  connection to a FortiManager or FortiAnalyzer is always done with the protocol https.
 
   * ``myfortimanager.mydomain.local``
-  * ``myfortianalyzer.mydomain.local:8443``
-  * ``10.20.30.40:9443``
+  * ``myfortianalyzer.mydomain.local``
+  * ``10.20.30.40``
+
+**https_port** *number* (optional, default 443)
+
+  The port number to use for accessing the https api.
 
 **password** *string* (required)
+
   The password used to login to the FortiManager or FortiAnalyzer device.
 
 **username** *string* (required)
+
   The username used to login to the FortiManager or FortiAnalyzer device.
 
 **type** *string* (required)
+
   Specifies the type of device. Use 'fortimanager' for FortiManager devices or 'fortianalyzer' for
   FortiAnalyzer devices.
 
@@ -108,7 +125,8 @@ FortiManager / FortiAnalyzer Devices
 .. code-block:: yaml
 
   myfortimanager1:
-    hostname: fortimanager-test.mydomain.local:9443
+    hostname: fortimanager-test.mydomain.local
+    https_port: 4443
     username: myusername
     password: mysupersecurepassword
     type: fortimanager
@@ -118,6 +136,7 @@ FortiClient EMS Devices
 -----------------------
 
 **cookie_path** *string* (optional)
+
   FortiClient EMS does support cookie handling. Use this option to specify a directory where cookies
   should be stored. The name of the cookie will be generated from the hostname. During login to
   FortiClient EMS this cookie is used if it exists. This will make requests much faster.
@@ -125,21 +144,28 @@ FortiClient EMS Devices
   done with username and password.
 
 **hostname** *string* (required)
-  The hostname or IP address of the FortiClient EMS device. May be followed by its connection port
-  if it's not 443. Due to security reasons the connection to a FortiClient EMS is always done with
-  the protocol https.
+
+  The hostname or IP address of the FortiClient EMS device. Do not add the protocol before or the
+  port number after, just the hostname or ip address. Due to security reasons the connection to a
+  FortiClient EMS is always done with the protocol https.
 
   * ``myems.mydomain.local``
-  * ``myems.mydomain.local:8443``
-  * ``10.20.30.40:9443``
+  * ``10.20.30.40``
+
+**https_port** *number* (optional, default 443)
+
+  The port number to use for accessing the https api.
 
 **password** *string* (required)
+
   The password used to login to the FortiClient EMS.
 
 **username** *string* (required)
+
   The username used to login to the FortiClient EMS.
 
 **type** *string* (required)
+
   Specifies the type of device. Use 'forticlientems' for FortiClient EMS devices.
 
 **example**
@@ -147,7 +173,8 @@ FortiClient EMS Devices
 .. code-block:: yaml
 
   myfortiems1:
-    hostname: ems-test.mydomain.local:9443
+    hostname: ems-test.mydomain.local
+    https_port: 4443
     username: myusername
     password: mysupersecurepassword
     cookie_path: data
@@ -165,15 +192,19 @@ ftp
 An ftp server may be used to upload configuration backups.
 
 **directory** *string* (required)
+
   Define the directory on the ftp server in which to upload the data to.
 
 **hostname** *string* (required)
+
   The hostname or ip address of the desired ftp server.
 
 **password** *string* (required)
+
   The password used to login to the ftp server.
 
 **type** *string* (optional, default: generic)
+
   For ftp servers always use 'ftp' as type.
 
 **username** *string* (required)
@@ -196,9 +227,11 @@ Define an smtp server to send notifications by mail. Not all utilities support s
 See the help for information.
 
 **hostname** *string* (required)
+
   The hostname or ip address of the desired smtp server.
 
 **port** *integer* (optional, default: 25)
+
   The tcp port on which the smtp server listens for incoming connections.
 
 **recipient** *string* (required)
@@ -208,6 +241,7 @@ See the help for information.
 **subject** *string* (required)
 
 **type** *string* (optional, default: generic)
+
   For smtp servers always use 'smtp' as type.
 
 **example**

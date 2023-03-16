@@ -27,8 +27,8 @@ class TestFortiClientEMS:
                 )
             ),
         )
-        ems = FortiClientEMS("ems_dummy", "dummy_user", "dummy_pass", ssl_verify=False)
-        assert ems.api_url == "https://ems_dummy/api/v1"
+        ems = FortiClientEMS("host", "dummy_user", "dummy_pass", ssl_verify=False)
+        assert ems.api_url == "https://host:443/api/v1"
         assert ems.login() == 200
 
     @staticmethod
@@ -42,10 +42,8 @@ class TestFortiClientEMS:
                 )
             ),
         )
-        ems = FortiClientEMS(
-            "ems_dummy", "dummy_user", "dummy_pass", "tests/data/", ssl_verify=False
-        )
-        assert ems.api_url == "https://ems_dummy/api/v1"
+        ems = FortiClientEMS("host", "dummy_user", "dummy_pass", "tests/data/", ssl_verify=False)
+        assert ems.api_url == "https://host:443/api/v1"
         assert ems.login() == 200
 
     @staticmethod
@@ -76,10 +74,8 @@ class TestFortiClientEMS:
                 ),
             ),
         )
-        ems = FortiClientEMS(
-            "ems_dummy", "dummy_user", "dummy_pass", "tests/data/", ssl_verify=False
-        )
-        assert ems.api_url == "https://ems_dummy/api/v1"
+        ems = FortiClientEMS("host", "dummy_user", "dummy_pass", "tests/data/", ssl_verify=False)
+        assert ems.api_url == "https://host:443/api/v1"
         assert ems.login() == 200
 
     @staticmethod
@@ -96,8 +92,8 @@ class TestFortiClientEMS:
                 )
             ),
         )
-        ems = FortiClientEMS("ems_dummy", "dummy_user", "dummy_pass", temp_dir, ssl_verify=False)
-        assert ems.api_url == "https://ems_dummy/api/v1"
+        ems = FortiClientEMS("host", "dummy_user", "dummy_pass", temp_dir, ssl_verify=False)
+        assert ems.api_url == "https://host:443/api/v1"
         assert ems.login() == 200
 
     @staticmethod
@@ -110,7 +106,7 @@ class TestFortiClientEMS:
             "fotoobo.fortinet.fortinet.requests.Session.get",
             MagicMock(return_value=ResponseMock(json={}, status=200)),
         )
-        ems = FortiClientEMS("ems_dummy", "dummy_user", "dummy_pass", ssl_verify=False)
+        ems = FortiClientEMS("host", "dummy_user", "dummy_pass", ssl_verify=False)
         response = ems.logout()
         assert response == 200
 
@@ -125,7 +121,7 @@ class TestFortiClientEMS:
             MagicMock(return_value=ResponseMock(json={}, status=401)),
         )
         with pytest.raises(APIError) as err:
-            FortiClientEMS("ems_dummy", "dummy_user", "dummy_pass", ssl_verify=False).logout()
+            FortiClientEMS("host", "dummy_user", "dummy_pass", ssl_verify=False).logout()
         assert "HTTP/401 Not Authorized" in str(err.value)
 
     @staticmethod
@@ -143,10 +139,10 @@ class TestFortiClientEMS:
                 )
             ),
         )
-        ems = FortiClientEMS("dummy_ems", "dummy_user", "dummy_pass")
+        ems = FortiClientEMS("host", "dummy_user", "dummy_pass")
         response = ems.get_version()
         requests.Session.get.assert_called_with(
-            "https://dummy_ems/api/v1/system/consts/get?system_update_time=1",
+            "https://host:443/api/v1/system/consts/get?system_update_time=1",
             params={},
             verify=True,
             timeout=3,
@@ -163,12 +159,12 @@ class TestFortiClientEMS:
             "fotoobo.fortinet.fortinet.requests.Session.get",
             MagicMock(return_value=ResponseMock(json={"data": {"System": {}}}, status=200)),
         )
-        ems = FortiClientEMS("dummy_ems", "dummy_user", "dummy_pass", ssl_verify=False)
+        ems = FortiClientEMS("host", "dummy_user", "dummy_pass", ssl_verify=False)
         with pytest.raises(GeneralWarning) as err:
             ems.get_version()
         assert "did not find any FortiClient EMS version number in response" in str(err.value)
         requests.Session.get.assert_called_with(
-            "https://dummy_ems/api/v1/system/consts/get?system_update_time=1",
+            "https://host:443/api/v1/system/consts/get?system_update_time=1",
             params={},
             verify=False,
             timeout=3,
@@ -181,6 +177,6 @@ class TestFortiClientEMS:
             "fotoobo.fortinet.forticlientems.FortiClientEMS.api",
             MagicMock(side_effect=APIError(999)),
         )
-        ems = FortiClientEMS("dummy_ems", "dummy_user", "dummy_pass", ssl_verify=False)
-        with pytest.raises(GeneralWarning, match=r"dummy_ems returned: unknown"):
+        ems = FortiClientEMS("host", "dummy_user", "dummy_pass", ssl_verify=False)
+        with pytest.raises(GeneralWarning, match=r"host returned: unknown"):
             ems.get_version()
