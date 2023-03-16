@@ -58,7 +58,7 @@ disallow_untyped_decorators=false
 
 
 # here we define the tox settings
-# we do it inline ecause we don't want to have another tox.ini in the project root
+# we do it inline because we don't want to have another tox.ini in the project root
 # package management is done as described in option 3 on the following FAQ
 #  - https://python-poetry.org/docs/master/faq/
 [tool.tox]

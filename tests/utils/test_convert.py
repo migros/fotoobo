@@ -11,7 +11,7 @@ from _pytest.monkeypatch import MonkeyPatch
 
 from fotoobo.exceptions import GeneralError
 from fotoobo.helpers.files import load_json_file
-from fotoobo.utils.convert import convert_checkpoint
+from fotoobo.utils.convert import checkpoint
 
 
 @pytest.mark.parametrize(
@@ -72,7 +72,7 @@ def test_convert(asset_type: str, monkeypatch: MonkeyPatch, temp_dir: str) -> No
 
     output_file = os.path.join(temp_dir, f"convert_{asset_type}.json")
 
-    convert_checkpoint("", output_file, asset_type)
+    checkpoint("", output_file, asset_type)
     assert os.path.isfile(output_file)
     converted = list(load_json_file(output_file) or [])
 
@@ -93,7 +93,7 @@ def test_convert_unsupported_type(asset_type: str, monkeypatch: MonkeyPatch) -> 
     """Test convert for unsupported types (which rise a GeneralError exception)"""
     monkeypatch.setattr("fotoobo.utils.convert.load_json_file", MagicMock(return_value=[]))
     with pytest.raises(GeneralError, match=r"type '.*' is not supported to convert"):
-        convert_checkpoint("", "", asset_type)
+        checkpoint("", "", asset_type)
 
 
 @pytest.mark.parametrize(
@@ -154,7 +154,7 @@ def test_convert_with_cache(asset_type: str, monkeypatch: MonkeyPatch, temp_dir:
         os.path.join(cache_dir, "convert_cache_hosts.json"),
     )
 
-    convert_checkpoint("", output_file, asset_type, cache_dir)
+    checkpoint("", output_file, asset_type, cache_dir)
     assert os.path.isfile(output_file)
 
     converted = list(load_json_file(output_file) or [])
