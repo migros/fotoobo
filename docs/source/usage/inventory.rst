@@ -27,7 +27,7 @@ The entry for each device begins with its name which can be used in the fotoobo 
     type: fortigate
   my-fortigate2:
     hostname: myfortigate2.manage.it
-    https_port: 8443
+    https_port: 4443
     token: the_api_key_from_the_device
     type: fortigate
 
