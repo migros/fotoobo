@@ -5,7 +5,7 @@ import logging
 
 import typer
 
-from fotoobo.utils.fgt.config.check import fgt_config_check
+from fotoobo.utils import fgt
 
 app = typer.Typer()
 log = logging.getLogger("fotoobo")
@@ -23,4 +23,4 @@ def check(
     """
     Check one or more FortiGate configuration files
     """
-    fgt_config_check(configuration, bundles)
+    fgt.config.check(configuration, bundles)
