@@ -11,8 +11,8 @@ import socket
 from datetime import datetime
 from logging.handlers import RotatingFileHandler, SysLogHandler
 from typing import Optional, Union
-from syslog import LOG_AUTH, LOG_CRIT, LOG_DEBUG, LOG_ERR, LOG_INFO, LOG_USER, LOG_WARNING
 
+from syslog import LOG_AUTH, LOG_CRIT, LOG_DEBUG, LOG_ERR, LOG_INFO, LOG_USER, LOG_WARNING
 from rich.logging import RichHandler
 
 from fotoobo.exceptions import GeneralError, GeneralWarning
@@ -156,15 +156,24 @@ class Log:
             ]:
                 raise GeneralWarning(f"Loglevel {log_level} not known")
 
-            if log_switch and not config.logging:
-                logging.basicConfig(
-                    level=log_level or logging.INFO,
-                    format="[grey37]%(name)s[/] %(message)s",
-                    datefmt="[%X]",
-                    handlers=[RichHandler(markup=True)],
+            # If nothing is configured in the config file but logging is requested from
+            # the commandline use a simple basic config
+            if not config.logging and log_switch:
+                # Configure logger "fotoobo"
+                logger.setLevel(log_level or logging.INFO)
+                console_handler = RichHandler(markup=True)
+                console_handler.setFormatter(
+                    logging.Formatter(fmt="[grey37]%(name)s[/] %(message)s", datefmt="[%X]")
                 )
+                logger.addHandler(console_handler)
 
+                # Configure audit_logger
+                audit_logger.disabled = True
+
+            # If there is a configuration in the config file
             else:
+                # Only configure something if there is a logging configuration and loging is
+                # requested
                 if config.logging and (config.logging["enabled"] or log_switch):
                     log_level = log_level if log_level else config.logging["level"]
 
