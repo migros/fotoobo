@@ -39,7 +39,7 @@ class FortiClientEMS(Fortinet):
             **kwargs (dict): see Fortinet class for available arguments
         """
         super().__init__(hostname, **kwargs)
-        self.api_url = f"https://{self.hostname}/api/v1"
+        self.api_url = f"https://{self.hostname}:{self.https_port}/api/v1"
         self.cookie_path = cookie_path
         self.password = password
         self.username = username
