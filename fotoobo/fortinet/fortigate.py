@@ -35,7 +35,7 @@ class FortiGate(Fortinet):
             **kwargs (dict): see Fortinet class for available arguments
         """
         super().__init__(hostname=hostname, **kwargs)
-        self.api_url = f"https://{self.hostname}/api/v2"
+        self.api_url = f"https://{self.hostname}:{str(self.https_port)}/api/v2"
         self.token = token
         self.type = "fortigate"
 

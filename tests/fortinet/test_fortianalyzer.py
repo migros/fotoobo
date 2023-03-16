@@ -37,9 +37,9 @@ class TestFortiAnalyzer:
             "fotoobo.fortinet.fortinet.requests.Session.post",
             MagicMock(return_value=ResponseMock(json=response, status=200)),
         )
-        assert FortiAnalyzer("", "", "").get_version() == expected
+        assert FortiAnalyzer("host", "", "").get_version() == expected
         requests.Session.post.assert_called_with(  # type: ignore
-            "https:///jsonrpc",
+            "https://host:443/jsonrpc",
             headers=None,
             json={"method": "get", "params": [{"url": "/sys/status"}], "session": ""},
             verify=True,

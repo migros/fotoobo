@@ -36,9 +36,9 @@ class TestFortiManager:
                 )
             ),
         )
-        assert FortiManager("", "", "").assign_all_objects("DUMMY") == 111
+        assert FortiManager("host", "", "").assign_all_objects("DUMMY") == 111
         requests.Session.post.assert_called_with(  # type: ignore
-            "https:///jsonrpc",
+            "https://host:443/jsonrpc",
             headers=None,
             json={
                 "method": "exec",
@@ -66,10 +66,10 @@ class TestFortiManager:
             MagicMock(return_value=ResponseMock(json={}, status=404)),
         )
         with pytest.raises(APIError) as err:
-            FortiManager("", "", "").assign_all_objects("DUMMY")
+            FortiManager("host", "", "").assign_all_objects("DUMMY")
         assert "HTTP/404 Resource Not Found" in str(err.value)
         requests.Session.post.assert_called_with(  # type: ignore
-            "https:///jsonrpc",
+            "https://host:443/jsonrpc",
             headers=None,
             json={
                 "method": "exec",
@@ -109,9 +109,9 @@ class TestFortiManager:
                 )
             ),
         )
-        assert FortiManager("", "", "").assign_all_objects("DUMMY") == 0
+        assert FortiManager("host", "", "").assign_all_objects("DUMMY") == 0
         requests.Session.post.assert_called_with(  # type: ignore
-            "https:///jsonrpc",
+            "https://host:443/jsonrpc",
             headers=None,
             json={
                 "method": "exec",
@@ -142,9 +142,9 @@ class TestFortiManager:
                 )
             ),
         )
-        assert FortiManager("", "", "").get_adoms() == [{"name": "dummy"}]
+        assert FortiManager("host", "", "").get_adoms() == [{"name": "dummy"}]
         requests.Session.post.assert_called_with(  # type:ignore
-            "https:///jsonrpc",
+            "https://host:443/jsonrpc",
             headers=None,
             json={"method": "get", "params": [{"url": "/dvmdb/adom"}], "session": ""},
             verify=True,
@@ -180,9 +180,9 @@ class TestFortiManager:
             "fotoobo.fortinet.fortinet.requests.Session.post",
             MagicMock(return_value=ResponseMock(json=response, status=200)),
         )
-        assert FortiManager("", "", "").get_version() == expected
+        assert FortiManager("host", "", "").get_version() == expected
         requests.Session.post.assert_called_with(  # type: ignore
-            "https:///jsonrpc",
+            "https://host:443/jsonrpc",
             headers=None,
             json={"method": "get", "params": [{"url": "/sys/status"}], "session": ""},
             verify=True,
@@ -210,7 +210,7 @@ class TestFortiManager:
         fmg = FortiManager("host", "user", "pass")
         assert fmg.login() == 200
         requests.Session.post.assert_called_with(  # type: ignore
-            "https://host/jsonrpc",
+            "https://host:443/jsonrpc",
             headers=None,
             json={
                 "method": "exec",
@@ -243,7 +243,7 @@ class TestFortiManager:
         fortimanager = FortiManager("host", "user", "pass")
         assert fortimanager.logout() == 200
         requests.Session.post.assert_called_with(  # type: ignore
-            "https://host/jsonrpc",
+            "https://host:443/jsonrpc",
             headers=None,
             json={"method": "exec", "params": [{"url": "/sys/logout"}], "session": ""},
             verify=True,
@@ -259,9 +259,9 @@ class TestFortiManager:
                 return_value=ResponseMock(json={"result": [{"status": {"code": 0}}]}, status=200)
             ),
         )
-        assert FortiManager("", "", "").set("ADOM", {"params": [{"url": "{adom}"}]}) == 0
+        assert FortiManager("host", "", "").set("ADOM", {"params": [{"url": "{adom}"}]}) == 0
         requests.Session.post.assert_called_with(  # type:ignore
-            "https:///jsonrpc",
+            "https://host:443/jsonrpc",
             headers=None,
             json={"params": [{"url": "adom/ADOM"}], "session": ""},
             verify=True,
@@ -277,9 +277,9 @@ class TestFortiManager:
                 return_value=ResponseMock(json={"result": [{"status": {"code": 0}}]}, status=200)
             ),
         )
-        assert FortiManager("", "", "").set("ADOM", [{"params": [{"url": "{adom}"}]}]) == 0
+        assert FortiManager("host", "", "").set("ADOM", [{"params": [{"url": "{adom}"}]}]) == 0
         requests.Session.post.assert_called_with(  # type:ignore
-            "https:///jsonrpc",
+            "https://host:443/jsonrpc",
             headers=None,
             json={"params": [{"url": "adom/ADOM"}], "session": ""},
             verify=True,
@@ -295,9 +295,9 @@ class TestFortiManager:
                 return_value=ResponseMock(json={"result": [{"status": {"code": 0}}]}, status=200)
             ),
         )
-        assert FortiManager("", "", "").set("global", {"params": [{"url": "{adom}"}]}) == 0
+        assert FortiManager("host", "", "").set("global", {"params": [{"url": "{adom}"}]}) == 0
         requests.Session.post.assert_called_with(  # type:ignore
-            "https:///jsonrpc",
+            "https://host:443/jsonrpc",
             headers=None,
             json={"params": [{"url": "global"}], "session": ""},
             verify=True,
@@ -318,9 +318,9 @@ class TestFortiManager:
                 )
             ),
         )
-        assert FortiManager("", "", "").set("ADOM", [{"params": [{"url": "{adom}"}]}]) == 1
+        assert FortiManager("host", "", "").set("ADOM", [{"params": [{"url": "{adom}"}]}]) == 1
         requests.Session.post.assert_called_with(  # type:ignore
-            "https:///jsonrpc",
+            "https://host:443/jsonrpc",
             headers=None,
             json={"params": [{"url": "adom/ADOM"}], "session": ""},
             verify=True,
@@ -335,10 +335,10 @@ class TestFortiManager:
             MagicMock(return_value=ResponseMock(json={}, status=444)),
         )
         with pytest.raises(APIError) as err:
-            FortiManager("", "", "").set("ADOM", [{"params": [{"url": "{adom}"}]}])
+            FortiManager("host", "", "").set("ADOM", [{"params": [{"url": "{adom}"}]}])
         assert "HTTP/444 general API Error" in str(err.value)
         requests.Session.post.assert_called_with(  # type:ignore
-            "https:///jsonrpc",
+            "https://host:443/jsonrpc",
             headers=None,
             json={"params": [{"url": "adom/ADOM"}], "session": ""},
             verify=True,
@@ -376,11 +376,11 @@ class TestFortiManager:
                 )
             ),
         )
-        messages = FortiManager("", "", "").wait_for_task(222, 0)
+        messages = FortiManager("host", "", "").wait_for_task(222, 0)
         assert isinstance(messages, list)
         assert messages[0]["task_id"] == 222
         requests.Session.post.assert_called_with(  # type: ignore
-            "https:///jsonrpc",
+            "https://host:443/jsonrpc",
             headers=None,
             json={"method": "get", "params": [{"url": "/task/task/222/line"}], "session": ""},
             verify=True,
