@@ -2,8 +2,9 @@
 Testing the cli convert app
 """
 
-from unittest.mock import MagicMock, patch
+from unittest.mock import MagicMock
 
+from _pytest.monkeypatch import MonkeyPatch
 from typer.testing import CliRunner
 
 from fotoobo.cli.main import app
@@ -32,8 +33,8 @@ def test_cli_convert_help() -> None:
     assert set(commands) == {"checkpoint"}
 
 
-@patch("fotoobo.utils.convert.load_json_file", MagicMock(return_value=[]))
-def test_cli_convert_checkpoint_unsupported() -> None:
+def test_cli_convert_checkpoint_unsupported(monkeypatch: MonkeyPatch) -> None:
     """Test convert cli command: convert checkpoint assets with unsupported type"""
+    monkeypatch.setattr("fotoobo.utils.convert.load_json_file", MagicMock(return_value=[]))
     result = runner.invoke(app, ["convert", "checkpoint", "infile", "outfile", "unsupported"])
     assert result.exit_code == 1

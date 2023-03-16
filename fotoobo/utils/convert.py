@@ -12,9 +12,7 @@ from fotoobo.helpers.files import create_dir, load_json_file, save_json_file
 log = logging.getLogger("fotoobo")
 
 
-def convert_checkpoint(
-    infile: str, outfile: str, obj_type: str, cache_dir: Optional[str] = None
-) -> None:
+def checkpoint(infile: str, outfile: str, obj_type: str, cache_dir: Optional[str] = None) -> None:
     """
     This function lets you convert Checkpoint assets into Fortinet syntax.
 
