@@ -200,9 +200,11 @@ An ftp server may be used to upload configuration backups.
   The hostname or ip address of the desired ftp server.
 
 **protocol** *string* (optional, default: sftp)
+
   Either 'sftp' or 'ftp', defaults to 'sftp'.
 
 **directory** *string* (required)
+
   Define the directory on the ftp server in which to upload the data to.
 
 **username** *string* (required)
