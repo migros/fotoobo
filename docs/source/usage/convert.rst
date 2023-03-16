@@ -71,7 +71,7 @@ The following mappings take place when converting checkpoint objects into Fortin
 
 .. image:: convert_checkpoint_mappings.drawio.svg
   :width: 100%
-  :alt: The fotoobo convert checkpoint mapings
+  :alt: The fotoobo convert checkpoint mappings
 
 
 

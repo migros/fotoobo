@@ -6,7 +6,6 @@ from unittest.mock import MagicMock
 import pytest
 from _pytest.monkeypatch import MonkeyPatch
 
-from fotoobo.exceptions import GeneralWarning
 from fotoobo.utils.fmg.get import version
 
 

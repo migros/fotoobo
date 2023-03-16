@@ -1,7 +1,7 @@
 """
 Testing the cli app
 """
-from unittest.mock import MagicMock, patch
+from unittest.mock import MagicMock
 
 from _pytest.monkeypatch import MonkeyPatch
 from typer.testing import CliRunner
@@ -63,43 +63,44 @@ def test_cli_app_fmg_get_version_help() -> None:
     assert not commands
 
 
-@patch(
-    "fotoobo.fortinet.fortinet.requests.Session.post",
-    MagicMock(
-        return_value=ResponseMock(
-            json={"result": [{"data": [{"name": "dummy", "os_ver": "1", "mr": "1"}]}]}, status=200
-        )
-    ),
-)
-def test_cli_app_fmg_get_adoms() -> None:
+def test_cli_app_fmg_get_adoms(monkeypatch: MonkeyPatch) -> None:
     """Test fmg get adoms"""
+    monkeypatch.setattr(
+        "fotoobo.fortinet.fortinet.requests.Session.post",
+        MagicMock(
+            return_value=ResponseMock(
+                json={"result": [{"data": [{"name": "dummy", "os_ver": "1", "mr": "1"}]}]},
+                status=200,
+            )
+        ),
+    )
     result = runner.invoke(app, ["-c", "tests/fotoobo.yaml", "fmg", "get", "adoms", "test_fmg"])
     assert result.exit_code == 0
     assert result.stdout.count("dummy") == 1
 
 
-@patch(
-    "fotoobo.fortinet.fortinet.requests.Session.post",
-    MagicMock(
-        return_value=ResponseMock(json={"result": [{"data": [{"name": "dummy"}]}]}, status=200)
-    ),
-)
-def test_cli_app_fmg_get_adoms_unknown_device() -> None:
+def test_cli_app_fmg_get_adoms_unknown_device(monkeypatch: MonkeyPatch) -> None:
     """Test cli options and commands for fmg get version"""
+    monkeypatch.setattr(
+        "fotoobo.fortinet.fortinet.requests.Session.post",
+        MagicMock(
+            return_value=ResponseMock(json={"result": [{"data": [{"name": "dummy"}]}]}, status=200)
+        ),
+    )
     result = runner.invoke(app, ["-c", "tests/fotoobo.yaml", "fmg", "get", "adoms", "dummy_fmg"])
     assert result.exit_code == 1
 
 
-@patch(
-    "fotoobo.fortinet.fortinet.requests.Session.post",
-    MagicMock(
-        return_value=ResponseMock(
-            json={"result": [{"data": {"Version": "v1.1.1-build1111 111111 (GA)"}}]}, status=200
-        )
-    ),
-)
-def test_cli_app_fmg_get_version() -> None:
+def test_cli_app_fmg_get_version(monkeypatch: MonkeyPatch) -> None:
     """Test cli options and commands for fmg get version"""
+    monkeypatch.setattr(
+        "fotoobo.fortinet.fortinet.requests.Session.post",
+        MagicMock(
+            return_value=ResponseMock(
+                json={"result": [{"data": {"Version": "v1.1.1-build1111 111111 (GA)"}}]}, status=200
+            )
+        ),
+    )
     result = runner.invoke(app, ["-c", "tests/fotoobo.yaml", "fmg", "get", "version", "test_fmg"])
     assert result.exit_code == 0
     assert result.stdout.count("1.1.1") == 1

@@ -70,7 +70,7 @@ def test_hamaster(monkeypatch: MonkeyPatch, ret_val: str, expected: str) -> None
         ),
     )
     monkeypatch.setattr(
-        "fotoobo.utils.fgt.check.hamaster_.snmp_get",
+        "fotoobo.utils.fgt.check._snmp_get",
         MagicMock(return_value=ret_val),
     )
     monkeypatch.setattr("fotoobo.helpers.output.Output.send_mail", MagicMock(return_value=None))

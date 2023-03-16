@@ -5,7 +5,7 @@ Test the FortiGate class
 from typing import Dict
 
 # pylint: disable=no-member
-from unittest.mock import MagicMock, patch
+from unittest.mock import MagicMock
 
 import pytest
 from _pytest.monkeypatch import MonkeyPatch
@@ -20,12 +20,12 @@ class TestFortiGate:
     """Test the FortiGate class"""
 
     @staticmethod
-    @patch(
-        "fotoobo.fortinet.fortinet.Fortinet.api",
-        MagicMock(return_value=ResponseMock(json={"key": "value"}, status=200)),
-    )
-    def test_api() -> None:
+    def test_api(monkeypatch: MonkeyPatch) -> None:
         """Test the FortiGate api method"""
+        monkeypatch.setattr(
+            "fotoobo.fortinet.fortinet.Fortinet.api",
+            MagicMock(return_value=ResponseMock(json={"key": "value"}, status=200)),
+        )
         fortigate = FortiGate("", "token")
         assert fortigate.api("get", "dummy").json() == {"key": "value"}
         assert fortigate.session.headers["Authorization"] == "Bearer token"
