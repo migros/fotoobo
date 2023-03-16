@@ -18,7 +18,7 @@ Here are the steps you need to perform to make a release.
 #. Execute the ``.make_release.sh`` script giving the type of release (major/minor/patch)
 #. Make a pull request
 #. Switch to the main repository (migros/fotoobo)
-#. Execute the ``.make_tag.sh`` script
+#. Execute the ``.tag_release.sh`` script
 
 .make_release.sh
 ----------------
