@@ -283,7 +283,6 @@ class TestLog:
             for handler in fotoobo_logger.handlers:
                 assert type(handler) in expected_fotoobo_logger_config.handlers
 
-
             # TODO: We need to review this -> What to do on log_switch?
             if log_switch and not config.logging:
                 assert requests_logger.level == logging.CRITICAL
