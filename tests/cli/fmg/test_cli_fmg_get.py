@@ -3,6 +3,7 @@ Testing the cli app
 """
 from unittest.mock import MagicMock
 
+import pytest
 from _pytest.monkeypatch import MonkeyPatch
 from typer.testing import CliRunner
 
@@ -112,25 +113,29 @@ def test_cli_app_fmg_get_version_dummy() -> None:
     assert result.exit_code == 1
 
 
-def test_cli_main_exception_warning(monkeypatch: MonkeyPatch) -> None:
+def test_cli_app_fmg_get_version_exception_warning(monkeypatch: MonkeyPatch) -> None:
     """Test cli when it raises a GeneralWarning exception"""
     monkeypatch.setattr(
         "fotoobo.fortinet.fortimanager.FortiManager.login",
         MagicMock(side_effect=GeneralWarning("dummy")),
     )
-    result = runner.invoke(app, ["-c", "tests/fotoobo.yaml", "fmg", "get", "version", "test_fmg"])
-    assert result.exit_code == 1
-    assert isinstance(result.exception, GeneralWarning)
-    assert result.exception.args[0] == "dummy"
+    with pytest.raises(GeneralWarning, match=r"dummy"):
+        runner.invoke(
+            app,
+            ["-c", "tests/fotoobo.yaml", "fmg", "get", "version", "test_fmg"],
+            catch_exceptions=False,
+        )
 
 
-def test_cli_main_exception_error(monkeypatch: MonkeyPatch) -> None:
+def test_cli_app_fmg_get_version_exception_error(monkeypatch: MonkeyPatch) -> None:
     """Test cli when it raises a GeneralError exception"""
     monkeypatch.setattr(
         "fotoobo.fortinet.fortimanager.FortiManager.login",
         MagicMock(side_effect=GeneralError("dummy")),
     )
-    result = runner.invoke(app, ["-c", "tests/fotoobo.yaml", "fmg", "get", "version", "test_fmg"])
-    assert result.exit_code == 1
-    assert isinstance(result.exception, GeneralError)
-    assert result.exception.args[0] == "dummy"
+    with pytest.raises(GeneralError, match=r"dummy"):
+        runner.invoke(
+            app,
+            ["-c", "tests/fotoobo.yaml", "fmg", "get", "version", "test_fmg"],
+            catch_exceptions=False,
+        )
