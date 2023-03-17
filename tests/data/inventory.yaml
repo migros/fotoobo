@@ -1,6 +1,10 @@
+globals:
+  fortigate:
+    https_port: 222
 test_fgt_1:
   hostname: dummy
   ssl_verify: false
+  https_port: 111
   token: dummy
   type: fortigate
 test_fgt_2:
