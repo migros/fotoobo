@@ -61,7 +61,7 @@ class TestSysLogFormatter:
                     exc_info=None,
                     args=None,
                 ),
-                "<15>1 1970-01-01T01:00:00%s fotoobo dummy.host 3456 - - username=dummy_user test_message",
+                "<15>1 1970-01-01T%s:00:00%s fotoobo dummy.host 3456 - - username=dummy_user test_message",
                 id="debug log",
             ),
             pytest.param(
@@ -74,7 +74,7 @@ class TestSysLogFormatter:
                     exc_info=None,
                     args=None,
                 ),
-                "<14>1 1970-01-01T01:00:00%s fotoobo dummy.host 3456 - - username=dummy_user test_message",
+                "<14>1 1970-01-01T%s:00:00%s fotoobo dummy.host 3456 - - username=dummy_user test_message",
                 id="info log",
             ),
             pytest.param(
@@ -87,7 +87,7 @@ class TestSysLogFormatter:
                     exc_info=None,
                     args=None,
                 ),
-                "<12>1 1970-01-01T01:00:00%s fotoobo dummy.host 3456 - - username=dummy_user test_message",
+                "<12>1 1970-01-01T%s:00:00%s fotoobo dummy.host 3456 - - username=dummy_user test_message",
                 id="warning log",
             ),
             pytest.param(
@@ -100,7 +100,7 @@ class TestSysLogFormatter:
                     exc_info=None,
                     args=None,
                 ),
-                "<11>1 1970-01-01T01:00:00%s fotoobo dummy.host 3456 - - username=dummy_user test_message",
+                "<11>1 1970-01-01T%s:00:00%s fotoobo dummy.host 3456 - - username=dummy_user test_message",
                 id="error log",
             ),
             pytest.param(
@@ -113,7 +113,7 @@ class TestSysLogFormatter:
                     exc_info=None,
                     args=None,
                 ),
-                "<10>1 1970-01-01T01:00:00%s fotoobo dummy.host 3456 - - username=dummy_user test_message",
+                "<10>1 1970-01-01T%s:00:00%s fotoobo dummy.host 3456 - - username=dummy_user test_message",
                 id="critical log",
             ),
         ],
@@ -141,7 +141,8 @@ class TestSysLogFormatter:
 
         # Make the tzinfo part of the expected message dynamic, so tests run all over the world
         tzinfo = datetime.now().astimezone().strftime("%z")
-        expected_string = expected_string % f"{tzinfo[0:3]}:{tzinfo[3:]}"
+        hour = datetime.fromtimestamp(0).strftime("%H")
+        expected_string = expected_string % (hour, f"{tzinfo[0:3]}:{tzinfo[3:]}")
 
         assert syslog_formatter.format(log_record) == expected_string
 
