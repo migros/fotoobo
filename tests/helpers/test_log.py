@@ -202,10 +202,10 @@ class TestLog:
                 LoggerConfig(
                     disabled=False,
                     log_level=logging.INFO,
-                    handlers=[RichHandler, RotatingFileHandler, SysLogHandler],
+                    handlers=[RichHandler],
                 ),
                 LoggerConfig(disabled=True, log_level=logging.INFO, handlers=[]),
-                id="simple log configuration from logfile",
+                id="simple log configuration from config file",
             ),
             pytest.param(
                 Config(
@@ -215,8 +215,8 @@ class TestLog:
                         "log_console": {},
                         "log_file": {
                             "name": "test.log",
-                            "log_syslog": {"host": "syslog_host", "port": 123, "protocol": "UDP"},
                         },
+                        "log_syslog": {"host": "1.2.3.4", "port": 123, "protocol": "UDP"},
                     }
                 ),
                 None,
@@ -227,7 +227,7 @@ class TestLog:
                     handlers=[RichHandler, RotatingFileHandler, SysLogHandler],
                 ),
                 LoggerConfig(disabled=True, log_level=logging.INFO, handlers=[]),
-                id="full log configuration from logfile",
+                id="full log configuration from config file",
             ),
         ),
     )
@@ -249,7 +249,6 @@ class TestLog:
         Returns:
 
         """
-
         monkeypatch.setattr("fotoobo.helpers.log.config", config)
 
         # The 3rd party loggers should get the same config in any case
@@ -265,6 +264,10 @@ class TestLog:
         monkeypatch.setattr(fotoobo_logger, "disabled", False)
         monkeypatch.setattr(audit_logger, "disabled", False)
 
+        # Empty handlers to remove potentially existing logging config
+        monkeypatch.setattr(fotoobo_logger, "handlers", [])
+        monkeypatch.setattr(audit_logger, "handlers", [])
+
         Log.configure_logging(log_switch, log_level)
 
         if expected_fotoobo_logger_config.disabled:
@@ -274,8 +277,12 @@ class TestLog:
 
         else:
             assert fotoobo_logger.level == expected_fotoobo_logger_config.log_level
+            # All handlers should be set
+            assert len(fotoobo_logger.handlers) == len(expected_fotoobo_logger_config.handlers)
+            # Check that the right handlers are set
             for handler in fotoobo_logger.handlers:
                 assert type(handler) in expected_fotoobo_logger_config.handlers
+
 
             # TODO: We need to review this -> What to do on log_switch?
             if log_switch and not config.logging:

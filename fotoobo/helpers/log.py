@@ -172,7 +172,7 @@ class Log:
 
             # If there is a configuration in the config file
             else:
-                # Only configure something if there is a logging configuration and loging is
+                # Only configure something if there is a logging configuration and logging is
                 # requested
                 if config.logging and (config.logging["enabled"] or log_switch):
                     log_level = log_level if log_level else config.logging["level"]
