@@ -128,5 +128,5 @@ description = display pygount statistics
 skip_install = true
 allowlist_externals = poetry, pygount
 commands_pre = poetry install
-commands = pygount -f summary -s py,toml,json,yaml,md -d -F [...],data
+commands = pygount -f summary -s py,toml,json,yaml,md,rst -d -F [...],data
 """
