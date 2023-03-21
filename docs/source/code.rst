@@ -30,6 +30,15 @@ Fortinet Classes
 .. autoclass:: fotoobo.fortinet.fortimanager.FortiManager
   :members:
 
+Inventory
+---------
+
+.. autoclass:: fotoobo.inventory.inventory.Inventory
+  :members:
+
+.. autoclass:: fotoobo.inventory.generic.GenericDevice
+  :members:
+
 
 Helpers
 -------
