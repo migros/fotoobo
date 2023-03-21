@@ -14,22 +14,37 @@ The fotoobo inventory is a `yaml file <https://yaml.org/>`_ containing your Fort
 devices. It is used to connect to these devices. Every device is listed with its name and the 
 required connection parameters. It may also contain secret access keys for the devices so make 
 sure it is never exposed to unauthorized individuals.
+`Don't say I didn't tell you <https://www.youtube.com/watch?v=1bVy1sLVasY>`_.
 
 The entry for each device begins with its name which can be used in the fotoobo cli to access it.
+
+Beneath the simple device information it may also contain global configuration fer every type of
+device. The section which holds the global configuration is named `globals` so make sure you haven't
+any device with the same name.
 
 **Simple Example**
 
 .. code-block:: yaml
 
+  globals:
+    fortigate:
+      https_port: 4443
+    fortimanager:
+      ssl_verify: false
   my-fortigate1:
-    hostname: myfortigate1.manage.it:
+    hostname: myfortigate1.local:
     token: the_api_key_from_the_device
     type: fortigate
   my-fortigate2:
-    hostname: myfortigate2.manage.it
-    https_port: 4443
+    hostname: myfortigate2.local
+    https_port: 8443
     token: the_api_key_from_the_device
     type: fortigate
+  my-fortimanager:
+    hostname: myfortimanager.local
+    username: the_fortimanager_username
+    password: the_fortimanager_password
+    type: fortimanager
 
 
 **fotoobo cli example**
@@ -39,6 +54,24 @@ The entry for each device begins with its name which can be used in the fotoobo 
   fotoobo fgt get version my-fortigate1
 
 Devices may have the following options depending of their device type:
+
+
+Globals
+-------
+
+Define your devices global configuration by device type. The possible key value pairs to configure
+may depend on the type of the device. See the respective device type below for available options.
+These options may be overwritten on any particular device.
+
+**example**
+
+.. code-block:: yaml
+
+  globals:
+    fortigate:
+      https_port: 4443
+    fortimanager:
+      ssl_verify: false
 
 
 FortiGate Devices
@@ -64,8 +97,7 @@ an API access token in every request.
 
   Check hosts SSL certificate (true) or not (false). Please be aware that disabling SSL certificate
   verification is a security risk and should not be used in a production environment.
-  `Don't say I didn't tell you <https://www.youtube.com/watch?v=1bVy1sLVasY>`_.
-
+  
 **token** *string* (required)
 
   The API access token from the FortiGate. Please read the
@@ -110,6 +142,11 @@ FortiManager / FortiAnalyzer Devices
 **password** *string* (required)
 
   The password used to login to the FortiManager or FortiAnalyzer device.
+
+**ssl_verify** *bool* (optional, default: true)
+
+  Check hosts SSL certificate (true) or not (false). Please be aware that disabling SSL certificate
+  verification is a security risk and should not be used in a production environment.
 
 **username** *string* (required)
 
@@ -159,6 +196,11 @@ FortiClient EMS Devices
 **password** *string* (required)
 
   The password used to login to the FortiClient EMS.
+
+**ssl_verify** *bool* (optional, default: true)
+
+  Check hosts SSL certificate (true) or not (false). Please be aware that disabling SSL certificate
+  verification is a security risk and should not be used in a production environment.
 
 **username** *string* (required)
 
