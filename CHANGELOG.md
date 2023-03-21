@@ -8,7 +8,9 @@ For examples and guidelines see [https://keepachangelog.com/](https://keepachang
 
 ### Added
 
-- Define the port number to connect to a Fortinet device with the new inventory option https_port
+- New `globals` section in inventory to set global options for devices
+- Define the port number to connect to a Fortinet API device with the new inventory option
+  https_port
 
 ### Changed
 
