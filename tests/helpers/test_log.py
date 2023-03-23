@@ -61,7 +61,7 @@ class TestSysLogFormatter:
                     exc_info=None,
                     args=None,
                 ),
-                "<15>1 1970-01-01T%s:00:00%s fotoobo dummy.host 3456 - - "
+                "<15>1 1970-01-01T%s:00:00%s dummy.host fotoobo 3456 - - "
                 "username=dummy_user test_message",
                 id="debug log",
             ),
@@ -75,7 +75,7 @@ class TestSysLogFormatter:
                     exc_info=None,
                     args=None,
                 ),
-                "<14>1 1970-01-01T%s:00:00%s fotoobo dummy.host 3456 - - "
+                "<14>1 1970-01-01T%s:00:00%s dummy.host fotoobo 3456 - - "
                 "username=dummy_user test_message",
                 id="info log",
             ),
@@ -89,7 +89,7 @@ class TestSysLogFormatter:
                     exc_info=None,
                     args=None,
                 ),
-                "<12>1 1970-01-01T%s:00:00%s fotoobo dummy.host 3456 - - "
+                "<12>1 1970-01-01T%s:00:00%s dummy.host fotoobo 3456 - - "
                 "username=dummy_user test_message",
                 id="warning log",
             ),
@@ -103,7 +103,7 @@ class TestSysLogFormatter:
                     exc_info=None,
                     args=None,
                 ),
-                "<11>1 1970-01-01T%s:00:00%s fotoobo dummy.host 3456 - - "
+                "<11>1 1970-01-01T%s:00:00%s dummy.host fotoobo 3456 - - "
                 "username=dummy_user test_message",
                 id="error log",
             ),
@@ -117,7 +117,7 @@ class TestSysLogFormatter:
                     exc_info=None,
                     args=None,
                 ),
-                "<10>1 1970-01-01T%s:00:00%s fotoobo dummy.host 3456 - - "
+                "<10>1 1970-01-01T%s:00:00%s dummy.host fotoobo 3456 - - "
                 "username=dummy_user test_message",
                 id="critical log",
             ),
