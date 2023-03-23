@@ -8,10 +8,10 @@ from logging.handlers import RotatingFileHandler, SysLogHandler
 from typing import List, Type
 from unittest.mock import MagicMock
 
+from syslog import LOG_USER
 import pytest
 from _pytest.monkeypatch import MonkeyPatch
 from rich.logging import RichHandler
-from syslog import LOG_USER
 
 from fotoobo.helpers.config import Config
 from fotoobo.helpers.log import Log, SysLogFormatter
@@ -61,7 +61,8 @@ class TestSysLogFormatter:
                     exc_info=None,
                     args=None,
                 ),
-                "<15>1 1970-01-01T%s:00:00%s fotoobo dummy.host 3456 - - username=dummy_user test_message",
+                "<15>1 1970-01-01T%s:00:00%s fotoobo dummy.host 3456 - - "
+                "username=dummy_user test_message",
                 id="debug log",
             ),
             pytest.param(
@@ -74,7 +75,8 @@ class TestSysLogFormatter:
                     exc_info=None,
                     args=None,
                 ),
-                "<14>1 1970-01-01T%s:00:00%s fotoobo dummy.host 3456 - - username=dummy_user test_message",
+                "<14>1 1970-01-01T%s:00:00%s fotoobo dummy.host 3456 - - "
+                "username=dummy_user test_message",
                 id="info log",
             ),
             pytest.param(
@@ -87,7 +89,8 @@ class TestSysLogFormatter:
                     exc_info=None,
                     args=None,
                 ),
-                "<12>1 1970-01-01T%s:00:00%s fotoobo dummy.host 3456 - - username=dummy_user test_message",
+                "<12>1 1970-01-01T%s:00:00%s fotoobo dummy.host 3456 - - "
+                "username=dummy_user test_message",
                 id="warning log",
             ),
             pytest.param(
@@ -100,7 +103,8 @@ class TestSysLogFormatter:
                     exc_info=None,
                     args=None,
                 ),
-                "<11>1 1970-01-01T%s:00:00%s fotoobo dummy.host 3456 - - username=dummy_user test_message",
+                "<11>1 1970-01-01T%s:00:00%s fotoobo dummy.host 3456 - - "
+                "username=dummy_user test_message",
                 id="error log",
             ),
             pytest.param(
@@ -113,7 +117,8 @@ class TestSysLogFormatter:
                     exc_info=None,
                     args=None,
                 ),
-                "<10>1 1970-01-01T%s:00:00%s fotoobo dummy.host 3456 - - username=dummy_user test_message",
+                "<10>1 1970-01-01T%s:00:00%s fotoobo dummy.host 3456 - - "
+                "username=dummy_user test_message",
                 id="critical log",
             ),
         ],
@@ -123,7 +128,6 @@ class TestSysLogFormatter:
         syslog_formatter: SysLogFormatter,
         log_record: logging.LogRecord,
         expected_string: str,
-        monkeypatch: MonkeyPatch,
     ) -> None:
         """
         Test the format() method
@@ -148,7 +152,8 @@ class TestSysLogFormatter:
 
     def test_format_with_unknown_loglevel(self, syslog_formatter: SysLogFormatter) -> None:
         """
-        Test the format() method, when an unknown level is given. It should raise a NotImplementedError in this case
+        Test the format() method, when an unknown level is given.
+        It should raise a NotImplementedError in this case
 
         Args:
             syslog_formatter:
@@ -232,6 +237,7 @@ class TestLog:
             ),
         ),
     )
+    # pylint: disable=too-many-arguments
     def test_configure_logging(
         self,
         config: Config,
