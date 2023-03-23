@@ -15,6 +15,7 @@ For examples and guidelines see [https://keepachangelog.com/](https://keepachang
 ### Changed
 
 - Fix the login issue with SFTP
+- Fix permissions on .tag_release.sh
 
 
 ## [0.6.0] - 2023-03-23
