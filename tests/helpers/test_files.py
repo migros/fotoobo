@@ -77,6 +77,7 @@ def yaml_test_file(temp_dir: str) -> str:
 def test_file_to_ftp(file: str, mock: MagicMock, expected: int, monkeypatch: MonkeyPatch) -> None:
     """Test the file_to_ftp function"""
     monkeypatch.setattr("fotoobo.helpers.files.FTP.cwd", MagicMock(return_value=""))
+    monkeypatch.setattr("fotoobo.helpers.files.FTP.sendcmd", MagicMock(return_value=""))
     monkeypatch.setattr("fotoobo.helpers.files.FTP.storbinary", mock)
     assert file_to_ftp(file, GenericDevice(username="", password="", directory="")) == expected
 
