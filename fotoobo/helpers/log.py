@@ -79,8 +79,8 @@ class SysLogFormatter(logging.Formatter):
                     # Syslog header parts
                     f"<{prival}>1",
                     timestamp,
-                    "fotoobo",
                     f"{self.hostname}",
+                    "fotoobo",
                     f"{record.process}",
                     msg_id,
                     "-",
