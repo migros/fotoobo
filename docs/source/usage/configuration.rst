@@ -15,7 +15,7 @@ fotoobo reads its configuration from a global configuration file, usually named 
 you do not explicitly set a file (with the command line option `-c` ) fotoobo searches at the following
 locations for a file named `fotoobo.yaml` (in the order given here):
 
-1. In the current working directory.
+1. In the current working directory
 2. In `$HOME/.config/`
 
 It will take the first file given and stop searching for other files.
