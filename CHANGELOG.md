@@ -6,6 +6,9 @@ For examples and guidelines see [https://keepachangelog.com/](https://keepachang
 
 ## [Unreleased]
 
+### Changed
+
+- Fix ordering of syslog message to comply with RFC5424
 
 ## [Released]
 
