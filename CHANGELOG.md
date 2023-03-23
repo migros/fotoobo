@@ -6,8 +6,15 @@ For examples and guidelines see [https://keepachangelog.com/](https://keepachang
 
 ## [Unreleased]
 
+
+## [Released]
+
+
+## [0.6.0] - 2023-03-23
+
 ### Added
 
+- Add option to upload a backup file with sftp (which is now the default)
 - New `globals` section in inventory to set global options for devices
 - Define the port number to connect to a Fortinet API device with the new inventory option
   https_port
@@ -22,13 +29,12 @@ For examples and guidelines see [https://keepachangelog.com/](https://keepachang
   more subcommands in the future
 
 
-## [Released]
-
 ## [0.5.0] - 2023-03-02
 
 ### Added
 
 - fotoobo is now on the official PyPI
+
 
 ## [0.4.3-6] - 2023-03-02
 
@@ -141,6 +147,7 @@ For examples and guidelines see [https://keepachangelog.com/](https://keepachang
 - Remove the login from the FortiManager and FortiClient EMS \_\_init\_\_()
 - Move the smtp configuration from fotoobo.yaml to the inventory
 - Use API for ems get version (instead of scraping login page)
+
 
 ## [0.1.0] - 2022-04-28
  
