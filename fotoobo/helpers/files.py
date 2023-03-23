@@ -62,6 +62,7 @@ def file_to_ftp(file: str, server: Any) -> int:
 
         if protocol == "sftp":
             with FTP_TLS(server.hostname) as ftp:
+                log.debug("SFTP transfer for '%s'", server.hostname)
                 ftp.sendcmd(f"USER {server.username}")
                 ftp.sendcmd(f"PASS {server.password}")
                 ftp.cwd(server.directory)
@@ -73,6 +74,7 @@ def file_to_ftp(file: str, server: Any) -> int:
 
         elif protocol == "ftp":
             with FTP(server.hostname, server.username, server.password) as ftp:
+                log.debug("FTP transfer for '%s'", server.hostname)
                 ftp.cwd(server.directory)
                 with open(file, "rb") as ftp_file:
                     response = ftp.storbinary(f"STOR {os.path.basename(file)}", ftp_file)
