@@ -77,7 +77,6 @@ def backup(  # pylint: disable=too-many-locals, too-many-branches
                 time: str = datetime.datetime.now().strftime("%Y%m%d-%H%M")
                 zip_file = os.path.join(config.backup_dir, name + "-" + time + ".conf.zip")
                 file_to_zip(config_file, zip_file)
-                log.debug("FTP transfer for '%s'", name)
                 file_to_ftp(zip_file, server)
                 os.remove(zip_file)
             else:
