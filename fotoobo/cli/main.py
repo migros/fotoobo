@@ -8,7 +8,7 @@ Caution: Use docstrings with care as they are used to print help texts on any co
 """
 import logging
 import sys
-from typing import Optional
+from typing import Optional, Union
 
 import typer
 
@@ -37,8 +37,8 @@ def version_callback(value: bool) -> None:
 @app.callback()
 def callback(  # pylint: disable=too-many-arguments
     context: typer.Context,
-    config_file: str = typer.Option(
-        "fotoobo.yaml",
+    config_file: Union[str, None] = typer.Option(
+        None,
         "--config",
         "-c",
         help="The fotoobo configuration file",
