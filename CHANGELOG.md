@@ -11,6 +11,9 @@ For examples and guidelines see [https://keepachangelog.com/](https://keepachang
 - New `globals` section in inventory to set global options for devices
 - Define the port number to connect to a Fortinet API device with the new inventory option
   https_port
+- fotoobo will now also search for a global config file in `~/.config/fotoobo.yaml`, if no explicit
+  config file is given by command line parameter, or it does not find a `fotoobo.yaml` in the
+  current working directory
 
 ### Changed
 
