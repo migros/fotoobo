@@ -14,7 +14,7 @@ runner = CliRunner()
 
 def test_cli_app_ems_get_help() -> None:
     """Test cli help for ems get"""
-    result = runner.invoke(app, ["ems", "get", "-h"])
+    result = runner.invoke(app, ["-c", "tests/fotoobo.yaml", "ems", "get", "-h"])
     assert result.exit_code == 0
     arguments, options, commands = parse_help_output(result.stdout)
     assert not arguments
@@ -24,7 +24,7 @@ def test_cli_app_ems_get_help() -> None:
 
 def test_cli_app_ems_get_version_help() -> None:
     """Test cli help for ems get version"""
-    result = runner.invoke(app, ["ems", "get", "version", "-h"])
+    result = runner.invoke(app, ["-c", "tests/fotoobo.yaml", "ems", "get", "version", "-h"])
     assert result.exit_code == 0
     arguments, options, commands = parse_help_output(result.stdout)
     assert set(arguments) == {"host"}
@@ -34,7 +34,7 @@ def test_cli_app_ems_get_version_help() -> None:
 
 def test_cli_app_ems_get_workgroups_help() -> None:
     """Test cli help for ems get workgroups"""
-    result = runner.invoke(app, ["ems", "get", "workgroups", "-h"])
+    result = runner.invoke(app, ["-c", "tests/fotoobo.yaml", "ems", "get", "workgroups", "-h"])
     assert result.exit_code == 0
     arguments, options, commands = parse_help_output(result.stdout)
     assert set(arguments) == {"host"}

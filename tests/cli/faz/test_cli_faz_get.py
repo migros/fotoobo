@@ -14,7 +14,7 @@ runner = CliRunner()
 
 def test_cli_app_faz_get_help() -> None:
     """Test cli help for faz get"""
-    result = runner.invoke(app, ["faz", "get", "-h"])
+    result = runner.invoke(app, ["-c", "tests/fotoobo.yaml", "faz", "get", "-h"])
     assert result.exit_code == 0
     arguments, options, commands = parse_help_output(result.stdout)
     assert not arguments
@@ -24,7 +24,7 @@ def test_cli_app_faz_get_help() -> None:
 
 def test_cli_app_faz_get_version_help() -> None:
     """Test cli help for faz get version"""
-    result = runner.invoke(app, ["faz", "get", "version", "-h"])
+    result = runner.invoke(app, ["-c", "tests/fotoobo.yaml", "faz", "get", "version", "-h"])
     assert result.exit_code == 0
     arguments, options, commands = parse_help_output(result.stdout)
     assert set(arguments) == {"host"}
