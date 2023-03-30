@@ -16,7 +16,7 @@ runner = CliRunner()
 
 def test_cli_app_fmg_get_help() -> None:
     """Test cli help for fmg get"""
-    result = runner.invoke(app, ["fmg", "get", "-h"])
+    result = runner.invoke(app, ["-c", "tests/fotoobo.yaml", "fmg", "get", "-h"])
     assert result.exit_code == 0
     arguments, options, commands = parse_help_output(result.stdout)
     assert not arguments
@@ -26,7 +26,7 @@ def test_cli_app_fmg_get_help() -> None:
 
 def test_cli_app_fmg_get_adoms_help() -> None:
     """Test cli help for fmg get adoms"""
-    result = runner.invoke(app, ["fmg", "get", "adoms", "-h"])
+    result = runner.invoke(app, ["-c", "tests/fotoobo.yaml", "fmg", "get", "adoms", "-h"])
     assert result.exit_code == 0
     arguments, options, commands = parse_help_output(result.stdout)
     assert set(arguments) == {"host"}
@@ -36,7 +36,7 @@ def test_cli_app_fmg_get_adoms_help() -> None:
 
 def test_cli_app_fmg_get_devices_help() -> None:
     """Test cli help for fmg get devices"""
-    result = runner.invoke(app, ["fmg", "get", "devices", "-h"])
+    result = runner.invoke(app, ["-c", "tests/fotoobo.yaml", "fmg", "get", "devices", "-h"])
     assert result.exit_code == 0
     arguments, options, commands = parse_help_output(result.stdout)
     assert set(arguments) == {"host"}
@@ -46,7 +46,7 @@ def test_cli_app_fmg_get_devices_help() -> None:
 
 def test_cli_app_fmg_get_policy_help() -> None:
     """Test cli help for fmg get policy"""
-    result = runner.invoke(app, ["fmg", "get", "policy", "-h"])
+    result = runner.invoke(app, ["-c", "tests/fotoobo.yaml", "fmg", "get", "policy", "-h"])
     assert result.exit_code == 0
     arguments, options, commands = parse_help_output(result.stdout)
     assert set(arguments) == {"host", "adom", "policy_name", "filename"}
@@ -56,7 +56,7 @@ def test_cli_app_fmg_get_policy_help() -> None:
 
 def test_cli_app_fmg_get_version_help() -> None:
     """Test cli help for fmg get version"""
-    result = runner.invoke(app, ["fmg", "get", "version", "-h"])
+    result = runner.invoke(app, ["-c", "tests/fotoobo.yaml", "fmg", "get", "version", "-h"])
     assert result.exit_code == 0
     arguments, options, commands = parse_help_output(result.stdout)
     assert set(arguments) == {"host"}

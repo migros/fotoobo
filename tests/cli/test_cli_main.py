@@ -46,7 +46,7 @@ def test_cli_app_no_args() -> None:
 
 def test_cli_app_help() -> None:
     """Test main cli help"""
-    result = runner.invoke(app, ["-h"])
+    result = runner.invoke(app, ["-c", "tests/fotoobo.yaml", "-h"])
     assert result.exit_code == 0
     arguments, options, commands = parse_help_output(result.stdout)
     assert not arguments
@@ -69,7 +69,7 @@ def test_cli_app_help() -> None:
 
 def test_cli_app_get_help() -> None:
     """Test cli help for get"""
-    result = runner.invoke(app, ["get", "-h"])
+    result = runner.invoke(app, ["-c", "tests/fotoobo.yaml", "get", "-h"])
     assert result.exit_code == 0
     arguments, options, commands = parse_help_output(result.stdout)
     assert not arguments
@@ -80,9 +80,9 @@ def test_cli_app_get_help() -> None:
 @pytest.mark.parametrize(
     "cli_call",
     (
-        pytest.param(["get", "version"], id="get version"),
-        pytest.param(["-V"], id="option -V"),
-        pytest.param(["--version"], id="option --version"),
+        pytest.param(["-c", "tests/fotoobo.yaml", "get", "version"], id="get version"),
+        pytest.param(["-c", "tests/fotoobo.yaml", "-V"], id="option -V"),
+        pytest.param(["-c", "tests/fotoobo.yaml", "--version"], id="option --version"),
     ),
 )
 def test_cli_app_get_version(cli_call: List[str]) -> None:
@@ -98,28 +98,28 @@ def test_cli_app_get_inventory(monkeypatch: MonkeyPatch) -> None:
         "fotoobo.inventory.inventory.load_yaml_file",
         MagicMock(return_value={"dummy": {"hostname": "dummy.local"}}),
     )
-    result = runner.invoke(app, ["get", "inventory"])
+    result = runner.invoke(app, ["-c", "tests/fotoobo.yaml", "get", "inventory"])
     assert result.exit_code == 0
     assert "fotoobo inventory" in result.stdout
 
 
 def test_cli_app_greet(greet_string: str) -> None:
     """Test cli app greet"""
-    result = runner.invoke(app, ["greet"])
+    result = runner.invoke(app, ["-c", "tests/fotoobo.yaml", "greet"])
     assert result.exit_code == 0
     assert greet_string in result.stdout
 
 
 def test_cli_app_greet_alice(greet_string: str) -> None:
     """Test cli app greet alice"""
-    result = runner.invoke(app, ["greet", "Alice"])
+    result = runner.invoke(app, ["-c", "tests/fotoobo.yaml", "greet", "Alice"])
     assert result.exit_code == 0
     assert "Hi Alice, " + greet_string in result.stdout
 
 
 def test_cli_app_greet_with_bye(greet_string: str) -> None:
     """Test cli app greet with option --bye set"""
-    result = runner.invoke(app, ["greet", "-b"])
+    result = runner.invoke(app, ["-c", "tests/fotoobo.yaml", "greet", "-b"])
     assert result.exit_code == 0
     assert greet_string in result.stdout
     assert "Good Bye" in result.stdout
@@ -127,7 +127,7 @@ def test_cli_app_greet_with_bye(greet_string: str) -> None:
 
 def test_cli_app_greet_help() -> None:
     """Test cli help for greet"""
-    result = runner.invoke(app, ["greet", "-h"])
+    result = runner.invoke(app, ["-c", "tests/fotoobo.yaml", "greet", "-h"])
     assert result.exit_code == 0
     arguments, options, commands = parse_help_output(result.stdout)
     assert set(arguments) == {"name"}
@@ -137,30 +137,30 @@ def test_cli_app_greet_help() -> None:
 
 def test_cli_main_logging() -> None:
     """test the logging switch"""
-    result = runner.invoke(app, ["greet"])
+    result = runner.invoke(app, ["-c", "tests/fotoobo.yaml", "greet"])
     assert result.exit_code == 0
-    result = runner.invoke(app, ["-l", "greet"])
+    result = runner.invoke(app, ["-c", "tests/fotoobo.yaml", "-l", "greet"])
     assert result.exit_code == 0
 
 
 def test_cli_main_logging_log_level() -> None:
     """test the log level setting"""
-    result = runner.invoke(app, ["-l", "--loglevel", "INFO", "greet"])
+    result = runner.invoke(app, ["-c", "tests/fotoobo.yaml", "-l", "--loglevel", "INFO", "greet"])
     assert result.exit_code == 0
-    result = runner.invoke(app, ["-l", "--loglevel", "DUMMY", "greet"])
+    result = runner.invoke(app, ["-c", "tests/fotoobo.yaml", "-l", "--loglevel", "DUMMY", "greet"])
     assert result.exit_code == 1
 
 
 def test_cli_main_logo() -> None:
     """test the logo presence"""
-    result = runner.invoke(app, ["get", "version"])
+    result = runner.invoke(app, ["-c", "tests/fotoobo.yaml", "get", "version"])
     assert result.exit_code == 0
     assert " f o t o o b o " in result.stdout
 
 
 def test_cli_main_no_logo() -> None:
     """test the logo absence with --nologo"""
-    result = runner.invoke(app, ["--nologo", "get", "version"])
+    result = runner.invoke(app, ["-c", "tests/fotoobo.yaml", "--nologo", "get", "version"])
     assert result.exit_code == 0
     assert not " f o t o o b o " in result.stdout
 
