@@ -5,10 +5,10 @@ import logging
 from dataclasses import dataclass
 from datetime import datetime
 from logging.handlers import RotatingFileHandler, SysLogHandler
+from syslog import LOG_USER
 from typing import List, Type
 from unittest.mock import MagicMock
 
-from syslog import LOG_USER
 import pytest
 from _pytest.monkeypatch import MonkeyPatch
 from rich.logging import RichHandler
@@ -144,7 +144,7 @@ class TestSysLogFormatter:
         log_record.process = 3456
 
         # Make the tzinfo part of the expected message dynamic, so tests run all over the world
-        tzinfo = datetime.now().astimezone().strftime("%z")
+        tzinfo = datetime.fromtimestamp(0).astimezone().strftime("%z")
         hour = datetime.fromtimestamp(0).strftime("%H")
         expected_string = expected_string % (hour, f"{tzinfo[0:3]}:{tzinfo[3:]}")
 
