@@ -11,7 +11,7 @@ runner = CliRunner()
 
 def test_cli_app_fgt_help() -> None:
     """Test cli help for fgt"""
-    result = runner.invoke(app, ["fgt", "-h"])
+    result = runner.invoke(app, ["-c", "tests/fotoobo.yaml", "fgt", "-h"])
     assert result.exit_code == 0
     arguments, options, commands = parse_help_output(result.stdout)
     assert not arguments
