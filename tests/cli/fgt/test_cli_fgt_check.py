@@ -14,7 +14,7 @@ runner = CliRunner()
 
 def test_cli_app_fgt_check_help() -> None:
     """Test cli help for fgt check"""
-    result = runner.invoke(app, ["fgt", "check", "-h"])
+    result = runner.invoke(app, ["-c", "tests/fotoobo.yaml", "fgt", "check", "-h"])
     assert result.exit_code == 0
     arguments, options, commands = parse_help_output(result.stdout)
     assert not arguments
@@ -24,7 +24,7 @@ def test_cli_app_fgt_check_help() -> None:
 
 def test_cli_app_fgt_check_hamaster_help() -> None:
     """Test cli help for fgt check hamaster"""
-    result = runner.invoke(app, ["fgt", "check", "hamaster", "-h"])
+    result = runner.invoke(app, ["-c", "tests/fotoobo.yaml", "fgt", "check", "hamaster", "-h"])
     assert result.exit_code == 0
     arguments, options, commands = parse_help_output(result.stdout)
     assert set(arguments) == {"host"}

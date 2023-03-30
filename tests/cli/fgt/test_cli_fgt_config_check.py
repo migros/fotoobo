@@ -15,7 +15,7 @@ runner = CliRunner()
 
 def test_cli_app_fgt_config_check_help() -> None:
     """Test cli help for fgt config check help"""
-    result = runner.invoke(app, ["fgt", "config", "check", "-h"])
+    result = runner.invoke(app, ["-c", "tests/fotoobo.yaml", "fgt", "config", "check", "-h"])
     assert result.exit_code == 0
     arguments, options, commands = parse_help_output(result.stdout)
     assert set(arguments) == {"configuration", "bundles"}
@@ -25,7 +25,7 @@ def test_cli_app_fgt_config_check_help() -> None:
 
 def test_cli_app_fgt_config_check_no_args() -> None:
     """Test fgt config check with no arguments"""
-    result = runner.invoke(app, ["fgt", "config", "check"])
+    result = runner.invoke(app, ["-c", "tests/fotoobo.yaml", "fgt", "config", "check"])
     assert result.exit_code == 2
 
 
@@ -34,6 +34,8 @@ def test_cli_app_fgt_config_check() -> None:
     result = runner.invoke(
         app,
         [
+            "-c",
+            "tests/fotoobo.yaml",
             "fgt",
             "config",
             "check",
@@ -62,6 +64,8 @@ def test_cli_app_fgt_config_check_failed(monkeypatch: MonkeyPatch) -> None:
     result = runner.invoke(
         app,
         [
+            "-c",
+            "tests/fotoobo.yaml",
             "fgt",
             "config",
             "check",
@@ -77,6 +81,8 @@ def test_cli_app_fgt_config_check_empty_config() -> None:
     result = runner.invoke(
         app,
         [
+            "-c",
+            "tests/fotoobo.yaml",
             "fgt",
             "config",
             "check",
@@ -92,6 +98,8 @@ def test_cli_app_fgt_config_check_nonexist_config_file() -> None:
     result = runner.invoke(
         app,
         [
+            "-c",
+            "tests/fotoobo.yaml",
             "fgt",
             "config",
             "check",
@@ -107,6 +115,8 @@ def test_cli_app_fgt_config_check_dir() -> None:
     result = runner.invoke(
         app,
         [
+            "-c",
+            "tests/fotoobo.yaml",
             "fgt",
             "config",
             "check",
@@ -122,6 +132,8 @@ def test_cli_app_fgt_config_check_invalid_bundle_file() -> None:
     result = runner.invoke(
         app,
         [
+            "-c",
+            "tests/fotoobo.yaml",
             "fgt",
             "config",
             "check",
