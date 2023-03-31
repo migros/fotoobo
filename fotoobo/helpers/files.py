@@ -179,8 +179,7 @@ def save_with_template(data: Dict[Any, Any], template_file: str, output_file: st
     Args:
         data (Dict[Any, Any]): The data used in the template
 
-        template_file (str): Filename of the Jinja2 template file. The path to the template_file
-        is always a relative path (at the moment). Absolute paths are not supported.
+        template_file (str): Filename of the Jinja2 template file
 
         output_file (str): The file to write the output to
     """
