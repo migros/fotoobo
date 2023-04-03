@@ -6,6 +6,10 @@ For examples and guidelines see [https://keepachangelog.com/](https://keepachang
 
 ## [Unreleased]
 
+### Added
+
+- Add cli command fgt config info to display information from a FortiGate configuration file
+
 ### Changed
 
 - Fix ordering of syslog message to comply with RFC5424
