@@ -1,12 +1,12 @@
 """
 Some helper functions for file manipulation.
 """
-
 import json
 import logging
 import os
 import re
 from ftplib import FTP, FTP_TLS
+from pathlib import Path
 from typing import Any, Dict, List, Union
 from zipfile import ZIP_DEFLATED, ZipFile
 
@@ -179,14 +179,15 @@ def save_with_template(data: Dict[Any, Any], template_file: str, output_file: st
     Args:
         data (Dict[Any, Any]): The data used in the template
 
-        template_file (str): Filename of the Jinja2 template file. The path to the template_file
-        is always a relative path (at the moment). Absolute paths are not supported.
+        template_file (str): Filename of the Jinja2 template file
 
         output_file (str): The file to write the output to
     """
     log.debug("template_file is: %s", template_file)
-    template_env = jinja2.Environment(loader=jinja2.FileSystemLoader("./"), trim_blocks=True)
-    template = template_env.get_template(template_file)
+    template_env = jinja2.Environment(
+        loader=jinja2.FileSystemLoader(Path(template_file).parent), trim_blocks=True
+    )
+    template = template_env.get_template(Path(template_file).name)
     output = template.render(data)
     with open(output_file, "w", encoding="UTF-8") as file:
         file.write(output)
