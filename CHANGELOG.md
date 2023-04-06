@@ -8,7 +8,8 @@ For examples and guidelines see [https://keepachangelog.com/](https://keepachang
 
 ### Added
 
-- Add cli command fgt config info to display information from a FortiGate configuration file
+- Argument `backup_dir` in CLI command `fgt backup`
+- CLI command `fgt config info` to display information from FortiGate configuration file(s)
 
 ### Changed
 
@@ -16,6 +17,9 @@ For examples and guidelines see [https://keepachangelog.com/](https://keepachang
 - Fix ordering of syslog message to comply with RFC5424
 - Fix path handling with jinja2 templates (now support relative and absolute paths)
 
+### Removed
+
+- Global option `backup_dir` in fotoobo.yaml
 
 
 ## [Released]

@@ -2,9 +2,6 @@
 # Note: All paths may be absolute or relative. If they are given relative, it is
 #       from the cwd where fotoobo has been run.
 
-# This is the path where fotoobo will write the config backups to
-backup_dir: ""
-
 # The path to a
 inventory: inventory.yaml
 
