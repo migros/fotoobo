@@ -7,6 +7,9 @@ For examples and guidelines see [https://keepachangelog.com/](https://keepachang
 ## [Unreleased]
 
 
+## [Released]
+
+
 ## [0.7.0] - 2023-04-06
 
 ### Added
@@ -23,9 +26,6 @@ For examples and guidelines see [https://keepachangelog.com/](https://keepachang
 ### Removed
 
 - Global option `backup_dir` in fotoobo.yaml
-
-
-## [Released]
 
 
 ## [0.6.1] - 2023-03-23
