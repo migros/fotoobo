@@ -51,7 +51,7 @@ Whenever a tag is pushed the release workflows are started.
 
 * The `create-github-release.yaml 
   <https://github.com/migros/fotoobo/blob/main/.github/workflows/create-github-release.yaml>`_ 
-  workflow is creates the release on GitHub.
+  workflow creates the release on GitHub.
 * The `publish-to-pypi.yaml
   <https://github.com/migros/fotoobo/blob/main/.github/workflows/publish-to-pypi.yaml>`_ workflow
   publishes the package to the PyPI registry.
