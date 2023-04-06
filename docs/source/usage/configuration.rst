@@ -50,13 +50,6 @@ Settings Reference
 General Settings
 ^^^^^^^^^^^^^^^^
 
-backup_dir
-""""""""""
-
-*default: None*
-
-The **path** for the FortiGate backup files. This setting is mandatory if using ``fotoobo fgt backup``.
-
 inventory
 """""""""
 

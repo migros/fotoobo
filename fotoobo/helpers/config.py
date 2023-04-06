@@ -22,7 +22,6 @@ class Config:
     """
 
     # set default values
-    backup_dir: str = ""
     inventory_file: str = "inventory.yaml"
     logging: Union[Dict[str, Any], None] = None
     audit_logging: Union[Dict[str, Any], None] = None
@@ -67,7 +66,6 @@ class Config:
                 loaded_config = dict(loaded_config)
 
                 # then set the config options from file if set in file
-                self.backup_dir = loaded_config.get("backup_dir", self.backup_dir)
                 self.inventory_file = loaded_config.get("inventory", self.inventory_file)
 
                 if loaded_config.get("logging"):

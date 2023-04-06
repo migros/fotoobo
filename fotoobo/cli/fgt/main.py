@@ -36,9 +36,15 @@ app.add_typer(config.app, name="config", help="FortiGate config file commands")
 def backup(
     host: str = typer.Argument(
         "",
-        help="The FortiGate hostname to access (must be defined in inventory)",
+        help="The FortiGate(s) to backup (must be defined in inventory)",
         show_default=False,
         metavar="[host]",
+    ),
+    backup_dir: str = typer.Argument(
+        "",
+        help="The directory to save the backup(s) to",
+        show_default=False,
+        metavar="[backup_dir]",
     ),
     ftp_server: str = typer.Option(
         None, "--ftp", help="the ftp configuration from the inventory", metavar="server"
@@ -50,4 +56,4 @@ def backup(
     """
     Backup one or more FortiGate(s)
     """
-    utils.fgt.backup(host, ftp_server, smtp_server)
+    utils.fgt.backup(host, backup_dir, ftp_server, smtp_server)
