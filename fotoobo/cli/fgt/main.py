@@ -36,21 +36,23 @@ app.add_typer(config.app, name="config", help="FortiGate config file commands")
 def backup(
     host: str = typer.Argument(
         "",
-        help="The FortiGate(s) to backup (must be defined in inventory)",
+        help="The FortiGate to backup (must be defined in inventory). Backups all if left empty.",
         show_default=False,
         metavar="[host]",
     ),
-    backup_dir: str = typer.Argument(
-        "",
-        help="The directory to save the backup(s) to",
+    backup_dir: str = typer.Option(
+        None,
+        "--backup-dir",
+        "-b",
+        help="The directory to save the backup(s) to. Default is the current working directory.",
         show_default=False,
-        metavar="[backup_dir]",
+        metavar="backup_dir",
     ),
     ftp_server: str = typer.Option(
-        None, "--ftp", help="the ftp configuration from the inventory", metavar="server"
+        None, "--ftp", "-f", help="the ftp configuration from the inventory", metavar="server"
     ),
     smtp_server: str = typer.Option(
-        None, "--smtp", help="the smtp configuration from the inventory", metavar="server"
+        None, "--smtp", "-s", help="the smtp configuration from the inventory", metavar="server"
     ),
 ) -> None:
     """
