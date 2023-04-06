@@ -12,6 +12,7 @@ For examples and guidelines see [https://keepachangelog.com/](https://keepachang
 
 ### Changed
 
+- Update getting started guide
 - Fix ordering of syslog message to comply with RFC5424
 - Fix path handling with jinja2 templates (now support relative and absolute paths)
 
