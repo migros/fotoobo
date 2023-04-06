@@ -47,8 +47,11 @@ An overview of all available fotoobo commands can be shown with:
   fotoobo get commands
 
 
-Configuration
--------------
+Connect your first FortiGate
+----------------------------
+
+The global configuration
+^^^^^^^^^^^^^^^^^^^^^^^^
 
 Start by creating a configuration file named `fotoobo.yaml`. At least give it a path to your
 inventory.
@@ -58,15 +61,26 @@ inventory.
   # The path to the inventory file
   inventory: inventory.yaml
 
+For more options see the :ref:`global configuration documentation<usage_configuration>`.
+
+The inventory
+^^^^^^^^^^^^^
+
 And of course you must also create the inventory file which in this case is called `inventory.yaml`.
 
 .. code-block:: yaml
 
   demo-fortigate:
     hostname: <YOUR FORTIGATE DNS NAME OR IP-ADDRESS>
+    https_port: 8443
     ssl_verify: false
     token: <YOUR FORTIGATE API ACCESS TOKEN>
     type: fortigate
+
+For more options see the :ref:`inventory documentation<usage_inventory>`.
+
+Let's have fun with the first query
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Now you can run fotoobo commands to the configured FortiGate. As an example you can get the FortiOS
 version from the FortiGate by issuing the following command:
@@ -75,11 +89,6 @@ version from the FortiGate by issuing the following command:
 
   fotoobo fgt get version demo-fortigate
 
-The same way you may access any other supported Fortinet product in your network. Other products
-might need other or additional configuration. For detailed information see:
-
-  * :ref:`usage_configuration`
-  * :ref:`usage_inventory`
 
 Termination
 -----------
