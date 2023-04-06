@@ -6,9 +6,12 @@ For examples and guidelines see [https://keepachangelog.com/](https://keepachang
 
 ## [Unreleased]
 
+
+## [0.7.0] - 2023-04-06
+
 ### Added
 
-- Argument `backup_dir` in CLI command `fgt backup`
+- Option `backup_dir` in CLI command `fgt backup`
 - CLI command `fgt config info` to display information from FortiGate configuration file(s)
 
 ### Changed
