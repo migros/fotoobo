@@ -4,10 +4,12 @@ Testing the cli fgt config check
 
 from unittest.mock import MagicMock
 
+import pytest
 from _pytest.monkeypatch import MonkeyPatch
 from typer.testing import CliRunner
 
 from fotoobo.cli.main import app
+from fotoobo.exceptions.exceptions import GeneralError, GeneralWarning
 from tests.helper import parse_help_output
 
 runner = CliRunner()
@@ -95,19 +97,20 @@ def test_cli_app_fgt_config_check_empty_config() -> None:
 
 def test_cli_app_fgt_config_check_nonexist_config_file() -> None:
     """Test cli options and commands for fgt config check with an nonexisting configuration"""
-    result = runner.invoke(
-        app,
-        [
-            "-c",
-            "tests/fotoobo.yaml",
-            "fgt",
-            "config",
-            "check",
-            "tests/data/fortigate_config_nonexist.conf",
-            "tests/data/fortigate_checks.yaml",
-        ],
-    )
-    assert result.exit_code == 1
+    with pytest.raises(GeneralWarning, match=r"there are no"):
+        runner.invoke(
+            app,
+            [
+                "-c",
+                "tests/fotoobo.yaml",
+                "fgt",
+                "config",
+                "check",
+                "tests/data/fortigate_config_nonexist.conf",
+                "tests/data/fortigate_checks.yaml",
+            ],
+            catch_exceptions=False,
+        )
 
 
 def test_cli_app_fgt_config_check_dir() -> None:
@@ -129,16 +132,17 @@ def test_cli_app_fgt_config_check_dir() -> None:
 
 def test_cli_app_fgt_config_check_invalid_bundle_file() -> None:
     """Test cli options and commands for fgt config check with an invalid check bundle file"""
-    result = runner.invoke(
-        app,
-        [
-            "-c",
-            "tests/fotoobo.yaml",
-            "fgt",
-            "config",
-            "check",
-            "tests/data/fortigate_config_single.conf",
-            "tests/data/fortigate_checks_invalid.yaml",
-        ],
-    )
-    assert result.exit_code == 1
+    with pytest.raises(GeneralError, match=r"no valid bundle file"):
+        runner.invoke(
+            app,
+            [
+                "-c",
+                "tests/fotoobo.yaml",
+                "fgt",
+                "config",
+                "check",
+                "tests/data/fortigate_config_single.conf",
+                "tests/data/fortigate_checks_invalid.yaml",
+            ],
+            catch_exceptions=False,
+        )
