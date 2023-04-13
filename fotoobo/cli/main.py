@@ -23,7 +23,7 @@ from fotoobo.helpers.config import config
 from fotoobo.helpers.log import Log
 from fotoobo.helpers.output import print_logo
 
-app = typer.Typer(context_settings={"help_option_names": ["-h", "--help"]})
+app = typer.Typer(context_settings={"help_option_names": ["-h", "--help"]}, no_args_is_help=True)
 log = logging.getLogger("fotoobo")
 
 

@@ -6,6 +6,12 @@ For examples and guidelines see [https://keepachangelog.com/](https://keepachang
 
 ## [Unreleased]
 
+### Added
+
+### Changed
+
+- Invoking fotoobo (or any sub-command) without arguments displays the help instead of an error
+
 
 ## [0.7.0] - 2023-04-06
 

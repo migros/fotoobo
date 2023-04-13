@@ -9,7 +9,7 @@ from fotoobo.cli.ems import get_commands as get
 from fotoobo.cli.ems import monitor
 from fotoobo.helpers import cli_path
 
-app = typer.Typer()
+app = typer.Typer(no_args_is_help=True)
 log = logging.getLogger("fotoobo")
 
 
