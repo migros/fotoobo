@@ -3,10 +3,13 @@
 All notable changes to this project will be documented in this file.
 For examples and guidelines see [https://keepachangelog.com/](https://keepachangelog.com/)
 
-
 ## [Unreleased]
 
-### Added
+
+
+## [Released]
+
+## [0.8.0] - 2023-04-13
 
 ### Changed
 
@@ -35,9 +38,6 @@ For examples and guidelines see [https://keepachangelog.com/](https://keepachang
 ### Removed
 
 - Global option `backup_dir` in fotoobo.yaml
-
-
-## [Released]
 
 
 ## [0.6.1] - 2023-03-23
