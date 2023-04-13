@@ -14,7 +14,7 @@ from fotoobo.fortinet.fortigate_config_check import FortiGateConfigCheck
 from fotoobo.helpers.files import load_yaml_file
 from fotoobo.helpers.output import Output
 
-app = typer.Typer()
+app = typer.Typer(no_args_is_help=True)
 log = logging.getLogger("fotoobo")
 
 

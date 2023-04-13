@@ -14,11 +14,10 @@ runner = CliRunner()
 def test_cli_get_no_args() -> None:
     """Test get cli without issuing any arguments"""
     result = runner.invoke(app, ["-c", "tests/fotoobo.yaml", "get"])
-    assert result.exit_code == 2
+    assert result.exit_code == 0
     assert "Usage: callback get [OPTIONS] COMMAND [ARGS]..." in result.stdout
-    assert "Try 'callback get -h' for help." in result.stdout
-    assert "Error" in result.stdout
-    assert "Missing command" in result.stdout
+    assert "--help" in result.stdout
+    assert "get commands for fotoobo" in result.stdout
 
 
 def test_cli_get_help() -> None:

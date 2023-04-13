@@ -11,7 +11,7 @@ from fotoobo.helpers.files import save_json_file, save_with_template
 from fotoobo.helpers.output import print_dicttable
 from fotoobo.utils.ems import monitor
 
-app = typer.Typer()
+app = typer.Typer(no_args_is_help=True)
 log = logging.getLogger("fotoobo")
 
 

@@ -8,7 +8,7 @@ import typer
 from fotoobo.helpers.output import print_datatable, print_dicttable
 from fotoobo.utils import fgt
 
-app = typer.Typer()
+app = typer.Typer(no_args_is_help=True)
 log = logging.getLogger("fotoobo")
 
 
