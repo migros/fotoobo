@@ -28,7 +28,10 @@ def test_cli_app_fgt_config_check_help() -> None:
 def test_cli_app_fgt_config_check_no_args() -> None:
     """Test fgt config check with no arguments"""
     result = runner.invoke(app, ["-c", "tests/fotoobo.yaml", "fgt", "config", "check"])
-    assert result.exit_code == 2
+    assert result.exit_code == 0
+    assert "Usage: callback fgt config check [OPTIONS] [config]" in result.stdout
+    assert "--help" in result.stdout
+    assert "Check one or more FortiGate" in result.stdout
 
 
 def test_cli_app_fgt_config_check() -> None:

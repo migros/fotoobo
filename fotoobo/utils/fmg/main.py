@@ -55,7 +55,7 @@ def assign(host: str, adoms: str, timeout: int = 60) -> None:
     fmg.logout()
 
 
-def set(host: str, file: str, adom: str) -> None:  # pylint: disable=redefined-builtin
+def post(host: str, file: str, adom: str) -> None:
     """
     Set the given configuration from a JSON file to the FortiManager
 
@@ -77,5 +77,5 @@ def set(host: str, file: str, adom: str) -> None:  # pylint: disable=redefined-b
     log.debug("FortiManager set command ...")
     log.info("start setting assets to '%s'", host + "/" + adom)
 
-    fmg.set(adom, payloads)
+    fmg.post(adom, payloads)
     fmg.logout()
