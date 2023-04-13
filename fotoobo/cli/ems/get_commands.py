@@ -9,7 +9,7 @@ from fotoobo.helpers import cli_path
 from fotoobo.helpers.output import print_datatable
 from fotoobo.utils import ems
 
-app = typer.Typer()
+app = typer.Typer(no_args_is_help=True, rich_markup_mode="rich")
 log = logging.getLogger("fotoobo")
 
 
@@ -29,12 +29,12 @@ def callback(context: typer.Context) -> None:
 def version(
     host: str = typer.Argument(
         "ems",
-        help="The FortiClientEMS hostname to access (must be defined in inventory)",
+        help="The FortiClientEMS hostname to access (must be defined in the inventory).",
         metavar="[host]",
     )
 ) -> None:
     """
-    Get the FortiClient EMS version
+    Get the FortiClient EMS version.
     """
     data = ems.get.version(host)
     print_datatable(data, title="FortiClient EMS Version", headers=["FortiClient EMS", "Version"])
@@ -44,13 +44,13 @@ def version(
 def workgroups(
     host: str = typer.Argument(
         "ems",
-        help="The FortiClientEMS hostname to access (must be defined in inventory)",
+        help="The FortiClientEMS hostname to access (must be defined in the inventory).",
         metavar="[host]",
     ),
     custom: bool = typer.Option(False, "--custom", "-c", help="Only show custom groups"),
 ) -> None:
     """
-    Get the FortiClient EMS workgroups
+    Get the FortiClient EMS workgroups.
     """
     data = ems.get.workgroups(host, custom)
     print_datatable(data, title="FortiClient EMS Workgroups", auto_header=True)

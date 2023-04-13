@@ -1,6 +1,8 @@
 """
 The FortiGate get commands
 """
+# pylint: disable=anomalous-backslash-in-string
+
 import logging
 
 import typer
@@ -9,7 +11,7 @@ from fotoobo.helpers import cli_path
 from fotoobo.helpers.output import print_datatable
 from fotoobo.utils import fgt
 
-app = typer.Typer()
+app = typer.Typer(no_args_is_help=True, rich_markup_mode="rich")
 log = logging.getLogger("fotoobo")
 
 
@@ -29,15 +31,16 @@ def callback(context: typer.Context) -> None:
 def version(
     host: str = typer.Argument(
         "",
-        help="The FortiGate hostname to access (must be defined in inventory)",
+        help="The FortiGate hostname to access (must be defined in the inventory). "
+        "\[default: <all>]",
         show_default=False,
         metavar="[host]",
     )
 ) -> None:
     """
-    Get the FortiGate version
+    Get the FortiGate(s) version(s).
 
-    The optional argument [host] makes this command somewhat magic. If you omit [host] it searches
+    The optional argument [host] makes this command somewhat magic. If you omit \[host] it searches
     for all devices of type 'fortigate' in the inventory and tries to get their FortiOS version.
     """
     data = fgt.get.version(host)

@@ -8,7 +8,7 @@ import typer
 from fotoobo.cli.faz import get_commands as get
 from fotoobo.helpers import cli_path
 
-app = typer.Typer()
+app = typer.Typer(no_args_is_help=True, rich_markup_mode="rich")
 log = logging.getLogger("fotoobo")
 
 
@@ -24,4 +24,4 @@ def callback(context: typer.Context) -> None:
     log.debug("about to execute command: '%s'", context.invoked_subcommand)
 
 
-app.add_typer(get.app, name="get", help="FortiAnalyzer get commands")
+app.add_typer(get.app, name="get", help="FortiAnalyzer get commands.")

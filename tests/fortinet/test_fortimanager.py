@@ -259,7 +259,7 @@ class TestFortiManager:
                 return_value=ResponseMock(json={"result": [{"status": {"code": 0}}]}, status=200)
             ),
         )
-        assert FortiManager("host", "", "").set("ADOM", {"params": [{"url": "{adom}"}]}) == 0
+        assert FortiManager("host", "", "").post("ADOM", {"params": [{"url": "{adom}"}]}) == 0
         requests.Session.post.assert_called_with(  # type:ignore
             "https://host:443/jsonrpc",
             headers=None,
@@ -277,7 +277,7 @@ class TestFortiManager:
                 return_value=ResponseMock(json={"result": [{"status": {"code": 0}}]}, status=200)
             ),
         )
-        assert FortiManager("host", "", "").set("ADOM", [{"params": [{"url": "{adom}"}]}]) == 0
+        assert FortiManager("host", "", "").post("ADOM", [{"params": [{"url": "{adom}"}]}]) == 0
         requests.Session.post.assert_called_with(  # type:ignore
             "https://host:443/jsonrpc",
             headers=None,
@@ -295,7 +295,7 @@ class TestFortiManager:
                 return_value=ResponseMock(json={"result": [{"status": {"code": 0}}]}, status=200)
             ),
         )
-        assert FortiManager("host", "", "").set("global", {"params": [{"url": "{adom}"}]}) == 0
+        assert FortiManager("host", "", "").post("global", {"params": [{"url": "{adom}"}]}) == 0
         requests.Session.post.assert_called_with(  # type:ignore
             "https://host:443/jsonrpc",
             headers=None,
@@ -318,7 +318,7 @@ class TestFortiManager:
                 )
             ),
         )
-        assert FortiManager("host", "", "").set("ADOM", [{"params": [{"url": "{adom}"}]}]) == 1
+        assert FortiManager("host", "", "").post("ADOM", [{"params": [{"url": "{adom}"}]}]) == 1
         requests.Session.post.assert_called_with(  # type:ignore
             "https://host:443/jsonrpc",
             headers=None,
@@ -335,7 +335,7 @@ class TestFortiManager:
             MagicMock(return_value=ResponseMock(json={}, status=444)),
         )
         with pytest.raises(APIError) as err:
-            FortiManager("host", "", "").set("ADOM", [{"params": [{"url": "{adom}"}]}])
+            FortiManager("host", "", "").post("ADOM", [{"params": [{"url": "{adom}"}]}])
         assert "HTTP/444 general API Error" in str(err.value)
         requests.Session.post.assert_called_with(  # type:ignore
             "https://host:443/jsonrpc",

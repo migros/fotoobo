@@ -3,8 +3,23 @@
 All notable changes to this project will be documented in this file.
 For examples and guidelines see [https://keepachangelog.com/](https://keepachangelog.com/)
 
+# [Unreleased]
 
-## [Unreleased]
+
+
+# [Released]
+
+## [0.8.0] - 2023-04-13
+
+### Changed
+
+- Renamed the following commands:
+   - `fotoobo fmg set` -> `fotoobo fmg post`
+   - `fotoobo fgt check` -> `fotoobo fgt monitor`
+- Changed argument ordering of the following commands (since host is usually optional):
+   - `fotoobo fmg assign`
+   - `fotoobo fmg get policy`
+- Invoking fotoobo (or any sub-command) without arguments displays the help instead of an error
 
 
 ## [Released]
