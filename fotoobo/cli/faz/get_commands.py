@@ -9,7 +9,7 @@ from fotoobo.helpers import cli_path
 from fotoobo.helpers.output import print_datatable
 from fotoobo.utils import faz
 
-app = typer.Typer(no_args_is_help=True)
+app = typer.Typer(no_args_is_help=True, rich_markup_mode="rich")
 log = logging.getLogger("fotoobo")
 
 
@@ -29,12 +29,12 @@ def callback(context: typer.Context) -> None:
 def version(
     host: str = typer.Argument(
         "faz",
-        help="The FortiAnalyzer hostname to access (must be defined in inventory)",
+        help="The FortiAnalyzer hostname to access (must be defined in the inventory).",
         metavar="[host]",
     )
 ) -> None:
     """
-    Get the FortiAnalyzer version
+    Get the FortiAnalyzer version.
     """
     data = faz.get.version(host)
     print_datatable(data, title="FortiAnalyzer Version", headers=["FortiAnalyzer", "Version"])

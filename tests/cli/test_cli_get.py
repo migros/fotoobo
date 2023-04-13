@@ -17,7 +17,7 @@ def test_cli_get_no_args() -> None:
     assert result.exit_code == 0
     assert "Usage: callback get [OPTIONS] COMMAND [ARGS]..." in result.stdout
     assert "--help" in result.stdout
-    assert "get commands for fotoobo" in result.stdout
+    assert "Get information about fotoobo" in result.stdout
 
 
 def test_cli_get_help() -> None:

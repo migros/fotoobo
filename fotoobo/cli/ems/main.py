@@ -6,10 +6,10 @@ import logging
 import typer
 
 from fotoobo.cli.ems import get_commands as get
-from fotoobo.cli.ems import monitor
+from fotoobo.cli.ems import monitor_commands as monitor
 from fotoobo.helpers import cli_path
 
-app = typer.Typer(no_args_is_help=True)
+app = typer.Typer(no_args_is_help=True, rich_markup_mode="rich")
 log = logging.getLogger("fotoobo")
 
 
@@ -25,5 +25,5 @@ def callback(context: typer.Context) -> None:
     log.debug("about to execute command: '%s'", context.invoked_subcommand)
 
 
-app.add_typer(get.app, name="get", help="FortiClient EMS get commands")
-app.add_typer(monitor.app, name="monitor", help="FortiClient EMS monitor commands")
+app.add_typer(get.app, name="get", help="FortiClient EMS get commands.")
+app.add_typer(monitor.app, name="monitor", help="FortiClient EMS monitor commands.")
