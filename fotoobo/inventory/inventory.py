@@ -93,27 +93,26 @@ class Inventory:
 
     for name, asset in inventory_raw.items():
 
-        # skip globals
-        if name == "globals":
-            continue
+    # skip globals
+    if name == "globals":
+        continue
 
-        # enrich the raw asset data with the globals
-        if asset.get("type", None) in self._globals:
-            asset = {**self._globals[asset["type"]], **asset}
+    # enrich the raw asset data with the globals
+    asset_type = asset.get("type", None)
+    if asset_type in self._globals:
+        asset = {**self._globals[asset_type], **asset}
 
-        if asset.get("type", "") == "fortigate":
+    # create asset object using the match and case keywords
+    match asset_type:
+        case "fortigate":
             self.assets[name] = FortiGate(**asset)
-
-        elif asset.get("type", "") == "forticlientems":
+        case "forticlientems":
             self.assets[name] = FortiClientEMS(**asset)
-
-        elif asset.get("type", "") == "fortianalyzer":
+        case "fortianalyzer":
             self.assets[name] = FortiAnalyzer(**asset)
-
-        elif asset.get("type", "") == "fortimanager":
+        case "fortimanager":
             self.assets[name] = FortiManager(**asset)
-
-        else:
+        case _:
             self.assets[name] = GenericDevice(**asset)
 
     def _set_globals(self, data: Dict[str, Any]) -> None:
