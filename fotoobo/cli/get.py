@@ -8,7 +8,7 @@ import typer
 from fotoobo.helpers import cli_path
 from fotoobo.utils import get
 
-app = typer.Typer(no_args_is_help=True)
+app = typer.Typer(no_args_is_help=True, rich_markup_mode="rich")
 log = logging.getLogger("fotoobo")
 
 
@@ -27,7 +27,7 @@ def callback(context: typer.Context) -> None:
 @app.command()
 def inventory() -> None:
     """
-    Get the fotoobo inventory
+    Print a summary over your fotoobo inventory.
     """
     get.inventory()
 
@@ -35,11 +35,11 @@ def inventory() -> None:
 @app.command()
 def version(
     verbose: bool = typer.Option(
-        False, "-v", help="Verbose output (also show most important modules)"
+        False, "-v", help="Verbose output (also show the most important modules)."
     ),
 ) -> None:
     """
-    Get the fotoobo version
+    Print the fotoobo version.
     """
     get.version(verbose)
 
@@ -47,6 +47,6 @@ def version(
 @app.command()
 def commands() -> None:
     """
-    Get the fotoobo commands
+    Print the fotoobo commands structure.
     """
     get.commands()

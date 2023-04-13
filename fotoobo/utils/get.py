@@ -49,10 +49,12 @@ def inventory() -> None:
 def version(verbose: bool = False) -> None:
     """Get the fotoobo version"""
     log.debug("printing fotoobo version information: %s", __version__)
-    versions = [{"module": "fotoobo", "version": __version__}]
+    if not verbose:
+        versions = [{"module": "fotoobo", "version": __version__}]
+    else:
+        versions = [{"module": "[bold]fotoobo[/]", "version": "[bold]" + __version__ + "[/]"}]
+        modules = ["pysnmp", "jinja2", "PyYAML", "requests", "rich", "typer"]
 
-    modules = ["pysnmp", "jinja2", "PyYAML", "requests", "rich", "typer"]
-    if verbose:
         for module in modules:
             versions.append({"module": module, "version": importlib.metadata.version(module)})
 

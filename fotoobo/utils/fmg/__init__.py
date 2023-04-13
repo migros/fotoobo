@@ -3,6 +3,6 @@ utils fmg
 """
 
 from . import get
-from .main import assign, set  # pylint: disable=redefined-builtin
+from .main import assign, post
 
-__all__ = ["assign", "get", "set"]
+__all__ = ["assign", "get", "post"]

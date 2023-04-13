@@ -9,8 +9,10 @@ from fotoobo.helpers import cli_path
 from fotoobo.helpers.output import print_datatable, write_policy_to_html
 from fotoobo.utils import fmg
 
-app = typer.Typer(no_args_is_help=True)
+app = typer.Typer(no_args_is_help=True, rich_markup_mode="rich")
 log = logging.getLogger("fotoobo")
+
+HELP_TEXT_HOST = "The FortiManager to access (must be defined in the inventory)."
 
 
 @app.callback()
@@ -29,12 +31,12 @@ def callback(context: typer.Context) -> None:
 def adoms(
     host: str = typer.Argument(
         "fmg",
-        help="The FortiManager hostname to access (must be defined in inventory)",
+        help=HELP_TEXT_HOST,
         metavar="[host]",
     )
 ) -> None:
     """
-    Get the FortiManager ADOM list
+    Get the FortiManager ADOM list.
     """
     data = fmg.get.adoms(host)
     print_datatable(data, title="FortiManager ADOMs", headers=["Name", "Version"])
@@ -44,15 +46,15 @@ def adoms(
 def devices(
     host: str = typer.Argument(
         "fmg",
-        help="The FortiManager hostname to access (must be defined in inventory)",
+        help=HELP_TEXT_HOST,
         metavar="[host]",
     )
 ) -> None:
     """
-    Get the FortiManager logical devices list
+    Get the FortiManager logical devices list.
 
-    Be aware that if a device is a cluster only the cluster device is returned, not all its
-    physical nodes.
+    Be aware that if a device is a cluster only the cluster
+    device is returned, not all its physical nodes.
     """
     data = fmg.get.devices(host)
     print_datatable(
@@ -62,44 +64,37 @@ def devices(
     )
 
 
-@app.command()
+@app.command(no_args_is_help=True)
 def policy(
-    host: str = typer.Argument(
-        ...,
-        help="The FortiManager hostname to access (must be defined in inventory)",
-        metavar="[host]",
-    ),
     adom: str = typer.Argument(
-        ..., help="The FortiManager ADOM to get the firewall policy from", metavar="[adom]"
+        ...,
+        help="The FortiManager ADOM to get the firewall policy from.",
+        metavar="[adom]",
+        show_default=False,
     ),
     policy_name: str = typer.Argument(
-        ...,
-        help="The policy name to get",
-        metavar="[policy]",
+        ..., help="The name of the policy to get.", metavar="[policy]", show_default=False
     ),
     filename: str = typer.Argument(
-        ...,
-        help="the filename to write the policy to",
-        metavar="[file]",
+        ..., help="The filename to write the policy to.", metavar="[file]", show_default=False
+    ),
+    host: str = typer.Argument(
+        "fmg",
+        help=HELP_TEXT_HOST,
+        metavar="[host]",
     ),
 ) -> None:
     """
-    Get a FortiManager policy
+    Get a FortiManager policy.
     """
     data = fmg.get.policy(host, adom, policy_name)
     write_policy_to_html(data, filename)
 
 
 @app.command()
-def version(
-    host: str = typer.Argument(
-        "fmg",
-        help="The FortiManager hostname to access (must be defined in inventory)",
-        metavar="[host]",
-    )
-) -> None:
+def version(host: str = typer.Argument("fmg", help=HELP_TEXT_HOST, metavar="[host]")) -> None:
     """
-    Get the FortiManager version
+    Get the FortiManager version.
     """
     data = fmg.get.version(host)
     print_datatable(data, title="FortiManager Version", headers=["FortiManager", "Version"])

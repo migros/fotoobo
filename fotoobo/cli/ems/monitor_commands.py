@@ -11,8 +11,20 @@ from fotoobo.helpers.files import save_json_file, save_with_template
 from fotoobo.helpers.output import print_dicttable
 from fotoobo.utils.ems import monitor
 
-app = typer.Typer(no_args_is_help=True)
+app = typer.Typer(no_args_is_help=True, rich_markup_mode="rich")
 log = logging.getLogger("fotoobo")
+
+
+HELP_TEXT_ARGUMENT_EMS = (
+    "The FortiClient EMS hostname to access (must be defined in the inventory)."
+)
+HELP_TEXT_OPTION_OUTPUT_FILE = "The file to write the output to."
+HELP_TEXT_OPTION_TEMPLATE = "The jinja2 template to use (use with -o)."
+HELP_TEXT_TEMPLATE = (
+    "If you add a template with the -t option you may render the output with any Jinja2 template "
+    "file. You may use any of the given data returned from the FortiClient EMS. Additionally there "
+    "are enriched variables under 'fotoobo' which you may also use in your template."
+)
 
 
 @app.callback()
@@ -27,34 +39,30 @@ def callback(context: typer.Context) -> None:
     log.debug("about to execute command: '%s'", context.invoked_subcommand)
 
 
-@app.command()
+@app.command(help="Monitor the FortiClient EMS connections.\n\n" + HELP_TEXT_TEMPLATE)
 def connections(
     host: str = typer.Argument(
         "ems",
-        help="The FortiClient EMS hostname to access (must be defined in inventory)",
+        help=HELP_TEXT_ARGUMENT_EMS,
         metavar="[host]",
     ),
     output_file: str = typer.Option(
         "",
         "--output",
         "-o",
-        help="The file to write the output to",
+        help=HELP_TEXT_OPTION_OUTPUT_FILE,
         metavar="[output]",
     ),
     template_file: str = typer.Option(
         "",
         "--template",
         "-t",
-        help="The jinja2 template to use (use with -o)",
+        help=HELP_TEXT_OPTION_TEMPLATE,
         metavar="[template]",
     ),
 ) -> None:
     """
-    Monitoring the FortiClient EMS connections.
-
-    If you add a template with the -t option you may render the output with any Jinja2 template
-    file. You may use any of the given data returned from the license endpoint. Additionally there
-    are enriched variables under 'fotoobo' which you also may use in your template.
+    Monitor the FortiClient EMS connections.
     """
     data = monitor.connections(host)
 
@@ -72,33 +80,32 @@ def connections(
         print_dicttable(data, title="FortiClient EMS connections")
 
 
-@app.command()
+@app.command(
+    help="Monitor the endpoint management status in FortiClient EMS.\n\n" + HELP_TEXT_TEMPLATE
+)
 def endpoint_management_status(
     host: str = typer.Argument(
         "ems",
-        help="The FortiClient EMS hostname to access (must be defined in inventory)",
+        help=HELP_TEXT_ARGUMENT_EMS,
         metavar="[host]",
     ),
     output_file: str = typer.Option(
         "",
         "--output",
         "-o",
-        help="The file to write the output to",
+        help=HELP_TEXT_OPTION_OUTPUT_FILE,
         metavar="[output]",
     ),
     template_file: str = typer.Option(
         "",
         "--template",
         "-t",
-        help="The jinja2 template to use (use with -o)",
+        help=HELP_TEXT_OPTION_TEMPLATE,
         metavar="[template]",
     ),
 ) -> None:
     """
-    Monitoring the endpoint management status in FortiClient EMS.
-
-    If you add a template with the -t option you may render the output with any Jinja2 template
-    file.
+    Monitor the endpoint management status in FortiClient EMS.
     """
     data = monitor.endpoint_management_status(host)
 
@@ -117,33 +124,33 @@ def endpoint_management_status(
         print_dicttable(data, title="FortiClient EMS endpoints")
 
 
-@app.command()
+@app.command(
+    help="Get the amount of FortiClient EMS devices which are online but policy is not in sync.\n\n"
+    + HELP_TEXT_TEMPLATE
+)
 def endpoint_outofsync(
     host: str = typer.Argument(
         "ems",
-        help="The FortiClient EMS hostname to access (must be defined in inventory)",
+        help=HELP_TEXT_ARGUMENT_EMS,
         metavar="[host]",
     ),
     output_file: str = typer.Option(
         "",
         "--output",
         "-o",
-        help="The file to write the output to",
+        help=HELP_TEXT_OPTION_OUTPUT_FILE,
         metavar="[output]",
     ),
     template_file: str = typer.Option(
         "",
         "--template",
         "-t",
-        help="The jinja2 template to use (use with -o)",
+        help=HELP_TEXT_OPTION_TEMPLATE,
         metavar="[template]",
     ),
 ) -> None:
     """
     Get amount of FortiClient EMS devices which are online but policy not in sync.
-
-    If you add a template with the -t option you may render the output with any Jinja2 template
-    file.
     """
     data = monitor.endpoint_online_outofsync(host)
 
@@ -162,33 +169,30 @@ def endpoint_outofsync(
         print_dicttable(data, title="FortiClient EMS endpoints")
 
 
-@app.command()
+@app.command(help="Monitor the endpoint OS versions in FortiClient EMS.\n\n" + HELP_TEXT_TEMPLATE)
 def endpoint_os_versions(
     host: str = typer.Argument(
         "ems",
-        help="The FortiClient EMS hostname to access (must be defined in inventory)",
+        help=HELP_TEXT_ARGUMENT_EMS,
         metavar="[host]",
     ),
     output_file: str = typer.Option(
         "",
         "--output",
         "-o",
-        help="The file to write the output to",
+        help=HELP_TEXT_OPTION_OUTPUT_FILE,
         metavar="[output]",
     ),
     template_file: str = typer.Option(
         "",
         "--template",
         "-t",
-        help="The jinja2 template to use (use with -o)",
+        help=HELP_TEXT_OPTION_TEMPLATE,
         metavar="[template]",
     ),
 ) -> None:
     """
-    Monitoring the endpoint os versions in FortiClient EMS.
-
-    If you add a template with the -t option you may render the output with any Jinja2 template
-    file.
+    Monitor the endpoint os versions in FortiClient EMS.
     """
     data = monitor.endpoint_os_versions(host)
 
@@ -207,34 +211,30 @@ def endpoint_os_versions(
         print_dicttable(data, title="FortiClient EMS endpoints")
 
 
-@app.command()
+@app.command(help="Monitor the FortiClient EMS license.\n\n" + HELP_TEXT_TEMPLATE)
 def license(  # pylint: disable=redefined-builtin
     host: str = typer.Argument(
         "ems",
-        help="The FortiClient EMS hostname to access (must be defined in inventory)",
+        help=HELP_TEXT_ARGUMENT_EMS,
         metavar="[host]",
     ),
     output_file: str = typer.Option(
         "",
         "--output",
         "-o",
-        help="The file to write the output to",
+        help=HELP_TEXT_OPTION_OUTPUT_FILE,
         metavar="[output]",
     ),
     template_file: str = typer.Option(
         "",
         "--template",
         "-t",
-        help="The jinja2 template to use (use with -o)",
+        help=HELP_TEXT_OPTION_TEMPLATE,
         metavar="[template]",
     ),
 ) -> None:
     """
-    Monitoring the FortiClient EMS license.
-
-    If you add a template with the -t option you may render the output with any Jinja2 template
-    file. You may use any of the given data returned from the license endpoint. Additionally there
-    are enriched variables under 'fotoobo' which you also may use in your template.
+    Monitor the FortiClient EMS license.
     """
     data = monitor.license(host)
 
@@ -257,12 +257,12 @@ def license(  # pylint: disable=redefined-builtin
 def system(
     host: str = typer.Argument(
         "ems",
-        help="The FortiClient EMS hostname to access (must be defined in inventory)",
+        help=HELP_TEXT_ARGUMENT_EMS,
         metavar="[host]",
     ),
 ) -> None:
     """
-    Monitoring the FortiClient EMS system information.
+    Monitor the FortiClient EMS system information.
     """
     data = monitor.system(host)
 

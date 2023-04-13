@@ -8,36 +8,45 @@ import typer
 from fotoobo.helpers.output import print_datatable, print_dicttable
 from fotoobo.utils import fgt
 
-app = typer.Typer(no_args_is_help=True)
+app = typer.Typer(no_args_is_help=True, rich_markup_mode="rich")
 log = logging.getLogger("fotoobo")
 
 
-@app.command()
+@app.command(no_args_is_help=True)
 def check(
     configuration: str = typer.Argument(
-        ..., help="The FortiGate configuration file or directory", metavar="[config]"
+        ...,
+        help="The FortiGate configuration file or directory.",
+        metavar="[config]",
+        show_default=False,
     ),
     bundles: str = typer.Argument(
-        ..., help="Filename of the file containing the check bundles", metavar="[bundles]"
+        ...,
+        help="Filename of the file containing the check bundles.",
+        metavar="[bundles]",
+        show_default=False,
     ),
 ) -> None:
     """
-    Check one or more FortiGate configuration files
+    Check one or more FortiGate configuration files.
     """
     fgt.config.check(configuration, bundles)
 
 
-@app.command()
+@app.command(no_args_is_help=True)
 def info(
     configuration: str = typer.Argument(
-        ..., help="The FortiGate configuration file or directory", metavar="[config]"
+        ...,
+        help="The FortiGate configuration file or directory.",
+        metavar="[config]",
+        show_default=False,
     ),
     as_list: bool = typer.Option(
-        False, "--list", "-l", help="print it as a list instead of separate blocks"
+        False, "--list", "-l", help="Print the result as a list instead of separate blocks."
     ),
 ) -> None:
     """
-    Get the information from one or more FortiGate configuration files
+    Get the information from one or more FortiGate configuration files.
     """
     infos = fgt.config.info(configuration)
     info_dicts = [data.__dict__ for data in infos]
