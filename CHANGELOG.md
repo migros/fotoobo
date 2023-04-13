@@ -6,7 +6,6 @@ For examples and guidelines see [https://keepachangelog.com/](https://keepachang
 # [Unreleased]
 
 
-
 # [Released]
 
 ## [0.8.0] - 2023-04-13
@@ -20,9 +19,6 @@ For examples and guidelines see [https://keepachangelog.com/](https://keepachang
    - `fotoobo fmg assign`
    - `fotoobo fmg get policy`
 - Invoking fotoobo (or any sub-command) without arguments displays the help instead of an error
-
-
-## [Released]
 
 
 ## [0.7.0] - 2023-04-06
