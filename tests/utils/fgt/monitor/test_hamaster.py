@@ -7,7 +7,7 @@ from unittest.mock import MagicMock
 import pytest
 from _pytest.monkeypatch import MonkeyPatch
 
-from fotoobo.utils.fgt.check import hamaster
+from fotoobo.utils.fgt.monitor import hamaster
 from tests.helper import ResponseMock
 
 
@@ -70,7 +70,7 @@ def test_hamaster(monkeypatch: MonkeyPatch, ret_val: str, expected: str) -> None
         ),
     )
     monkeypatch.setattr(
-        "fotoobo.utils.fgt.check._snmp_get",
+        "fotoobo.utils.fgt.monitor._snmp_get",
         MagicMock(return_value=ret_val),
     )
     monkeypatch.setattr("fotoobo.helpers.output.Output.send_mail", MagicMock(return_value=None))

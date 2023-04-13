@@ -1,4 +1,4 @@
-"""Test utils fmg set"""
+"""Test utils fmg post"""
 
 
 from unittest.mock import MagicMock
@@ -7,7 +7,7 @@ import pytest
 from _pytest.monkeypatch import MonkeyPatch
 
 from fotoobo.exceptions import GeneralWarning
-from fotoobo.utils.fmg import set  # pylint: disable=redefined-builtin
+from fotoobo.utils.fmg import post
 
 
 @pytest.fixture(autouse=True)
@@ -34,20 +34,20 @@ def fmg_logout(monkeypatch: MonkeyPatch) -> None:
     )
 
 
-def test_set(monkeypatch: MonkeyPatch) -> None:
-    """Test set"""
+def test_post(monkeypatch: MonkeyPatch) -> None:
+    """Test POST"""
     monkeypatch.setattr(
         "fotoobo.utils.fmg.main.load_json_file", MagicMock(return_value={"dummy": "dummy"})
     )
     monkeypatch.setattr(
-        "fotoobo.fortinet.fortimanager.FortiManager.set", MagicMock(return_value=None)
+        "fotoobo.fortinet.fortimanager.FortiManager.post", MagicMock(return_value=None)
     )
-    set("test_fmg", "", "")
+    post("test_fmg", "", "")
     assert True
 
 
-def test_set_exception_empty_payload_file(monkeypatch: MonkeyPatch) -> None:
-    """Test set with exception when device is not defined"""
-    monkeypatch.setattr("fotoobo.utils.fmg.set_.load_json_file", MagicMock(return_value=[]))
+def test_post_exception_empty_payload_file(monkeypatch: MonkeyPatch) -> None:
+    """Test POST with exception when device is not defined"""
+    monkeypatch.setattr("fotoobo.utils.fmg.post_.load_json_file", MagicMock(return_value=[]))
     with pytest.raises(GeneralWarning, match=r"there is no data in the given file \(dummy_file\)"):
-        set("dummy", "dummy_file", "")
+        post("dummy", "dummy_file", "")
