@@ -121,7 +121,7 @@ def greet(
     if not name:
         try:
             name = os.getlogin().capitalize()
-        except OSError:         # We need this, will fail on GitHub otherwise...
+        except OSError:  # We need this, will fail on GitHub otherwise...
             name = ""
     utils.greet(str(name), bye, log_enabled)
 
