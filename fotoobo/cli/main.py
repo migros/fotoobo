@@ -119,7 +119,10 @@ def greet(
     It allows you to greet someone with different colors in different languages.
     """
     if not name:
-        name = os.getlogin().capitalize()
+        try:
+            name = os.getlogin().capitalize()
+        except OSError:         # We need this, will fail on GitHub otherwise...
+            name = ""
     utils.greet(str(name), bye, log_enabled)
 
 
