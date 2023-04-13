@@ -6,7 +6,6 @@ For examples and guidelines see [https://keepachangelog.com/](https://keepachang
 # [Unreleased]
 
 
-
 # [Released]
 
 ## [0.8.0] - 2023-04-13
