@@ -224,9 +224,9 @@ class FortiManager(Fortinet):
         response = self.api("post", payload=payload)
         return response.status_code
 
-    def set(self, adom: str, payloads: Any) -> int:
+    def post(self, adom: str, payloads: Any) -> int:
         """
-        Set method to FortiManager.
+        POST method to FortiManager.
 
         You can pass a single payload (Dict) or a list of payloads (List of Dict).
 
