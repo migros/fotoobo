@@ -70,10 +70,13 @@ class FortiGate(Fortinet):
 
     def backup(self, timeout: int = 10) -> str:
         """
-        Get the configuration backup from a FortiGate
+        Get the configuration backup from a FortiGate.
+
+        Args:
+            timeout (int): Timeout in sec to wait for the response
 
         Returns:
-            str: configuration backup as text
+            str: Configuration backup as text
         """
         data = self.api(
             "get", "monitor/system/config/backup", params={"scope": "global"}, timeout=timeout
