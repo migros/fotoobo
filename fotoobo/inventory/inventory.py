@@ -102,6 +102,27 @@ class Inventory:
     if asset_type in self._globals:
         asset = {**self._globals[asset_type], **asset}
 
+         # enrich the raw asset data with the globals
+        if asset.get("type", None) in self._globals:
+            asset = {**self._globals[asset["type"]], **asset}
+
+        if asset.get("type", "") == "fortigate":
+            self.assets[name] = FortiGate(**asset)
+
+        elif asset.get("type", "") == "forticlientems":
+            self.assets[name] = FortiClientEMS(**asset)
+
+        elif asset.get("type", "") == "fortianalyzer":
+            self.assets[name] = FortiAnalyzer(**asset)
+
+        elif asset.get("type", "") == "fortimanager":
+            self.assets[name] = FortiManager(**asset)
+
+        else:
+            self.assets[name] = GenericDevice(**asset)
+        
+        
+    '''
     # create asset object using the match and case keywords
     match asset_type:
         case "fortigate":
@@ -114,7 +135,8 @@ class Inventory:
             self.assets[name] = FortiManager(**asset)
         case _:
             self.assets[name] = GenericDevice(**asset)
-
+    ''' 
+    
     def _set_globals(self, data: Dict[str, Any]) -> None:
         """
         Set some defaults for device types
