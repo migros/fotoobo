@@ -55,14 +55,14 @@ def assign(host: str, adoms: str, timeout: int = 60) -> None:
     fmg.logout()
 
 
-def post(host: str, file: str, adom: str) -> None:
+def post(file: str, adom: str, host: str) -> None:
     """
-    Set the given configuration from a JSON file to the FortiManager
+    POST the given configuration from a JSON file to the FortiManager
 
     Args:
-        host (str): The FortiManager defined in inventory
         file (str): The configuration file to oad the configuration from
         adom (str): The ADOM to assign the global policy to
+        host (str): The FortiManager defined in inventory
 
     Raises:
         GeneralWarning: GeneralWarning
@@ -74,8 +74,8 @@ def post(host: str, file: str, adom: str) -> None:
     fmg = inventory.get(host, "fortimanager")[host]
     fmg.login()
 
-    log.debug("FortiManager set command ...")
-    log.info("start setting assets to '%s'", host + "/" + adom)
+    log.debug("FortiManager post command ...")
+    log.info("start POSTing assets to '%s'", host + "/" + adom)
 
     fmg.post(adom, payloads)
     fmg.logout()
