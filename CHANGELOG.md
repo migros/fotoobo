@@ -5,6 +5,10 @@ For examples and guidelines see [https://keepachangelog.com/](https://keepachang
 
 # [Unreleased]
 
+### Changed
+
+- Command `fotoobo fmg assign` now lets you to specify which global policy to assign
+
 
 # [Released]
 
