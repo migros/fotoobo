@@ -77,64 +77,64 @@ class Inventory:
         return assets
 
     def _load_inventory(self) -> None:
-    """
-    Load the inventory from a file given
-    """
-    # Expand user home shortcuts in the inventory file path
-    expanded_inventory_file = os.path.expanduser(self._inventory_file)
-    log.debug("loading assets from '%s'", expanded_inventory_file)
-    inventory_raw: Dict[str, Any] = dict(load_yaml_file(expanded_inventory_file) or {})
+        """
+        Load the inventory from a file given
+        """
+        # Expand user home shortcuts in the inventory file path
+        expanded_inventory_file = os.path.expanduser(self._inventory_file)
+        log.debug("loading assets from '%s'", expanded_inventory_file)
+        inventory_raw: Dict[str, Any] = dict(load_yaml_file(expanded_inventory_file) or {})
 
-    # set the globals
-    # this has to be done before the looping over all inventory items so that the globals are
-    # already set during looping
-    if "globals" in inventory_raw:
-        self._set_globals(inventory_raw["globals"])
+        # set the globals
+        # this has to be done before the looping over all inventory items so that the globals are
+        # already set during looping
+        if "globals" in inventory_raw:
+            self._set_globals(inventory_raw["globals"])
 
-    for name, asset in inventory_raw.items():
+        for name, asset in inventory_raw.items():
 
-    # skip globals
-    if name == "globals":
-        continue
+        # skip globals
+        if name == "globals":
+            continue
 
-    # enrich the raw asset data with the globals
-    asset_type = asset.get("type", None)
-    if asset_type in self._globals:
-        asset = {**self._globals[asset_type], **asset}
+        # enrich the raw asset data with the globals
+        asset_type = asset.get("type", None)
+        if asset_type in self._globals:
+            asset = {**self._globals[asset_type], **asset}
 
-         # enrich the raw asset data with the globals
-        if asset.get("type", None) in self._globals:
-            asset = {**self._globals[asset["type"]], **asset}
+             # enrich the raw asset data with the globals
+            if asset.get("type", None) in self._globals:
+                asset = {**self._globals[asset["type"]], **asset}
 
-        if asset.get("type", "") == "fortigate":
-            self.assets[name] = FortiGate(**asset)
+            if asset.get("type", "") == "fortigate":
+                self.assets[name] = FortiGate(**asset)
 
-        elif asset.get("type", "") == "forticlientems":
-            self.assets[name] = FortiClientEMS(**asset)
+            elif asset.get("type", "") == "forticlientems":
+                self.assets[name] = FortiClientEMS(**asset)
 
-        elif asset.get("type", "") == "fortianalyzer":
-            self.assets[name] = FortiAnalyzer(**asset)
+            elif asset.get("type", "") == "fortianalyzer":
+                self.assets[name] = FortiAnalyzer(**asset)
 
-        elif asset.get("type", "") == "fortimanager":
-            self.assets[name] = FortiManager(**asset)
+            elif asset.get("type", "") == "fortimanager":
+                self.assets[name] = FortiManager(**asset)
 
-        else:
-            self.assets[name] = GenericDevice(**asset)
-        
-        
+            else:
+                self.assets[name] = GenericDevice(**asset)
+
+
     '''
-    # create asset object using the match and case keywords
-    match asset_type:
-        case "fortigate":
-            self.assets[name] = FortiGate(**asset)
-        case "forticlientems":
-            self.assets[name] = FortiClientEMS(**asset)
-        case "fortianalyzer":
-            self.assets[name] = FortiAnalyzer(**asset)
-        case "fortimanager":
-            self.assets[name] = FortiManager(**asset)
-        case _:
-            self.assets[name] = GenericDevice(**asset)
+        # create asset object using the match and case keywords
+        match asset_type:
+            case "fortigate":
+                self.assets[name] = FortiGate(**asset)
+            case "forticlientems":
+                self.assets[name] = FortiClientEMS(**asset)
+            case "fortianalyzer":
+                self.assets[name] = FortiAnalyzer(**asset)
+            case "fortimanager":
+                self.assets[name] = FortiManager(**asset)
+            case _:
+                self.assets[name] = GenericDevice(**asset)
     ''' 
     
     def _set_globals(self, data: Dict[str, Any]) -> None:
