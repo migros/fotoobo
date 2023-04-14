@@ -36,7 +36,7 @@ class TestFortiManager:
                 )
             ),
         )
-        assert FortiManager("host", "", "").assign_all_objects("DUMMY") == 111
+        assert FortiManager("host", "", "").assign_all_objects("dummy_adom", "dummy_policy") == 111
         requests.Session.post.assert_called_with(  # type: ignore
             "https://host:443/jsonrpc",
             headers=None,
@@ -46,8 +46,8 @@ class TestFortiManager:
                     {
                         "data": {
                             "flags": ["cp_all_objs"],
-                            "pkg": "default",
-                            "target": [{"adom": "DUMMY", "excluded": "disable"}],
+                            "pkg": "dummy_policy",
+                            "target": [{"adom": "dummy_adom", "excluded": "disable"}],
                         },
                         "url": "/securityconsole/assign/package",
                     }
@@ -66,7 +66,7 @@ class TestFortiManager:
             MagicMock(return_value=ResponseMock(json={}, status=404)),
         )
         with pytest.raises(APIError) as err:
-            FortiManager("host", "", "").assign_all_objects("DUMMY")
+            FortiManager("host", "", "").assign_all_objects("dummy_adom", "dummy_policy")
         assert "HTTP/404 Resource Not Found" in str(err.value)
         requests.Session.post.assert_called_with(  # type: ignore
             "https://host:443/jsonrpc",
@@ -77,8 +77,8 @@ class TestFortiManager:
                     {
                         "data": {
                             "flags": ["cp_all_objs"],
-                            "pkg": "default",
-                            "target": [{"adom": "DUMMY", "excluded": "disable"}],
+                            "pkg": "dummy_policy",
+                            "target": [{"adom": "dummy_adom", "excluded": "disable"}],
                         },
                         "url": "/securityconsole/assign/package",
                     }
@@ -109,7 +109,7 @@ class TestFortiManager:
                 )
             ),
         )
-        assert FortiManager("host", "", "").assign_all_objects("DUMMY") == 0
+        assert FortiManager("host", "", "").assign_all_objects("adom1,adom2", "policy1") == 0
         requests.Session.post.assert_called_with(  # type: ignore
             "https://host:443/jsonrpc",
             headers=None,
@@ -119,8 +119,11 @@ class TestFortiManager:
                     {
                         "data": {
                             "flags": ["cp_all_objs"],
-                            "pkg": "default",
-                            "target": [{"adom": "DUMMY", "excluded": "disable"}],
+                            "pkg": "policy1",
+                            "target": [
+                                {"adom": "adom1", "excluded": "disable"},
+                                {"adom": "adom2", "excluded": "disable"},
+                            ],
                         },
                         "url": "/securityconsole/assign/package",
                     }

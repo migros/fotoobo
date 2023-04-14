@@ -25,7 +25,7 @@ def test_cli_app_fmg_assign_help() -> None:
     result = runner.invoke(app, ["-c", "tests/fotoobo.yaml", "fmg", "assign", "-h"])
     assert result.exit_code == 0
     arguments, options, commands = parse_help_output(result.stdout)
-    assert set(arguments) == {"host", "adoms"}
+    assert set(arguments) == {"adoms", "host", "policy"}
     assert options == {"-h", "--help", "-t", "--timeout"}
     assert not commands
 

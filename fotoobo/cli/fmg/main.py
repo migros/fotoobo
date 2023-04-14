@@ -35,6 +35,12 @@ def assign(
         metavar="[adoms]",
         show_default=False,
     ),
+    policy: str = typer.Argument(
+        ...,
+        help="The global policy to assign",
+        metavar="[policy]",
+        show_default=False,
+    ),
     host: str = typer.Argument(
         "fmg",
         help="The FortiManager to access (must be defined in the inventory).",
@@ -51,7 +57,7 @@ def assign(
     """
     Assign a global policy to a specified ADOM or to a list of ADOMs.
     """
-    fmg.assign(host, adoms, timeout=timeout)
+    fmg.assign(adoms=adoms, policy=policy, host=host, timeout=timeout)
 
 
 @app.command(no_args_is_help=True)

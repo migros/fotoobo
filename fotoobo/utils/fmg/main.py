@@ -12,25 +12,23 @@ from fotoobo.inventory import Inventory
 log = logging.getLogger("fotoobo")
 
 
-def assign(host: str, adoms: str, timeout: int = 60) -> None:
+def assign(adoms: str, policy: str, host: str, timeout: int = 60) -> None:
     """
     Assign the global policy to the given ADOM
 
     Args:
-        host (str):  The FortiManager defined in inventory
-
-        adoms (str): The ADOMs to assign the global policy to. Specify multiple ADOMs as a comma
-        separated list (no spaces)
-
-    Raises:
-        GeneralWarning: _description_
+        adoms (str):   The ADOMs to assign the global policy to. Specify multiple ADOMs as a comma
+            separated list (no spaces).
+        policy (str):  Specify the global policy to assign [Default: 'default'].
+        host (str):    The FortiManager defined in inventory.
+        timeout (int): Timeout in sec. to wait for the FortiManager task to finish [Default: 60].
     """
     inventory = Inventory(config.inventory_file)
     fmg = inventory.get(host, "fortimanager")[host]
     fmg.login()
 
     log.debug("Assigning global policy/objects to ADOM %s", adoms)
-    task_id = fmg.assign_all_objects(adoms)
+    task_id = fmg.assign_all_objects(adoms=adoms, policy=policy)
     if task_id > 0:
         log.info("created FortiManager task id %s", task_id)
         messages = fmg.wait_for_task(task_id, timeout=timeout)
