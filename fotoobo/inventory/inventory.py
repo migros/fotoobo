@@ -4,6 +4,7 @@ Devices class for storing device information
 
 import logging
 from typing import Any, Dict, Optional
+import os
 
 from fotoobo.exceptions import GeneralWarning
 from fotoobo.fortinet.fortianalyzer import FortiAnalyzer
@@ -93,35 +94,35 @@ class Inventory:
 
         for name, asset in inventory_raw.items():
 
-        # skip globals
-        if name == "globals":
-            continue
+            # skip globals
+            if name == "globals":
+                continue
 
-        # enrich the raw asset data with the globals
-        asset_type = asset.get("type", None)
-        if asset_type in self._globals:
-            asset = {**self._globals[asset_type], **asset}
+            # enrich the raw asset data with the globals
+            asset_type = asset.get("type", None)
+            if asset_type in self._globals:
+                asset = {**self._globals[asset_type], **asset}
 
-             # enrich the raw asset data with the globals
-            if asset.get("type", None) in self._globals:
-                asset = {**self._globals[asset["type"]], **asset}
+                # enrich the raw asset data with the globals
+                if asset.get("type", None) in self._globals:
+                    asset = {**self._globals[asset["type"]], **asset}
 
-            if asset.get("type", "") == "fortigate":
-                self.assets[name] = FortiGate(**asset)
+                if asset.get("type", "") == "fortigate":
+                    self.assets[name] = FortiGate(**asset)
 
-            elif asset.get("type", "") == "forticlientems":
-                self.assets[name] = FortiClientEMS(**asset)
+                elif asset.get("type", "") == "forticlientems":
+                    self.assets[name] = FortiClientEMS(**asset)
 
-            elif asset.get("type", "") == "fortianalyzer":
-                self.assets[name] = FortiAnalyzer(**asset)
+                elif asset.get("type", "") == "fortianalyzer":
+                    self.assets[name] = FortiAnalyzer(**asset)
 
-            elif asset.get("type", "") == "fortimanager":
-                self.assets[name] = FortiManager(**asset)
+                elif asset.get("type", "") == "fortimanager":
+                    self.assets[name] = FortiManager(**asset)
 
-            else:
-                self.assets[name] = GenericDevice(**asset)
+                else:
+                    self.assets[name] = GenericDevice(**asset)
 
-
+# pylint: disable=pointless-string-statement
     '''
         # create asset object using the match and case keywords
         match asset_type:
@@ -136,7 +137,7 @@ class Inventory:
             case _:
                 self.assets[name] = GenericDevice(**asset)
     ''' 
-    
+
     def _set_globals(self, data: Dict[str, Any]) -> None:
         """
         Set some defaults for device types
