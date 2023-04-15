@@ -4,6 +4,7 @@ Devices class for storing device information
 
 import logging
 from typing import Any, Dict, Optional
+import os
 
 from fotoobo.exceptions import GeneralWarning
 from fotoobo.fortinet.fortianalyzer import FortiAnalyzer
@@ -80,8 +81,10 @@ class Inventory:
         """
         Load the inventory from a file given
         """
-        log.debug("loading assets from '%s'", self._inventory_file)
-        inventory_raw: Dict[str, Any] = dict(load_yaml_file(self._inventory_file) or {})
+        # Expand user home shortcuts in the inventory file path
+        expanded_inventory_file = os.path.expanduser(self._inventory_file)
+        log.debug("loading assets from '%s'", expanded_inventory_file)
+        inventory_raw: Dict[str, Any] = dict(load_yaml_file(expanded_inventory_file) or {})
 
         # set the globals
         # this has to be done before the looping over all inventory items so that the globals are
@@ -113,6 +116,22 @@ class Inventory:
 
             else:
                 self.assets[name] = GenericDevice(**asset)
+
+    # pylint: disable=pointless-string-statement
+    """
+        # create asset object using the match and case keywords
+        match asset_type:
+            case "fortigate":
+                self.assets[name] = FortiGate(**asset)
+            case "forticlientems":
+                self.assets[name] = FortiClientEMS(**asset)
+            case "fortianalyzer":
+                self.assets[name] = FortiAnalyzer(**asset)
+            case "fortimanager":
+                self.assets[name] = FortiManager(**asset)
+            case _:
+                self.assets[name] = GenericDevice(**asset)
+    """
 
     def _set_globals(self, data: Dict[str, Any]) -> None:
         """
