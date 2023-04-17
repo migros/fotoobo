@@ -62,17 +62,16 @@ def assign(
 
 @app.command(no_args_is_help=True)
 def post(
-    host: str = typer.Argument(
-        ...,
-        help="The FortiManager to access (must be defined in the inventory).",
-        metavar="[host]",
-        show_default=False,
-    ),
     file: str = typer.Argument(
         ..., help="JSON file with payload(s).", show_default=False, metavar="[file]"
     ),
     adom: str = typer.Argument(
         ..., help="The ADOM to issue the set command(s).", metavar="[adom]", show_default=False
+    ),
+    host: str = typer.Argument(
+        "fmg",
+        help="The FortiManager to access (must be defined in the inventory).",
+        metavar="[host]",
     ),
 ) -> None:
     """
@@ -80,7 +79,7 @@ def post(
 
     Configure the FortiManager with any valid API call(s) given within the JSON file.
     """
-    fmg.post(host, file, adom)
+    fmg.post(file=file, adom=adom, host=host)
 
 
 app.add_typer(get.app, name="get", help="FortiManager get commands.")

@@ -34,7 +34,7 @@ class TestFortiGate:
         )
 
     @staticmethod
-    def test_get_backup(monkeypatch: MonkeyPatch) -> None:
+    def test_backup(monkeypatch: MonkeyPatch) -> None:
         """Test the FortiGate backup method"""
         monkeypatch.setattr(
             "fotoobo.fortinet.fortigate.FortiGate.api",
