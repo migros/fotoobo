@@ -5,6 +5,10 @@ For examples and guidelines see [https://keepachangelog.com/](https://keepachang
 
 # [Unreleased]
 
+### Changed
+
+- Changed the order of arguments in `fotoobo fmg post` and made host optional with "fmg" as default.
+
 
 # [Released]
 

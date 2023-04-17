@@ -30,11 +30,11 @@ def test_cli_app_fmg_assign_help() -> None:
     assert not commands
 
 
-def test_cli_app_fmg_set_help() -> None:
-    """Test cli help for fmg set"""
+def test_cli_app_fmg_post_help() -> None:
+    """Test cli help for fmg post"""
     result = runner.invoke(app, ["-c", "tests/fotoobo.yaml", "fmg", "post", "-h"])
     assert result.exit_code == 0
     arguments, options, commands = parse_help_output(result.stdout)
-    assert set(arguments) == {"host", "file", "adom"}
+    assert set(arguments) == {"file", "adom", "host"}
     assert options == {"-h", "--help"}
     assert not commands
