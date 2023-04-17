@@ -91,17 +91,19 @@ class FortiManager(Fortinet):
             method, url, headers=headers, payload=payload, params=params, timeout=timeout
         )
 
-    def assign_all_objects(self, adoms: str) -> int:
+    def assign_all_objects(self, adoms: str, policy: str) -> int:
         """
         Copies all objects from the global ADOM database to a given ADOM.
 
         Args:
             adoms (str): The ADOM to assign the global policy/objects to. If you specify an invalid
-            ADOM name you'll get a permission error. You can specify multiple ADOMs by separating
-            them with a comma (no spaces)
+                ADOM name you'll get a permission error. You can specify multiple ADOMs by
+                separating them with a comma (no spaces)
+
+            policy (str): Specify the global policy to assign [Default: 'default'].
 
         Returns:
-            int: The id of the created task or 0 (zero) if unsuccessful
+            int: The id of the FortiManager task created or 0 (zero) if unsuccessful
 
         """
         task_id = 0
@@ -114,7 +116,7 @@ class FortiManager(Fortinet):
                 {
                     "data": {
                         "flags": ["cp_all_objs"],
-                        "pkg": "default",
+                        "pkg": policy,
                         "target": adom_payload,
                     },
                     "url": "/securityconsole/assign/package",

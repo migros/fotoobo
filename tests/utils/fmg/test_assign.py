@@ -56,5 +56,5 @@ def test_assign(monkeypatch: MonkeyPatch) -> None:
             )
         ),
     )
-    assign("test_fmg", "")
+    assign("dummy_adoms", "dummy_policy", "test_fmg")
     assert True
