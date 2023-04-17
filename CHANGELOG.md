@@ -7,6 +7,7 @@ For examples and guidelines see [https://keepachangelog.com/](https://keepachang
 
 ### Changed
 
+- Command `fotoobo fmg assign` now lets you to specify which global policy to assign
 - Changed the order of arguments in `fotoobo fmg post` and made host optional with "fmg" as default.
 
 
