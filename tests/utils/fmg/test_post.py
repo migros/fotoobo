@@ -42,12 +42,12 @@ def test_post(monkeypatch: MonkeyPatch) -> None:
     monkeypatch.setattr(
         "fotoobo.fortinet.fortimanager.FortiManager.post", MagicMock(return_value=None)
     )
-    post("test_fmg", "", "")
+    post(file="dummy_file", adom="dummy_adom", host="test_fmg")
     assert True
 
 
 def test_post_exception_empty_payload_file(monkeypatch: MonkeyPatch) -> None:
     """Test POST with exception when device is not defined"""
-    monkeypatch.setattr("fotoobo.utils.fmg.post_.load_json_file", MagicMock(return_value=[]))
-    with pytest.raises(GeneralWarning, match=r"there is no data in the given file \(dummy_file\)"):
-        post("dummy", "dummy_file", "")
+    monkeypatch.setattr("fotoobo.utils.fmg.main.load_json_file", MagicMock(return_value=[]))
+    with pytest.raises(GeneralWarning, match=r"there is no data in the given file"):
+        post(file="dummy_file", adom="dummy_adom", host="dummy_host")
