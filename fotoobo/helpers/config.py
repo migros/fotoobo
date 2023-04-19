@@ -28,6 +28,7 @@ class Config:
     no_logo: bool = False
     snmp_community: str = ""
     cli_info: Dict[str, Any] = field(default_factory=dict)
+    ssl_verify: Union[str, bool] = True
 
     def load_configuration(self, config_file: Union[str, None]) -> None:
         """
@@ -76,6 +77,8 @@ class Config:
 
                 self.no_logo = loaded_config.get("no_logo", self.no_logo)
                 self.snmp_community = loaded_config.get("snmp_community", self.snmp_community)
+
+                self.ssl_verify = loaded_config.get("ssl_verify", self.ssl_verify)
 
 
 config = Config()

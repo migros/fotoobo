@@ -71,7 +71,7 @@ These options may be overwritten on any particular device.
     fortigate:
       https_port: 4443
     fortimanager:
-      ssl_verify: false
+      ssl_verify: "/path/to/my/custonm/ca.pem"
 
 
 FortiGate Devices
@@ -93,9 +93,10 @@ an API access token in every request.
 
   The port number to use for accessing the https api.
 
-**ssl_verify** *bool* (optional, default: true)
+**ssl_verify** *bool | string* (optional, default: true)
 
-  Check hosts SSL certificate (true) or not (false). Please be aware that disabling SSL certificate
+  Check host SSL certificate (true) or not (false). You can also provide a path to a custom
+  CA certificate or CA bundle. Please be aware that disabling SSL certificate
   verification is a security risk and should not be used in a production environment.
   
 **token** *string* (required)
@@ -143,9 +144,10 @@ FortiManager / FortiAnalyzer Devices
 
   The password used to login to the FortiManager or FortiAnalyzer device.
 
-**ssl_verify** *bool* (optional, default: true)
+**ssl_verify** *bool | string* (optional, default: true)
 
-  Check hosts SSL certificate (true) or not (false). Please be aware that disabling SSL certificate
+  Check host SSL certificate (true) or not (false). You can also provide a path to a custom
+  CA certificate or CA bundle. Please be aware that disabling SSL certificate
   verification is a security risk and should not be used in a production environment.
 
 **username** *string* (required)
@@ -197,9 +199,10 @@ FortiClient EMS Devices
 
   The password used to login to the FortiClient EMS.
 
-**ssl_verify** *bool* (optional, default: true)
+**ssl_verify** *bool | string* (optional, default: true)
 
-  Check hosts SSL certificate (true) or not (false). Please be aware that disabling SSL certificate
+  Check host SSL certificate (true) or not (false). You can also provide a path to a custom
+  CA certificate or CA bundle. Please be aware that disabling SSL certificate
   verification is a security risk and should not be used in a production environment.
 
 **username** *string* (required)
