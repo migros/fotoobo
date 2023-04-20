@@ -17,7 +17,7 @@ def connections(host: str) -> Dict[Any, Any]:
     """
     Get connections information from FortiClient EMS.
 
-    The data returned is the raw data part from the EMS response. Additionally the data is enriched
+    The data returned is the raw data part from the EMS response. Additionally, the data is enriched
     with calculated and interesting values. All the enriched values are in the "fotoobo" in the
     returned dict.
 
@@ -44,7 +44,7 @@ def endpoint_management_status(host: str) -> Dict[str, Any]:
     """
     Get management information about endpoints registered in FortiClient EMS.
 
-    The data returned is the raw data part from the EMS response. Additionally the data is enriched
+    The data returned is the raw data part from the EMS response. Additionally, the data is enriched
     with calculated and interesting values. All the enriched values are in the key "fotoobo" in the
     returned dict:
 
@@ -112,7 +112,7 @@ def endpoint_os_versions(host: str) -> Dict[str, Any]:
     """
     Get management information about endpoints registered in FortiClient EMS.
 
-    The data returned is the raw data part from the EMS response. Additionally the data is enriched
+    The data returned is the raw data part from the EMS response. Additionally, the data is enriched
     with calculated and interesting values. All the enriched values are in the key "fotoobo" in the
     returned dict:
 
@@ -170,7 +170,7 @@ def license(host: str) -> Dict[str, Any]:  # pylint: disable=redefined-builtin
     """
     Get license information from FortiClient EMS.
 
-    The data returned is the raw data part from the EMS response. Additionally the data is enriched
+    The data returned is the raw data part from the EMS response. Additionally, the data is enriched
     with calculated and interesting values. All the enriched values are in the key "fotoobo" in the
     returned dict:
 
@@ -188,7 +188,7 @@ def license(host: str) -> Dict[str, Any]:  # pylint: disable=redefined-builtin
                 - vpn_only
         - {{ fotoobo.license_expiry_days }}     Days until your FortiClient EMS license expires.
             Be aware that it only shows the expiry of the "fabric_agent" fabric_agent as for now.
-            If you wish mor granular view this utility has to be improved accordingly.
+            If you wish more granular view this utility has to be improved accordingly.
 
     Args:
         host (str): FortiClient EMS host defined in the inventory
