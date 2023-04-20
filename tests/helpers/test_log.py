@@ -13,6 +13,7 @@ import pytest
 from _pytest.monkeypatch import MonkeyPatch
 from rich.logging import RichHandler
 
+from fotoobo.exceptions import GeneralError
 from fotoobo.helpers.config import Config
 from fotoobo.helpers.log import Log, SysLogFormatter
 
@@ -290,7 +291,6 @@ class TestLog:
             for handler in fotoobo_logger.handlers:
                 assert type(handler) in expected_fotoobo_logger_config.handlers
 
-            # TODO: We need to review this -> What to do on log_switch?
             if log_switch and not config.logging:
                 assert requests_logger.level == logging.CRITICAL
                 assert urllib3_logger.level == logging.CRITICAL
@@ -323,3 +323,70 @@ class TestLog:
         logger.audit("test")  # type: ignore
 
         audit_patch.assert_called_with("test")
+
+    @pytest.mark.parametrize(
+        "config",
+        (
+            pytest.param(
+                Config(
+                    logging={
+                        "enabled": True,
+                        "level": "DEBUG",
+                        "log_console": {},
+                        "log_file": {
+                            "name": "test.log",
+                        },
+                        "log_syslog": {
+                            "host": "notexisting.syslog.host.local",
+                            "port": 123,
+                            "protocol": "UDP",
+                        },
+                    }
+                ),
+                id="Normal logging",
+            ),
+            pytest.param(
+                Config(
+                    logging={
+                        "enabled": False,
+                    },
+                    audit_logging={
+                        "enabled": True,
+                        "level": "DEBUG",
+                        "log_console": {},
+                        "log_file": {
+                            "name": "test.log",
+                        },
+                        "log_syslog": {
+                            "host": "notexisting.syslog.host.local",
+                            "port": 123,
+                            "protocol": "UDP",
+                        },
+                    },
+                ),
+                id="Audit logging",
+            ),
+        ),
+    )
+    def test_logging_with_syslog_server_not_available(
+        self, config: Config, monkeypatch: MonkeyPatch
+    ) -> None:
+        """
+        Test that fotoobo closes itself sanely when the configured syslog server is not available.
+
+        Args:
+            monkeypatch:
+
+        Returns:
+
+        """
+
+        monkeypatch.setattr("fotoobo.helpers.log.config", config)
+
+        monkeypatch.setattr(
+            "fotoobo.helpers.log.SysLogHandler",
+            MagicMock(side_effect=OSError("[Errno 113] No route to host")),
+        )
+
+        with pytest.raises(GeneralError, match="Cannot configure SysLog logging: *"):
+            Log.configure_logging(True, "INFO")
