@@ -5,6 +5,11 @@ For examples and guidelines see [https://keepachangelog.com/](https://keepachang
 
 # [Unreleased]
 
+### Added
+
+- It is now possible to use a custom CA to verify the connections to your Fortinet devices
+
+
 ### Changed
 
 - Command `fotoobo fmg assign` now lets you to specify which global policy to assign

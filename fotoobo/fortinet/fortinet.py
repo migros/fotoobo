@@ -11,6 +11,7 @@ import requests
 import urllib3
 
 from fotoobo.exceptions import APIError, GeneralError
+from fotoobo.helpers.config import config
 
 log = logging.getLogger("fotoobo")
 
@@ -54,7 +55,7 @@ class Fortinet(ABC):
         if proxy := kwargs.get("proxy", ""):
             self.session.proxies = {"http": f"{proxy}", "https": f"{proxy}"}
 
-        self.ssl_verify: bool = kwargs.get("ssl_verify", True)
+        self.ssl_verify: bool = kwargs.get("ssl_verify", config.ssl_verify)
         if not self.ssl_verify:
             urllib3.disable_warnings()
 
