@@ -7,7 +7,7 @@ import typer
 
 from fotoobo.helpers import cli_path
 from fotoobo.helpers.output import print_datatable, write_policy_to_html
-from fotoobo.utils import fmg
+from fotoobo.tools import fmg
 
 app = typer.Typer(no_args_is_help=True, rich_markup_mode="rich")
 log = logging.getLogger("fotoobo")

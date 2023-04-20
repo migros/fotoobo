@@ -9,7 +9,7 @@ import typer
 from fotoobo.helpers import cli_path
 from fotoobo.helpers.files import save_json_file, save_with_template
 from fotoobo.helpers.output import print_dicttable
-from fotoobo.utils.ems import monitor
+from fotoobo.tools.ems import monitor
 
 app = typer.Typer(no_args_is_help=True, rich_markup_mode="rich")
 log = logging.getLogger("fotoobo")

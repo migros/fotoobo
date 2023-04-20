@@ -6,7 +6,7 @@ import logging
 import typer
 
 from fotoobo.helpers.output import print_datatable, print_dicttable
-from fotoobo.utils import fgt
+from fotoobo.tools import fgt
 
 app = typer.Typer(no_args_is_help=True, rich_markup_mode="rich")
 log = logging.getLogger("fotoobo")
