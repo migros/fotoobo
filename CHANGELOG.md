@@ -5,6 +5,11 @@ For examples and guidelines see [https://keepachangelog.com/](https://keepachang
 
 # [Unreleased]
 
+
+# [Released]
+
+## [0.9.0] - 2023-04-23
+
 ### Added
 
 - It is now possible to use a custom CA to verify the connections to your Fortinet devices
@@ -12,11 +17,9 @@ For examples and guidelines see [https://keepachangelog.com/](https://keepachang
 
 ### Changed
 
-- Command `fotoobo fmg assign` now lets you to specify which global policy to assign
+- Command `fotoobo fmg assign` now lets you specify which global policy to assign
 - Changed the order of arguments in `fotoobo fmg post` and made host optional with "fmg" as default.
 
-
-# [Released]
 
 ## [0.8.0] - 2023-04-13
 
