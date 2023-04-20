@@ -11,8 +11,8 @@ import socket
 from datetime import datetime
 from logging.handlers import RotatingFileHandler, SysLogHandler
 from typing import Optional, Union
-
 from syslog import LOG_AUTH, LOG_CRIT, LOG_DEBUG, LOG_ERR, LOG_INFO, LOG_USER, LOG_WARNING
+
 from rich.logging import RichHandler
 
 from fotoobo.exceptions import GeneralError, GeneralWarning
@@ -210,15 +210,20 @@ class Log:
                         logger.addHandler(file_handler)
 
                     if "log_syslog" in config.logging:
-                        syslog_handler = SysLogHandler(
-                            address=(
-                                config.logging["log_syslog"]["host"],
-                                int(config.logging["log_syslog"]["port"]),
-                            ),
-                            socktype=socket.SOCK_STREAM
-                            if config.logging["log_syslog"]["protocol"] == "TCP"
-                            else socket.SOCK_DGRAM,
-                        )
+                        try:
+                            syslog_handler = SysLogHandler(
+                                address=(
+                                    config.logging["log_syslog"]["host"],
+                                    int(config.logging["log_syslog"]["port"]),
+                                ),
+                                socktype=socket.SOCK_STREAM
+                                if config.logging["log_syslog"]["protocol"] == "TCP"
+                                else socket.SOCK_DGRAM,
+                            )
+                        except (OSError, socket.gaierror) as error:
+                            raise GeneralError(
+                                f"Cannot configure SysLog logging: {str(error)}"
+                            ) from error
 
                         syslog_handler.setFormatter(SysLogFormatter(LOG_USER))
 
@@ -247,16 +252,21 @@ class Log:
                         audit_logger.addHandler(audit_file_handler)
 
                     if "log_syslog" in config.audit_logging:
-                        audit_syslog_handler = SysLogHandler(
-                            address=(
-                                config.audit_logging["log_syslog"]["host"],
-                                int(config.audit_logging["log_syslog"]["port"]),
-                            ),
-                            facility=LOG_AUTH,
-                            socktype=socket.SOCK_STREAM
-                            if config.audit_logging["log_syslog"]["protocol"] == "TCP"
-                            else socket.SOCK_DGRAM,
-                        )
+                        try:
+                            audit_syslog_handler = SysLogHandler(
+                                address=(
+                                    config.audit_logging["log_syslog"]["host"],
+                                    int(config.audit_logging["log_syslog"]["port"]),
+                                ),
+                                facility=LOG_AUTH,
+                                socktype=socket.SOCK_STREAM
+                                if config.audit_logging["log_syslog"]["protocol"] == "TCP"
+                                else socket.SOCK_DGRAM,
+                            )
+                        except (OSError, socket.gaierror) as error:
+                            raise GeneralError(
+                                f"Cannot configure SysLog logging: {str(error)}"
+                            ) from error
 
                         audit_syslog_handler.setFormatter(SysLogFormatter(LOG_AUTH))
 
