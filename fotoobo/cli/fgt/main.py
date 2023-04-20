@@ -5,7 +5,7 @@ import logging
 
 import typer
 
-from fotoobo import utils
+from fotoobo import tools
 from fotoobo.cli.fgt import monitor_commands as monitor
 from fotoobo.cli.fgt import config_commands as config
 from fotoobo.cli.fgt import get_commands as get
@@ -67,4 +67,4 @@ def backup(
     """
     Backup one or more FortiGate(s).
     """
-    utils.fgt.backup(host, backup_dir, ftp_server, smtp_server)
+    tools.fgt.backup(host, backup_dir, ftp_server, smtp_server)

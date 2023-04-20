@@ -365,13 +365,13 @@
                     <div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 158px; height: 1px; padding-top: 660px; margin-left: 21px;">
                         <div data-drawio-colors="color: rgb(0, 0, 0); " style="box-sizing: border-box; font-size: 0px; text-align: center;">
                             <div style="display: inline-block; font-size: 20px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">
-                                utils
+                                tools
                             </div>
                         </div>
                     </div>
                 </foreignObject>
                 <text x="100" y="666" fill="rgb(0, 0, 0)" font-family="Helvetica" font-size="20px" text-anchor="middle">
-                    utils
+                    tools
                 </text>
             </switch>
         </g>

@@ -6,7 +6,7 @@ import logging
 import typer
 
 from fotoobo.helpers import cli_path
-from fotoobo.utils import convert
+from fotoobo.tools import convert
 
 app = typer.Typer(no_args_is_help=True, rich_markup_mode="rich")
 log = logging.getLogger("fotoobo")

@@ -54,7 +54,7 @@ def test_cli_app_fgt_config_check() -> None:
 def test_cli_app_fgt_config_check_failed(monkeypatch: MonkeyPatch) -> None:
     """Test fgt config check when there are failed checks"""
     monkeypatch.setattr(
-        "fotoobo.utils.fgt.config.load_yaml_file",
+        "fotoobo.tools.fgt.config.load_yaml_file",
         MagicMock(
             return_value=[
                 {
