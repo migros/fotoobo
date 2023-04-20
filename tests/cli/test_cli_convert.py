@@ -34,7 +34,7 @@ def test_cli_convert_help() -> None:
 
 def test_cli_convert_checkpoint_unsupported(monkeypatch: MonkeyPatch) -> None:
     """Test convert cli command: convert checkpoint assets with unsupported type"""
-    monkeypatch.setattr("fotoobo.utils.convert.load_json_file", MagicMock(return_value=[]))
+    monkeypatch.setattr("fotoobo.tools.convert.load_json_file", MagicMock(return_value=[]))
     result = runner.invoke(
         app,
         ["-c", "tests/fotoobo.yaml", "convert", "checkpoint", "infile", "outfile", "unsupported"],

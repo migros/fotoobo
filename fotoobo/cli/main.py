@@ -15,7 +15,7 @@ from typing import Optional, Union
 
 import typer
 
-from fotoobo import utils
+from fotoobo import tools
 from fotoobo.cli import convert, get
 from fotoobo.cli.ems import main as ems
 from fotoobo.cli.faz import main as faz
@@ -37,7 +37,7 @@ log = logging.getLogger("fotoobo")
 def version_callback(value: bool) -> None:
     """The version callback"""
     if value:
-        utils.get.version()
+        tools.get.version()
         raise typer.Exit()
 
 
@@ -123,7 +123,7 @@ def greet(
             name = os.getlogin().capitalize()
         except OSError:  # We need this, will fail on GitHub otherwise...
             name = ""
-    utils.greet(str(name), bye, log_enabled)
+    tools.greet(str(name), bye, log_enabled)
 
 
 # fotoobo specific commands

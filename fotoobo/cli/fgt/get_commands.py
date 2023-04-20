@@ -9,7 +9,7 @@ import typer
 
 from fotoobo.helpers import cli_path
 from fotoobo.helpers.output import print_datatable
-from fotoobo.utils import fgt
+from fotoobo.tools import fgt
 
 app = typer.Typer(no_args_is_help=True, rich_markup_mode="rich")
 log = logging.getLogger("fotoobo")
