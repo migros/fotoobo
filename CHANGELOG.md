@@ -6,6 +6,11 @@ For examples and guidelines see [https://keepachangelog.com/](https://keepachang
 # [Unreleased]
 
 
+### Added
+
+- Add raw option `-r` or `--raw` to cli commands for ems monitor
+
+
 # [Released]
 
 ## [0.9.0] - 2023-04-23
