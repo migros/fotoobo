@@ -5,6 +5,10 @@ For examples and guidelines see [https://keepachangelog.com/](https://keepachang
 
 # [Unreleased]
 
+### Added
+
+- Add documentation about how to import fotoobo into Python modules 
+
 
 ### Added
 
