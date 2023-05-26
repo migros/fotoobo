@@ -7,7 +7,12 @@ For examples and guidelines see [https://keepachangelog.com/](https://keepachang
 
 ### Added
 
-- Add documentation about how to import fotoobo into Python modules 
+- Add documentation about how to import fotoobo into Python modules
+- Add \_\_init\_\_ to the autodoc documentation
+
+### Changed
+
+- Update Sphinx to 6.2.1
 
 
 ### Added
