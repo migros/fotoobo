@@ -26,25 +26,28 @@ class Fortinet(ABC):
     def __init__(self, hostname: str, **kwargs: Any) -> None:
         """
         Set some initial parameters for the Fortinet super class.
+
         It also initializes a requests session. If you're making several requests to the same host,
         the underlying TCP connection will be reused, which can result in a significant performance
         increase. (https://docs.python-requests.org/en/master/user/advanced/)
 
         Args:
             hostname (str): the hostname of the Fortinet device to connect to
-            **kwargs: additional arguments from the following list:
-                https_port (int): The tcp port number to connect to the https api
-                    If you do not specify a port number it is set to 443 by default.
-                proxy (str): proxy server to use to connect to the Fortinet device
-                    If you need to connect to your Fortinet device through a proxy server you can
-                    set it here as as string. If needed you may append the proxy server port with a
-                    column to the proxy server. e.g. "proxy.local:8000".
-                ssl_verify (bool): enable/disable SSL certificate check
-                    When ssl_verify is enabled you have to install a trusted SSL certificate onto
-                    the device you wish to connect to. If you set ssl_verify to false it will also
-                    disable the warnings in urllib3. This prevents unwanted SSL warnings to be
-                    logged.
-                timeout (float): connection timeout in seconds
+
+        Keyword Args:
+            https_port (int): The tcp port number to connect to the https api
+                If you do not specify a port number it is set to 443 by default.
+            proxy (str): proxy server to use to connect to the Fortinet device
+                If you need to connect to your Fortinet device through a proxy server you can
+                set it here as as string. If needed you may append the proxy server port with a
+                column to the proxy server. e.g. "proxy.local:8000".
+            ssl_verify (bool): enable/disable SSL certificate check
+                When ssl_verify is enabled you have to install a trusted SSL certificate onto
+                the device you wish to connect to. If you set ssl_verify to false it will also
+                disable the warnings in urllib3. This prevents unwanted SSL warnings to be
+                logged.
+
+            timeout (float): connection timeout in seconds
         """
         self.api_url: str = ""
         self.hostname: str = hostname
@@ -80,7 +83,6 @@ class Fortinet(ABC):
             params (dict): dictionary with parameters (if needed)
             payload (dict): JSON body for post requests (if needed)
             timeout (float): the requests read timeout
-
 
         Returns:
             response: response from the request
