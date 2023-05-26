@@ -12,6 +12,8 @@ Exceptions
   :members:
 
 
+.. _auto_fortinet_classes:
+
 Fortinet Classes
 ----------------
 
