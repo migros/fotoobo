@@ -15,6 +15,11 @@ For examples and guidelines see [https://keepachangelog.com/](https://keepachang
 - Update Sphinx to 6.2.1
 
 
+### Added
+
+- Add raw option `-r` or `--raw` to cli commands for ems monitor
+
+
 # [Released]
 
 ## [0.9.0] - 2023-04-23

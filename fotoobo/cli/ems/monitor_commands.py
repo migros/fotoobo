@@ -5,6 +5,7 @@ The FortiClient EMS monitor commands
 import logging
 
 import typer
+from rich.pretty import pprint
 
 from fotoobo.helpers import cli_path
 from fotoobo.helpers.files import save_json_file, save_with_template
@@ -53,6 +54,7 @@ def connections(
         help=HELP_TEXT_OPTION_OUTPUT_FILE,
         metavar="[output]",
     ),
+    raw: bool = typer.Option(False, "-r", "--raw", help="Output raw data."),
     template_file: str = typer.Option(
         "",
         "--template",
@@ -77,7 +79,11 @@ def connections(
             save_json_file(output_file, data)
 
     else:
-        print_dicttable(data, title="FortiClient EMS connections")
+        # if no output file is given just pretty print the output to the console
+        if raw:
+            pprint(data, expand_all=True)
+        else:
+            print_dicttable(data, title="FortiClient EMS connections")
 
 
 @app.command(
@@ -96,6 +102,7 @@ def endpoint_management_status(
         help=HELP_TEXT_OPTION_OUTPUT_FILE,
         metavar="[output]",
     ),
+    raw: bool = typer.Option(False, "-r", "--raw", help="Output raw data."),
     template_file: str = typer.Option(
         "",
         "--template",
@@ -120,53 +127,11 @@ def endpoint_management_status(
             save_json_file(output_file, data)
 
     else:
-        # if no output file is given just print the output to the console
-        print_dicttable(data, title="FortiClient EMS endpoints")
-
-
-@app.command(
-    help="Get the amount of FortiClient EMS devices which are online but policy is not in sync.\n\n"
-    + HELP_TEXT_TEMPLATE
-)
-def endpoint_outofsync(
-    host: str = typer.Argument(
-        "ems",
-        help=HELP_TEXT_ARGUMENT_EMS,
-        metavar="[host]",
-    ),
-    output_file: str = typer.Option(
-        "",
-        "--output",
-        "-o",
-        help=HELP_TEXT_OPTION_OUTPUT_FILE,
-        metavar="[output]",
-    ),
-    template_file: str = typer.Option(
-        "",
-        "--template",
-        "-t",
-        help=HELP_TEXT_OPTION_TEMPLATE,
-        metavar="[template]",
-    ),
-) -> None:
-    """
-    Get amount of FortiClient EMS devices which are online but policy not in sync.
-    """
-    data = monitor.endpoint_online_outofsync(host)
-
-    if output_file:
-        log.debug("output_file is: %s", output_file)
-
-        if template_file:
-            save_with_template(data, template_file, output_file)
-
+        # if no output file is given just pretty print the output to the console
+        if raw:
+            pprint(data, expand_all=True)
         else:
-            # write to file without a template (raw output)
-            save_json_file(output_file, data)
-
-    else:
-        # if no output file is given just print the output to the console
-        print_dicttable(data, title="FortiClient EMS endpoints")
+            print_dicttable(data, title="FortiClient EMS endpoints")
 
 
 @app.command(help="Monitor the endpoint OS versions in FortiClient EMS.\n\n" + HELP_TEXT_TEMPLATE)
@@ -183,6 +148,7 @@ def endpoint_os_versions(
         help=HELP_TEXT_OPTION_OUTPUT_FILE,
         metavar="[output]",
     ),
+    raw: bool = typer.Option(False, "-r", "--raw", help="Output raw data."),
     template_file: str = typer.Option(
         "",
         "--template",
@@ -207,8 +173,60 @@ def endpoint_os_versions(
             save_json_file(output_file, data)
 
     else:
-        # if no output file is given just print the output to the console
-        print_dicttable(data, title="FortiClient EMS endpoints")
+        # if no output file is given just pretty print the output to the console
+        if raw:
+            pprint(data, expand_all=True)
+        else:
+            print_dicttable(data, title="FortiClient EMS endpoints")
+
+
+@app.command(
+    help="Get the amount of FortiClient EMS devices which are online but policy is not in sync.\n\n"
+    + HELP_TEXT_TEMPLATE
+)
+def endpoint_outofsync(
+    host: str = typer.Argument(
+        "ems",
+        help=HELP_TEXT_ARGUMENT_EMS,
+        metavar="[host]",
+    ),
+    output_file: str = typer.Option(
+        "",
+        "--output",
+        "-o",
+        help=HELP_TEXT_OPTION_OUTPUT_FILE,
+        metavar="[output]",
+    ),
+    raw: bool = typer.Option(False, "-r", "--raw", help="Output raw data."),
+    template_file: str = typer.Option(
+        "",
+        "--template",
+        "-t",
+        help=HELP_TEXT_OPTION_TEMPLATE,
+        metavar="[template]",
+    ),
+) -> None:
+    """
+    Get amount of FortiClient EMS devices which are online but policy not in sync.
+    """
+    data = monitor.endpoint_online_outofsync(host)
+
+    if output_file:
+        log.debug("output_file is: %s", output_file)
+
+        if template_file:
+            save_with_template(data, template_file, output_file)
+
+        else:
+            # write to file without a template (raw output)
+            save_json_file(output_file, data)
+
+    else:
+        # if no output file is given just pretty print the output to the console
+        if raw:
+            pprint(data, expand_all=True)
+        else:
+            print_dicttable(data, title="FortiClient EMS endpoints")
 
 
 @app.command(help="Monitor the FortiClient EMS license.\n\n" + HELP_TEXT_TEMPLATE)
@@ -225,6 +243,7 @@ def license(  # pylint: disable=redefined-builtin
         help=HELP_TEXT_OPTION_OUTPUT_FILE,
         metavar="[output]",
     ),
+    raw: bool = typer.Option(False, "-r", "--raw", help="Output raw data."),
     template_file: str = typer.Option(
         "",
         "--template",
@@ -249,8 +268,11 @@ def license(  # pylint: disable=redefined-builtin
             save_json_file(output_file, data)
 
     else:
-        # if no output file is given just print the output to the console
-        print_dicttable(data, title="FortiClient EMS license information")
+        # if no output file is given just pretty print the output to the console
+        if raw:
+            pprint(data, expand_all=True)
+        else:
+            print_dicttable(data, title="FortiClient EMS license information")
 
 
 @app.command()
@@ -260,12 +282,16 @@ def system(
         help=HELP_TEXT_ARGUMENT_EMS,
         metavar="[host]",
     ),
+    raw: bool = typer.Option(False, "-r", "--raw", help="Output raw data."),
 ) -> None:
     """
     Monitor the FortiClient EMS system information.
     """
     data = monitor.system(host)
 
-    license_data = data.pop("license", {})  # pop "license" key to print that in another table
-    print_dicttable(data, title="FortiClient EMS system information")
-    print_dicttable(license_data, title="FortiClient EMS system.license information")
+    if raw:
+        pprint(data, expand_all=True)
+    else:
+        license_data = data.pop("license", {})  # pop "license" key to print that in another table
+        print_dicttable(data, title="FortiClient EMS system information")
+        print_dicttable(license_data, title="FortiClient EMS system.license information")
