@@ -3,13 +3,13 @@
 Please refer to docs_legacy/convert_checkpoint_mappings.drawio.svg to see how a Checkpoint asset is
 going to be converted into a Fortinet asset.
 
-The Fortinet assets are referenced by their names. Even if we set a uuid we cannot use the uuid to
+The Fortinet assets are referenced by their names. Even if we set an uuid we cannot use the uuid to
 access the asset. The uuid is only supported for network assets and not for service assets.
 """
 
 import copy
 import logging
-import os
+from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 from fotoobo.exceptions import GeneralError
@@ -23,7 +23,7 @@ class CheckpointConverter:
     The Checkpoint converter class
     """
 
-    def __init__(self, assets: Any, cache_file: Optional[str] = None) -> None:
+    def __init__(self, assets: Any, cache_file: Optional[Path] = None) -> None:
         self.assets = assets
         self.converted: List[Any] = []
         self.supported_types = [
@@ -44,7 +44,6 @@ class CheckpointConverter:
         Convert Checkpoint configuration objects into Fortinet syntax.
 
         Args:
-            assets (Any): the original assets
             obj_type (str): define the type of objects to convert
             bulk_size: the bulk size to generate
 
@@ -71,7 +70,7 @@ class CheckpointConverter:
         # Now do the caching if cache_file is given
         if self.cache_file:
             cache: List[Any] = []
-            if os.path.isfile(self.cache_file):
+            if self.cache_file.is_file():
                 log.debug("found cache file '%s'", self.cache_file)
                 cache = list(load_json_file(self.cache_file) or [])
 
@@ -274,7 +273,7 @@ class CheckpointConverter:
 
         Possible values for "port" in the Checkpoint assets are:
         - "2000" is a single port which will be "2000"
-        - "3000-3500" is a portrange which will be "3000-4000"
+        - "3000-3500" is a port range which will be "3000-4000"
         - ">4000" will be converted to "4001-65535"
         - "<5000" will be converted to "1-4999"
 
@@ -313,7 +312,7 @@ class CheckpointConverter:
     def _convert_services_udp(self) -> List[Dict[str, Any]]:
         """
         Convert Checkpoint services_udp objects
-        Even though the UDP services are almost identical to the TCP services we use it's own
+        Even though the UDP services are almost identical to the TCP services we use its own
         convert function. This adds some redundancy but removes complexity and segregates duties.
 
         For possible values for the Checkpoint "port" field and how they will get converted refer
@@ -365,7 +364,7 @@ class CheckpointConverter:
             url_name = obj["name"].replace("/", "\\/")
 
             # patch for special group "gIntegrity_Server"
-            # This one is not able to be converted as the members are not supported by FortiManager.
+            # This one cannot be converted as the members are not supported by FortiManager.
             # Remove the group "gIntegrity_Server" from the Checkpoint global policy (it seems not
             # to be in use). Then this patch can be removed.
             if url_name == "gIntegrity_Server":

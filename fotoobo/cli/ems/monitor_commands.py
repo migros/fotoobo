@@ -3,6 +3,7 @@ The FortiClient EMS monitor commands
 """
 
 import logging
+from pathlib import Path
 
 import typer
 from rich.pretty import pprint
@@ -47,7 +48,7 @@ def connections(
         help=HELP_TEXT_ARGUMENT_EMS,
         metavar="[host]",
     ),
-    output_file: str = typer.Option(
+    output_file: Path = typer.Option(
         "",
         "--output",
         "-o",
@@ -55,7 +56,7 @@ def connections(
         metavar="[output]",
     ),
     raw: bool = typer.Option(False, "-r", "--raw", help="Output raw data."),
-    template_file: str = typer.Option(
+    template_file: Path = typer.Option(
         "",
         "--template",
         "-t",
@@ -95,7 +96,7 @@ def endpoint_management_status(
         help=HELP_TEXT_ARGUMENT_EMS,
         metavar="[host]",
     ),
-    output_file: str = typer.Option(
+    output_file: Path = typer.Option(
         "",
         "--output",
         "-o",
@@ -103,7 +104,7 @@ def endpoint_management_status(
         metavar="[output]",
     ),
     raw: bool = typer.Option(False, "-r", "--raw", help="Output raw data."),
-    template_file: str = typer.Option(
+    template_file: Path = typer.Option(
         "",
         "--template",
         "-t",
@@ -141,7 +142,7 @@ def endpoint_os_versions(
         help=HELP_TEXT_ARGUMENT_EMS,
         metavar="[host]",
     ),
-    output_file: str = typer.Option(
+    output_file: Path = typer.Option(
         "",
         "--output",
         "-o",
@@ -149,7 +150,7 @@ def endpoint_os_versions(
         metavar="[output]",
     ),
     raw: bool = typer.Option(False, "-r", "--raw", help="Output raw data."),
-    template_file: str = typer.Option(
+    template_file: Path = typer.Option(
         "",
         "--template",
         "-t",
@@ -190,7 +191,7 @@ def endpoint_outofsync(
         help=HELP_TEXT_ARGUMENT_EMS,
         metavar="[host]",
     ),
-    output_file: str = typer.Option(
+    output_file: Path = typer.Option(
         "",
         "--output",
         "-o",
@@ -198,7 +199,7 @@ def endpoint_outofsync(
         metavar="[output]",
     ),
     raw: bool = typer.Option(False, "-r", "--raw", help="Output raw data."),
-    template_file: str = typer.Option(
+    template_file: Path = typer.Option(
         "",
         "--template",
         "-t",
@@ -236,7 +237,7 @@ def license(  # pylint: disable=redefined-builtin
         help=HELP_TEXT_ARGUMENT_EMS,
         metavar="[host]",
     ),
-    output_file: str = typer.Option(
+    output_file: Path = typer.Option(
         "",
         "--output",
         "-o",
@@ -244,7 +245,7 @@ def license(  # pylint: disable=redefined-builtin
         metavar="[output]",
     ),
     raw: bool = typer.Option(False, "-r", "--raw", help="Output raw data."),
-    template_file: str = typer.Option(
+    template_file: Path = typer.Option(
         "",
         "--template",
         "-t",

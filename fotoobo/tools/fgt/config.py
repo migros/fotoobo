@@ -1,16 +1,17 @@
 """
-FortiGate confcheck utility
+FortiGate configuration check utility
 """
 
 import logging
-import os
-from typing import Any, List
+from pathlib import Path
+from typing import List
 
 import typer
 
 from fotoobo.exceptions import GeneralError, GeneralWarning
 from fotoobo.fortinet.fortigate_config import FortiGateConfig
 from fotoobo.fortinet.fortigate_config_check import FortiGateConfigCheck
+from fotoobo.fortinet.fortigate_info import FortiGateInfo
 from fotoobo.helpers.files import load_yaml_file
 from fotoobo.helpers.output import Output
 
@@ -18,7 +19,7 @@ app = typer.Typer(no_args_is_help=True, rich_markup_mode="rich")
 log = logging.getLogger("fotoobo")
 
 
-def check(config: str, bundles: str) -> None:
+def check(config: Path, bundles: Path) -> None:
     """
     The FortiGate configuration check
 
@@ -31,15 +32,14 @@ def check(config: str, bundles: str) -> None:
         GeneralWarning: GeneralWarning
         GeneralError: GeneralError
     """
-    files: List[str] = []
-    if os.path.isfile(config):
+    files: List[Path] = []
+    config = Path(config)
+    if config.is_file():
         files.append(config)
 
-    elif os.path.isdir(config):
+    elif config.is_dir():
         log.debug("Given config is a directory")
-        files = [
-            os.path.join(config, file) for file in os.listdir(config) if file.endswith(".conf")
-        ]
+        files = [file for file in config.iterdir() if file.suffix == ".conf"]
 
     else:
         log.error("no valid configuration file")
@@ -48,7 +48,8 @@ def check(config: str, bundles: str) -> None:
         log.warning("there are no configuration files to check")
         raise GeneralWarning("there are no configuration files to check")
 
-    if os.path.isfile(bundles):
+    bundles = Path(bundles)
+    if bundles.is_file():
         checks = load_yaml_file(bundles)
 
     else:
@@ -73,7 +74,7 @@ def check(config: str, bundles: str) -> None:
 
         log.info(
             "all checks in '%s' done with '%s' messages",
-            os.path.basename(file),
+            file.name,
             len(conf_check.results),
         )
         total_results += len(conf_check.results)
@@ -86,12 +87,12 @@ def check(config: str, bundles: str) -> None:
     output.print_raw()
 
 
-def info(config: str) -> List[Any]:
+def info(config: Path) -> List[FortiGateInfo]:
     """
     The FortiGate configuration information utility.
 
     Args:
-        config:  The configuration to get the information from (either a file or directory)
+        config (Path):  The configuration to get the information from (either a file or directory)
                  in case it's a directory all .conf files in it will be checked.
 
     Returns:
@@ -100,15 +101,13 @@ def info(config: str) -> List[Any]:
     Raises:
         GeneralWarning: GeneralWarning
     """
-    files: List[str] = []
-    if os.path.isfile(config):
+    files: List[Path] = []
+    if config.is_file():
         files.append(config)
 
-    elif os.path.isdir(config):
+    elif config.is_dir():
         log.debug("Given config is a directory")
-        files = [
-            os.path.join(config, file) for file in os.listdir(config) if file.endswith(".conf")
-        ]
+        files = [file for file in config.iterdir() if file.is_file() and file.suffix == ".conf"]
 
     if not files:
         log.warning("there are no configuration files")

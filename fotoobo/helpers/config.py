@@ -1,12 +1,12 @@
 """
 The config helper is used to load and set basic configuration for fotoobo. Some configuration
 options may be set by the global configuration file which by default points to fotoobo.yaml in the
-local directory. Some configuration options may be set by command line parameters regarding to the
-cli help system.
+local directory. Some configuration options may be set by command line parameters as described in
+the cli help system.
 If there are configuration options available in the global configuration file and also as a command
 line option, the command line option takes precedence over the global configuration file option.
 """
-import os
+from pathlib import Path
 from dataclasses import dataclass, field
 from typing import Any, Dict, Union
 
@@ -22,7 +22,7 @@ class Config:
     """
 
     # set default values
-    inventory_file: str = "inventory.yaml"
+    inventory_file: Path = Path("inventory.yaml")
     logging: Union[Dict[str, Any], None] = None
     audit_logging: Union[Dict[str, Any], None] = None
     no_logo: bool = False
@@ -30,31 +30,29 @@ class Config:
     cli_info: Dict[str, Any] = field(default_factory=dict)
     ssl_verify: Union[str, bool] = True
 
-    def load_configuration(self, config_file: Union[str, None]) -> None:
+    def load_configuration(self, config_file: Union[Path, None]) -> None:
         """
         Load the global fotoobo configuration file. If the configuration file is not present it just
         will be ignored and all the options remain as they are.
         If a file is present it looks for configuration options to set. Keep in mind that it is not
         mandatory to define every option in the configuration file. For that case make sure that an
-        option not present in the configuration file is set with it's default.
+        option not present in the configuration file is set with its default.
 
         Args:
-            config_file (str): fotoobo configuration file to load configuration from
+            config_file (Path): fotoobo configuration file to load configuration from
         """
 
         # If no explicit config file has been given, search at the predefined places
         if config_file is None:
-            fotoobo_yaml_in_dot_config = os.path.join(
-                os.path.expanduser("~"), ".config", "fotoobo.yaml"
-            )
+            fotoobo_yaml_in_dot_config = Path("~").expanduser() / ".config" / "fotoobo.yaml"
 
             # First we check whether there is a project fotoobo.yaml in the
             # current working directory
-            if os.path.isfile("fotoobo.yaml"):
-                config_file = "fotoobo.yaml"
+            if Path("fotoobo.yaml").is_file():
+                config_file = Path("fotoobo.yaml")
 
             # Second we check whether there is a user wide fotoobo.yaml in the .config folder
-            elif os.path.isfile(fotoobo_yaml_in_dot_config):
+            elif fotoobo_yaml_in_dot_config.is_file():
                 config_file = fotoobo_yaml_in_dot_config
 
             # If no config file can be found we rest with the defaults
@@ -67,7 +65,7 @@ class Config:
                 loaded_config = dict(loaded_config)
 
                 # then set the config options from file if set in file
-                self.inventory_file = loaded_config.get("inventory", self.inventory_file)
+                self.inventory_file = Path(loaded_config.get("inventory", self.inventory_file))
 
                 if loaded_config.get("logging"):
                     self.logging = loaded_config["logging"]

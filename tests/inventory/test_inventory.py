@@ -3,6 +3,7 @@ Test the inventory
 """
 
 from typing import Optional
+from pathlib import Path
 
 import pytest
 
@@ -23,7 +24,7 @@ class TestInventory:
         inventory file are written to the devices and if the options on devices have precedence over
         the global options.
         """
-        inventory = Inventory("tests/data/inventory.yaml")
+        inventory = Inventory(Path("tests/data/inventory.yaml"))
         assert isinstance(inventory.assets, dict)
         assert len(inventory.assets) == 7
         assert len(inventory.fortigates) == 2
@@ -42,7 +43,7 @@ class TestInventory:
     )
     def test_get(test_name: Optional[str], test_type: Optional[str], expected_len: int) -> None:
         """Test Inventory.get()"""
-        inventory = Inventory("tests/data/inventory.yaml")
+        inventory = Inventory(Path("tests/data/inventory.yaml"))
         assets = inventory.get(test_name, test_type)
         assert len(assets) == expected_len
 
@@ -58,7 +59,7 @@ class TestInventory:
     def test_get_with_exception(
         test_name: Optional[str], test_type: Optional[str], expected_message: str
     ) -> None:
-        """Test Inventory.get() when a exception is raised"""
-        inventory = Inventory("tests/data/inventory.yaml")
+        """Test Inventory.get() when an exception is raised"""
+        inventory = Inventory(Path("tests/data/inventory.yaml"))
         with pytest.raises(GeneralWarning, match=expected_message):
             inventory.get(test_name, test_type)
