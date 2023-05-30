@@ -2,7 +2,7 @@
 Test the output helper
 """
 
-import os
+from pathlib import Path
 from typing import Any, List, Union
 from unittest.mock import MagicMock
 
@@ -23,9 +23,9 @@ from fotoobo.inventory.generic import GenericDevice
 
 
 @pytest.fixture
-def html_test_file(temp_dir: str) -> str:
+def html_test_file(temp_dir: str) -> Path:
     """Returns the filename of a json test file"""
-    return os.path.join(temp_dir, "test_file.html")
+    return Path(temp_dir) / "test_file.html"
 
 
 class TestOutput:
@@ -81,7 +81,7 @@ class TestOutput:
     @staticmethod
     def test_send_mail(monkeypatch: MonkeyPatch) -> None:
         """Test send_mail
-        Here we don not really test something. We just run through the send_mail method to see if
+        Here we do not really test something. We just run through the send_mail method to see if
         it raises any error or exception. In fact no mail is really sent.
         """
         monkeypatch.setattr(
@@ -234,9 +234,9 @@ def test_print_json(input_data: Any, expect: str, capsys: Any) -> None:
     assert expect in out
 
 
-def test_write_policy_to_html(html_test_file: str) -> None:  # pylint: disable=redefined-outer-name
+def test_write_policy_to_html(html_test_file: Path) -> None:  # pylint: disable=redefined-outer-name
     """Test write_policy_to_html"""
-    assert not os.path.isfile(html_test_file)
+    assert not html_test_file.is_file()
     write_policy_to_html(
         [
             {"h1": "h1", "h2": "h2", "h3": "h3"},
@@ -246,4 +246,4 @@ def test_write_policy_to_html(html_test_file: str) -> None:  # pylint: disable=r
         ],
         html_test_file,
     )
-    assert os.path.isfile(html_test_file)
+    assert html_test_file.is_file()

@@ -4,6 +4,7 @@ Test fgt tools get version
 
 from typing import Any
 from unittest.mock import MagicMock
+from pathlib import Path
 
 import pytest
 from _pytest.monkeypatch import MonkeyPatch
@@ -15,7 +16,9 @@ from fotoobo.tools.fgt.get import version
 @pytest.fixture(autouse=True)
 def inventory_file(monkeypatch: MonkeyPatch) -> None:
     """Change inventory file in config to test inventory"""
-    monkeypatch.setattr("fotoobo.helpers.config.config.inventory_file", "tests/data/inventory.yaml")
+    monkeypatch.setattr(
+        "fotoobo.helpers.config.config.inventory_file", Path("tests/data/inventory.yaml")
+    )
 
 
 @pytest.mark.parametrize(

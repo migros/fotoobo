@@ -2,11 +2,11 @@
 The FortiGate configuration class represents the whole or parts of a FortiGate configuration
 """
 import logging
-from typing import IO, Any, Dict, List, Optional
+from pathlib import Path
+from typing import Any, Dict, IO, List, Optional
 
 from fotoobo.exceptions import GeneralWarning
 from fotoobo.helpers.files import load_json_file, save_json_file
-
 from .fortigate_info import FortiGateInfo
 
 log = logging.getLogger("fotoobo")
@@ -42,9 +42,9 @@ class FortiGateConfig:
             path (str)  : from where should the configuration come?
             Examples:
             /                           : the whole configuration (default)
-            /system/global/...          : subpath in global configuration
+            /system/global/...          : sub-path in global configuration
             /system/global/admin-scp    : exact configuration option
-            /root/firewall/address/...  : subpath in root vdom
+            /root/firewall/address/...  : sub-path in root vdom
 
         Returns:
             any: FortiGateConfig configuration value or snippet from the given path.
@@ -84,38 +84,38 @@ class FortiGateConfig:
             vdoms = list(self.vdom_config.keys())
         return vdoms
 
-    def save_configuration_file(self, filename: str) -> None:
+    def save_configuration_file(self, configuration_file: Path) -> None:
         """
         Save the configuration to a json configuration file.
 
         Args:
-            filename (str): The json file to load the FortiGate configuration from
+            configuration_file (Path): The json file to load the FortiGate configuration from
         """
         save_json_file(
-            filename,
+            configuration_file,
             {"global": self.global_config, "vdom": self.vdom_config, "info": self.info.__dict__},
         )
 
     @staticmethod
-    def parse_configuration_file(filename: str) -> "FortiGateConfig":
+    def parse_configuration_file(configuration_file: Path) -> "FortiGateConfig":
         """
         Parse the FortiGate configuration from a file into a python object
 
         Args:
-            filename (str): the filename of the FortiGate configuration file
+            configuration_file (Path): the filename of the FortiGate configuration file
 
         Returns:
             FortiGateConfig: the parsed FortiGate configuration object
         """
-        log.debug("start configuration parser with file '%s'", filename)
+        log.debug("start configuration parser with file '%s'", configuration_file)
         FortiGateConfig._config_path = []
-        with open(filename, "r", encoding="UTF-8") as forti_file:
+        with configuration_file.open(encoding="UTF-8") as forti_file:
             parsed_config = FortiGateConfig._parse_to_dict(forti_file)
 
         global_config: Dict[str, Any] = {}
         vdom_config: Dict[str, Any] = {}
-        if not "info" in parsed_config:
-            raise GeneralWarning(f"There is no info in {filename}")
+        if "info" not in parsed_config:
+            raise GeneralWarning(f"There is no info in {configuration_file}")
         info = parsed_config["info"]
         parsed_config.pop("info")
 
@@ -133,17 +133,17 @@ class FortiGateConfig:
         return FortiGateConfig(global_config, vdom_config, info)
 
     @staticmethod
-    def load_configuration_file(filename: str) -> "FortiGateConfig":
+    def load_configuration_file(configuration_file: Path) -> "FortiGateConfig":
         """
         Create a FortiGateConfig object from a json configuration file.
 
         Args:
-            filename (str): The json file to load the FortiGate configuration from
+            configuration_file (Path): The json file to load the FortiGate configuration from
 
         Returns:
             FortiGateConfig: FortiGate configuration object
         """
-        data = load_json_file(filename)
+        data = load_json_file(configuration_file)
         return FortiGateConfig(data["global"], data["vdom"], data["info"])  # type: ignore
 
     @staticmethod
@@ -157,14 +157,14 @@ class FortiGateConfig:
         Returns:
             list: configuration list as list
         """
-        conflist: List[str] = []
+        configs: List[str] = []
 
         for key, value in config.items():
-            newconf = value
-            newconf["id"] = int(key)
-            conflist.append(newconf)
+            new_config = value
+            new_config["id"] = int(key)
+            configs.append(new_config)
 
-        return conflist
+        return configs
 
     @staticmethod
     def _config_is_list(config: Dict[str, Any]) -> bool:
@@ -188,26 +188,26 @@ class FortiGateConfig:
         return is_list
 
     @staticmethod
-    def _get_nested_dict(configs: List[str], newdata: Any) -> Dict[str, Any]:
+    def _get_nested_dict(configs: List[str], new_data: Any) -> Dict[str, Any]:
         """
-        Create a nested configuration dict from a list of strings and add newdata to the last key.
+        Create a nested configuration dict from a list of strings and add new data to the last key.
 
         Args:
             configs (list): configuration leafs to process
-            newdata (any): data to add to the last key
+            new_data (any): data to add to the last key
 
         Returns:
             dict: the nested configuration
         """
-        newdict = {}
+        out_dict = {}
         key = configs.pop(0)
         if len(configs) > 0:
-            newdict[key] = FortiGateConfig._get_nested_dict(configs, newdata)
+            out_dict[key] = FortiGateConfig._get_nested_dict(configs, new_data)
 
         else:
-            newdict[key] = newdata
+            out_dict[key] = new_data
 
-        return dict(newdict)
+        return dict(out_dict)
 
     @staticmethod
     def _parse_config_comment(info: Dict[str, Any], line: str) -> Dict[str, str]:
@@ -251,6 +251,7 @@ class FortiGateConfig:
         config: Any = {}
         info: Dict[str, str] = {}
         multiline: str = ""
+        multiline_key: str = ""
 
         for line in config_file:
             line = line.strip()
@@ -271,7 +272,6 @@ class FortiGateConfig:
                 continue
             # check if a multiline string starts. begin with "set" and uneven amount of quotes (")
             if line.startswith("set ") and line.count('"') % 2 == 1 and not line.endswith('"'):
-                multiline_key: str = ""
                 _, multiline_key, value = line.split(maxsplit=2)  # first part is always "set"
                 multiline += value
                 continue

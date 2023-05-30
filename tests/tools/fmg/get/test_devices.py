@@ -2,6 +2,7 @@
 
 
 from unittest.mock import MagicMock
+from pathlib import Path
 
 import pytest
 from _pytest.monkeypatch import MonkeyPatch
@@ -13,7 +14,9 @@ from tests.helper import ResponseMock
 @pytest.fixture(autouse=True)
 def inventory_file(monkeypatch: MonkeyPatch) -> None:
     """Change inventory file in config to test inventory"""
-    monkeypatch.setattr("fotoobo.helpers.config.config.inventory_file", "tests/data/inventory.yaml")
+    monkeypatch.setattr(
+        "fotoobo.helpers.config.config.inventory_file", Path("tests/data/inventory.yaml")
+    )
 
 
 @pytest.fixture(autouse=True)
