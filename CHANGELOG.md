@@ -14,6 +14,9 @@ For examples and guidelines see [https://keepachangelog.com/](https://keepachang
 ### Changed
 
 - Refactored whole code to use `pathlib.Path` instead of `os.path`
+- Introduced a new `Result` class to abstract the output of the tools from the CLI print logic
+- The inventory will now be searched relative to the `fotoobo.yaml` if given by a relative path
+  (instead of searching from the cwd, which can cause confusion)
 - Update Sphinx to 6.2.1
 
 

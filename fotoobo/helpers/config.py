@@ -65,7 +65,12 @@ class Config:
                 loaded_config = dict(loaded_config)
 
                 # then set the config options from file if set in file
-                self.inventory_file = Path(loaded_config.get("inventory", self.inventory_file))
+                self.inventory_file = Path(
+                    loaded_config.get("inventory", self.inventory_file)
+                ).expanduser()
+
+                if not self.inventory_file.is_absolute():
+                    self.inventory_file = config_file.parent / self.inventory_file
 
                 if loaded_config.get("logging"):
                     self.logging = loaded_config["logging"]

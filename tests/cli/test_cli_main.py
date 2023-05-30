@@ -89,6 +89,7 @@ def test_cli_app_get_version(cli_call: List[str]) -> None:
     result = runner.invoke(app, cli_call)
     assert result.exit_code == 0
     assert "fotoobo version" in result.stdout
+    assert "typer" not in result.stdout
 
 
 def test_cli_app_get_inventory(monkeypatch: MonkeyPatch) -> None:
