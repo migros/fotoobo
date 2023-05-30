@@ -2,6 +2,7 @@
 The fotoobo convert commands
 """
 import logging
+from pathlib import Path
 
 import typer
 
@@ -26,13 +27,13 @@ def callback(context: typer.Context) -> None:
 
 @app.command(no_args_is_help=True)
 def checkpoint(
-    infile: str = typer.Argument(
+    infile: Path = typer.Argument(
         ...,
         help="The json file to read the Checkpoint objects from.",
         show_default=False,
         metavar="[infile]",
     ),
-    outfile: str = typer.Argument(
+    outfile: Path = typer.Argument(
         ...,
         help="The json file to write the converted objects to.",
         show_default=False,
@@ -44,7 +45,7 @@ def checkpoint(
         show_default=False,
         metavar="[type]",
     ),
-    cache_dir: str = typer.Argument(
+    cache_dir: Path = typer.Argument(
         None,
         help="The cache directory to use.",
         show_default=False,

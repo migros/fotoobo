@@ -3,6 +3,7 @@ FortiManager assign utility
 """
 
 import logging
+from pathlib import Path
 
 from fotoobo.exceptions.exceptions import GeneralWarning
 from fotoobo.helpers.config import config
@@ -53,7 +54,7 @@ def assign(adoms: str, policy: str, host: str, timeout: int = 60) -> None:
     fmg.logout()
 
 
-def post(file: str, adom: str, host: str) -> None:
+def post(file: Path, adom: str, host: str) -> None:
     """
     POST the given configuration from a JSON file to the FortiManager
 

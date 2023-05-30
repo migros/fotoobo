@@ -2,6 +2,7 @@
 The FortiGate commands
 """
 import logging
+from pathlib import Path
 
 import typer
 
@@ -41,7 +42,7 @@ def backup(
         show_default=False,
         metavar="[host]",
     ),
-    backup_dir: str = typer.Option(
+    backup_dir: Path = typer.Option(
         None,
         "--backup-dir",
         "-b",

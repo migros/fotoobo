@@ -10,6 +10,7 @@ Caution: Use docstrings with care as they are used to print help texts on any co
 
 import logging
 import os
+from pathlib import Path
 import sys
 from typing import Optional, Union
 
@@ -44,7 +45,7 @@ def version_callback(value: bool) -> None:
 @app.callback()
 def callback(  # pylint: disable=too-many-arguments
     context: typer.Context,
-    config_file: Union[str, None] = typer.Option(
+    config_file: Union[Path, None] = typer.Option(
         None,
         "--config",
         "-c",

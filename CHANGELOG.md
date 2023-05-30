@@ -9,15 +9,12 @@ For examples and guidelines see [https://keepachangelog.com/](https://keepachang
 
 - Add documentation about how to import fotoobo into Python modules
 - Add \_\_init\_\_ to the autodoc documentation
+- Add raw option `-r` or `--raw` to cli commands for ems monitor
 
 ### Changed
 
+- Refactored whole code to use `pathlib.Path` instead of `os.path`
 - Update Sphinx to 6.2.1
-
-
-### Added
-
-- Add raw option `-r` or `--raw` to cli commands for ems monitor
 
 
 # [Released]

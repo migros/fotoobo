@@ -1,6 +1,6 @@
 """Test fotoobo convert tools"""
 
-import os
+from pathlib import Path
 import shutil
 from copy import deepcopy
 from typing import Any, Dict
@@ -28,7 +28,7 @@ from fotoobo.tools.convert import checkpoint
         pytest.param("service_groups", id="test type 'service_groups'"),
     ),
 )
-def test_convert(asset_type: str, monkeypatch: MonkeyPatch, temp_dir: str) -> None:
+def test_convert(asset_type: str, monkeypatch: MonkeyPatch, temp_dir: Path) -> None:
     """Test convert"""
     return_value: Dict[str, Any] = {
         "hosts": [
@@ -70,10 +70,10 @@ def test_convert(asset_type: str, monkeypatch: MonkeyPatch, temp_dir: str) -> No
         "fotoobo.tools.convert.load_json_file", MagicMock(return_value=deepcopy(return_value))
     )
 
-    output_file = os.path.join(temp_dir, f"convert_{asset_type}.json")
+    output_file = temp_dir / f"convert_{asset_type}.json"
 
-    checkpoint("", output_file, asset_type)
-    assert os.path.isfile(output_file)
+    checkpoint(Path(""), output_file, asset_type)
+    assert output_file.is_file()
     converted = list(load_json_file(output_file) or [])
 
     for index in range(len(return_value[asset_type])):
@@ -93,7 +93,7 @@ def test_convert_unsupported_type(asset_type: str, monkeypatch: MonkeyPatch) -> 
     """Test convert for unsupported types (which rise a GeneralError exception)"""
     monkeypatch.setattr("fotoobo.tools.convert.load_json_file", MagicMock(return_value=[]))
     with pytest.raises(GeneralError, match=r"type '.*' is not supported to convert"):
-        checkpoint("", "", asset_type)
+        checkpoint(Path(""), Path(""), asset_type)
 
 
 @pytest.mark.parametrize(
@@ -110,7 +110,7 @@ def test_convert_unsupported_type(asset_type: str, monkeypatch: MonkeyPatch) -> 
         pytest.param("service_groups", id="test type 'service_groups'"),
     ),
 )
-def test_convert_with_cache(asset_type: str, monkeypatch: MonkeyPatch, temp_dir: str) -> None:
+def test_convert_with_cache(asset_type: str, monkeypatch: MonkeyPatch, temp_dir: Path) -> None:
     """Test convert with cache"""
     return_value: Dict[str, Any] = {
         "hosts": [
@@ -143,19 +143,19 @@ def test_convert_with_cache(asset_type: str, monkeypatch: MonkeyPatch, temp_dir:
         "fotoobo.tools.convert.load_json_file", MagicMock(return_value=deepcopy(return_value))
     )
 
-    output_file = os.path.join(temp_dir, f"convert_cache_{asset_type}.json")
-    cache_dir = os.path.join(temp_dir, "cache")
+    output_file = temp_dir / f"convert_cache_{asset_type}.json"
+    cache_dir = temp_dir / "cache"
 
-    if not os.path.isdir(cache_dir):
-        os.mkdir(cache_dir)
+    if not cache_dir.is_dir():
+        cache_dir.mkdir()
 
     shutil.copy(
-        os.path.join("tests", "data", "convert_cache_hosts.json"),
-        os.path.join(cache_dir, "convert_cache_hosts.json"),
+        Path("tests", "data", "convert_cache_hosts.json"),
+        cache_dir / "convert_cache_hosts.json",
     )
 
-    checkpoint("", output_file, asset_type, cache_dir)
-    assert os.path.isfile(output_file)
+    checkpoint(Path(""), output_file, asset_type, cache_dir)
+    assert output_file.is_file()
 
     converted = list(load_json_file(output_file) or [])
     if asset_type == "hosts":

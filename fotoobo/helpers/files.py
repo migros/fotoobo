@@ -3,7 +3,6 @@ Some helper functions for file manipulation.
 """
 import json
 import logging
-import os
 import re
 from ftplib import FTP, FTP_TLS
 from pathlib import Path
@@ -18,29 +17,29 @@ from fotoobo.exceptions import GeneralError
 log = logging.getLogger("fotoobo")
 
 
-def create_dir(directory: str) -> None:
+def create_dir(directory: Path) -> None:
     """
     Try to create a given directory if it does not exist.
 
     Args:
-        directory (str): directory to create (in case it not already exists)
+        directory (Path): The directory to create (in case it not already exists)
 
     Raises:
         DirectoryError: Error with message
     """
-    if not os.path.isdir(directory):
+    if not directory.is_dir():
         try:
-            os.mkdir(directory)
+            directory.mkdir()
         except OSError as err:
-            raise GeneralError(f"unable to create directory {directory}") from err
+            raise GeneralError(f"Unable to create directory {directory}") from err
 
 
-def file_to_ftp(file: str, server: Any) -> int:
+def file_to_ftp(file: Path, server: Any) -> int:
     """
     Upload a file to a ftp server.
 
     Args:
-        file (str): the source file to upload
+        file (Path): The source file to upload
 
         server (dict): the ftp sever definition dict containing the following keys:
 
@@ -53,8 +52,8 @@ def file_to_ftp(file: str, server: Any) -> int:
     Returns:
         int: return code
     """
-    retcode = 0
-    if os.path.isfile(file):
+    return_code = 0
+    if file.is_file():
         if hasattr(server, "protocol"):
             protocol = server.protocol
         else:
@@ -66,42 +65,42 @@ def file_to_ftp(file: str, server: Any) -> int:
                 ftp.sendcmd(f"USER {server.username}")
                 ftp.sendcmd(f"PASS {server.password}")
                 ftp.cwd(server.directory)
-                with open(file, "rb") as ftp_file:
-                    response = ftp.storbinary(f"STOR {os.path.basename(file)}", ftp_file)
+                with file.open("rb") as ftp_file:
+                    response = ftp.storbinary(f"STOR {file.name}", ftp_file)
                     if response != "226 Transfer complete.":
                         if code := re.search(r"^([0-9]{0,3})\s", response):
-                            retcode = int(code[1])
+                            return_code = int(code[1])
 
         elif protocol == "ftp":
             with FTP(server.hostname, server.username, server.password) as ftp:
                 log.debug("FTP transfer for '%s'", server.hostname)
                 ftp.cwd(server.directory)
-                with open(file, "rb") as ftp_file:
-                    response = ftp.storbinary(f"STOR {os.path.basename(file)}", ftp_file)
+                with file.open("rb") as ftp_file:
+                    response = ftp.storbinary(f"STOR {file.name}", ftp_file)
                     if response != "226 Transfer complete.":
                         if code := re.search(r"^([0-9]{0,3})\s", response):
-                            retcode = int(code[1])
+                            return_code = int(code[1])
 
         else:
             raise GeneralError(f'Unknown FTP protocol "{protocol}" for server "{server.hostname}"')
 
     else:
-        retcode = 666
+        return_code = 666
 
-    return retcode
+    return return_code
 
 
-def file_to_zip(src: str, dst: str, level: int = 9) -> None:
+def file_to_zip(src: Path, dst: Path, level: int = 9) -> None:
     """
     Zip (compress) a file.
 
     Args:
-        src (str): the source file
+        src (Path): the source file
 
-        dst (str): the destination file (zipfile). If the dst file ends with extension '.zip'
+        dst (Path): the destination file (zipfile). If the dst file ends with extension '.zip'
         the inner file will omit the '.zip' extension.
 
-        level (int): compresslevel
+        level (int): compression level, as accepted by `zipfile.ZipFile`
 
     Returns:
         int: return code
@@ -109,60 +108,59 @@ def file_to_zip(src: str, dst: str, level: int = 9) -> None:
     if level < 0 or level > 9:
         raise GeneralError("zip level must between 0 and 9")
 
-    inner_file = dst if not dst.endswith(".zip") else dst[0:-4]
-    if os.path.isfile(src):
+    inner_file = dst if not dst.suffix == ".zip" else Path(dst.name[0:-4])
+    if src.is_file():
         with ZipFile(dst, "w", ZIP_DEFLATED, compresslevel=level) as archive:
-            archive.write(src, arcname=os.path.basename(inner_file))
+            archive.write(src, arcname=inner_file.name)
 
 
-def load_json_file(filename: str) -> Union[List[Any], Dict[str, Any], None]:
+def load_json_file(json_file: Path) -> Union[List[Any], Dict[str, Any], None]:
     """
     Loads the content of a json file into a list or dict.
 
     Args:
-        filename (str): filename of the json file to load
+        json_file (Path): The path to the json file to load
 
     Returns:
         list|dict|None: list or dict with json data from filename or None if file is not found
     """
     content = None
-    if os.path.isfile(filename):
-        with open(filename, "r", encoding="UTF-8") as json_file:
-            content = json.load(json_file)
+    if json_file.is_file():
+        with json_file.open(encoding="UTF-8") as in_file:
+            content = json.load(in_file)
 
     return content
 
 
-def load_yaml_file(filename: str) -> Union[List[Any], Dict[str, Any], None]:
+def load_yaml_file(yaml_file: Path) -> Union[List[Any], Dict[str, Any], None]:
     """
     Loads the content of a yaml file into a list or dict.
 
     Args:
-        filename (str): filename of the yaml file to load
+        yaml_file (Path): The file of the yaml file to load
 
     Returns:
         list|dict: yaml data from filename
     """
     content = None
-    if os.path.isfile(filename):
-        with open(filename, "r", encoding="UTF-8") as yaml_file:
-            content = yaml.safe_load(yaml_file)
+    if yaml_file.is_file():
+        content = yaml.safe_load(yaml_file.read_text(encoding="UTF-8"))
 
     return content
 
 
-def save_json_file(filename: str, data: Union[List[Any], Dict[Any, Any]]) -> bool:
+def save_json_file(json_file: Path, data: Union[List[Any], Dict[Any, Any]]) -> bool:
     """
     Saves the content of a list or dict to a json file.
 
     Args:
-        filename (str): the filename to write the json dato into
+        json_file (Path): The file to write the json dato into
         data (list|dict): data to save
     """
     status = True
     if isinstance(data, (list, dict)):
-        with open(filename, "w", encoding="UTF-8") as json_file:
-            json.dump(data, json_file, indent=4)
+        with json_file.open("w", encoding="UTF-8") as out_file:
+            json.dump(data, out_file, indent=4)
 
     else:
         status = False
@@ -170,7 +168,7 @@ def save_json_file(filename: str, data: Union[List[Any], Dict[Any, Any]]) -> boo
     return status
 
 
-def save_with_template(data: Dict[Any, Any], template_file: str, output_file: str) -> None:
+def save_with_template(data: Dict[Any, Any], template_file: Path, output_file: Path) -> None:
     """
     Saves a data structure to a file with a given Jinja2 template. The data structure and the
     variables you can use in the template file depend on the utility the data comes from. See the
@@ -179,26 +177,25 @@ def save_with_template(data: Dict[Any, Any], template_file: str, output_file: st
     Args:
         data (Dict[Any, Any]): The data used in the template
 
-        template_file (str): Filename of the Jinja2 template file
+        template_file (Path): Filename of the Jinja2 template file
 
-        output_file (str): The file to write the output to
+        output_file (Path): The file to write the output to
     """
     log.debug("template_file is: %s", template_file)
     template_env = jinja2.Environment(
-        loader=jinja2.FileSystemLoader(Path(template_file).parent), trim_blocks=True
+        loader=jinja2.FileSystemLoader(template_file.parent), trim_blocks=True, autoescape=True
     )
-    template = template_env.get_template(Path(template_file).name)
+    template = template_env.get_template(template_file.name)
     output = template.render(data)
-    with open(output_file, "w", encoding="UTF-8") as file:
-        file.write(output)
+    output_file.write_text(output, encoding="UTF-8")
 
 
-def save_yaml_file(filename: str, data: Union[List[Any], Dict[str, Any]]) -> bool:
+def save_yaml_file(yaml_file: Path, data: Union[List[Any], Dict[str, Any]]) -> bool:
     """
     Saves the content of a list or dict to a yaml file.
 
     Args:
-        filename (str): the filename to write the yaml data into
+        yaml_file (Path): the file to write the yaml data into
 
         data (list|dict): data to save
 
@@ -207,8 +204,8 @@ def save_yaml_file(filename: str, data: Union[List[Any], Dict[str, Any]]) -> boo
     """
     status = True
     if isinstance(data, (list, dict)):
-        with open(filename, "w", encoding="UTF-8") as yaml_file:
-            yaml.dump(data, yaml_file)
+        with open(yaml_file, "w", encoding="UTF-8") as out_file:
+            yaml.dump(data, out_file)
 
     else:
         status = False
