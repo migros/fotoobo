@@ -2,6 +2,7 @@
 The FortiManager commands
 """
 import logging
+from pathlib import Path
 
 import typer
 
@@ -62,7 +63,7 @@ def assign(
 
 @app.command(no_args_is_help=True)
 def post(
-    file: str = typer.Argument(
+    file: Path = typer.Argument(
         ..., help="JSON file with payload(s).", show_default=False, metavar="[file]"
     ),
     adom: str = typer.Argument(

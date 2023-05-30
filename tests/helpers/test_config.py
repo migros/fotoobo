@@ -2,6 +2,7 @@
 Test the config helper
 """
 from typing import Callable, Union
+from pathlib import Path
 from unittest.mock import MagicMock
 
 import pytest
@@ -16,7 +17,7 @@ class TestConfig:
     def test_config(self) -> None:
         """test the default config settings"""
         config = Config()
-        assert config.inventory_file == "inventory.yaml"
+        assert config.inventory_file == Path("inventory.yaml")
         assert not config.logging
         assert not config.audit_logging
         assert not config.no_logo
@@ -28,28 +29,28 @@ class TestConfig:
                 None,
                 MagicMock(return_value=False),
                 MagicMock(return_value=None),
-                "inventory.yaml",
+                Path("inventory.yaml"),
                 id="No config file given",
             ),
             pytest.param(
-                "test/fotoobo.yaml",
+                Path("test/fotoobo.yaml"),
                 MagicMock(return_value=True),
                 MagicMock(return_value={"inventory": "test1", "logging": {"enabled": True}}),
-                "test1",
+                Path("test1"),
                 id="Custom fotoobo.yaml",
             ),
             pytest.param(
                 None,
-                lambda file: file == "fotoobo.yaml",
+                lambda file: file == Path("fotoobo.yaml"),
                 MagicMock(return_value={"inventory": "test2", "audit_logging": {"enabled": True}}),
-                "test2",
+                Path("test2"),
                 id="Use fotoobo.yaml in current directory",
             ),
             pytest.param(
                 None,
-                lambda file: file != "fotoobo.yaml",
+                lambda file: file != Path("fotoobo.yaml"),
                 MagicMock(return_value={"inventory": "test3"}),
-                "test3",
+                Path("test3"),
                 id="Use fotoobo.yaml in .config/fotoobo.yaml",
             ),
         ),
@@ -57,14 +58,14 @@ class TestConfig:
     # pylint: disable=too-many-arguments
     def test_load_configuration(
         self,
-        config_file: Union[str, None],
+        config_file: Union[Path, None],
         isfile_mock: Union[MagicMock, Callable[[str], bool]],
         load_yaml_file_mock: MagicMock,
         expected_inventory: str,
         monkeypatch: MonkeyPatch,
     ) -> None:
         """test load configuration from file"""
-        monkeypatch.setattr("fotoobo.helpers.files.os.path.isfile", isfile_mock)
+        monkeypatch.setattr("fotoobo.helpers.files.Path.is_file", isfile_mock)
         monkeypatch.setattr("fotoobo.helpers.config.load_yaml_file", load_yaml_file_mock)
         config = Config()
         config.load_configuration(config_file)

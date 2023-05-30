@@ -5,6 +5,7 @@ import datetime
 import json
 import logging
 import os
+from pathlib import Path
 from typing import Optional
 
 from fotoobo.exceptions import APIError, GeneralError, GeneralWarning
@@ -18,7 +19,7 @@ log = logging.getLogger("fotoobo")
 
 def backup(  # pylint: disable=too-many-locals, too-many-branches
     host: str,
-    backup_dir: str = "",
+    backup_dir: Optional[Path] = None,
     ftp_server: Optional[str] = None,
     smtp_server: Optional[str] = None,
 ) -> None:
@@ -28,7 +29,7 @@ def backup(  # pylint: disable=too-many-locals, too-many-branches
     Args:
         host (str):         The host from the inventory to get the backup. If no host is given all
                             FortiGate devices in the inventory are backed up.
-        backup_dir (str):   The directory to save tha backup(s) to
+        backup_dir (Path):   The directory to save tha backup(s) to
         ftp_server (str):   The FTP server from the inventory to upload the backup to. You may omit
                             this argument to only safe the backup to a file. This argument also
                             compresses the configuration file into a zip file.
@@ -36,18 +37,18 @@ def backup(  # pylint: disable=too-many-locals, too-many-branches
     """
     output = Output()
     inventory = Inventory(config.inventory_file)
-    fgts = inventory.get(host, "fortigate")
+    fortigates = inventory.get(host, "fortigate")
     if not backup_dir:
-        backup_dir = os.getcwd()
+        backup_dir = Path.cwd()
 
     create_dir(backup_dir)
 
     # backup every FortiGate
-    for name, fgt in fgts.items():
+    for name, fgt in fortigates.items():
         log.debug("backup FortiGate '%s'", name)
-        config_file = os.path.join(backup_dir, name + ".conf")
+        config_file = backup_dir / Path(name).with_suffix(".conf")
 
-        if os.path.isfile(config_file):
+        if config_file.is_file():
             os.remove(config_file)
 
         try:
@@ -69,10 +70,9 @@ def backup(  # pylint: disable=too-many-locals, too-many-branches
             log.error("backup '%s' failed with error '%s'", name, data_json["http_status"])
             continue
 
-        with open(config_file, "w", encoding="UTF-8") as file:
-            file.writelines(data)
+        config_file.write_text(data, encoding="UTF-8")
 
-        if not os.path.isfile(config_file):
+        if not config_file.is_file():
             output.add(f"backup file for '{name}' does not exist")
             continue
 
@@ -81,7 +81,7 @@ def backup(  # pylint: disable=too-many-locals, too-many-branches
                 server = inventory.assets[ftp_server]
                 log.debug("compressing configuration '%s'", name)
                 time: str = datetime.datetime.now().strftime("%Y%m%d-%H%M")
-                zip_file = os.path.join(backup_dir, name + "-" + time + ".conf.zip")
+                zip_file = backup_dir / Path(name + "-" + time + ".conf.zip")
                 file_to_zip(config_file, zip_file)
                 file_to_ftp(zip_file, server)
                 os.remove(zip_file)

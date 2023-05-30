@@ -3,6 +3,7 @@ The beautiful output helper
 """
 import json
 import os
+from pathlib import Path
 import smtplib
 from datetime import datetime
 from typing import Any, Dict, List, Union
@@ -33,7 +34,7 @@ class Output:
         Add one or multiple message(s) to the output
 
         Args:
-            message (str|list): Add a message or a list of messages to the output
+            messages (str|list): Add a message or a list of messages to the output
         """
         if isinstance(messages, str):
             self.messages.append(messages)
@@ -98,14 +99,15 @@ def print_datatable(
 
     Args:
         data (Union[List[Any], Dict[str, Any]]): data to print as list
+        title (str): set the preferred title for the table
+        auto_header (bool): whether to show the headers (default: off)
+        headers (List[str]): Set the headers (if needed)
     """
     if not headers:
         headers = []
 
     if isinstance(data, dict):
-        lst = []
-        lst.append(data)
-        data = lst
+        data = [data]
 
     if isinstance(data, list):
         table = Table(title=title, show_header=auto_header or bool(headers))
@@ -159,15 +161,13 @@ def print_json(data: Any, indent: int = 4) -> None:
     print(json.dumps(data, indent=indent))
 
 
-def write_policy_to_html(  # pylint: disable=too-many-locals
-    data: List[Dict[str, Any]], filename: str
-) -> None:
+def write_policy_to_html(data: List[Dict[str, Any]], out_file: Path) -> None:
     """
     Write a
 
     Args:
         data (List)   : List of Dicts with data
-        filename (str): Filename to write the HTML output to
+        out_file (Path): Filename to write the HTML output to
     """
     ignored_rows = ["status", "global-label", "send-deny-packet"]
     table = '<table class="table table-bordered">\n'
@@ -270,7 +270,4 @@ def write_policy_to_html(  # pylint: disable=too-many-locals
     </html>
     """
 
-    with open(filename, "w", encoding="UTF-8") as file:
-        file.writelines(html_header)
-        file.writelines(table)
-        file.writelines(html_footer)
+    out_file.write_text(html_header + table + html_footer, encoding="UTF-8")

@@ -4,7 +4,7 @@ Devices class for storing device information
 
 import logging
 from typing import Any, Dict, Optional
-import os
+from pathlib import Path
 
 from fotoobo.exceptions import GeneralWarning
 from fotoobo.fortinet.fortianalyzer import FortiAnalyzer
@@ -12,7 +12,6 @@ from fotoobo.fortinet.forticlientems import FortiClientEMS
 from fotoobo.fortinet.fortigate import FortiGate
 from fotoobo.fortinet.fortimanager import FortiManager
 from fotoobo.helpers.files import load_yaml_file
-
 from .generic import GenericDevice
 
 log = logging.getLogger("fotoobo")
@@ -25,9 +24,9 @@ class Inventory:
     https://fotoobo.readthedocs.io/en/latest/usage/inventory.html
     """
 
-    def __init__(self, inventory_file: str):
+    def __init__(self, inventory_file: Path):
         """Initialize the inventory"""
-        self._inventory_file: str = inventory_file
+        self._inventory_file: Path = inventory_file
         self._globals: Dict[str, Any] = {
             "fortianalyzer": {},
             "forticlientems": {},
@@ -50,7 +49,7 @@ class Inventory:
         Get a list of assets from the inventory
 
         Args:
-            asset (str, optional): Which asset to get. If blank get every asset
+            name (str, optional): Which asset to get. If blank get every asset
             type (str, optional) : Which asset type to get. If blank get every asset.
 
         Returns:
@@ -82,7 +81,7 @@ class Inventory:
         Load the inventory from a file given
         """
         # Expand user home shortcuts in the inventory file path
-        expanded_inventory_file = os.path.expanduser(self._inventory_file)
+        expanded_inventory_file = self._inventory_file.expanduser()
         log.debug("loading assets from '%s'", expanded_inventory_file)
         inventory_raw: Dict[str, Any] = dict(load_yaml_file(expanded_inventory_file) or {})
 

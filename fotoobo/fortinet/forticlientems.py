@@ -2,14 +2,13 @@
 FortiClient EMS Class
 """
 import logging
-import os
+from pathlib import Path
 import pickle
 from typing import Any, Dict, Optional
 
 import requests
 
 from fotoobo.exceptions import APIError, GeneralWarning
-
 from .fortinet import Fortinet
 
 log = logging.getLogger("fotoobo")
@@ -60,6 +59,7 @@ class FortiClientEMS(Fortinet):
         Args:
             method (str): request method from [get, post]
             url (str): rest API URL to request data from
+            headers (dict): additional headers (if needed)
             params (dict): dictionary with parameters (if needed)
             payload (dict): JSON body for post requests (if needed)
             timeout (float): the requests read timeout
@@ -81,7 +81,6 @@ class FortiClientEMS(Fortinet):
         Returns:
             str: version
         """
-        ems_version: str = ""
         try:
             response = self.api("get", "/system/consts/get?system_update_time=1")
 
@@ -90,7 +89,7 @@ class FortiClientEMS(Fortinet):
             raise GeneralWarning(f"{self.hostname} returned: {err.message}") from err
 
         try:
-            ems_version = response.json()["data"]["System"]["VERSION"]
+            ems_version: str = response.json()["data"]["System"]["VERSION"]
 
         except KeyError as err:
             log.warning("did not find any FortiClient EMS version number in response")
@@ -108,13 +107,13 @@ class FortiClientEMS(Fortinet):
             int: status code from the FortiClient EMS logon
         """
         status = 401
-        cookie_file = os.path.abspath(os.path.join(self.cookie_path, f"{self.hostname}.cookie"))
+        cookie = Path(self.cookie_path) / f"{self.hostname}.cookie"
         if self.cookie_path:
-            log.debug("searching cookie in %s", cookie_file)
-            if os.path.isfile(cookie_file):
+            log.debug("searching cookie in %s", cookie)
+            if cookie.is_file():
                 log.debug("cookie exists. skipping login")
-                with open(cookie_file, "rb") as cookiefile:
-                    self.session.cookies.update(pickle.load(cookiefile))  # type: ignore
+                with cookie.open("rb") as cookie_file:
+                    self.session.cookies.update(pickle.load(cookie_file))  # type: ignore
 
                 try:
                     response = self.api("get", "/system/serial_number")
@@ -140,8 +139,8 @@ class FortiClientEMS(Fortinet):
             response = self.api("post", "/auth/signin", payload=payload)
             if response.status_code == 200 and self.cookie_path:
                 log.debug("saving cookie for %s", self.hostname)
-                with open(cookie_file, "wb") as cookiefile:
-                    pickle.dump(self.session.cookies, cookiefile)
+                with cookie.open("wb") as cookie_file:
+                    pickle.dump(self.session.cookies, cookie_file)
 
             status = response.status_code
 

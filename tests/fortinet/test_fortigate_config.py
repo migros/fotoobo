@@ -1,7 +1,7 @@
 """
 Test the FortiGate config class
 """
-import os
+from pathlib import Path
 from typing import Any, Dict
 
 import pytest
@@ -10,21 +10,21 @@ from fotoobo.fortinet.fortigate_config import FortiGateConfig
 
 
 @pytest.fixture
-def conf_file_vdom() -> str:
+def conf_file_vdom() -> Path:
     """The configuration file with a FortiGate config with VDOMs enabled"""
-    return "tests/data/fortigate_config_vdom.conf"
+    return Path("tests/data/fortigate_config_vdom.conf")
 
 
 @pytest.fixture
-def conf_file_single() -> str:
+def conf_file_single() -> Path:
     """The configuration file with a FortiGate config with single VDOM mode"""
-    return "tests/data/fortigate_config_single.conf"
+    return Path("tests/data/fortigate_config_single.conf")
 
 
 @pytest.fixture
-def conf_file_empty() -> str:
+def conf_file_empty() -> Path:
     """Just an empty configuration file"""
-    return "tests/data/fortigate_config_empty.conf"
+    return Path("tests/data/fortigate_config_empty.conf")
 
 
 @pytest.fixture
@@ -56,10 +56,10 @@ class TestFortiGateConfigGeneral:
     """Test the FortiGateConfig class without a dummy config"""
 
     @staticmethod
-    def test_parse_to_dict_empty(conf_file_empty: str) -> None:
+    def test_parse_to_dict_empty(conf_file_empty: Path) -> None:
         """Test the _parse_to_dict method with empty file"""
         FortiGateConfig._config_path = []  # only needed as long as _config_path is not thread-safe
-        with open(conf_file_empty, "r", encoding="UTF-8") as forti_file:
+        with conf_file_empty.open(encoding="UTF-8") as forti_file:
             config = FortiGateConfig._parse_to_dict(forti_file)
         assert not config
 
@@ -126,17 +126,18 @@ class TestFortiGateConfigSingle:
         assert not info
 
     @staticmethod
-    def test_parse_to_dict(conf_file_single: str) -> None:
+    def test_parse_to_dict(conf_file_single: Path) -> None:
         """Test the _parse_to_dict method with dummy file"""
         FortiGateConfig._config_path = []  # only needed as long as _config_path is not thread-safe
-        with open(conf_file_single, "r", encoding="UTF-8") as forti_file:
+        with conf_file_single.open(encoding="UTF-8") as forti_file:
             config = FortiGateConfig._parse_to_dict(forti_file)
+
         assert config["info"]["buildno"] == "8303"
         assert config["leaf_n"]["option_n"] == "value_n"
         assert config["leaf_z"]["option_z"] == "value_z"
 
     @staticmethod
-    def test_parse_configuration_file(conf_file_single: str) -> None:
+    def test_parse_configuration_file(conf_file_single: Path) -> None:
         """Test the parse_configuration_file method with dummy file"""
         config = FortiGateConfig.parse_configuration_file(conf_file_single)
         assert config.info.buildno == "8303"
@@ -144,19 +145,19 @@ class TestFortiGateConfigSingle:
         assert config.vdom_config["root"]["leaf_z"]["option_z"] == "value_z"
 
     @staticmethod
-    def test_save_configuration_file(temp_dir: str, conf_file_single: str) -> None:
+    def test_save_configuration_file(temp_dir: Path, conf_file_single: Path) -> None:
         """Test the load_configuration_file method with dummy file"""
-        filename = os.path.join(temp_dir, "testsingle.json")
-        assert not os.path.isfile(filename)
+        filename = temp_dir / "testsingle.json"
+        assert not filename.is_file()
         config = FortiGateConfig.parse_configuration_file(conf_file_single)
         config.save_configuration_file(filename)
-        assert os.path.isfile(filename)
+        assert filename.is_file()
 
     @staticmethod
-    def test_load_configuration_file(temp_dir: str) -> None:
+    def test_load_configuration_file(temp_dir: Path) -> None:
         """Test the load_configuration_file method with dummy file"""
-        filename = os.path.join(temp_dir, "testsingle.json")
-        assert os.path.isfile(filename)
+        filename = temp_dir / "testsingle.json"
+        assert filename.is_file()
         config = FortiGateConfig.load_configuration_file(filename)
         assert config.info.buildno == "8303"
         assert config.vdom_config["root"]["leaf_n"]["option_n"] == "value_n"
@@ -232,17 +233,18 @@ class TestFortiGateConfigVDOM:
         assert not info
 
     @staticmethod
-    def test_parse_to_dict(conf_file_vdom: str) -> None:
+    def test_parse_to_dict(conf_file_vdom: Path) -> None:
         """Test the _parse_to_dict method with dummy file"""
         FortiGateConfig._config_path = []  # only needed as long as _config_path is not thread-safe
-        with open(conf_file_vdom, "r", encoding="UTF-8") as forti_file:
+        with conf_file_vdom.open(encoding="UTF-8") as forti_file:
             config = FortiGateConfig._parse_to_dict(forti_file)
+
         assert config["info"]["buildno"] == "8303"
         assert config["vdom"]["vdom_n"]["leaf_n"]["option_n"] == "value_n"
         assert config["vdom"]["vdom_z"]["leaf_z"]["option_z"] == "value_z"
 
     @staticmethod
-    def test_parse_configuration_file(conf_file_vdom: str) -> None:
+    def test_parse_configuration_file(conf_file_vdom: Path) -> None:
         """Test the parse_configuration_file method with dummy file"""
         config = FortiGateConfig.parse_configuration_file(conf_file_vdom)
         assert config.info.buildno == "8303"
@@ -250,26 +252,26 @@ class TestFortiGateConfigVDOM:
         assert config.vdom_config["vdom_z"]["leaf_z"]["option_z"] == "value_z"
 
     @staticmethod
-    def test_save_configuration_file(temp_dir: str, conf_file_vdom: str) -> None:
+    def test_save_configuration_file(temp_dir: Path, conf_file_vdom: Path) -> None:
         """Test the load_configuration_file method with dummy file"""
-        filename = os.path.join(temp_dir, "testvdom.json")
-        assert not os.path.isfile(filename)
+        filename = temp_dir / "testvdom.json"
+        assert not filename.is_file()
         config = FortiGateConfig.parse_configuration_file(conf_file_vdom)
         config.save_configuration_file(filename)
-        assert os.path.isfile(filename)
+        assert filename.is_file()
 
     @staticmethod
-    def test_load_configuration_file(temp_dir: str) -> None:
+    def test_load_configuration_file(temp_dir: Path) -> None:
         """Test the load_configuration_file method with dummy file"""
-        filename = os.path.join(temp_dir, "testvdom.json")
-        assert os.path.isfile(filename)
+        filename = temp_dir / "testvdom.json"
+        assert filename.is_file()
         config = FortiGateConfig.load_configuration_file(filename)
         assert config.info.buildno == "8303"
         assert config.vdom_config["vdom_n"]["leaf_n"]["option_n"] == "value_n"
         assert config.vdom_config["vdom_z"]["leaf_z"]["option_z"] == "value_z"
 
     @staticmethod
-    def test_get_configuration_global(conf_file_single: str, conf_file_vdom: str) -> None:
+    def test_get_configuration_global(conf_file_single: Path, conf_file_vdom: Path) -> None:
         """Test the get_configuration_file method for global configuration"""
         config_single = FortiGateConfig.parse_configuration_file(conf_file_single)
         config_vdom = FortiGateConfig.parse_configuration_file(conf_file_vdom)
@@ -285,7 +287,7 @@ class TestFortiGateConfigVDOM:
             assert not config.get_configuration("global", "/system/global/not")
 
     @staticmethod
-    def test_get_configuration_single(conf_file_single: str) -> None:
+    def test_get_configuration_single(conf_file_single: Path) -> None:
         """Test the get_configuration_file method for vdom configuration in single mode"""
         config = FortiGateConfig.parse_configuration_file(conf_file_single)
         assert config.get_configuration("vdom")
@@ -298,7 +300,7 @@ class TestFortiGateConfigVDOM:
         assert not config.get_configuration("vdom", "/root/leaf_1/not")
 
     @staticmethod
-    def test_get_configuration_vdom(conf_file_vdom: str) -> None:
+    def test_get_configuration_vdom(conf_file_vdom: Path) -> None:
         """Test the get_configuration_file method for vdom configuration in vdom mode"""
         config = FortiGateConfig.parse_configuration_file(conf_file_vdom)
         assert config.get_configuration("vdom")

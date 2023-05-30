@@ -2,6 +2,7 @@
 The FortiGate get commands
 """
 import logging
+from pathlib import Path
 
 import typer
 
@@ -14,13 +15,13 @@ log = logging.getLogger("fotoobo")
 
 @app.command(no_args_is_help=True)
 def check(
-    configuration: str = typer.Argument(
+    configuration: Path = typer.Argument(
         ...,
         help="The FortiGate configuration file or directory.",
         metavar="[config]",
         show_default=False,
     ),
-    bundles: str = typer.Argument(
+    bundles: Path = typer.Argument(
         ...,
         help="Filename of the file containing the check bundles.",
         metavar="[bundles]",
@@ -35,7 +36,7 @@ def check(
 
 @app.command(no_args_is_help=True)
 def info(
-    configuration: str = typer.Argument(
+    configuration: Path = typer.Argument(
         ...,
         help="The FortiGate configuration file or directory.",
         metavar="[config]",

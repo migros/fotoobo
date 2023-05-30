@@ -2,6 +2,7 @@
 The FortiManager get commands
 """
 import logging
+from pathlib import Path
 
 import typer
 
@@ -75,7 +76,7 @@ def policy(
     policy_name: str = typer.Argument(
         ..., help="The name of the policy to get.", metavar="[policy]", show_default=False
     ),
-    filename: str = typer.Argument(
+    filename: Path = typer.Argument(
         ..., help="The filename to write the policy to.", metavar="[file]", show_default=False
     ),
     host: str = typer.Argument(

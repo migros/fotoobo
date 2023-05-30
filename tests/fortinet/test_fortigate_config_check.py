@@ -1,6 +1,8 @@
 """
 Test the FortiGate config check class
 """
+from pathlib import Path
+
 import pytest
 
 from fotoobo.exceptions import GeneralError
@@ -10,25 +12,25 @@ from fotoobo.helpers.files import load_yaml_file
 
 
 @pytest.fixture
-def conf_file_vdom() -> str:
+def conf_file_vdom() -> Path:
     """The configuration file with a FortiGate config with VDOMs enabled"""
-    return "tests/data/fortigate_config_vdom.conf"
+    return Path("tests/data/fortigate_config_vdom.conf")
 
 
 @pytest.fixture
-def conf_file_single() -> str:
+def conf_file_single() -> Path:
     """The configuration file with a FortiGate config with single VDOM mode"""
-    return "tests/data/fortigate_config_single.conf"
+    return Path("tests/data/fortigate_config_single.conf")
 
 
 @pytest.fixture
-def checks_file() -> str:
+def checks_file() -> Path:
     """The check bundle file for the FortiGate configuration checker"""
-    return "tests/data/fortigate_checks.yaml"
+    return Path("tests/data/fortigate_checks.yaml")
 
 
 @pytest.fixture
-def config_vdom(conf_file_vdom: str) -> FortiGateConfig:
+def config_vdom(conf_file_vdom: Path) -> FortiGateConfig:
     # pylint: disable=redefined-outer-name
     """A FortiGate configuration with VDOMs enabled"""
     return FortiGateConfig.parse_configuration_file(conf_file_vdom)
@@ -42,7 +44,7 @@ class TestFortiGateConfigCheck:
     # start tests with different configuration files
 
     @staticmethod
-    def test_check_config_single_global(conf_file_single: str, checks_file: str) -> None:
+    def test_check_config_single_global(conf_file_single: Path, checks_file: Path) -> None:
         """Do a configuration check with a single VDOM FortiGate configuration file"""
         conf_check = FortiGateConfigCheck(
             FortiGateConfig.parse_configuration_file(conf_file_single), load_yaml_file(checks_file)
@@ -51,7 +53,7 @@ class TestFortiGateConfigCheck:
         assert len(conf_check.results) == 0
 
     @staticmethod
-    def test_check_config_vdom_global(conf_file_vdom: str, checks_file: str) -> None:
+    def test_check_config_vdom_global(conf_file_vdom: Path, checks_file: Path) -> None:
         """Do a configuration check with a multiple VDOM FortiGate configuration file"""
         conf_check = FortiGateConfigCheck(
             FortiGateConfig.parse_configuration_file(conf_file_vdom), load_yaml_file(checks_file)
