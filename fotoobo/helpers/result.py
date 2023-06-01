@@ -163,7 +163,7 @@ class Result:
                 json.dumps(v, indent=4) if isinstance(v, (dict, list)) else v for v in _values
             ]
             # If an item in line is a not render-able convert to string
-            values += [str(v) if isinstance(v, (bool, int, list)) else v for v in _values]
+            values = [str(v) if isinstance(v, (bool, int, float)) else v for v in values]
 
             table.add_row(*values)
 
