@@ -7,6 +7,7 @@ from pathlib import Path
 import typer
 
 from fotoobo.helpers import cli_path
+from fotoobo.helpers.files import load_json_file, save_json_file
 from fotoobo.tools import convert
 
 app = typer.Typer(no_args_is_help=True, rich_markup_mode="rich")
@@ -58,4 +59,8 @@ def checkpoint(
     The Checkpoint objects have to be prepared in a json file. See
     https://fotoobo.readthedocs.io/en/latest/usage/convert.html for more information.
     """
-    convert.checkpoint(infile, outfile, obj_type, cache_dir)
+    checkpoint_assets = load_json_file(infile)
+
+    result = convert.checkpoint(checkpoint_assets, obj_type, outfile.name, cache_dir)
+
+    save_json_file(outfile, result.get_result("fortinet_assets"))
