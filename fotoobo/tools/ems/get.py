@@ -6,12 +6,13 @@ from typing import Dict, List
 
 from fotoobo.fortinet.forticlientems import FortiClientEMS
 from fotoobo.helpers.config import config
+from fotoobo.helpers.result import Result
 from fotoobo.inventory import Inventory
 
 log = logging.getLogger("fotoobo")
 
 
-def version(host: str) -> Dict[str, str]:
+def version(host: str) -> Result[Dict[str, str]]:
     """
     ems get version
 
@@ -19,15 +20,19 @@ def version(host: str) -> Dict[str, str]:
         host (str): host defined in inventory
 
     Returns:
-        Dict[str, str]: version data in a dict with keys: host, version
+        Result[Dict[str, str]]: version data in a dict with keys: host, version
     """
+    result = Result[Dict[str, str]]()
+
     inventory = Inventory(config.inventory_file)
     ems: FortiClientEMS = inventory.get(host, "forticlientems")[host]
     log.debug("FortiClient EMS get version ...")
     ems.login()
     ems_version = ems.get_version()
 
-    return {"host": host, "version": ems_version}
+    result.push_result(host, {"host": host, "version": ems_version})
+
+    return result
 
 
 def workgroups(host: str, custom: bool = False) -> List[Dict[str, str]]:
