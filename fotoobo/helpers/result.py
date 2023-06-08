@@ -112,12 +112,14 @@ class Result(Generic[T]):
         """
         return self.results
 
+    # pylint: disable=too-many-arguments
     def print_result_as_table(
         self,
         only_host: Union[str, None] = None,
         title: str = "",
         auto_header: bool = False,
         headers: Union[List[str], None] = None,
+        host_is_first_column: bool = False,
     ) -> None:
         """
         Print a table from given data as list or dict.
@@ -128,6 +130,7 @@ class Result(Generic[T]):
             title (str): set the preferred title for the table
             auto_header (bool): whether to show the headers (default: off)
             headers (List[str]): Set the headers (if needed)
+            host_is_first_column (bool): add the host as first column
 
         Raises:
             GeneralWarning: If the data cannot be interpreted as a table
@@ -136,9 +139,26 @@ class Result(Generic[T]):
             headers = []
 
         if only_host:
-            data: Any = self.results[only_host]
+            if host_is_first_column:
+                result = self.results[only_host]
+                if isinstance(result, dict):
+                    data: Any = {"host": only_host, **result}
+                else:
+                    data = {"host": only_host, "value": result}
+            else:
+                data = self.results[only_host]
         else:
-            data = [self.results]
+            if host_is_first_column:
+                data = []
+
+                for host, result in self.results.items():
+                    if isinstance(result, dict):
+                        data.append({"host": host, **result})
+                    else:
+                        data.append({"host": host, "value": result})
+
+            else:
+                data = self.results
 
         self.print_table_raw(data, headers, auto_header, title)
 
@@ -171,7 +191,7 @@ class Result(Generic[T]):
                 table.add_column(heading)
 
         if isinstance(data, dict):
-            data = list(data)
+            data = [data]
 
         for line in data:
             _values = line.values()
