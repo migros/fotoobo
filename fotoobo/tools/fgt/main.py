@@ -1,28 +1,21 @@
 """
 FortiGate backup utility
 """
-import datetime
 import json
 import logging
-import os
-from pathlib import Path
-from typing import Optional
+from typing import Union
 
-from fotoobo.exceptions import APIError, GeneralError, GeneralWarning
+from fotoobo.exceptions import APIError, GeneralError
 from fotoobo.helpers.config import config
-from fotoobo.helpers.files import create_dir, file_to_ftp, file_to_zip
-from fotoobo.helpers.output import Output
+from fotoobo.helpers.result import Result
 from fotoobo.inventory import Inventory
 
 log = logging.getLogger("fotoobo")
 
 
-def backup(  # pylint: disable=too-many-locals, too-many-branches
-    host: str,
-    backup_dir: Optional[Path] = None,
-    ftp_server: Optional[str] = None,
-    smtp_server: Optional[str] = None,
-) -> None:
+def backup(
+    host: Union[str, None] = None,
+) -> Result:
     """
     Create a FortiGate configuration backup into a file and optionally upload it to an FTP server.
 
@@ -35,60 +28,38 @@ def backup(  # pylint: disable=too-many-locals, too-many-branches
                             compresses the configuration file into a zip file.
         smtp_server (str):  The SMTP server from the inventory to send mail messages if errors occur
     """
-    output = Output()
+    result = Result()
+
     inventory = Inventory(config.inventory_file)
     fortigates = inventory.get(host, "fortigate")
-    if not backup_dir:
-        backup_dir = Path.cwd()
-
-    create_dir(backup_dir)
 
     # backup every FortiGate
     for name, fgt in fortigates.items():
         log.debug("backup FortiGate '%s'", name)
-        config_file = backup_dir / Path(name).with_suffix(".conf")
-
-        if config_file.is_file():
-            os.remove(config_file)
 
         try:
             data: str = fgt.backup()
 
+            result.push_result(name, data)
+
         except GeneralError as err:
-            output.add(err.message)
+            result.push_message(name, err.message, level="error")
             continue
 
         except APIError as err:
-            output.add(f"{name} returned {err.message}")
+            result.push_message(name, f"{name} returned {err.message}", level="error")
             continue
 
         if data.startswith("#config-version"):
-            log.info("backup '%s' succeeded", name)
+            success_message = f"config backup for '{name}' succeeded"
+            log.info(success_message)
+            result.push_message(name, success_message)
 
         else:
             data_json = json.loads(data)
-            log.error("backup '%s' failed with error '%s'", name, data_json["http_status"])
+            error_str = f"backup '{name}' failed with error '{data_json['http_status']}'"
+            log.error(error_str)
+            result.push_message(name, error_str, level="error")
             continue
 
-        config_file.write_text(data, encoding="UTF-8")
-
-        if not config_file.is_file():
-            output.add(f"backup file for '{name}' does not exist")
-            continue
-
-        if ftp_server:
-            if ftp_server in inventory.assets:
-                server = inventory.assets[ftp_server]
-                log.debug("compressing configuration '%s'", name)
-                time: str = datetime.datetime.now().strftime("%Y%m%d-%H%M")
-                zip_file = backup_dir / Path(name + "-" + time + ".conf.zip")
-                file_to_zip(config_file, zip_file)
-                file_to_ftp(zip_file, server)
-                os.remove(zip_file)
-
-            else:
-                raise GeneralWarning(f"ftp server '{ftp_server}' not found in inventory")
-
-    if smtp_server:
-        if smtp_server in inventory.assets:
-            output.send_mail(inventory.assets[smtp_server])
+    return result

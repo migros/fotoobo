@@ -1,16 +1,11 @@
 """Test fotoobo convert tools"""
-
-from pathlib import Path
 import shutil
-from copy import deepcopy
+from pathlib import Path
 from typing import Any, Dict
-from unittest.mock import MagicMock
 
 import pytest
-from _pytest.monkeypatch import MonkeyPatch
 
 from fotoobo.exceptions import GeneralError
-from fotoobo.helpers.files import load_json_file
 from fotoobo.tools.convert import checkpoint
 
 
@@ -28,9 +23,9 @@ from fotoobo.tools.convert import checkpoint
         pytest.param("service_groups", id="test type 'service_groups'"),
     ),
 )
-def test_convert(asset_type: str, monkeypatch: MonkeyPatch, temp_dir: Path) -> None:
+def test_convert(asset_type: str) -> None:
     """Test convert"""
-    return_value: Dict[str, Any] = {
+    checkpoint_assets: Dict[str, Any] = {
         "hosts": [
             {
                 "uid": "aaaa-aaaa-aaaa-aaaa",
@@ -66,20 +61,13 @@ def test_convert(asset_type: str, monkeypatch: MonkeyPatch, temp_dir: Path) -> N
         "service_groups": [],
     }
 
-    monkeypatch.setattr(
-        "fotoobo.tools.convert.load_json_file", MagicMock(return_value=deepcopy(return_value))
-    )
+    result = checkpoint(checkpoint_assets, asset_type, "out_file_name")
+    converted = result.get_result("fortinet_assets") or []
 
-    output_file = temp_dir / f"convert_{asset_type}.json"
-
-    checkpoint(Path(""), output_file, asset_type)
-    assert output_file.is_file()
-    converted = list(load_json_file(output_file) or [])
-
-    for index in range(len(return_value[asset_type])):
+    for index in range(len(checkpoint_assets[asset_type])):
         asset = converted[0]["params"][index]["data"]
-        assert asset["name"] == return_value[asset_type][index]["name"]
-        assert asset["comment"] == return_value[asset_type][index]["comments"]
+        assert asset["name"] == checkpoint_assets[asset_type][index]["name"]
+        assert asset["comment"] == checkpoint_assets[asset_type][index]["comments"]
 
 
 @pytest.mark.parametrize(
@@ -89,11 +77,10 @@ def test_convert(asset_type: str, monkeypatch: MonkeyPatch, temp_dir: Path) -> N
         pytest.param("dummy", id="test type 'dummy'"),
     ),
 )
-def test_convert_unsupported_type(asset_type: str, monkeypatch: MonkeyPatch) -> None:
+def test_convert_unsupported_type(asset_type: str) -> None:
     """Test convert for unsupported types (which rise a GeneralError exception)"""
-    monkeypatch.setattr("fotoobo.tools.convert.load_json_file", MagicMock(return_value=[]))
     with pytest.raises(GeneralError, match=r"type '.*' is not supported to convert"):
-        checkpoint(Path(""), Path(""), asset_type)
+        checkpoint([], "", asset_type)
 
 
 @pytest.mark.parametrize(
@@ -110,9 +97,9 @@ def test_convert_unsupported_type(asset_type: str, monkeypatch: MonkeyPatch) -> 
         pytest.param("service_groups", id="test type 'service_groups'"),
     ),
 )
-def test_convert_with_cache(asset_type: str, monkeypatch: MonkeyPatch, temp_dir: Path) -> None:
+def test_convert_with_cache(asset_type: str, temp_dir: Path) -> None:
     """Test convert with cache"""
-    return_value: Dict[str, Any] = {
+    checkpoint_assets: Dict[str, Any] = {
         "hosts": [
             {
                 "uid": "aaaa-aaaa-aaaa-aaaa",
@@ -139,11 +126,7 @@ def test_convert_with_cache(asset_type: str, monkeypatch: MonkeyPatch, temp_dir:
         "service_groups": [],
     }
 
-    monkeypatch.setattr(
-        "fotoobo.tools.convert.load_json_file", MagicMock(return_value=deepcopy(return_value))
-    )
-
-    output_file = temp_dir / f"convert_cache_{asset_type}.json"
+    output_file_name = f"convert_cache_{asset_type}.json"
     cache_dir = temp_dir / "cache"
 
     if not cache_dir.is_dir():
@@ -154,10 +137,12 @@ def test_convert_with_cache(asset_type: str, monkeypatch: MonkeyPatch, temp_dir:
         cache_dir / "convert_cache_hosts.json",
     )
 
-    checkpoint(Path(""), output_file, asset_type, cache_dir)
-    assert output_file.is_file()
+    result = checkpoint(checkpoint_assets, asset_type, output_file_name, cache_dir)
 
-    converted = list(load_json_file(output_file) or [])
+    converted = result.get_result("fortinet_assets")
     if asset_type == "hosts":
+        # We have one ("aaa-*") already in the cache, only need to convert 1
         assert len(converted[0]["params"]) == 1
-        assert converted[0]["params"][0]["data"]["name"] == return_value["hosts"][1]["name"]
+        converted_name = converted[0]["params"][0]["data"]["name"]
+        expected_name = checkpoint_assets["hosts"][1]["name"]
+        assert converted_name == expected_name

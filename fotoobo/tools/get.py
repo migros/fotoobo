@@ -4,58 +4,74 @@ The fotoobo get utility
 import importlib.metadata
 import logging
 
-from rich import print as rprint
-from rich.panel import Panel
 from rich.text import Text
 from rich.tree import Tree
 
 from fotoobo import __version__
 from fotoobo.helpers.cli import walk_cli_info
 from fotoobo.helpers.config import config
-from fotoobo.helpers.output import print_datatable
+from fotoobo.helpers.result import Result
 from fotoobo.inventory import Inventory
 
 log = logging.getLogger("fotoobo")
 
 
-def commands() -> None:
-    """Get the fotoobo cli commands
-
-    Walk through the typer cli app and return its commands as a beautiful rich tree. The commands
-    are sorted in alphabetical order
+def inventory() -> Result:
     """
-    # from fotoobo.cli.main import app
+    Get the fotoobo inventory
+    """
+    log.debug("Printing fotoobo inventory information")
 
-    # tree = walk_cli_tree(app, Tree(Text().append("fotoobo", style="bold cyan")))
-    # rprint(Panel(tree, border_style="#FF33BB", title="cli commands", title_align="right"))
-    # rprint(config.cli_info)
-    tree = walk_cli_info(
-        config.cli_info["command"],
-        Tree(Text().append(config.cli_info["info_name"], style="bold cyan")),
-    )
-    rprint(Panel(tree, border_style="#FF33BB", title="cli commands structure", title_align="right"))
+    result = Result()
+    _inventory = Inventory(config.inventory_file)
 
-
-def inventory() -> None:
-    """Get the fotoobo inventory"""
-    log.debug("printing fotoobo inventory information")
-    inv = Inventory(config.inventory_file)
     data_table = []
-    for host, data in inv.assets.items():
+
+    for host, data in _inventory.assets.items():
         data_table.append({"host": host, "hostname": data.hostname, "type": data.type})
-    print_datatable(data_table, title="fotoobo inventory", headers=["Device", "Hostname", "Type"])
+
+    result.push_result("inventory", data_table)
+
+    return result
 
 
-def version(verbose: bool = False) -> None:
-    """Get the fotoobo version"""
+def version(verbose: bool = False) -> Result:
+    """
+    Get the fotoobo version
+
+    Args:
+        verbose:    Whether we want verbose output
+    """
     log.debug("printing fotoobo version information: %s", __version__)
-    if not verbose:
-        versions = [{"module": "fotoobo", "version": __version__}]
-    else:
-        versions = [{"module": "[bold]fotoobo[/]", "version": "[bold]" + __version__ + "[/]"}]
+
+    result = Result()
+    versions = [{"module": "fotoobo", "version": __version__}]
+
+    if verbose:
         modules = ["pysnmp", "jinja2", "PyYAML", "requests", "rich", "typer"]
 
         for module in modules:
             versions.append({"module": module, "version": importlib.metadata.version(module)})
 
-    print_datatable(versions, title="fotoobo version")
+    result.push_result("version", versions)
+
+    return result
+
+
+def commands() -> Result:
+    """Get the fotoobo cli commands
+
+    Walk through the typer cli app and return its commands as a beautiful rich tree. The commands
+    are sorted in alphabetical order
+    """
+    result = Result()
+
+    result.push_result(
+        "commands",
+        walk_cli_info(
+            config.cli_info["command"],
+            Tree(Text().append(config.cli_info["info_name"], style="bold cyan")),
+        ),
+    )
+
+    return result
