@@ -2,6 +2,7 @@
 The FotooboResult class
 """
 import json
+import smtplib
 from typing import Any, Dict, List, Union
 
 from rich.console import Console
@@ -9,6 +10,7 @@ from rich.table import Table
 from rich.theme import Theme
 
 from fotoobo.exceptions import GeneralWarning
+from fotoobo.helpers import cli_path
 
 ftb_theme = Theme({"var": "white", "ftb": "#FF33BB bold", "chk": "green"})
 
@@ -35,7 +37,7 @@ class Result:
         self.total: int = 0
 
         # Add messages for each device
-        self.messages: Dict[str, List[str]] = {}
+        self.messages: Dict[str, List[Dict[str, str]]] = {}
 
         # The results for each device
         self.results: Dict[str, Any] = {}
@@ -64,13 +66,15 @@ class Result:
         else:
             self.failed.append(host)
 
-    def push_message(self, host: str, message: str) -> None:
+    def push_message(self, host: str, message: str, level: str = "info") -> None:
         """
         Add a message for the host
 
         Args:
             host:       The host to add the message for
             message:    The message to add
+            level:      The level to assign to this message, used for later filtering
+                        (use for example "info", "warning", "error")
 
         Returns:
 
@@ -79,7 +83,7 @@ class Result:
         if host not in self.messages:
             self.messages[host] = []
 
-        self.messages[host].append(message)
+        self.messages[host].append({"message": message, "level": level})
 
     def get_result(self, host: str) -> Any:
         """
@@ -93,6 +97,19 @@ class Result:
         """
 
         return self.results[host]
+
+    def all_results(self) -> Dict[str, Any]:
+        """
+        Return all results
+
+        Returns:
+            The results as a dictionary of the following form:
+            {
+                '<name of the host>': <data>
+            }
+            where `<data>` may be of any type
+        """
+        return self.results
 
     def print_result_as_table(
         self,
@@ -168,3 +185,45 @@ class Result:
             table.add_row(*values)
 
         self.console.print(table)
+
+    def send_mail(self, smtp_server: Any, levels: Union[List[str], str, None] = None) -> None:
+        """
+        Send an e-mail with the messages collected up until the call
+
+        Args:
+            smtp_server:    The smtp server from inventory to use
+            levels:         The levels to output:
+                              - None means all messages will be output (default)
+                              - 'level' means only messages with level='level' will be output
+                              - ['level1', 'level2'] like 2nd option, but all levels given will get
+                                output
+        """
+        out_messages: List[str] = []
+
+        for _, messages in self.messages.items():
+            for message in messages:
+                if not levels or message["level"] in levels:
+                    out_messages.append(message["message"])
+
+        if not out_messages:
+            return
+
+        # Prepare server connection
+        smtp_server.port = getattr(smtp_server, "port", 25)
+
+        adds = "s" if len(out_messages) > 1 else ""
+        out_messages.append(str(len(out_messages)) + " message" + adds + " in list")
+
+        body = "To:" + smtp_server.recipient + "\n"
+        body += "From:" + smtp_server.sender + "\n"
+        body += "Subject:" + smtp_server.subject + "\n\n"
+
+        if cli_path:
+            body += "command: " + " ".join(cli_path) + "\n\n"
+
+        for message_line in out_messages:
+            body += message_line + "\n"
+
+        with smtplib.SMTP(smtp_server.hostname, smtp_server.port) as mail_server:
+            # server.set_debuglevel(1)
+            mail_server.sendmail(smtp_server.sender, smtp_server.recipient, body)

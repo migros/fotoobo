@@ -11,75 +11,134 @@ from fotoobo.exceptions import APIError
 from fotoobo.tools.fgt import backup
 
 
-def test_backup_no_backup_dir(monkeypatch: MonkeyPatch, temp_dir: Path) -> None:
-    """Test fgt backup without backup_dir in config"""
+def test_backup_no_backup_dir(monkeypatch: MonkeyPatch) -> None:
+    """
+    Test fgt backup without backup_dir in config
+    """
+    test_config = "#config-version\ntest"
+
     monkeypatch.setattr(
         "fotoobo.tools.fgt.main.config.inventory_file", Path("tests/data/inventory.yaml")
     )
-    monkeypatch.setattr("fotoobo.tools.fgt.main.create_dir", MagicMock(return_value=True))
     monkeypatch.setattr(
         "fotoobo.fortinet.fortigate.FortiGate.backup",
-        MagicMock(return_value="#config-version\ntest"),
+        MagicMock(return_value=test_config),
     )
-    monkeypatch.setattr("fotoobo.tools.fgt.main.Path.is_file", MagicMock(return_value=True))
-    monkeypatch.setattr("fotoobo.tools.fgt.main.os.remove", MagicMock(return_value=True))
-    backup("test_fgt_1", temp_dir)
-    assert True
+
+    result = backup("test_fgt_1")
+
+    all_results = result.all_results()
+    assert len(all_results) == 1
+    assert all_results["test_fgt_1"] == test_config
+
+    assert len(result.messages["test_fgt_1"]) == 1
+    message = result.messages["test_fgt_1"][0]
+    assert message["level"] == "info"
+    assert "succeeded" in message["message"]
 
 
-def test_backup_all(monkeypatch: MonkeyPatch, temp_dir: Path) -> None:
-    """Test fgt backup with no 'hosts' so all FortiGates are backed up"""
-    monkeypatch.setattr("fotoobo.tools.fgt.main.create_dir", MagicMock(return_value=True))
+def test_backup_all(monkeypatch: MonkeyPatch) -> None:
+    """
+    Test fgt backup with no 'hosts' so all FortiGates are backed up
+    """
+    test_config = "#config-version\ntest"
+
     monkeypatch.setattr(
         "fotoobo.tools.fgt.main.config.inventory_file", Path("tests/data/inventory.yaml")
     )
-    backup("", temp_dir)
-    assert True
-
-
-def test_backup_single(monkeypatch: MonkeyPatch, temp_dir: Path) -> None:
-    """Test fgt backup single FortiGate"""
-    monkeypatch.setattr(
-        "fotoobo.tools.fgt.main.config.inventory_file", Path("tests/data/inventory.yaml")
-    )
-    monkeypatch.setattr("fotoobo.tools.fgt.main.create_dir", MagicMock(return_value=True))
     monkeypatch.setattr(
         "fotoobo.fortinet.fortigate.FortiGate.backup",
-        MagicMock(return_value="#config-version\ntest"),
+        MagicMock(return_value=test_config),
     )
-    monkeypatch.setattr("fotoobo.tools.fgt.main.Path.is_file", MagicMock(return_value=True))
-    monkeypatch.setattr("fotoobo.tools.fgt.main.os.remove", MagicMock(return_value=True))
-    backup("test_fgt_1", temp_dir)
-    assert True
+
+    result = backup()
+
+    all_results = result.all_results()
+    assert len(all_results) == 2
+    assert all_results["test_fgt_1"] == test_config
+    assert all_results["test_fgt_2"] == test_config
+
+    assert len(result.messages) == 2
+    assert len(result.messages["test_fgt_1"]) == 1
+    message = result.messages["test_fgt_1"][0]
+    assert message["level"] == "info"
+    assert "succeeded" in message["message"]
+
+    assert len(result.messages["test_fgt_2"]) == 1
+    message = result.messages["test_fgt_2"][0]
+    assert message["level"] == "info"
+    assert "succeeded" in message["message"]
 
 
-def test_backup_single_with_invalid_config(monkeypatch: MonkeyPatch, temp_dir: Path) -> None:
-    """Test fgt backup single FortiGate"""
+def test_backup_single(monkeypatch: MonkeyPatch) -> None:
+    """
+    Test fgt backup single FortiGate
+    """
+    test_config = "#config-version\ntest"
+
     monkeypatch.setattr(
         "fotoobo.tools.fgt.main.config.inventory_file", Path("tests/data/inventory.yaml")
     )
-    monkeypatch.setattr("fotoobo.tools.fgt.main.create_dir", MagicMock(return_value=True))
     monkeypatch.setattr(
         "fotoobo.fortinet.fortigate.FortiGate.backup",
-        MagicMock(return_value='{"http_status": "666"}'),
+        MagicMock(return_value=test_config),
     )
-    monkeypatch.setattr("fotoobo.tools.fgt.main.Path.is_file", MagicMock(return_value=True))
-    monkeypatch.setattr("fotoobo.tools.fgt.main.os.remove", MagicMock(return_value=True))
-    backup("test_fgt_1", temp_dir)
-    assert True
+
+    result = backup("test_fgt_1")
+
+    all_results = result.all_results()
+    assert len(all_results) == 1
+    assert all_results["test_fgt_1"] == test_config
+
+    assert len(result.messages["test_fgt_1"]) == 1
+    message = result.messages["test_fgt_1"][0]
+    assert message["level"] == "info"
+    assert "succeeded" in message["message"]
 
 
-def test_backup_api_error(monkeypatch: MonkeyPatch, temp_dir: Path) -> None:
-    """Test fgt backup with an API error"""
-    monkeypatch.setattr("fotoobo.tools.fgt.main.Path.is_file", MagicMock(return_value=True))
-    monkeypatch.setattr("fotoobo.tools.fgt.main.os.remove", MagicMock(return_value=True))
+def test_backup_single_with_invalid_config(monkeypatch: MonkeyPatch) -> None:
+    """
+    Test fgt backup single FortiGate
+    """
+    test_config = '{"http_status": "456"}'
     monkeypatch.setattr(
         "fotoobo.tools.fgt.main.config.inventory_file", Path("tests/data/inventory.yaml")
     )
-    monkeypatch.setattr("fotoobo.tools.fgt.main.create_dir", MagicMock(return_value=True))
+    monkeypatch.setattr(
+        "fotoobo.fortinet.fortigate.FortiGate.backup",
+        MagicMock(return_value=test_config),
+    )
+
+    result = backup("test_fgt_1")
+
+    all_results = result.all_results()
+    assert len(all_results) == 1
+    assert all_results["test_fgt_1"] == test_config
+
+    assert len(result.messages["test_fgt_1"]) == 1
+    message = result.messages["test_fgt_1"][0]
+    assert message["level"] == "error"
+    assert "failed" in message["message"]
+
+
+def test_backup_api_error(monkeypatch: MonkeyPatch) -> None:
+    """
+    Test fgt backup with an API error
+    """
+    monkeypatch.setattr(
+        "fotoobo.tools.fgt.main.config.inventory_file", Path("tests/data/inventory.yaml")
+    )
     monkeypatch.setattr(
         "fotoobo.fortinet.fortigate.FortiGate.backup",
         MagicMock(side_effect=APIError("dummy error")),
     )
-    backup("test_fgt_1", temp_dir)
-    assert True
+
+    result = backup("test_fgt_2")
+
+    all_results = result.all_results()
+    assert len(all_results) == 0
+
+    assert len(result.messages["test_fgt_2"]) == 1
+    message = result.messages["test_fgt_2"][0]
+    assert message["level"] == "error"
+    assert "returned unknown" in message["message"]
