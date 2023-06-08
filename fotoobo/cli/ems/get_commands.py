@@ -37,8 +37,12 @@ def version(
     Get the FortiClient EMS version.
     """
     result = ems.get.version(host)
-    data = result.all_results()
-    print_datatable(data, title="FortiClient EMS Version", headers=["FortiClient EMS", "Version"])
+    result.print_result_as_table(
+        host,
+        title="FortiClient EMS Version",
+        headers=["FortiClient EMS", "Version"],
+        host_is_first_column=True,
+    )
 
 
 @app.command()
