@@ -4,6 +4,7 @@ The FortiClient EMS monitor commands
 
 import logging
 from pathlib import Path
+from typing import Union
 
 import typer
 from rich.pretty import pprint
@@ -48,16 +49,16 @@ def connections(
         help=HELP_TEXT_ARGUMENT_EMS,
         metavar="[host]",
     ),
-    output_file: Path = typer.Option(
-        "",
+    output_file: Union[None, Path] = typer.Option(
+        None,
         "--output",
         "-o",
         help=HELP_TEXT_OPTION_OUTPUT_FILE,
         metavar="[output]",
     ),
     raw: bool = typer.Option(False, "-r", "--raw", help="Output raw data."),
-    template_file: Path = typer.Option(
-        "",
+    template_file: Union[None, Path] = typer.Option(
+        None,
         "--template",
         "-t",
         help=HELP_TEXT_OPTION_TEMPLATE,

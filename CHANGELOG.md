@@ -21,6 +21,11 @@ For examples and guidelines see [https://keepachangelog.com/](https://keepachang
   (instead of searching from the cwd, which can cause confusion)
 - Update Sphinx to 6.2.1
 
+### Fixed
+
+- Fix a bug with inexisting cookie path for EMS
+- Fix default values for jinja2 template helper
+
 
 # [Released]
 
