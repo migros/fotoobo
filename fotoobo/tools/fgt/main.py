@@ -3,6 +3,7 @@ FortiGate backup utility
 """
 import json
 import logging
+from typing import Union
 
 from fotoobo.exceptions import APIError, GeneralError
 from fotoobo.helpers.config import config
@@ -13,7 +14,7 @@ log = logging.getLogger("fotoobo")
 
 
 def backup(
-    host: str | None = None,
+    host: Union[str, None] = None,
 ) -> Result:
     """
     Create a FortiGate configuration backup into a file and optionally upload it to an FTP server.
