@@ -3,8 +3,10 @@ The FotooboResult class
 """
 import json
 import smtplib
+from pathlib import Path
 from typing import Any, Dict, List, Union
 
+import jinja2
 from rich.console import Console
 from rich.table import Table
 from rich.theme import Theme
@@ -185,6 +187,26 @@ class Result:
             table.add_row(*values)
 
         self.console.print(table)
+
+    def save_with_template(self, host: str, template_file: Path, output_file: Path) -> None:
+        """
+        Saves a data structure to a file with a given Jinja2 template. The data structure and the
+        variables you can use in the template file depend on the utility the data comes from. See
+        the docs of the used utility to see what variables you're intended to use.
+
+        Args:
+            data (Dict[Any, Any]): The data used in the template
+
+            template_file (Path): Filename of the Jinja2 template file
+
+            output_file (Path): The file to write the output to
+        """
+        template_env = jinja2.Environment(
+            loader=jinja2.FileSystemLoader(template_file.parent), trim_blocks=True, autoescape=True
+        )
+        template = template_env.get_template(template_file.name)
+        output = template.render(self.results[host])
+        output_file.write_text(output, encoding="UTF-8")
 
     def send_mail(self, smtp_server: Any, levels: Union[List[str], str, None] = None) -> None:
         """
