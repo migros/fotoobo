@@ -24,7 +24,7 @@ class CheckpointConverter:
     """
 
     def __init__(self, assets: Any, cache_file: Optional[Path] = None) -> None:
-        self.assets = assets
+        self.assets = copy.deepcopy(assets)
         self.converted: List[Any] = []
         self.supported_types = [
             "hosts",

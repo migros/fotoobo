@@ -68,7 +68,9 @@ def connections(
     """
     Monitor the FortiClient EMS connections.
     """
-    data = monitor.connections(host)
+    result = monitor.connections(host)
+
+    data = result.get_result(host)
 
     if output_file:
         log.debug("output_file is: %s", output_file)
@@ -85,7 +87,7 @@ def connections(
         if raw:
             pprint(data, expand_all=True)
         else:
-            print_dicttable(data, title="FortiClient EMS connections")
+            result.print_result_as_table(host, title="FortiClient EMS connections")
 
 
 @app.command(
@@ -116,7 +118,9 @@ def endpoint_management_status(
     """
     Monitor the endpoint management status in FortiClient EMS.
     """
-    data = monitor.endpoint_management_status(host)
+    result = monitor.endpoint_management_status(host)
+
+    data = result.get_result(host)
 
     if output_file:
         log.debug("output_file is: %s", output_file)
@@ -133,7 +137,7 @@ def endpoint_management_status(
         if raw:
             pprint(data, expand_all=True)
         else:
-            print_dicttable(data, title="FortiClient EMS endpoints")
+            result.print_result_as_table(host, title="FortiClient EMS endpoints")
 
 
 @app.command(help="Monitor the endpoint OS versions in FortiClient EMS.\n\n" + HELP_TEXT_TEMPLATE)
@@ -162,7 +166,9 @@ def endpoint_os_versions(
     """
     Monitor the endpoint os versions in FortiClient EMS.
     """
-    data = monitor.endpoint_os_versions(host)
+    result = monitor.endpoint_os_versions(host)
+
+    data = result.get_result(host)
 
     if output_file:
         log.debug("output_file is: %s", output_file)
@@ -179,7 +185,7 @@ def endpoint_os_versions(
         if raw:
             pprint(data, expand_all=True)
         else:
-            print_dicttable(data, title="FortiClient EMS endpoints")
+            result.print_result_as_table(host, title="FortiClient EMS endpoints")
 
 
 @app.command(
@@ -211,7 +217,8 @@ def endpoint_outofsync(
     """
     Get amount of FortiClient EMS devices which are online but policy not in sync.
     """
-    data = monitor.endpoint_online_outofsync(host)
+    result = monitor.endpoint_online_outofsync(host)
+    data = result.get_result(host)
 
     if output_file:
         log.debug("output_file is: %s", output_file)
@@ -228,7 +235,7 @@ def endpoint_outofsync(
         if raw:
             pprint(data, expand_all=True)
         else:
-            print_dicttable(data, title="FortiClient EMS endpoints")
+            result.print_result_as_table(host, title="FortiClient EMS endpoints")
 
 
 @app.command(help="Monitor the FortiClient EMS license.\n\n" + HELP_TEXT_TEMPLATE)
@@ -257,7 +264,8 @@ def license(  # pylint: disable=redefined-builtin
     """
     Monitor the FortiClient EMS license.
     """
-    data = monitor.license(host)
+    result = monitor.license(host)
+    data = result.get_result(host)
 
     if output_file:
         log.debug("output_file is: %s", output_file)
@@ -274,7 +282,7 @@ def license(  # pylint: disable=redefined-builtin
         if raw:
             pprint(data, expand_all=True)
         else:
-            print_dicttable(data, title="FortiClient EMS license information")
+            result.print_result_as_table(host, title="FortiClient EMS license information")
 
 
 @app.command()
@@ -289,7 +297,9 @@ def system(
     """
     Monitor the FortiClient EMS system information.
     """
-    data = monitor.system(host)
+    result = monitor.system(host)
+
+    data = result.get_result(host)
 
     if raw:
         pprint(data, expand_all=True)

@@ -38,7 +38,10 @@ log = logging.getLogger("fotoobo")
 def version_callback(value: bool) -> None:
     """The version callback"""
     if value:
-        tools.get.version()
+        if not config.no_logo:
+            print_logo()
+
+        get.version(False)
         raise typer.Exit()
 
 

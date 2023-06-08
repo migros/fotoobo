@@ -1,5 +1,5 @@
 """
-Testing the cli fgt config check
+Test the cli fgt config
 """
 
 

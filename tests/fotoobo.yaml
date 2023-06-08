@@ -1,5 +1,5 @@
 ---
-inventory: tests/data/inventory.yaml
+inventory: data/inventory.yaml
 
 logging:
   enabled: true

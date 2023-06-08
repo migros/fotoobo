@@ -44,7 +44,8 @@ def test_connections(monkeypatch: MonkeyPatch) -> None:
             )
         ),
     )
-    data = monitor.connections("test_ems")
+    result = monitor.connections("test_ems")
+    data = result.get_result("test_ems")
     assert data["data"][0]["token"] == "offlineNominal"
     assert data["data"][0]["value"] == 1111
     assert data["fotoobo"]["offlineNominal"] == 1111
@@ -68,7 +69,8 @@ def test_endpoint_management_status(monkeypatch: MonkeyPatch) -> None:
             )
         ),
     )
-    data = monitor.endpoint_management_status("test_ems")
+    result = monitor.endpoint_management_status("test_ems")
+    data = result.get_result("test_ems")
     assert data["data"][0]["token"] == "managed"
     assert data["data"][0]["value"] == 1000
     assert data["data"][1]["token"] == "unmanaged"
@@ -93,7 +95,8 @@ def test_endpoint_online_outofsync(monkeypatch: MonkeyPatch) -> None:
             )
         ),
     )
-    data = monitor.endpoint_online_outofsync("test_ems")
+    result = monitor.endpoint_online_outofsync("test_ems")
+    data = result.get_result("test_ems")
     assert data["fotoobo"]["outofsync"] == 999
 
 
@@ -113,7 +116,8 @@ def test_endpoint_os_versions(monkeypatch: MonkeyPatch) -> None:
             )
         ),
     )
-    data = monitor.endpoint_os_versions("test_ems")
+    result = monitor.endpoint_os_versions("test_ems")
+    data = result.get_result("test_ems")
     assert data["fotoobo"]["fctversionwindows"] == 666
     assert data["fotoobo"]["fctversionmac"] == 666
     assert data["fotoobo"]["fctversionlinux"] == 666
@@ -158,7 +162,8 @@ def test_system(monkeypatch: MonkeyPatch) -> None:
             )
         ),
     )
-    data = monitor.system("test_ems")
+    result = monitor.system("test_ems")
+    data = result.get_result("test_ems")
     assert data["name"] == "dummy_hostname"
     assert data["license"]["seats"]["fabric_agent"] == 1001
 
@@ -202,7 +207,8 @@ def test_license(monkeypatch: MonkeyPatch) -> None:
             )
         ),
     )
-    data = monitor.license("test_ems")
+    result = monitor.license("test_ems")
+    data = result.get_result("test_ems")
     assert data["sn"] == "FCTEMS0000000000"
     assert data["fotoobo"]["fabric_agent_usage"] == 10
     assert data["fotoobo"]["sandbox_cloud_usage"] == 20
