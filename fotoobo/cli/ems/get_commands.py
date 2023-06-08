@@ -53,5 +53,7 @@ def workgroups(
     """
     Get the FortiClient EMS workgroups.
     """
-    data = ems.get.workgroups(host, custom)
+    result = ems.get.workgroups(host, custom)
+    data = result.get_result(host)
+
     print_datatable(data, title="FortiClient EMS Workgroups", auto_header=True)
