@@ -15,7 +15,7 @@ log = logging.getLogger("fotoobo")
 
 def backup(
     host: Union[str, None] = None,
-) -> Result:
+) -> Result[str]:
     """
     Create a FortiGate configuration backup into a file and optionally upload it to an FTP server.
 
@@ -28,7 +28,7 @@ def backup(
                             compresses the configuration file into a zip file.
         smtp_server (str):  The SMTP server from the inventory to send mail messages if errors occur
     """
-    result = Result()
+    result = Result[str]()
 
     inventory = Inventory(config.inventory_file)
     fortigates = inventory.get(host, "fortigate")

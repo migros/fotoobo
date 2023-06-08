@@ -3,6 +3,7 @@ The fotoobo get utility
 """
 import importlib.metadata
 import logging
+from typing import Dict, List
 
 from rich.text import Text
 from rich.tree import Tree
@@ -16,13 +17,13 @@ from fotoobo.inventory import Inventory
 log = logging.getLogger("fotoobo")
 
 
-def inventory() -> Result:
+def inventory() -> Result[List[Dict[str, str]]]:
     """
     Get the fotoobo inventory
     """
     log.debug("Printing fotoobo inventory information")
 
-    result = Result()
+    result = Result[List[Dict[str, str]]]()
     _inventory = Inventory(config.inventory_file)
 
     data_table = []
@@ -35,7 +36,7 @@ def inventory() -> Result:
     return result
 
 
-def version(verbose: bool = False) -> Result:
+def version(verbose: bool = False) -> Result[List[Dict[str, str]]]:
     """
     Get the fotoobo version
 
@@ -44,7 +45,7 @@ def version(verbose: bool = False) -> Result:
     """
     log.debug("printing fotoobo version information: %s", __version__)
 
-    result = Result()
+    result = Result[List[Dict[str, str]]]()
     versions = [{"module": "fotoobo", "version": __version__}]
 
     if verbose:
@@ -58,13 +59,13 @@ def version(verbose: bool = False) -> Result:
     return result
 
 
-def commands() -> Result:
+def commands() -> Result[Tree]:
     """Get the fotoobo cli commands
 
     Walk through the typer cli app and return its commands as a beautiful rich tree. The commands
     are sorted in alphabetical order
     """
-    result = Result()
+    result = Result[Tree]()
 
     result.push_result(
         "commands",

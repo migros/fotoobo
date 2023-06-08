@@ -33,5 +33,6 @@ def test_version(monkeypatch: MonkeyPatch) -> None:
         "fotoobo.fortinet.forticlientems.FortiClientEMS.get_version",
         MagicMock(return_value="1.1.1"),
     )
-    data = version("test_ems")
+    result = version("test_ems")
+    data = result.get_result("test_ems")
     assert data == {"host": "test_ems", "version": "1.1.1"}

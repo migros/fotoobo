@@ -3,19 +3,20 @@ The FotooboResult class
 """
 import json
 import smtplib
-from typing import Any, Dict, List, Union
+from typing import Any, Dict, Generic, List, TypeVar, Union
 
 from rich.console import Console
 from rich.table import Table
 from rich.theme import Theme
 
-from fotoobo.exceptions import GeneralWarning
 from fotoobo.helpers import cli_path
 
 ftb_theme = Theme({"var": "white", "ftb": "#FF33BB bold", "chk": "green"})
 
+T = TypeVar("T")
 
-class Result:
+
+class Result(Generic[T]):
     """
     This class represents a Result of an operation in fotoobo.
 
@@ -40,12 +41,12 @@ class Result:
         self.messages: Dict[str, List[Dict[str, str]]] = {}
 
         # The results for each device
-        self.results: Dict[str, Any] = {}
+        self.results: Dict[str, T] = {}
 
         # Console object for rich output
         self.console = Console(theme=ftb_theme)
 
-    def push_result(self, host: str, data: Any, successful: bool = True) -> None:
+    def push_result(self, host: str, data: T, successful: bool = True) -> None:
         """
         Add a result for the host
 
@@ -85,7 +86,7 @@ class Result:
 
         self.messages[host].append({"message": message, "level": level})
 
-    def get_result(self, host: str) -> Any:
+    def get_result(self, host: str) -> T:
         """
         Return the result pushed by this
         Args:
@@ -98,7 +99,7 @@ class Result:
 
         return self.results[host]
 
-    def all_results(self) -> Dict[str, Any]:
+    def all_results(self) -> Dict[str, T]:
         """
         Return all results
 
@@ -135,21 +136,18 @@ class Result:
             headers = []
 
         if only_host:
-            data = self.results[only_host]
+            data: Any = self.results[only_host]
         else:
-            data = self.results
+            data = [self.results]
 
-        if isinstance(data, dict):
-            data = [data]
-
-        if isinstance(data, list):
-            self.print_table_raw(data, headers, auto_header, title)
-
-        else:
-            raise GeneralWarning("data is not a list or dict")
+        self.print_table_raw(data, headers, auto_header, title)
 
     def print_table_raw(
-        self, data: List[Dict[str, Any]], headers: List[str], auto_header: bool, title: str
+        self,
+        data: Any,
+        headers: List[str],
+        auto_header: bool,
+        title: str,
     ) -> None:
         """
         Print the data given as a rich table to the console
@@ -172,15 +170,20 @@ class Result:
             for heading in headers:
                 table.add_column(heading)
 
+        if isinstance(data, dict):
+            data = list(data)
+
         for line in data:
             _values = line.values()
 
             # If an item in line is a dict or list we should pretty print it
-            values = [
-                json.dumps(v, indent=4) if isinstance(v, (dict, list)) else v for v in _values
-            ]
-            # If an item in line is a not render-able convert to string
-            values = [str(v) if isinstance(v, (bool, int, float)) else v for v in values]
+            values: List[str] = []
+
+            for entry in _values:
+                if isinstance(entry, (dict, list)):
+                    values.append(json.dumps(entry, indent=4))
+                else:
+                    values.append(str(entry))
 
             table.add_row(*values)
 
