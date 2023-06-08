@@ -27,7 +27,7 @@ FortiGate
 
 .. code-block:: python
 
-    from fotoobo.fortinet.fortigate import FortiGate
+    from fotoobo import FortiGate
     fgt = FortiGate("<HOSTNAME>", "<TOKEN>", https_port=8443, ssl_verify=False)
     print(fgt.get_version())
 
@@ -36,7 +36,7 @@ FortiManager
 
 .. code-block:: python
 
-    from fotoobo.fortinet.fortimanager import FortiManager
+    from fotoobo import FortiManager
     fmg = FortiManager("<HOSTNAME>", "<USERNAME>", "<PASSWORD>", ssl_verify=False)
     fmg.login()
     print(fmg.get_version())
@@ -47,7 +47,7 @@ FortiAnalyzer
 
 .. code-block:: python
 
-    from fotoobo.fortinet.fortianalyzer import FortiAnalyzer
+    from fotoobo import FortiAnalyzer
     faz = FortiAnalyzer("<HOSTNAME>", "<USERNAME>", "<PASSWORD>", ssl_verify=False)
     faz.login()
     print(faz.get_version())
@@ -58,7 +58,7 @@ FortiClient EMS
 
 .. code-block:: python
 
-    from fotoobo.fortinet.forticlientems import FortiClientEMS
+    from fotoobo import FortiClientEMS
     ems = FortiClientEMS("<HOSTNAME>", "<USERNAME>", "<PASSWORD>", ssl_verify=False)
     ems.login()
     print(ems.get_version())
