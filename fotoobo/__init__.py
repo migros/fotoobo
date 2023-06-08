@@ -5,4 +5,7 @@ This is fotoobo, the mighty Fortinet toolbox for managing your Fortinet environm
 to be extendable to your needs. It's most likely the swiss army knife for Fortinet infrastructure.
 """
 
+from .fortinet import FortiAnalyzer, FortiClientEMS, FortiGate, FortiManager
+
+__all__ = ["FortiAnalyzer", "FortiClientEMS", "FortiGate", "FortiManager"]
 __version__: str = "0.9.0"

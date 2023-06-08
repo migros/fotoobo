@@ -13,6 +13,8 @@ For examples and guidelines see [https://keepachangelog.com/](https://keepachang
 
 ### Changed
 
+- Optimize the way to import fotoobo in Python modules. For example you may now do
+  `from fotoobo import FortiGate` instead of `from fotoobo.fortinet.fortigate import FortiGate`.
 - Refactored whole code to use `pathlib.Path` instead of `os.path`
 - Introduced a new `Result` class to abstract the output of the tools from the CLI print logic
   and started to migrate to this class for `ems monitor`, `fgt backup` and `convert` commands to 
