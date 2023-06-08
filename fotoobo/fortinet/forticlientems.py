@@ -2,13 +2,14 @@
 FortiClient EMS Class
 """
 import logging
-from pathlib import Path
 import pickle
+from pathlib import Path
 from typing import Any, Dict, Optional
 
 import requests
 
 from fotoobo.exceptions import APIError, GeneralWarning
+
 from .fortinet import Fortinet
 
 log = logging.getLogger("fotoobo")
@@ -107,7 +108,7 @@ class FortiClientEMS(Fortinet):
             int: status code from the FortiClient EMS logon
         """
         status = 401
-        cookie = Path(self.cookie_path) / f"{self.hostname}.cookie"
+        cookie = Path(self.cookie_path).expanduser() / f"{self.hostname}.cookie"
         if self.cookie_path:
             log.debug("searching cookie in %s", cookie)
             if cookie.is_file():
