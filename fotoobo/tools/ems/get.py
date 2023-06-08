@@ -12,7 +12,7 @@ from fotoobo.inventory import Inventory
 log = logging.getLogger("fotoobo")
 
 
-def version(host: str) -> Result[Dict[str, str]]:
+def version(host: str) -> Result[str]:
     """
     ems get version
 
@@ -22,7 +22,7 @@ def version(host: str) -> Result[Dict[str, str]]:
     Returns:
         Result[Dict[str, str]]: version data in a dict with keys: host, version
     """
-    result = Result[Dict[str, str]]()
+    result = Result[str]()
 
     inventory = Inventory(config.inventory_file)
     ems: FortiClientEMS = inventory.get(host, "forticlientems")[host]
@@ -30,7 +30,7 @@ def version(host: str) -> Result[Dict[str, str]]:
     ems.login()
     ems_version = ems.get_version()
 
-    result.push_result(host, {"host": host, "version": ems_version})
+    result.push_result(host, f"v{ems_version}")
 
     return result
 

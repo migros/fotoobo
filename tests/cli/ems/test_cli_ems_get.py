@@ -42,6 +42,33 @@ def test_cli_app_ems_get_workgroups_help() -> None:
     assert not commands
 
 
+def test_cli_app_ems_get_workgroups(monkeypatch: MonkeyPatch) -> None:
+    """Test cli help for ems get workgroups"""
+    monkeypatch.setattr(
+        "fotoobo.fortinet.forticlientems.FortiClientEMS.login", MagicMock(return_value=200)
+    )
+    monkeypatch.setattr(
+        "fotoobo.fortinet.fortinet.requests.Session.get",
+        MagicMock(
+            return_value=ResponseMock(
+                json={
+                    "data": [
+                        {"name": "Test-grp", "id": 12345, "total_devices": 123},
+                        {"name": "Test-grp2", "id": 54321, "total_devices": 321},
+                    ]
+                },
+                status=200,
+            )
+        ),
+    )
+    result = runner.invoke(
+        app, ["-c", "tests/fotoobo.yaml", "ems", "get", "workgroups", "test_ems"]
+    )
+    assert result.exit_code == 0
+    assert "Test-grp  │ 12345 │ 123" in result.stdout
+    assert "Test-grp2 │ 54321 │ 321" in result.stdout
+
+
 def test_cli_app_ems_get_version(monkeypatch: MonkeyPatch) -> None:
     """Test cli help for ems get version"""
     monkeypatch.setattr(
@@ -55,7 +82,7 @@ def test_cli_app_ems_get_version(monkeypatch: MonkeyPatch) -> None:
     )
     result = runner.invoke(app, ["-c", "tests/fotoobo.yaml", "ems", "get", "version", "test_ems"])
     assert result.exit_code == 0
-    assert result.stdout.count("1.2.3") == 1
+    assert "test_ems        │ v1.2.3" in result.stdout
 
 
 def test_cli_app_ems_get_version_dummy() -> None:
