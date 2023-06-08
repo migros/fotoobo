@@ -16,6 +16,11 @@ For examples and guidelines see [https://keepachangelog.com/](https://keepachang
 - Refactored whole code to use `pathlib.Path` instead of `os.path`
 - Update Sphinx to 6.2.1
 
+### Fixed
+
+- Fix a bug with inexisting cookie path for EMS
+- Fix default values for jinja2 template helper
+
 
 # [Released]
 

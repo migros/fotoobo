@@ -139,8 +139,13 @@ class FortiClientEMS(Fortinet):
             response = self.api("post", "/auth/signin", payload=payload)
             if response.status_code == 200 and self.cookie_path:
                 log.debug("saving cookie for %s", self.hostname)
-                with cookie.open("wb") as cookie_file:
-                    pickle.dump(self.session.cookies, cookie_file)
+
+                try:
+                    with cookie.open("wb") as cookie_file:
+                        pickle.dump(self.session.cookies, cookie_file)
+
+                except FileNotFoundError:
+                    log.warning("unable to save cookie file: %s", str(cookie.resolve()))
 
             status = response.status_code
 
