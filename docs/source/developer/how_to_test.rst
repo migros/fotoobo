@@ -12,7 +12,7 @@ Static Data
 
 If you need static data for your tests use the directory *tests/data*. There you can put your data.
 If you change existing data make sure you do not break other tests. Make sure to not add any kind of
-productive and sensitive data into this directory as is pushed to the repository.
+productive and sensitive data into this directory as it is pushed to the repository.
 
 Temporary Data
 --------------
