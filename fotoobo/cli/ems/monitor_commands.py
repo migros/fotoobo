@@ -10,7 +10,7 @@ import typer
 from rich.pretty import pprint
 
 from fotoobo.helpers import cli_path
-from fotoobo.helpers.files import save_json_file, save_with_template
+from fotoobo.helpers.files import save_json_file
 from fotoobo.helpers.output import print_dicttable
 from fotoobo.tools.ems import monitor
 
@@ -76,7 +76,8 @@ def connections(
         log.debug("output_file is: %s", output_file)
 
         if template_file:
-            save_with_template(data, template_file, output_file)
+            log.debug("template_file is: %s", template_file)
+            result.save_with_template(host, template_file, output_file)
 
         else:
             # write to file without a template (raw output)
@@ -126,7 +127,7 @@ def endpoint_management_status(
         log.debug("output_file is: %s", output_file)
 
         if template_file:
-            save_with_template(data, template_file, output_file)
+            result.save_with_template(host, template_file, output_file)
 
         else:
             # write to file without a template (raw output)
@@ -174,7 +175,7 @@ def endpoint_os_versions(
         log.debug("output_file is: %s", output_file)
 
         if template_file:
-            save_with_template(data, template_file, output_file)
+            result.save_with_template(host, template_file, output_file)
 
         else:
             # write to file without a template (raw output)
@@ -224,7 +225,7 @@ def endpoint_outofsync(
         log.debug("output_file is: %s", output_file)
 
         if template_file:
-            save_with_template(data, template_file, output_file)
+            result.save_with_template(host, template_file, output_file)
 
         else:
             # write to file without a template (raw output)
@@ -271,7 +272,7 @@ def license(  # pylint: disable=redefined-builtin
         log.debug("output_file is: %s", output_file)
 
         if template_file:
-            save_with_template(data, template_file, output_file)
+            result.save_with_template(host, template_file, output_file)
 
         else:
             # write to file without a template (raw output)
