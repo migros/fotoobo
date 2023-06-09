@@ -100,16 +100,16 @@ def endpoint_management_status(
         help=HELP_TEXT_ARGUMENT_EMS,
         metavar="[host]",
     ),
-    output_file: Path = typer.Option(
-        "",
+    output_file: Union[None, Path] = typer.Option(
+        None,
         "--output",
         "-o",
         help=HELP_TEXT_OPTION_OUTPUT_FILE,
         metavar="[output]",
     ),
     raw: bool = typer.Option(False, "-r", "--raw", help="Output raw data."),
-    template_file: Path = typer.Option(
-        "",
+    template_file: Union[None, Path] = typer.Option(
+        None,
         "--template",
         "-t",
         help=HELP_TEXT_OPTION_TEMPLATE,
@@ -148,16 +148,16 @@ def endpoint_os_versions(
         help=HELP_TEXT_ARGUMENT_EMS,
         metavar="[host]",
     ),
-    output_file: Path = typer.Option(
-        "",
+    output_file: Union[None, Path] = typer.Option(
+        None,
         "--output",
         "-o",
         help=HELP_TEXT_OPTION_OUTPUT_FILE,
         metavar="[output]",
     ),
     raw: bool = typer.Option(False, "-r", "--raw", help="Output raw data."),
-    template_file: Path = typer.Option(
-        "",
+    template_file: Union[None, Path] = typer.Option(
+        None,
         "--template",
         "-t",
         help=HELP_TEXT_OPTION_TEMPLATE,
@@ -199,16 +199,16 @@ def endpoint_outofsync(
         help=HELP_TEXT_ARGUMENT_EMS,
         metavar="[host]",
     ),
-    output_file: Path = typer.Option(
-        "",
+    output_file: Union[None, Path] = typer.Option(
+        None,
         "--output",
         "-o",
         help=HELP_TEXT_OPTION_OUTPUT_FILE,
         metavar="[output]",
     ),
     raw: bool = typer.Option(False, "-r", "--raw", help="Output raw data."),
-    template_file: Path = typer.Option(
-        "",
+    template_file: Union[None, Path] = typer.Option(
+        None,
         "--template",
         "-t",
         help=HELP_TEXT_OPTION_TEMPLATE,
@@ -246,16 +246,16 @@ def license(  # pylint: disable=redefined-builtin
         help=HELP_TEXT_ARGUMENT_EMS,
         metavar="[host]",
     ),
-    output_file: Path = typer.Option(
-        "",
+    output_file: Union[None, Path] = typer.Option(
+        None,
         "--output",
         "-o",
         help=HELP_TEXT_OPTION_OUTPUT_FILE,
         metavar="[output]",
     ),
     raw: bool = typer.Option(False, "-r", "--raw", help="Output raw data."),
-    template_file: Path = typer.Option(
-        "",
+    template_file: Union[None, Path] = typer.Option(
+        None,
         "--template",
         "-t",
         help=HELP_TEXT_OPTION_TEMPLATE,
