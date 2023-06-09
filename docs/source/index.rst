@@ -24,6 +24,7 @@ to `contribute <https://github.com/migros/fotoobo/blob/main/CONTRIBUTING.md>`_ t
   usage/configuration
   usage/inventory
   usage/convert
+  usage/templating
   usage/import_fotoobo
 
 .. toctree::
