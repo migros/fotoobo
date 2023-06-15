@@ -6,6 +6,10 @@ For examples and guidelines see [https://keepachangelog.com/](https://keepachang
 
 # [Unreleased]
 
+### Changed
+
+- Migrate `fgt config`, `fgt get` and `fmg get` commands to use the Result class.
+
 
 # [Released]
 
