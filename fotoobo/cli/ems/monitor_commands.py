@@ -270,8 +270,13 @@ def endpoint_outofsync(
         # if no output file is given just pretty print the output to the console
         if raw:
             pprint(data, expand_all=True)
+
         else:
-            result.print_result_as_table(host, title="FortiClient EMS endpoints")
+            result.print_table_raw(
+                [{"name": "out of sync", "count": result.get_result(host)["fotoobo"]["outofsync"]}],
+                [],
+                title="FortiClients not in synch",
+            )
 
 
 @app.command(help="Monitor the FortiClient EMS license.\n\n" + HELP_TEXT_TEMPLATE)
@@ -318,7 +323,19 @@ def license(  # pylint: disable=redefined-builtin
         if raw:
             pprint(data, expand_all=True)
         else:
-            result.print_result_as_table(host, title="FortiClient EMS license information")
+            licenses = []
+            for key, value in result.get_result(host)["data"].items():
+                licenses.append({"key": key, "value": value})
+            result.print_table_raw(
+                licenses, ["Key", "Value"], title="FortiClient EMS license information"
+            )
+
+            licenses = []
+            for key, value in result.get_result(host)["fotoobo"].items():
+                licenses.append({"key": key, "value": value})
+            result.print_table_raw(
+                licenses, ["Key", "Value"], title="FortiClient EMS license summary"
+            )
 
 
 @app.command()
@@ -334,12 +351,20 @@ def system(
     Monitor the FortiClient EMS system information.
     """
     result = monitor.system(host)
-
     data = result.get_result(host)
 
     if raw:
         pprint(data, expand_all=True)
+
     else:
-        license_data = data.pop("license", {})  # pop "license" key to print that in another table
+        _ = data.pop("license", {})  # pop "license" key as ist is not used (it's another command)
         print_dicttable(data, title="FortiClient EMS system information")
-        print_dicttable(license_data, title="FortiClient EMS system.license information")
+
+        result.print_table_raw(
+            [
+                {"key": "hostname", "hostname": data["name"]},
+                {"key": "system_time", "system_time": data["system_time"]},
+            ],
+            ["Key", "Value"],
+            title="FortiClient EMS status",
+        )
