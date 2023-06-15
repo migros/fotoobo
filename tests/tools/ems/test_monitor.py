@@ -209,7 +209,7 @@ def test_license(monkeypatch: MonkeyPatch) -> None:
     )
     result = monitor.license("test_ems")
     data = result.get_result("test_ems")
-    assert data["sn"] == "FCTEMS0000000000"
+    assert data["data"]["sn"] == "FCTEMS0000000000"
     assert data["fotoobo"]["fabric_agent_usage"] == 10
     assert data["fotoobo"]["sandbox_cloud_usage"] == 20
     assert data["fotoobo"]["license_expiry_days"] > 0

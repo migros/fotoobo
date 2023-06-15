@@ -7,8 +7,8 @@ from datetime import datetime
 from typing import Any, Dict
 
 from fotoobo.fortinet.forticlientems import FortiClientEMS
-from fotoobo.helpers.result import Result
 from fotoobo.helpers.config import config
+from fotoobo.helpers.result import Result
 from fotoobo.inventory import Inventory
 
 log = logging.getLogger("fotoobo")
@@ -218,10 +218,10 @@ def license(host: str) -> Result:  # pylint: disable=redefined-builtin
     ems.login()
 
     response = ems.api("get", "/license/get")
-    data = dict(response.json()["data"])
+    data = {}
+    data["data"] = dict(response.json()["data"])
 
-    for lic in data["licenses"]:
-
+    for lic in data["data"]["licenses"]:
         if lic["type"] == "fabric_agent":
             log.debug("license expiry: %s", lic["expiry_date"])
             license_expiry = datetime.strptime(lic["expiry_date"], "%Y-%m-%dT%H:%M:%S")
@@ -231,11 +231,11 @@ def license(host: str) -> Result:  # pylint: disable=redefined-builtin
     data["fotoobo"] = {}
     data["fotoobo"]["license_expiry_days"] = license_expiry_days
 
-    for key in data["seats"]:
-        if data["seats"][key] > 0:
-            log.debug(f"{key} license count: %s", data["seats"][key])
-            log.debug(f"{key} license used: %s", data["used"][key])
-            license_usage = int(100 / data["seats"][key] * data["used"][key])
+    for key in data["data"]["seats"]:
+        if data["data"]["seats"][key] > 0:
+            log.debug(f"{key} license count: %s", data["data"]["seats"][key])
+            log.debug(f"{key} license used: %s", data["data"]["used"][key])
+            license_usage = int(100 / data["data"]["seats"][key] * data["data"]["used"][key])
             log.debug(f"{key} license usage : %s%%", license_usage)
             data["fotoobo"][key + "_usage"] = license_usage
 
