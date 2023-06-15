@@ -231,11 +231,19 @@ class Result(Generic[T]):
         output = template.render(self.results[host])
         output_file.write_text(output, encoding="UTF-8")
 
-    def send_mail(self, smtp_server: Any, levels: Union[List[str], str, None] = None) -> None:
+    def send_mail(
+        self,
+        smtp_server: Any,
+        levels: Union[List[str], str, None] = None,
+        count: bool = False,
+        command: bool = False,
+    ) -> None:
         """
         Send an e-mail with the messages collected up until the call
 
         Args:
+            command:        Whether to write the issued command into the message (default: false)
+            count:          Whether to write the message count into the message (default: false)
             smtp_server:    The smtp server from inventory to use
             levels:         The levels to output:
                               - None means all messages will be output (default)
@@ -245,30 +253,30 @@ class Result(Generic[T]):
         """
         out_messages: List[str] = []
 
-        for _, messages in self.messages.items():
+        for host, messages in self.messages.items():
             for message in messages:
                 if not levels or message["level"] in levels:
-                    out_messages.append(message["message"])
+                    out_messages.append(f"{host}: {message['message']}")
 
         if not out_messages:
             return
-
-        # Prepare server connection
-        smtp_server.port = getattr(smtp_server, "port", 25)
-
-        adds = "s" if len(out_messages) > 1 else ""
-        out_messages.append(str(len(out_messages)) + " message" + adds + " in list")
 
         body = "To:" + smtp_server.recipient + "\n"
         body += "From:" + smtp_server.sender + "\n"
         body += "Subject:" + smtp_server.subject + "\n\n"
 
-        if cli_path:
-            body += "command: " + " ".join(cli_path) + "\n\n"
-
         for message_line in out_messages:
             body += message_line + "\n"
 
+        if command and cli_path:
+            body += "\ncommand: " + " ".join(cli_path) + "\n"
+
+        if count:
+            adds = "s" if len(out_messages) > 1 else ""
+            body += "\n" + str(len(out_messages)) + " message" + adds + " in list"
+
+        # Prepare server connection and send mail
+        smtp_server.port = getattr(smtp_server, "port", 25)
         with smtplib.SMTP(smtp_server.hostname, smtp_server.port) as mail_server:
             # server.set_debuglevel(1)
             mail_server.sendmail(smtp_server.sender, smtp_server.recipient, body)
