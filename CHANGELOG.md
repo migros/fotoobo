@@ -3,7 +3,14 @@
 All notable changes to this project will be documented in this file.
 For examples and guidelines see [https://keepachangelog.com/](https://keepachangelog.com/)
 
+
 # [Unreleased]
+
+
+# [Released]
+
+
+## [0.10.0] - 2023-06-15
 
 ### Added
 
@@ -31,8 +38,6 @@ For examples and guidelines see [https://keepachangelog.com/](https://keepachang
 - Fix a bug with non existing cookie path for EMS
 - Fix default values for jinja2 template helper
 
-
-# [Released]
 
 ## [0.9.0] - 2023-04-23
 
