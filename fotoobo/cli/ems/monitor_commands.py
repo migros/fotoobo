@@ -87,8 +87,20 @@ def connections(
         # if no output file is given just pretty print the output to the console
         if raw:
             pprint(data, expand_all=True)
+
         else:
-            result.print_result_as_table(host, title="FortiClient EMS connections")
+            conns = []
+            for connection in result.get_result(host)["data"]:
+                conns.append(
+                    {
+                        "token": connection["token"],
+                        "value": connection["value"],
+                        "name": connection["name"],
+                    }
+                )
+            result.print_table_raw(
+                conns, ["Token", "Count", "Description"], title="FortiClient Connection status"
+            )
 
 
 @app.command(
