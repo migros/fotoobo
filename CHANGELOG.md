@@ -14,6 +14,7 @@ For examples and guidelines see [https://keepachangelog.com/](https://keepachang
 
 ### Changed
 
+- Beautify `ems monitor` commands output
 - Optimize the way to import fotoobo in Python modules. For example you may now do
   `from fotoobo import FortiGate` instead of `from fotoobo.fortinet.fortigate import FortiGate`.
 - Refactored whole code to use `pathlib.Path` instead of `os.path`
@@ -26,6 +27,7 @@ For examples and guidelines see [https://keepachangelog.com/](https://keepachang
 
 ### Fixed
 
+- Fix pyasn1 to 0.4.8 due to pysnmp dependency
 - Fix a bug with non existing cookie path for EMS
 - Fix default values for jinja2 template helper
 

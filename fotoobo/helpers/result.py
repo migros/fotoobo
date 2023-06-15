@@ -11,6 +11,7 @@ from rich.console import Console
 from rich.table import Table
 from rich.theme import Theme
 
+from fotoobo.exceptions import GeneralWarning
 from fotoobo.helpers import cli_path
 
 ftb_theme = Theme({"var": "white", "ftb": "#FF33BB bold", "chk": "green"})
@@ -23,7 +24,7 @@ class Result(Generic[T]):
     This class represents a Result of an operation in fotoobo.
 
     This dataset is meant to be the generic result structure for any tool inside fotoobo.
-    It can then be rendered to some commandline output (CLI) or JSON response (REST API).
+    It can then be rendered to some command line output (CLI) or JSON response (REST API).
     """
 
     def __init__(self) -> None:
@@ -164,12 +165,15 @@ class Result(Generic[T]):
 
         self.print_table_raw(data, headers, auto_header, title)
 
+        else:
+            raise GeneralWarning("data is not a list or dict")
+
     def print_table_raw(
         self,
-        data: Any,
+        data: List[Dict[str, Any]],
         headers: List[str],
-        auto_header: bool,
-        title: str,
+        auto_header: bool = False,
+        title: str = "",
     ) -> None:
         """
         Print the data given as a rich table to the console
