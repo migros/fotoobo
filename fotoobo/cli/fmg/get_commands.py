@@ -7,7 +7,7 @@ from pathlib import Path
 import typer
 
 from fotoobo.helpers import cli_path
-from fotoobo.helpers.output import print_datatable, write_policy_to_html
+from fotoobo.helpers.output import write_policy_to_html
 from fotoobo.tools import fmg
 
 app = typer.Typer(no_args_is_help=True, rich_markup_mode="rich")
@@ -39,8 +39,10 @@ def adoms(
     """
     Get the FortiManager ADOM list.
     """
-    data = fmg.get.adoms(host)
-    print_datatable(data, title="FortiManager ADOMs", headers=["Name", "Version"])
+    result = fmg.get.adoms(host)
+    result.print_result_as_table(
+        host_is_first_column=True, title="FortiManager ADOMs", headers=["Name", "Version"]
+    )
 
 
 @app.command()
@@ -57,9 +59,8 @@ def devices(
     Be aware that if a device is a cluster only the cluster
     device is returned, not all its physical nodes.
     """
-    data = fmg.get.devices(host)
-    print_datatable(
-        data,
+    result = fmg.get.devices(host)
+    result.print_result_as_table(
         title="Fortinet devices",
         headers=["Device Name", "Version", "HA", "Platform", "Description"],
     )
@@ -88,8 +89,8 @@ def policy(
     """
     Get a FortiManager policy.
     """
-    data = fmg.get.policy(host, adom, policy_name)
-    write_policy_to_html(data, filename)
+    result = fmg.get.policy(host, adom, policy_name)
+    write_policy_to_html(result.get_result(host), filename)
 
 
 @app.command()
@@ -97,5 +98,5 @@ def version(host: str = typer.Argument("fmg", help=HELP_TEXT_HOST, metavar="[hos
     """
     Get the FortiManager version.
     """
-    data = fmg.get.version(host)
-    print_datatable(data, title="FortiManager Version", headers=["FortiManager", "Version"])
+    result = fmg.get.version(host)
+    result.print_result_as_table(title="FortiManager Version", headers=["FortiManager", "Version"])

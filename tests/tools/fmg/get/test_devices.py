@@ -73,15 +73,18 @@ def test_devices(monkeypatch: MonkeyPatch) -> None:
             ),
         ),
     )
-    data = devices("test_fmg")
-    assert len(data) == 2
-    assert data[0]["name"] == "dummy_1"
-    assert data[0]["version"] == "1.2.3"
-    assert data[0]["ha_mode"] == "0"
-    assert data[0]["platform"] == "dummy_platform_1"
-    assert data[0]["desc"] == "dummy_description_1"
-    assert data[1]["name"] == "dummy_2"
-    assert data[1]["version"] == "4.5.6"
-    assert data[1]["ha_mode"] == "1"
-    assert data[1]["platform"] == "dummy_platform_2"
-    assert data[1]["desc"] == "dummy_description_2"
+    result = devices("test_fmg")
+
+    assert len(result.results) == 2
+
+    host_1 = result.get_result("dummy_1")
+    assert host_1["version"] == "1.2.3"
+    assert host_1["ha_mode"] == "0"
+    assert host_1["platform"] == "dummy_platform_1"
+    assert host_1["desc"] == "dummy_description_1"
+
+    host_2 = result.get_result("dummy_2")
+    assert host_2["version"] == "4.5.6"
+    assert host_2["ha_mode"] == "1"
+    assert host_2["platform"] == "dummy_platform_2"
+    assert host_2["desc"] == "dummy_description_2"
