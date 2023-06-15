@@ -19,7 +19,6 @@ from fotoobo.helpers.files import (
     load_json_file,
     load_yaml_file,
     save_json_file,
-    save_with_template,
     save_yaml_file,
 )
 from fotoobo.inventory.generic import GenericDevice
@@ -323,16 +322,3 @@ def test_create_dir_with_os_error(monkeypatch: MonkeyPatch) -> None:
     monkeypatch.setattr("fotoobo.helpers.files.Path.mkdir", MagicMock(side_effect=OSError()))
     with pytest.raises(GeneralError, match=r"Unable to create directory dummy"):
         create_dir(Path("dummy"))
-
-
-# Start testing jinja2 templates
-
-
-def test_save_with_template(temp_dir: Path) -> None:
-    """Test save_with_template"""
-    output_file = temp_dir / "output.txt"
-    save_with_template({"fotoobo": {"dummy_var": 42}}, Path("tests/data/dummy.j2"), output_file)
-    assert output_file.is_file()
-    content = output_file.read_text(encoding="UTF-8")
-    assert "dummy" in content
-    assert "42" in content

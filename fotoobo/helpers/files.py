@@ -9,7 +9,6 @@ from pathlib import Path
 from typing import Any, Dict, List, Union
 from zipfile import ZIP_DEFLATED, ZipFile
 
-import jinja2
 import yaml
 
 from fotoobo.exceptions import GeneralError
@@ -166,28 +165,6 @@ def save_json_file(json_file: Path, data: Union[List[Any], Dict[Any, Any]]) -> b
         status = False
 
     return status
-
-
-def save_with_template(data: Dict[Any, Any], template_file: Path, output_file: Path) -> None:
-    """
-    Saves a data structure to a file with a given Jinja2 template. The data structure and the
-    variables you can use in the template file depend on the utility the data comes from. See the
-    docs of the used utility to see what variables you're intended to use.
-
-    Args:
-        data (Dict[Any, Any]): The data used in the template
-
-        template_file (Path): Filename of the Jinja2 template file
-
-        output_file (Path): The file to write the output to
-    """
-    log.debug("template_file is: %s", template_file)
-    template_env = jinja2.Environment(
-        loader=jinja2.FileSystemLoader(template_file.parent), trim_blocks=True, autoescape=True
-    )
-    template = template_env.get_template(template_file.name)
-    output = template.render(data)
-    output_file.write_text(output, encoding="UTF-8")
 
 
 def save_yaml_file(yaml_file: Path, data: Union[List[Any], Dict[str, Any]]) -> bool:

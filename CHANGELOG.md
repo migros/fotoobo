@@ -7,6 +7,7 @@ For examples and guidelines see [https://keepachangelog.com/](https://keepachang
 
 ### Added
 
+- Add documentation about templating with jinja2
 - Add documentation about how to import fotoobo into Python modules
 - Add \_\_init\_\_ to the autodoc documentation
 - Add raw option `-r` or `--raw` to cli commands for ems monitor
@@ -25,7 +26,7 @@ For examples and guidelines see [https://keepachangelog.com/](https://keepachang
 
 ### Fixed
 
-- Fix a bug with inexisting cookie path for EMS
+- Fix a bug with non existing cookie path for EMS
 - Fix default values for jinja2 template helper
 
 
