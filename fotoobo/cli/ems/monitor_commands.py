@@ -99,7 +99,7 @@ def connections(
                     }
                 )
             result.print_table_raw(
-                conns, ["Token", "Count", "Description"], title="FortiClient Connection status"
+                conns, ["Token", "Count", "Description"], title="FortiClient connection status"
             )
 
 
@@ -149,8 +149,19 @@ def endpoint_management_status(
         # if no output file is given just pretty print the output to the console
         if raw:
             pprint(data, expand_all=True)
+
         else:
-            result.print_result_as_table(host, title="FortiClient EMS endpoints")
+            endpoints = []
+            for endpoint in result.get_result(host)["data"]:
+                endpoints.append(
+                    {
+                        "name": endpoint["name"],
+                        "value": endpoint["value"],
+                    }
+                )
+            result.print_table_raw(
+                endpoints, ["Status", "Count"], title="FortiClient management status"
+            )
 
 
 @app.command(help="Monitor the endpoint OS versions in FortiClient EMS.\n\n" + HELP_TEXT_TEMPLATE)
