@@ -35,4 +35,4 @@ def test_version(monkeypatch: MonkeyPatch) -> None:
     )
     result = version("test_ems")
     data = result.get_result("test_ems")
-    assert data == {"host": "test_ems", "version": "1.1.1"}
+    assert data == "v1.1.1"

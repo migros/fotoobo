@@ -88,7 +88,12 @@ def connections(
         if raw:
             pprint(data, expand_all=True)
         else:
-            result.print_result_as_table(host, title="FortiClient EMS connections")
+            result.print_table_raw(
+                data["data"],
+                headers=["Token", "Value", "Name"],
+                auto_header=False,
+                title="FortiClient EMS connections",
+            )
 
 
 @app.command(

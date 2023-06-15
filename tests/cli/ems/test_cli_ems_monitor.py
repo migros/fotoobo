@@ -1,11 +1,13 @@
 """
 Testing the ems monitor cli app
 """
+from unittest.mock import MagicMock
 
 from typer.testing import CliRunner
+from _pytest.monkeypatch import MonkeyPatch
 
 from fotoobo.cli.main import app
-from tests.helper import parse_help_output
+from tests.helper import ResponseMock, parse_help_output
 
 runner = CliRunner()
 
@@ -37,6 +39,32 @@ def test_cli_app_ems_monitor_connections_help() -> None:
     assert not commands
 
 
+def test_cli_app_ems_monitor_connections(monkeypatch: MonkeyPatch) -> None:
+    """Test cli for ems monitor connections"""
+    monkeypatch.setattr(
+        "fotoobo.fortinet.forticlientems.FortiClientEMS.api",
+        MagicMock(
+            return_value=ResponseMock(
+                json={
+                    "result": {"retval": 1, "message": None},
+                    "data": [
+                        {"token": "managed", "value": 1000, "name": "Managed"},
+                        {"token": "unmanaged", "value": 99, "name": "Unmanaged"},
+                    ],
+                }
+            )
+        ),
+    )
+    result = runner.invoke(
+        app, ["-c", "tests/fotoobo.yaml", "ems", "monitor", "connections", "test_ems"]
+    )
+
+    assert result.exit_code == 0
+
+    assert "managed   │ 1000  │ Managed" in result.stdout
+    assert "unmanaged │ 99    │ Unmanaged" in result.stdout
+
+
 def test_cli_app_ems_monitor_endpoint_management_status_help() -> None:
     """Test cli help for ems monitor endpoint-management-status"""
     result = runner.invoke(
@@ -47,6 +75,33 @@ def test_cli_app_ems_monitor_endpoint_management_status_help() -> None:
     assert set(arguments) == {"host"}
     assert options == {"-h", "--help", "-o", "--output", "-r", "--raw", "-t", "--template"}
     assert not commands
+
+
+def test_cli_app_ems_monitor_endpoint_management_status(monkeypatch: MonkeyPatch) -> None:
+    """Test cli for ems monitor connections"""
+    monkeypatch.setattr(
+        "fotoobo.fortinet.forticlientems.FortiClientEMS.api",
+        MagicMock(
+            return_value=ResponseMock(
+                json={
+                    "result": {"retval": 1, "message": None},
+                    "data": [
+                        {"token": "managed", "value": 1000, "name": "Managed"},
+                        {"token": "unmanaged", "value": 99, "name": "Unmanaged"},
+                    ],
+                }
+            )
+        ),
+    )
+    result = runner.invoke(
+        app,
+        ["-c", "tests/fotoobo.yaml", "ems", "monitor", "endpoint-management-status", "test_ems"],
+    )
+
+    assert result.exit_code == 0
+
+    assert "managed   │ 1000  │ Managed" in result.stdout
+    assert "unmanaged │ 99    │ Unmanaged" in result.stdout
 
 
 def test_cli_app_ems_monitor_endpoint_os_versions_help() -> None:
@@ -61,6 +116,32 @@ def test_cli_app_ems_monitor_endpoint_os_versions_help() -> None:
     assert not commands
 
 
+def test_cli_app_ems_monitor_endpoint_os_versions(monkeypatch: MonkeyPatch) -> None:
+    """Test cli for ems monitor connections"""
+    monkeypatch.setattr(
+        "fotoobo.fortinet.forticlientems.FortiClientEMS.api",
+        MagicMock(
+            return_value=ResponseMock(
+                json={
+                    "result": {"retval": 1, "message": None},
+                    "data": [
+                        {"token": "dummy_os_1", "name": "dummy_os_1", "value": 222},
+                        {"token": "dummy_os_2", "name": "dummy_os_2", "value": 444},
+                    ],
+                }
+            )
+        ),
+    )
+    result = runner.invoke(
+        app, ["-c", "tests/fotoobo.yaml", "ems", "monitor", "endpoint-os-versions", "test_ems"]
+    )
+
+    assert result.exit_code == 0
+
+    assert "dummy_os_1  │ dummy_ver_1  │ 222" in result.stdout
+    assert "dummy_os_2  │ dummy_ver_2  │ 444" in result.stdout
+
+
 def test_cli_app_ems_monitor_endpoint_outofsync_help() -> None:
     """Test cli help for ems monitor endpoint-outofsync"""
     result = runner.invoke(
@@ -73,6 +154,32 @@ def test_cli_app_ems_monitor_endpoint_outofsync_help() -> None:
     assert not commands
 
 
+def test_cli_app_ems_monitor_endpoint_outofsync(monkeypatch: MonkeyPatch) -> None:
+    """Test cli for ems monitor connections"""
+    monkeypatch.setattr(
+        "fotoobo.fortinet.forticlientems.FortiClientEMS.api",
+        MagicMock(
+            return_value=ResponseMock(
+                json={
+                    "result": {"retval": 1, "message": None},
+                    "data": {
+                        "endpoints": [{"device_id": 888, "name": "dummy_device_name"}],
+                        "total": 999,
+                    },
+                }
+            )
+        ),
+    )
+    result = runner.invoke(
+        app, ["-c", "tests/fotoobo.yaml", "ems", "monitor", "endpoint-outofsync", "test_ems"]
+    )
+
+    assert result.exit_code == 0
+
+    assert "managed   │ 1000  │ Managed" in result.stdout
+    assert "unmanaged │ 99    │ Unmanaged" in result.stdout
+
+
 def test_cli_app_ems_monitor_license_help() -> None:
     """Test cli help for ems monitor license"""
     result = runner.invoke(app, ["-c", "tests/fotoobo.yaml", "ems", "monitor", "license", "-h"])
@@ -83,6 +190,50 @@ def test_cli_app_ems_monitor_license_help() -> None:
     assert not commands
 
 
+def test_cli_app_ems_monitor_license(monkeypatch: MonkeyPatch) -> None:
+    """Test cli for ems monitor connections"""
+    monkeypatch.setattr(
+        "fotoobo.fortinet.forticlientems.FortiClientEMS.api",
+        MagicMock(
+            return_value=ResponseMock(
+                json={
+                    "result": {"retval": 1, "message": None},
+                    "data": {
+                        "sn": "FCTEMS0000000000",
+                        "hid": "00000000-0000-0000-0000-000000000000-00000000",
+                        "seats": {"fabric_agent": 1000, "sandbox_cloud": 2000},
+                        "future_seats": {"fabric_agent": 1000, "sandbox_cloud": 2000},
+                        "licenses": [
+                            {
+                                "expiry_date": "2099-01-01T00:00:00",
+                                "start_date": "2098-01-01T00:00:00",
+                                "type": "fabric_agent",
+                            },
+                        ],
+                        "is_trial": False,
+                        "license_ver": 0,
+                        "future_ver": 0,
+                        "error": None,
+                        "vdom_seats": {"fabric_agent": 1000, "sandbox_cloud": 2000},
+                        "used": {
+                            "fabric_agent": 100,
+                            "sandbox_cloud": 400,
+                        },
+                    },
+                }
+            )
+        ),
+    )
+    result = runner.invoke(
+        app, ["-c", "tests/fotoobo.yaml", "ems", "monitor", "license", "test_ems"]
+    )
+
+    assert result.exit_code == 0
+
+    assert "managed   │ 1000  │ Managed" in result.stdout
+    assert "unmanaged │ 99    │ Unmanaged" in result.stdout
+
+
 def test_cli_app_ems_monitor_system_help() -> None:
     """Test cli help for ems monitor system"""
     result = runner.invoke(app, ["-c", "tests/fotoobo.yaml", "ems", "monitor", "system", "-h"])
@@ -91,3 +242,47 @@ def test_cli_app_ems_monitor_system_help() -> None:
     assert set(arguments) == {"host"}
     assert options == {"-h", "--help", "-r", "--raw"}
     assert not commands
+
+
+def test_cli_app_ems_monitor_system(monkeypatch: MonkeyPatch) -> None:
+    """Test cli for ems monitor connections"""
+    monkeypatch.setattr(
+        "fotoobo.fortinet.forticlientems.FortiClientEMS.api",
+        MagicMock(
+            return_value=ResponseMock(
+                json={
+                    "result": {"retval": 1, "message": "System info retrieved successfully."},
+                    "data": {
+                        "name": "dummy_hostname",
+                        "system_time": "2066-06-06 06:06:06",
+                        "license": {
+                            "sn": "FCTEMS0000000000",
+                            "hid": "00000000-0000-0000-0000-000000000000-00000000",
+                            "seats": {"fabric_agent": 1001, "sandbox_cloud": 1002},
+                            "future_seats": {"fabric_agent": 1001, "sandbox_cloud": 1002},
+                            "licenses": [
+                                {
+                                    "expiry_date": "2099-01-01T00:00:00",
+                                    "start_date": "2098-01-01T00:00:00",
+                                    "type": "fabric_agent",
+                                },
+                            ],
+                            "is_trial": False,
+                            "license_ver": 0,
+                            "future_ver": 0,
+                            "error": None,
+                            "used": {"fabric_agent": 1001, "sandbox_cloud": 1002},
+                        },
+                    },
+                }
+            )
+        ),
+    )
+    result = runner.invoke(
+        app, ["-c", "tests/fotoobo.yaml", "ems", "monitor", "system", "test_ems"]
+    )
+
+    assert result.exit_code == 0
+
+    assert "name        │ dummy_hostname" in result.stdout
+    assert "sn           │ FCTEMS0000000000" in result.stdout
