@@ -151,7 +151,11 @@ class Result:
             raise GeneralWarning("data is not a list or dict")
 
     def print_table_raw(
-        self, data: List[Dict[str, Any]], headers: List[str], auto_header: bool, title: str
+        self,
+        data: List[Dict[str, Any]],
+        headers: List[str],
+        auto_header: bool = False,
+        title: str = "",
     ) -> None:
         """
         Print the data given as a rich table to the console
