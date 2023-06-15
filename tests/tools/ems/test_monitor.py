@@ -109,8 +109,8 @@ def test_endpoint_os_versions(monkeypatch: MonkeyPatch) -> None:
                 json={
                     "result": {"retval": 1, "message": None},
                     "data": [
-                        {"token": "dummy_os_1", "name": "dummy_os_1", "value": 222},
-                        {"token": "dummy_os_2", "name": "dummy_os_2", "value": 444},
+                        {"token": "dummy_os_1", "name": "dummy_ver_1", "value": 333},
+                        {"token": "dummy_os_2", "name": "dummy_ver_2", "value": 444},
                     ],
                 }
             )
@@ -118,9 +118,9 @@ def test_endpoint_os_versions(monkeypatch: MonkeyPatch) -> None:
     )
     result = monitor.endpoint_os_versions("test_ems")
     data = result.get_result("test_ems")
-    assert data["fotoobo"]["fctversionwindows"] == 666
-    assert data["fotoobo"]["fctversionmac"] == 666
-    assert data["fotoobo"]["fctversionlinux"] == 666
+    assert data["fotoobo"]["fctversionwindows"] == 777
+    assert data["fotoobo"]["fctversionmac"] == 777
+    assert data["fotoobo"]["fctversionlinux"] == 777
 
 
 def test_system(monkeypatch: MonkeyPatch) -> None:
