@@ -11,7 +11,6 @@ from rich.pretty import pprint
 
 from fotoobo.helpers import cli_path
 from fotoobo.helpers.files import save_json_file
-from fotoobo.helpers.output import print_dicttable
 from fotoobo.tools.ems import monitor
 
 app = typer.Typer(no_args_is_help=True, rich_markup_mode="rich")
@@ -358,7 +357,6 @@ def system(
 
     else:
         _ = data.pop("license", {})  # pop "license" key as ist is not used (it's another command)
-        print_dicttable(data, title="FortiClient EMS system information")
 
         result.print_table_raw(
             [

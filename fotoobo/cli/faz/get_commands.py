@@ -6,7 +6,6 @@ import logging
 import typer
 
 from fotoobo.helpers import cli_path
-from fotoobo.helpers.output import print_datatable
 from fotoobo.tools import faz
 
 app = typer.Typer(no_args_is_help=True, rich_markup_mode="rich")
@@ -36,5 +35,9 @@ def version(
     """
     Get the FortiAnalyzer version.
     """
-    data = faz.get.version(host)
-    print_datatable(data, title="FortiAnalyzer Version", headers=["FortiAnalyzer", "Version"])
+    result = faz.get.version(host)
+    result.print_result_as_table(
+        title="FortiAnalyzer Version",
+        headers=["FortiAnalyzer", "Version"],
+        host_is_first_column=True,
+    )

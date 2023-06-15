@@ -44,7 +44,7 @@ def test_cli_app_faz_get_version(monkeypatch: MonkeyPatch) -> None:
     )
     result = runner.invoke(app, ["-c", "tests/fotoobo.yaml", "faz", "get", "version", "test_faz"])
     assert result.exit_code == 0
-    assert result.stdout.count("1.1.1") == 1
+    assert "test_faz      │ v1.1.1" in result.stdout
 
 
 def test_cli_app_faz_get_version_dummy() -> None:

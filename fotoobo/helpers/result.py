@@ -4,20 +4,21 @@ The FotooboResult class
 import json
 import smtplib
 from pathlib import Path
-from typing import Any, Dict, List, Union
+from typing import Any, Dict, Generic, List, TypeVar, Union
 
 import jinja2
 from rich.console import Console
 from rich.table import Table
 from rich.theme import Theme
 
-from fotoobo.exceptions import GeneralWarning
 from fotoobo.helpers import cli_path
 
 ftb_theme = Theme({"var": "white", "ftb": "#FF33BB bold", "chk": "green"})
 
+T = TypeVar("T")
 
-class Result:
+
+class Result(Generic[T]):
     """
     This class represents a Result of an operation in fotoobo.
 
@@ -42,12 +43,12 @@ class Result:
         self.messages: Dict[str, List[Dict[str, str]]] = {}
 
         # The results for each device
-        self.results: Dict[str, Any] = {}
+        self.results: Dict[str, T] = {}
 
         # Console object for rich output
         self.console = Console(theme=ftb_theme)
 
-    def push_result(self, host: str, data: Any, successful: bool = True) -> None:
+    def push_result(self, host: str, data: T, successful: bool = True) -> None:
         """
         Add a result for the host
 
@@ -87,7 +88,7 @@ class Result:
 
         self.messages[host].append({"message": message, "level": level})
 
-    def get_result(self, host: str) -> Any:
+    def get_result(self, host: str) -> T:
         """
         Return the result pushed by this
         Args:
@@ -100,7 +101,7 @@ class Result:
 
         return self.results[host]
 
-    def all_results(self) -> Dict[str, Any]:
+    def all_results(self) -> Dict[str, T]:
         """
         Return all results
 
@@ -113,12 +114,14 @@ class Result:
         """
         return self.results
 
+    # pylint: disable=too-many-arguments
     def print_result_as_table(
         self,
         only_host: Union[str, None] = None,
         title: str = "",
         auto_header: bool = False,
         headers: Union[List[str], None] = None,
+        host_is_first_column: bool = False,
     ) -> None:
         """
         Print a table from given data as list or dict.
@@ -129,6 +132,7 @@ class Result:
             title (str): set the preferred title for the table
             auto_header (bool): whether to show the headers (default: off)
             headers (List[str]): Set the headers (if needed)
+            host_is_first_column (bool): add the host as first column
 
         Raises:
             GeneralWarning: If the data cannot be interpreted as a table
@@ -137,18 +141,28 @@ class Result:
             headers = []
 
         if only_host:
-            data = self.results[only_host]
+            if host_is_first_column:
+                result = self.results[only_host]
+                if isinstance(result, dict):
+                    data: Any = {"host": only_host, **result}
+                else:
+                    data = {"host": only_host, "value": result}
+            else:
+                data = self.results[only_host]
         else:
-            data = self.results
+            if host_is_first_column:
+                data = []
 
-        if isinstance(data, dict):
-            data = [data]
+                for host, result in self.results.items():
+                    if isinstance(result, dict):
+                        data.append({"host": host, **result})
+                    else:
+                        data.append({"host": host, "value": result})
 
-        if isinstance(data, list):
-            self.print_table_raw(data, headers, auto_header, title)
+            else:
+                data = self.results
 
-        else:
-            raise GeneralWarning("data is not a list or dict")
+        self.print_table_raw(data, headers, auto_header, title)
 
     def print_table_raw(
         self,
@@ -178,15 +192,20 @@ class Result:
             for heading in headers:
                 table.add_column(heading)
 
+        if isinstance(data, dict):
+            data = [data]
+
         for line in data:
             _values = line.values()
 
             # If an item in line is a dict or list we should pretty print it
-            values = [
-                json.dumps(v, indent=4) if isinstance(v, (dict, list)) else v for v in _values
-            ]
-            # If an item in line is a not render-able convert to string
-            values = [str(v) if isinstance(v, (bool, int, float)) else v for v in values]
+            values: List[str] = []
+
+            for entry in _values:
+                if isinstance(entry, (dict, list)):
+                    values.append(json.dumps(entry, indent=4))
+                else:
+                    values.append(str(entry))
 
             table.add_row(*values)
 
