@@ -61,7 +61,9 @@ def test_policy(monkeypatch: MonkeyPatch) -> None:
             )
         ),
     )
-    data = policy("test_fmg", "", "")
+    result = policy("test_fmg", "", "")
+
+    data = result.get_result("test_fmg")
     assert data == [
         {
             "status": "0",
