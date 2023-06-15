@@ -185,8 +185,20 @@ def endpoint_os_versions(
         # if no output file is given just pretty print the output to the console
         if raw:
             pprint(data, expand_all=True)
+
         else:
-            result.print_result_as_table(host, title="FortiClient EMS endpoints")
+            versions = []
+            for _os, os_versions in result.get_result(host)["data"].items():
+                for line in os_versions:
+                    versions.append(
+                        {"os": _os[10:], "fc_version": line["name"], "count": line["value"]}
+                    )
+            result.print_table_raw(versions, ["OS", "FC Version", "Count"])
+
+            totals = []
+            for _os, count in result.get_result(host)["fotoobo"].items():
+                totals.append({"os": _os[10:], "count": count})
+            result.print_table_raw(totals, ["OS", "Total"], title="Summary")
 
 
 @app.command(
