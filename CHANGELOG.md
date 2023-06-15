@@ -26,6 +26,7 @@ For examples and guidelines see [https://keepachangelog.com/](https://keepachang
 
 ### Fixed
 
+- Fix pyasn1 to 0.4.8 due to pysnmp dependency
 - Fix a bug with non existing cookie path for EMS
 - Fix default values for jinja2 template helper
 
