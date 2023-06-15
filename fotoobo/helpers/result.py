@@ -88,6 +88,46 @@ class Result(Generic[T]):
 
         self.messages[host].append({"message": message, "level": level})
 
+    def get_messages(self, host: str) -> List[Dict[str, str]]:
+        """
+        Return all the messages for the host given
+
+        Args:
+            host:       The host to get the messages for
+
+        Returns:
+            A list of the messages pushed for this host. If there are no messages for this host, it
+            will return an empty list.
+        """
+
+        if host not in self.messages:
+            return []
+
+        return self.messages[host]
+
+    def print_messages(self, only_host: Union[str, None] = None) -> None:
+        """
+        Print the messages to the console
+
+        Args:
+            only_host:  Only print the messages for host only_host. If None is given, print all
+                        messages.
+
+        Returns:
+
+        """
+
+        out_messages = []
+
+        for host, _messages in self.messages.items():
+            if only_host and host != only_host:
+                continue
+
+            out_messages += [f"[hst]{host}[/]: {message['message']}" for message in _messages]
+
+        for message in out_messages:
+            self.console.print(message)
+
     def get_result(self, host: str) -> T:
         """
         Return the result pushed by this

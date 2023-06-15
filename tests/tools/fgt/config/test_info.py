@@ -20,7 +20,7 @@ from fotoobo.tools.fgt.config import info
 def test_info(file: Path) -> None:
     """test the info utility"""
     infos = info(file)
-    assert infos[0].buildno == "8303"
+    assert infos.get_result("HOSTNAME UNKNOWN").buildno == "8303"
 
 
 @pytest.mark.parametrize(
