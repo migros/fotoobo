@@ -14,6 +14,7 @@ For examples and guidelines see [https://keepachangelog.com/](https://keepachang
 
 ### Changed
 
+- Beautify `ems monitor` commands output
 - Optimize the way to import fotoobo in Python modules. For example you may now do
   `from fotoobo import FortiGate` instead of `from fotoobo.fortinet.fortigate import FortiGate`.
 - Refactored whole code to use `pathlib.Path` instead of `os.path`
