@@ -4,6 +4,7 @@ Test the results helper class
 
 
 from pathlib import Path
+from typing import Dict
 
 from fotoobo.helpers.result import Result
 
@@ -13,7 +14,7 @@ class TestResults:
 
     def test_save_with_template(self, temp_dir: Path) -> None:
         """Test save_with_template"""
-        result = Result()
+        result = Result[Dict[str, Dict[str, int]]]()
         result.push_result("dummy_ems", {"fotoobo": {"dummy_var": 42}})
         output_file = temp_dir / "output.txt"
         result.save_with_template("dummy_ems", Path("tests/data/dummy.j2"), output_file)

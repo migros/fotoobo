@@ -11,7 +11,6 @@ from rich.console import Console
 from rich.table import Table
 from rich.theme import Theme
 
-from fotoobo.exceptions import GeneralWarning
 from fotoobo.helpers import cli_path
 
 ftb_theme = Theme({"var": "white", "ftb": "#FF33BB bold", "chk": "green"})
@@ -164,9 +163,6 @@ class Result(Generic[T]):
                 data = self.results
 
         self.print_table_raw(data, headers, auto_header, title)
-
-        else:
-            raise GeneralWarning("data is not a list or dict")
 
     def print_table_raw(
         self,

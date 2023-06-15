@@ -100,8 +100,8 @@ def test_cli_app_ems_monitor_endpoint_management_status(monkeypatch: MonkeyPatch
 
     assert result.exit_code == 0
 
-    assert "managed   │ 1000  │ Managed" in result.stdout
-    assert "unmanaged │ 99    │ Unmanaged" in result.stdout
+    assert "Managed   │ 1000" in result.stdout
+    assert "Unmanaged │ 99" in result.stdout
 
 
 def test_cli_app_ems_monitor_endpoint_os_versions_help() -> None:
@@ -125,8 +125,8 @@ def test_cli_app_ems_monitor_endpoint_os_versions(monkeypatch: MonkeyPatch) -> N
                 json={
                     "result": {"retval": 1, "message": None},
                     "data": [
-                        {"token": "dummy_os_1", "name": "dummy_os_1", "value": 222},
-                        {"token": "dummy_os_2", "name": "dummy_os_2", "value": 444},
+                        {"token": "dummy_os_1", "name": "dummy_ver_1", "value": 333},
+                        {"token": "dummy_os_2", "name": "dummy_ver_2", "value": 444},
                     ],
                 }
             )
@@ -138,8 +138,12 @@ def test_cli_app_ems_monitor_endpoint_os_versions(monkeypatch: MonkeyPatch) -> N
 
     assert result.exit_code == 0
 
-    assert "dummy_os_1  │ dummy_ver_1  │ 222" in result.stdout
-    assert "dummy_os_2  │ dummy_ver_2  │ 444" in result.stdout
+    assert "windows │ dummy_ver_1 │ 333" in result.stdout
+    assert "linux   │ dummy_ver_2 │ 444" in result.stdout
+    assert "Summary" in result.stdout
+    assert "windows │ 777" in result.stdout
+    assert "mac     │ 777" in result.stdout
+    assert "linux   │ 777" in result.stdout
 
 
 def test_cli_app_ems_monitor_endpoint_outofsync_help() -> None:
@@ -176,8 +180,7 @@ def test_cli_app_ems_monitor_endpoint_outofsync(monkeypatch: MonkeyPatch) -> Non
 
     assert result.exit_code == 0
 
-    assert "managed   │ 1000  │ Managed" in result.stdout
-    assert "unmanaged │ 99    │ Unmanaged" in result.stdout
+    assert "out of sync │ 999" in result.stdout
 
 
 def test_cli_app_ems_monitor_license_help() -> None:
@@ -230,8 +233,11 @@ def test_cli_app_ems_monitor_license(monkeypatch: MonkeyPatch) -> None:
 
     assert result.exit_code == 0
 
-    assert "managed   │ 1000  │ Managed" in result.stdout
-    assert "unmanaged │ 99    │ Unmanaged" in result.stdout
+    assert " sn           │ FCTEMS0000000000 " in result.stdout
+
+    assert "license_expiry_days │ 27593" in result.stdout
+    assert "fabric_agent_usage  │ 10" in result.stdout
+    assert "sandbox_cloud_usage │ 20" in result.stdout
 
 
 def test_cli_app_ems_monitor_system_help() -> None:
@@ -284,5 +290,5 @@ def test_cli_app_ems_monitor_system(monkeypatch: MonkeyPatch) -> None:
 
     assert result.exit_code == 0
 
-    assert "name        │ dummy_hostname" in result.stdout
-    assert "sn           │ FCTEMS0000000000" in result.stdout
+    assert " hostname    │ dummy_hostname " in result.stdout
+    assert " system_time │ 2066-06-06 06:06:06 " in result.stdout
