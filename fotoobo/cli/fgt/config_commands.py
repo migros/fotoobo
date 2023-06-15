@@ -6,7 +6,6 @@ from pathlib import Path
 
 import typer
 
-from fotoobo.helpers.output import print_datatable, print_dicttable
 from fotoobo.tools import fgt
 
 app = typer.Typer(no_args_is_help=True, rich_markup_mode="rich")
@@ -31,7 +30,9 @@ def check(
     """
     Check one or more FortiGate configuration files.
     """
-    fgt.config.check(configuration, bundles)
+    result = fgt.config.check(configuration, bundles)
+
+    result.print_messages()
 
 
 @app.command(no_args_is_help=True)
@@ -49,12 +50,15 @@ def info(
     """
     Get the information from one or more FortiGate configuration files.
     """
-    infos = fgt.config.info(configuration)
-    info_dicts = [data.__dict__ for data in infos]
+    result = fgt.config.info(configuration)
 
     if as_list:
-        print_datatable(info_dicts, auto_header=True)
+        info_dicts = []
+
+        for _, _info in result.all_results().items():
+            info_dicts.append(_info.__dict__)
+
+        result.print_table_raw(info_dicts, [], auto_header=True)
 
     else:
-        for data in info_dicts:
-            print_dicttable(data, title=data.get("hostname", "unknown"))
+        result.print_result_as_table()

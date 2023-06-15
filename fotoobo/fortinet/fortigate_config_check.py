@@ -5,6 +5,7 @@ import logging
 from typing import Any, Dict, List
 
 from fotoobo.exceptions import GeneralError
+from fotoobo.helpers.result import Result
 from fotoobo.fortinet.fortigate_config import FortiGateConfig
 
 log = logging.getLogger("fotoobo")
@@ -13,7 +14,7 @@ log = logging.getLogger("fotoobo")
 class FortiGateConfigCheck:
     """The FortiGate configuration check class"""
 
-    def __init__(self, config: FortiGateConfig, checks: Any) -> None:
+    def __init__(self, config: FortiGateConfig, checks: Any, result: Result[Any]) -> None:
         """
         Initialize the configuration checker.
 
@@ -24,7 +25,7 @@ class FortiGateConfigCheck:
         self.allowed_checks: List[str] = ["count", "exist", "value", "value_in_list"]
         self.config = config
         self.checks = checks
-        self.results: List[str] = []
+        self.result = result
 
     def add_message(self, chk: Dict[str, Any], msg: str) -> None:
         """
@@ -36,9 +37,10 @@ class FortiGateConfigCheck:
         """
         check_name = f" (check_name: [var]{chk['name']}[/])" if "name" in chk else ""
         message = f"[chk]{chk['type']}[/]: {msg}{check_name}"
-        self.results.append(message)
+        log.info(message)
+        self.result.push_message(self.config.info.hostname, message)
 
-    def execute_checks(self) -> None:  # pylint: disable=too-many-branches
+    def execute_checks(self) -> Result[Any]:  # pylint: disable=too-many-branches
         """
         Execute the FortiGate configuration checks.
 
@@ -121,7 +123,7 @@ class FortiGateConfigCheck:
                         )
                         getattr(self, "_check_" + check["type"])(config, check)
 
-        self.results = [f"[hst]{self.config.info.hostname}[/]: {result}" for result in self.results]
+        return self.result
 
     def _check_count(self, config: Any, chk: Dict[str, Any]) -> None:
         """
