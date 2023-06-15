@@ -18,7 +18,7 @@ def checkpoint(
     obj_type: str,
     conversion_id: str,
     cache_dir: Optional[Path] = None,
-) -> Result:
+) -> Result[List[Any]]:
     """
     This function lets you convert Checkpoint assets into Fortinet syntax.
 
@@ -30,7 +30,7 @@ def checkpoint(
     """
     log.info("start converting checkpoint assets of type %s", obj_type)
 
-    result = Result()
+    result = Result[List[Any]]()
 
     if cache_dir:
         create_dir(cache_dir)

@@ -36,8 +36,13 @@ def version(
     """
     Get the FortiClient EMS version.
     """
-    data = ems.get.version(host)
-    print_datatable(data, title="FortiClient EMS Version", headers=["FortiClient EMS", "Version"])
+    result = ems.get.version(host)
+    result.print_result_as_table(
+        host,
+        title="FortiClient EMS Version",
+        headers=["FortiClient EMS", "Version"],
+        host_is_first_column=True,
+    )
 
 
 @app.command()
@@ -52,5 +57,7 @@ def workgroups(
     """
     Get the FortiClient EMS workgroups.
     """
-    data = ems.get.workgroups(host, custom)
+    result = ems.get.workgroups(host, custom)
+    data = result.get_result(host)
+
     print_datatable(data, title="FortiClient EMS Workgroups", auto_header=True)
