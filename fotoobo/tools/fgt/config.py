@@ -13,13 +13,13 @@ from fotoobo.fortinet.fortigate_config import FortiGateConfig
 from fotoobo.fortinet.fortigate_config_check import FortiGateConfigCheck
 from fotoobo.fortinet.fortigate_info import FortiGateInfo
 from fotoobo.helpers.files import load_yaml_file
-from fotoobo.helpers.output import Output
+from fotoobo.helpers.result import Result
 
 app = typer.Typer(no_args_is_help=True, rich_markup_mode="rich")
 log = logging.getLogger("fotoobo")
 
 
-def check(config: Path, bundles: Path) -> None:
+def check(config: Path, bundles: Path) -> Result[List[str]]:
     """
     The FortiGate configuration check
 
@@ -57,37 +57,32 @@ def check(config: Path, bundles: Path) -> None:
         raise GeneralError("no valid bundle file")
 
     total_results: int = 0
-    output = Output()
+    result = Result[List[str]]()
+
     for file in files:
         try:
-            conf_check = FortiGateConfigCheck(
-                FortiGateConfig.parse_configuration_file(file), checks
-            )
+            fortigate_config = FortiGateConfig.parse_configuration_file(file)
+            conf_check = FortiGateConfigCheck(fortigate_config, checks, result)
 
         except GeneralWarning as warn:
             log.warning(warn.message)
             continue
 
         conf_check.execute_checks()
-        for result in conf_check.results:
-            log.info(result)
 
-        log.info(
-            "all checks in '%s' done with '%s' messages",
-            file.name,
-            len(conf_check.results),
-        )
-        total_results += len(conf_check.results)
-        output.add(conf_check.results)
+        num_results = len(result.get_messages(fortigate_config.info.hostname))
+        log.info("all checks in '%s' done with '%s' messages", file.name, num_results)
+        total_results += num_results
 
     log.info("all checks done with '%s' messages", total_results)
+
     if total_results == 0:
-        output.add("There were no errors in the configuration file(s)")
+        result.push_message("fotoobo", "There were no errors in the configuration file(s)")
 
-    output.print_raw()
+    return result
 
 
-def info(config: Path) -> List[FortiGateInfo]:
+def info(config: Path) -> Result[FortiGateInfo]:
     """
     The FortiGate configuration information utility.
 
@@ -113,9 +108,10 @@ def info(config: Path) -> List[FortiGateInfo]:
         log.warning("there are no configuration files")
         raise GeneralWarning("there are no configuration files")
 
-    output = []
+    result = Result[FortiGateInfo]()
+
     for file in files:
         conf = FortiGateConfig.parse_configuration_file(file)
-        output.append(conf.info)
+        result.push_result(conf.info.hostname, conf.info)
 
-    return output
+    return result
