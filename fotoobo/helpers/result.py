@@ -22,7 +22,7 @@ class Result:
     This class represents a Result of an operation in fotoobo.
 
     This dataset is meant to be the generic result structure for any tool inside fotoobo.
-    It can then be rendered to some commandline output (CLI) or JSON response (REST API).
+    It can then be rendered to some command line output (CLI) or JSON response (REST API).
     """
 
     def __init__(self) -> None:
