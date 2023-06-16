@@ -8,7 +8,6 @@ import logging
 import typer
 
 from fotoobo.helpers import cli_path
-from fotoobo.helpers.output import print_datatable
 from fotoobo.tools import fgt
 
 app = typer.Typer(no_args_is_help=True, rich_markup_mode="rich")
@@ -43,5 +42,5 @@ def version(
     The optional argument [host] makes this command somewhat magic. If you omit \[host] it searches
     for all devices of type 'fortigate' in the inventory and tries to get their FortiOS version.
     """
-    data = fgt.get.version(host)
-    print_datatable(data, title="FortiGate Versions", headers=["FortiGate", "Version"])
+    result = fgt.get.version(host)
+    result.print_result_as_table(title="FortiGate Versions", headers=["FortiGate", "Version"])
