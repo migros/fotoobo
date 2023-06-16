@@ -2,8 +2,8 @@
 Test fgt tools check hamaster
 """
 
-from unittest.mock import MagicMock
 from pathlib import Path
+from unittest.mock import MagicMock
 
 import pytest
 from _pytest.monkeypatch import MonkeyPatch
@@ -77,5 +77,5 @@ def test_hamaster(monkeypatch: MonkeyPatch, ret_val: str, expected: str) -> None
         MagicMock(return_value=ret_val),
     )
     monkeypatch.setattr("fotoobo.helpers.output.Output.send_mail", MagicMock(return_value=None))
-    data = hamaster("test_fmg", smtp_server="test_smtp")
-    assert data == [{"name": "dummy", "status": expected}]
+    result = hamaster("test_fmg")
+    assert result.get_result("dummy") == expected
