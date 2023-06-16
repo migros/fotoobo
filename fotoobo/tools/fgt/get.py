@@ -3,18 +3,19 @@ FortiGate get version utility
 """
 
 import logging
-from typing import Dict, List, Optional
+from typing import Optional
 
 from rich.progress import track
 
 from fotoobo.exceptions import GeneralError, GeneralWarning
+from fotoobo.helpers.result import Result
 from fotoobo.helpers.config import config
 from fotoobo.inventory import Inventory
 
 log = logging.getLogger("fotoobo")
 
 
-def version(host: Optional[str] = None) -> List[Dict[str, str]]:
+def version(host: Optional[str] = None) -> Result[str]:
     """
     FortiGate get version
 
@@ -25,7 +26,7 @@ def version(host: Optional[str] = None) -> List[Dict[str, str]]:
     inventory = Inventory(config.inventory_file)
     fgts = inventory.get(host, "fortigate")
 
-    data = []
+    result = Result[str]()
     for name, fgt in track(fgts.items(), description="getting FortiGate versions..."):
         log.debug("getting FortiGate version for %s", name)
         try:
@@ -33,6 +34,6 @@ def version(host: Optional[str] = None) -> List[Dict[str, str]]:
         except (GeneralWarning, GeneralError) as exception:
             fortigate_version = f"unknown due to {exception.message}"
 
-        data.append({"name": name, "version": fortigate_version})
+        result.push_result(name, fortigate_version)
 
-    return data
+    return result
