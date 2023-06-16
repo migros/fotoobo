@@ -33,9 +33,13 @@ def test_version(host: str, monkeypatch: MonkeyPatch) -> None:
     monkeypatch.setattr(
         "fotoobo.fortinet.fortigate.FortiGate.get_version", MagicMock(return_value="1.1.1")
     )
-    data = version(host)
-    assert isinstance(data, list)
-    assert data[0]["version"] == "1.1.1"
+    result = version(host)
+    if host:
+        assert isinstance(result.get_result(host), str)
+        assert result.get_result(host) == "1.1.1"
+    else:
+        assert len(result.results) == 2
+        assert result.get_result("test_fgt_2") == "1.1.1"
 
 
 @pytest.mark.parametrize(
@@ -51,8 +55,8 @@ def test_version_exception_from_fortigate(side_effect: Any, monkeypatch: MonkeyP
         "fotoobo.fortinet.fortigate.FortiGate.get_version",
         MagicMock(side_effect=(side_effect)),
     )
-    data = version("test_fgt_1")
-    assert data == [{"name": "test_fgt_1", "version": "unknown due to dummy message"}]
+    result = version("test_fgt_1")
+    assert result.get_result("test_fgt_1") == "unknown due to dummy message"
 
 
 def test_version_no_fortigates(monkeypatch: MonkeyPatch) -> None:
