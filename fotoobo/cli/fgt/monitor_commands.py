@@ -8,7 +8,8 @@ import logging
 import typer
 
 from fotoobo.helpers import cli_path
-from fotoobo.helpers.output import print_datatable
+from fotoobo.helpers.config import config
+from fotoobo.inventory.inventory import Inventory
 from fotoobo.tools import fgt
 
 app = typer.Typer(no_args_is_help=True, rich_markup_mode="rich")
@@ -52,7 +53,23 @@ def hamaster(
     The optional argument \[host] makes this command somewhat magic. If you omit \[host] it searches
     for all devices in the default FortiManager (fmg) in the inventory.
     """
-    data = fgt.monitor.hamaster(host, smtp_server)
-    print_datatable(
-        data, title="FortiGate HA master status", headers=["FortiGate Cluster", "Status"]
+    inventory = Inventory(config.inventory_file)
+    result = fgt.monitor.hamaster(host)
+
+    if smtp_server:
+        if smtp_server in inventory.assets:
+            result.send_mail(
+                inventory.assets[smtp_server],
+                ["warning", "error"],
+                count=True,
+                command=True,
+            )
+
+        else:
+            log.warning("SMTP server %s not in found in inventory.", smtp_server)
+
+    result.print_result_as_table(
+        headers=["FortiGate Cluster", "Status"],
+        title="FortiGate HA master status",
+        host_is_first_column=True,
     )
