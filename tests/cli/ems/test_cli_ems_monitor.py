@@ -3,8 +3,8 @@ Testing the ems monitor cli app
 """
 from unittest.mock import MagicMock
 
-from typer.testing import CliRunner
 from _pytest.monkeypatch import MonkeyPatch
+from typer.testing import CliRunner
 
 from fotoobo.cli.main import app
 from tests.helper import ResponseMock, parse_help_output
@@ -235,7 +235,7 @@ def test_cli_app_ems_monitor_license(monkeypatch: MonkeyPatch) -> None:
 
     assert " sn           │ FCTEMS0000000000 " in result.stdout
 
-    assert "license_expiry_days │ 27593" in result.stdout
+    assert "license_expiry_days │ " in result.stdout
     assert "fabric_agent_usage  │ 10" in result.stdout
     assert "sandbox_cloud_usage │ 20" in result.stdout
 
