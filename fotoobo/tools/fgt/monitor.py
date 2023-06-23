@@ -3,7 +3,6 @@ FortiGate check hamaster utility
 """
 
 import logging
-from typing import Dict, List, Optional
 
 from pysnmp.hlapi import (
     CommunityData,
@@ -18,7 +17,7 @@ from rich.progress import track
 
 from fotoobo.exceptions import GeneralError
 from fotoobo.helpers.config import config
-from fotoobo.helpers.output import Output
+from fotoobo.helpers.result import Result
 from fotoobo.inventory import Inventory
 
 log = logging.getLogger("fotoobo")
@@ -64,7 +63,6 @@ def _snmp_get(  # pylint: disable=too-many-arguments
         raise GeneralError(f"SNMP error: {error_status}")
 
     for var_bind in var_binds:
-
         value: str = var_bind.prettyPrint()
 
         if "=" in value:
@@ -76,9 +74,7 @@ def _snmp_get(  # pylint: disable=too-many-arguments
     return value
 
 
-def hamaster(  # pylint: disable=too-many-locals
-    host: str, smtp_server: Optional[str] = None
-) -> List[Dict[str, str]]:
+def hamaster(host: str) -> Result[str]:
     """
     FortiGate check hamaster
 
@@ -116,8 +112,7 @@ def hamaster(  # pylint: disable=too-many-locals
                     expect = node["name"]
             firewalls.append({"name": device["name"], "ip": device["ip"], "expect": expect})
 
-    data = []
-    output = Output()
+    result = Result[str]()
 
     for firewall in track(firewalls, description="getting HA info ..."):
         master_status: str = "unknown"
@@ -134,22 +129,20 @@ def hamaster(  # pylint: disable=too-many-locals
 
             if ha_master == firewall["expect"]:
                 master_status = "OK"
+                result.push_message(firewall["name"], "HA-Status OK", "info")
 
             else:
                 master_status = "not OK"
-                output.add(
-                    f"{firewall['name']} HA-Status NOT OK - expect: {firewall['expect']}"
-                    + f" got: {ha_master}"
+                result.push_message(
+                    firewall["name"],
+                    f"HA-Status NOT OK - expect: {firewall['expect']} got: {ha_master}",
+                    "error",
                 )
 
         except GeneralError as err:
             log.error("%s returned an error: %s", firewall["name"], err)
-            output.add(f"{firewall['name']} returned an error: {err}")
+            result.push_message(firewall["name"], str(err), "error")
 
-        data.append({"name": firewall["name"], "status": master_status})
+        result.push_result(firewall["name"], master_status)
 
-    if smtp_server:
-        if smtp_server in inventory.assets:
-            output.send_mail(inventory.assets[smtp_server])
-
-    return data
+    return result

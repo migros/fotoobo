@@ -6,6 +6,10 @@ For examples and guidelines see [https://keepachangelog.com/](https://keepachang
 
 # [Unreleased]
 
+### Added
+
+- Command ´fgt hamaster´ now supports Jinja2 templating
+
 ### Changed
 
 - Migrate `fgt config`, `fgt get` and `fmg get` commands to use the Result class.
