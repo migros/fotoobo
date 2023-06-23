@@ -104,8 +104,8 @@ def hamaster(
         if template_file:
             log.debug("template_file is: %s", template_file)
             output: Result[Dict[str, Dict[str, str]]] = Result()
-            output.push_result("hamaster", data)
-            output.save_with_template("hamaster", template_file, output_file)
+            output.push_result("_hamaster", data)
+            output.save_with_template("_hamaster", template_file, output_file)
 
         else:
             # write to file without a template (raw output)
