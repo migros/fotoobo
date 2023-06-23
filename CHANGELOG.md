@@ -6,6 +6,9 @@ For examples and guidelines see [https://keepachangelog.com/](https://keepachang
 
 # [Unreleased]
 
+### Added
+
+- Introduce ´fgt config get´ command to (bulk) print parts of saved configuration
 
 # [Released]
 
