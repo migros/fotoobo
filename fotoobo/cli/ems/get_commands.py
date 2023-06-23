@@ -6,7 +6,6 @@ import logging
 import typer
 
 from fotoobo.helpers import cli_path
-from fotoobo.helpers.output import print_datatable
 from fotoobo.tools import ems
 
 app = typer.Typer(no_args_is_help=True, rich_markup_mode="rich")
@@ -58,6 +57,4 @@ def workgroups(
     Get the FortiClient EMS workgroups.
     """
     result = ems.get.workgroups(host, custom)
-    data = result.get_result(host)
-
-    print_datatable(data, title="FortiClient EMS Workgroups", auto_header=True)
+    result.print_result_as_table(host, title="FortiClient EMS Workgroups", auto_header=True)

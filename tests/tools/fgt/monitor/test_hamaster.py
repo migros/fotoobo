@@ -76,6 +76,8 @@ def test_hamaster(monkeypatch: MonkeyPatch, ret_val: str, expected: str) -> None
         "fotoobo.tools.fgt.monitor._snmp_get",
         MagicMock(return_value=ret_val),
     )
-    monkeypatch.setattr("fotoobo.helpers.output.Output.send_mail", MagicMock(return_value=None))
+    monkeypatch.setattr(
+        "fotoobo.helpers.result.Result.send_messages_as_mail", MagicMock(return_value=None)
+    )
     result = hamaster("test_fmg")
     assert result.get_result("dummy") == expected

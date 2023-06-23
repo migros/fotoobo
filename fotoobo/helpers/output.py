@@ -1,77 +1,12 @@
 """
 The beautiful output helper
 """
-import json
 import os
 from pathlib import Path
-import smtplib
 from datetime import datetime
-from typing import Any, Dict, List, Union
+from typing import Any, Dict, List
 
 from rich.console import Console
-from rich.table import Table
-from rich.theme import Theme
-
-from fotoobo.exceptions import GeneralWarning
-from fotoobo.helpers import cli_path
-
-ftb_theme = Theme({"var": "white", "ftb": "#FF33BB bold", "chk": "green"})
-console = Console(theme=ftb_theme)
-
-
-class Output:
-    """Control the fotoobo output"""
-
-    def __init__(self) -> None:
-        """Initialize the output class"""
-        self.messages: List[str] = []
-        # self.ftb_theme = Theme({"var": "white", "ftb": "#FF33BB bold", "chk": "green"})
-        # self.ftb_theme = ftb_theme
-        self.console = console
-
-    def add(self, messages: Union[str, List[str]]) -> None:
-        """
-        Add one or multiple message(s) to the output
-
-        Args:
-            messages (str|list): Add a message or a list of messages to the output
-        """
-        if isinstance(messages, str):
-            self.messages.append(messages)
-        elif isinstance(messages, list):
-            for message in messages:
-                self.messages.append(message)
-        else:
-            raise GeneralWarning(f"cannot add input type '{type(input)}' to output")
-
-    def print_raw(self) -> None:
-        """print the output in raw format"""
-        for message in self.messages:
-            self.console.print(message)
-
-    def send_mail(self, smtp_server: Any) -> None:
-        """
-        Send an e-mail
-        """
-        if not self.messages:
-            return
-
-        smtp_server.port = getattr(smtp_server, "port", 25)
-        adds = "s" if len(self.messages) > 1 else ""
-        self.messages.append(str(len(self.messages)) + " message" + adds + " in list")
-        body = "To:" + smtp_server.recipient + "\n"
-        body += "From:" + smtp_server.sender + "\n"
-        body += "Subject:" + smtp_server.subject + "\n\n"
-
-        if cli_path:
-            body += "command: " + " ".join(cli_path) + "\n\n"
-
-        for message in self.messages:
-            body += message + "\n"
-
-        with smtplib.SMTP(smtp_server.hostname, smtp_server.port) as mail_server:
-            # server.set_debuglevel(1)
-            mail_server.sendmail(smtp_server.sender, smtp_server.recipient, body)
 
 
 def print_logo() -> None:
@@ -86,79 +21,6 @@ def print_logo() -> None:
     logo_console.print(" make IT easy  ")
     logo_console.print("┌───┐┌───┐┌───┐")
     logo_console.print("╰───┘└───┘└───╯")
-
-
-def print_datatable(
-    data: Union[List[Any], Dict[str, Any]],
-    title: str = "",
-    auto_header: bool = False,
-    headers: Union[List[str], None] = None,
-) -> None:
-    """
-    Print a table from given data as list or dict.
-
-    Args:
-        data (Union[List[Any], Dict[str, Any]]): data to print as list
-        title (str): set the preferred title for the table
-        auto_header (bool): whether to show the headers (default: off)
-        headers (List[str]): Set the headers (if needed)
-    """
-    if not headers:
-        headers = []
-
-    if isinstance(data, dict):
-        data = [data]
-
-    if isinstance(data, list):
-        table = Table(title=title, show_header=auto_header or bool(headers))
-        if auto_header:
-            for heading in data[0].keys():
-                table.add_column(heading)
-
-        elif headers:
-            for heading in headers:
-                table.add_column(heading)
-
-        for line in data:
-            values = line.values()
-            # if an item in line is a dict or list it should pretty print it
-            values = [json.dumps(v, indent=4) if isinstance(v, (dict, list)) else v for v in values]
-            # if an item in line is a not renderable convert to string
-            values = [str(v) if isinstance(v, (bool, int, list)) else v for v in values]
-            table.add_row(*values)
-
-        console.print(table)
-
-    else:
-        raise GeneralWarning("data is not a list or dict")
-
-
-def print_dicttable(
-    data: Dict[Any, Any],
-    title: str = "",
-    auto_header: bool = False,
-    headers: Union[List[str], None] = None,
-) -> None:
-    """Print a table from a given dict. Each key will be a new line"""
-    if not isinstance(data, dict):
-        raise GeneralWarning("data is not a dict")
-
-    data_list = []
-    for key, val in data.items():
-        data_list.append({"key": key, "value": val})
-
-    print_datatable(data_list, title=title, auto_header=auto_header, headers=headers)
-
-
-def print_json(data: Any, indent: int = 4) -> None:
-    """
-    Print a data structure as pretty json
-
-    Args:
-        data (Any): Any data structure
-        indent (int): indentation spaces
-    """
-    print(json.dumps(data, indent=indent))
 
 
 def write_policy_to_html(data: List[Dict[str, Any]], out_file: Path) -> None:
