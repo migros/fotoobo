@@ -11,9 +11,12 @@ For examples and guidelines see [https://keepachangelog.com/](https://keepachang
 - Introduce ´fgt config get´ command to (bulk) print parts of saved configuration
 - Command ´fgt hamaster´ now supports Jinja2 templating
 
+### Changed
+
+- Migrate `fgt config`, `fgt get` and `fmg get` commands to use the Result class.
+
 
 # [Released]
-
 
 ## [0.10.0] - 2023-06-15
 

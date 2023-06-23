@@ -111,4 +111,4 @@ def backup(
                 raise GeneralWarning(f"ftp server '{ftp_server}' not found in inventory")
 
     if smtp_server and smtp_server in inventory.assets:
-        result.send_mail(inventory.assets[smtp_server], "error")
+        result.send_messages_as_mail(inventory.assets[smtp_server], "error")

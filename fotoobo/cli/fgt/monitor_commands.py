@@ -88,7 +88,7 @@ def hamaster(
 
     if smtp_server:
         if smtp_server in inventory.assets:
-            result.send_mail(
+            result.send_messages_as_mail(
                 inventory.assets[smtp_server],
                 ["warning", "error"],
                 count=True,
