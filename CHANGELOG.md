@@ -8,6 +8,7 @@ For examples and guidelines see [https://keepachangelog.com/](https://keepachang
 
 ### Added
 
+- Introduce ´fgt config get´ command to (bulk) print parts of saved configuration
 - Command ´fgt hamaster´ now supports Jinja2 templating
 
 ### Changed
@@ -16,7 +17,6 @@ For examples and guidelines see [https://keepachangelog.com/](https://keepachang
 
 
 # [Released]
-
 
 ## [0.10.0] - 2023-06-15
 

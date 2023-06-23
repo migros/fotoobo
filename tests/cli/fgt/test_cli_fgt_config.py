@@ -18,7 +18,7 @@ def test_cli_app_fgt_config_help() -> None:
     arguments, options, commands = parse_help_output(result.stdout)
     assert not arguments
     assert options == {"-h", "--help"}
-    assert set(commands) == {"check", "info"}
+    assert set(commands) == {"check", "get", "info"}
 
 
 def test_cli_app_fgt_config_no_args() -> None:

@@ -36,6 +36,24 @@ def check(
 
 
 @app.command(no_args_is_help=True)
+def get(
+    configuration: Path = typer.Argument(
+        ...,
+        help="The FortiGate configuration file or directory.",
+        metavar="[config]",
+        show_default=False,
+    ),
+    scope: str = typer.Argument(
+        ..., help="Scope of the configuration ('global' or 'vdom')", metavar="[scope]"
+    ),
+    path: str = typer.Argument("/", help="Configuration path", metavar="[path]"),
+) -> None:
+    """Get configuration or parts of it from one or more FortiGate configuration files"""
+    result = fgt.config.get(configuration, scope, path)
+    result.print_raw()
+
+
+@app.command(no_args_is_help=True)
 def info(
     configuration: Path = typer.Argument(
         ...,
