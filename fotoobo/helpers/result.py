@@ -134,7 +134,7 @@ class Result(Generic[T]):
         """
         Return the result pushed by this
         Args:
-            host:   The name of the host to retreive the result for
+            host:   The name of the host to retrieve the result for
 
         Returns:
             The results stored before with push_results, or None if the host does not exist
