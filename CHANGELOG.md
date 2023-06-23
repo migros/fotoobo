@@ -9,6 +9,8 @@ For examples and guidelines see [https://keepachangelog.com/](https://keepachang
 ### Added
 
 - Introduce ´fgt config get´ command to (bulk) print parts of saved configuration
+- Command ´fgt hamaster´ now supports Jinja2 templating
+
 
 # [Released]
 
