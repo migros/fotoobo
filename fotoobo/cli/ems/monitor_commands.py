@@ -7,7 +7,6 @@ from pathlib import Path
 from typing import Union
 
 import typer
-from rich.pretty import pprint
 
 from fotoobo.helpers import cli_path
 from fotoobo.helpers.files import save_json_file
@@ -85,7 +84,7 @@ def connections(
     else:
         # if no output file is given just pretty print the output to the console
         if raw:
-            pprint(data, expand_all=True)
+            result.print_raw()
 
         else:
             conns = []
@@ -147,7 +146,7 @@ def endpoint_management_status(
     else:
         # if no output file is given just pretty print the output to the console
         if raw:
-            pprint(data, expand_all=True)
+            result.print_raw()
 
         else:
             endpoints = []
@@ -206,7 +205,7 @@ def endpoint_os_versions(
     else:
         # if no output file is given just pretty print the output to the console
         if raw:
-            pprint(data, expand_all=True)
+            result.print_raw()
 
         else:
             versions = []
@@ -268,7 +267,7 @@ def endpoint_outofsync(
     else:
         # if no output file is given just pretty print the output to the console
         if raw:
-            pprint(data, expand_all=True)
+            result.print_raw()
 
         else:
             result.print_table_raw(
@@ -320,7 +319,7 @@ def license(  # pylint: disable=redefined-builtin
     else:
         # if no output file is given just pretty print the output to the console
         if raw:
-            pprint(data, expand_all=True)
+            result.print_raw()
         else:
             licenses = []
             for key, value in result.get_result(host)["data"].items():
@@ -353,7 +352,7 @@ def system(
     data = result.get_result(host)
 
     if raw:
-        pprint(data, expand_all=True)
+        result.print_raw()
 
     else:
         _ = data.pop("license", {})  # pop "license" key as ist is not used (it's another command)
