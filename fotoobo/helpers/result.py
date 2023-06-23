@@ -8,6 +8,7 @@ from typing import Any, Dict, Generic, List, TypeVar, Union
 
 import jinja2
 from rich.console import Console
+from rich.pretty import pprint
 from rich.table import Table
 from rich.theme import Theme
 
@@ -203,6 +204,24 @@ class Result(Generic[T]):
                 data = self.results
 
         self.print_table_raw(data, headers, auto_header, title)
+
+    def print_raw(self, only_host: Union[str, None] = None) -> None:
+        """
+        Print the raw data from Result() in pretty format.
+
+        Args:
+            only_host (Union[str, None]): Print only the result for the host given
+                                          (default: print all results)
+        """
+        if only_host:
+            data = {only_host: self.get_result(only_host)}
+
+        else:
+            data = {}
+            for host in self.all_results():
+                data[host] = self.results[host]
+
+        pprint(data, expand_all=True)
 
     def print_table_raw(
         self,
