@@ -26,5 +26,15 @@ def test_cli_app_fgt_monitor_hamaster_help() -> None:
     assert result.exit_code == 0
     arguments, options, commands = parse_help_output(result.stdout)
     assert set(arguments) == {"host"}
-    assert options == {"-h", "--help", "--smtp"}
+    assert options == {
+        "-h",
+        "--help",
+        "-o",
+        "--output",
+        "-r",
+        "--raw",
+        "--smtp",
+        "-t",
+        "--template",
+    }
     assert not commands
