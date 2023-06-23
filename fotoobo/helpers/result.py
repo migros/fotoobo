@@ -12,6 +12,7 @@ from rich.pretty import pprint
 from rich.table import Table
 from rich.theme import Theme
 
+from fotoobo.exceptions import GeneralWarning
 from fotoobo.helpers import cli_path
 
 ftb_theme = Theme({"var": "white", "ftb": "#FF33BB bold", "chk": "green"})
@@ -133,12 +134,17 @@ class Result(Generic[T]):
         """
         Return the result pushed by this
         Args:
-            host:
+            host:   The name of the host to retreive the result for
 
         Returns:
-            The results stored before with push_results
+            The results stored before with push_results, or None if the host does not exist
 
+        Raises:
+            GeneralWarning if there is no result for host
         """
+
+        if host not in self.results:
+            raise GeneralWarning(f"Host {host} is not in results.")
 
         return self.results[host]
 
@@ -185,11 +191,15 @@ class Result(Generic[T]):
             if host_is_first_column:
                 result = self.results[only_host]
                 if isinstance(result, dict):
-                    data: Any = {"host": only_host, **result}
+                    data: Any = [{"host": only_host, **result}]
                 else:
-                    data = {"host": only_host, "value": result}
+                    data = [{"host": only_host, "value": result}]
             else:
-                data = self.results[only_host]
+                if isinstance(self.results[only_host], list):
+                    data = self.results[only_host]
+                else:
+                    data = [self.results[only_host]]
+
         else:
             if host_is_first_column:
                 data = []
@@ -201,27 +211,9 @@ class Result(Generic[T]):
                         data.append({"host": host, "value": result})
 
             else:
-                data = self.results
+                data = [self.results]
 
         self.print_table_raw(data, headers, auto_header, title)
-
-    def print_raw(self, only_host: Union[str, None] = None) -> None:
-        """
-        Print the raw data from Result() in pretty format.
-
-        Args:
-            only_host (Union[str, None]): Print only the result for the host given
-                                          (default: print all results)
-        """
-        if only_host:
-            data = {only_host: self.get_result(only_host)}
-
-        else:
-            data = {}
-            for host in self.all_results():
-                data[host] = self.results[host]
-
-        pprint(data, expand_all=True)
 
     def print_table_raw(
         self,
@@ -242,6 +234,9 @@ class Result(Generic[T]):
         Returns:
             Nothing
         """
+        if not (isinstance(data, list) and isinstance(data[0], dict)):
+            raise GeneralWarning("data for print_table_raw must be a list of dicts.")
+
         table = Table(title=title, show_header=auto_header or bool(headers))
         if auto_header:
             for heading in data[0].keys():
@@ -250,9 +245,6 @@ class Result(Generic[T]):
         elif headers:
             for heading in headers:
                 table.add_column(heading)
-
-        if isinstance(data, dict):
-            data = [data]
 
         for line in data:
             _values = line.values()
@@ -269,6 +261,24 @@ class Result(Generic[T]):
             table.add_row(*values)
 
         self.console.print(table)
+
+    def print_raw(self, only_host: Union[str, None] = None) -> None:
+        """
+        Print the raw data from Result() in pretty format.
+
+        Args:
+            only_host (Union[str, None]): Print only the result for the host given
+                                          (default: print all results)
+        """
+        if only_host:
+            data = {only_host: self.get_result(only_host)}
+
+        else:
+            data = {}
+            for host in self.all_results():
+                data[host] = self.results[host]
+
+        pprint(data, expand_all=True)
 
     def save_with_template(self, host: str, template_file: Path, output_file: Path) -> None:
         """
@@ -290,7 +300,7 @@ class Result(Generic[T]):
         output = template.render(self.results[host])
         output_file.write_text(output, encoding="UTF-8")
 
-    def send_mail(
+    def send_messages_as_mail(
         self,
         smtp_server: Any,
         levels: Union[List[str], str, None] = None,

@@ -7,12 +7,13 @@ from typing import Any, Dict, List, Optional
 
 from fotoobo.exceptions.exceptions import GeneralError
 from fotoobo.helpers.config import config
+from fotoobo.helpers.result import Result
 from fotoobo.inventory import Inventory
 
 log = logging.getLogger("fotoobo")
 
 
-def adoms(host: str) -> List[Dict[str, str]]:
+def adoms(host: str) -> Result[str]:
     """
     FortiManager get ADOMs
 
@@ -24,18 +25,22 @@ def adoms(host: str) -> List[Dict[str, str]]:
     """
     inventory = Inventory(config.inventory_file)
     fmg = inventory.get(host, "fortimanager")[host]
-    adom_list = []
+    result = Result[str]()
+
     log.debug("FortiManager get adoms ...")
+
     fmg.login()
     fmg_adoms = fmg.get_adoms()
+
     for adom in fmg_adoms:
-        adom_list.append({"name": adom["name"], "version": f"{adom['os_ver']}.{adom['mr']}"})
+        result.push_result(adom["name"], f"{adom['os_ver']}.{adom['mr']}")
 
     fmg.logout()
-    return adom_list
+
+    return result
 
 
-def devices(host: str) -> List[Dict[str, str]]:
+def devices(host: str) -> Result[Dict[str, str]]:
     """
     FortiManager get logical devices
     In a cluster only the cluster device is returned, not the physical nodes
@@ -63,22 +68,24 @@ def devices(host: str) -> List[Dict[str, str]]:
     }
     response = fmg.api("post", payload=payload)
     fmg.logout()
-    device_list = []
+    result = Result[Dict[str, str]]()
     for device in response.json()["result"][0]["data"]:
-        device_list.append(
+        result.push_result(
+            device["name"],
             {
-                "name": device["name"],
                 "version": f"{device['os_ver']}.{device['mr']}.{device['patch']}",
                 "ha_mode": str(device["ha_mode"]),
                 "platform": device["platform_str"],
                 "desc": device["desc"],
-            }
+            },
         )
 
-    return device_list
+    return result
 
 
-def policy(host: str, adom: str, policy_name: str, fields: Optional[List[str]] = None) -> List[Any]:
+def policy(
+    host: str, adom: str, policy_name: str, fields: Optional[List[str]] = None
+) -> Result[List[Dict[str, Any]]]:
     """
     FortiManager get policy
     """
@@ -125,10 +132,13 @@ def policy(host: str, adom: str, policy_name: str, fields: Optional[List[str]] =
         policies.append({field: pol.get(field, None) for field in fields})
 
     fmg.logout()
-    return policies
+
+    out_result = Result[List[Dict[str, Any]]]()
+    out_result.push_result(host, policies)
+    return out_result
 
 
-def version(host: str) -> Dict[str, str]:
+def version(host: str) -> Result[str]:
     """
     FortiManager get version
 
@@ -144,5 +154,7 @@ def version(host: str) -> Dict[str, str]:
     fmg.login()
     fmg_version = fmg.get_version()
     fmg.logout()
+    result = Result[str]()
+    result.push_result(host, fmg_version)
 
-    return {"host": host, "version": fmg_version}
+    return result

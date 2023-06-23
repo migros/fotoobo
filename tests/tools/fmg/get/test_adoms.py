@@ -47,9 +47,8 @@ def test_adoms(monkeypatch: MonkeyPatch) -> None:
             ]
         ),
     )
-    data = adoms("test_fmg")
-    assert len(data) == 2
-    assert data[0]["name"] == "adom_1"
-    assert data[0]["version"] == "1.2"
-    assert data[1]["name"] == "adom_2"
-    assert data[1]["version"] == "3.4"
+    result = adoms("test_fmg")
+
+    assert len(result.results) == 2
+    assert result.get_result("adom_1") == "1.2"
+    assert result.get_result("adom_2") == "3.4"
