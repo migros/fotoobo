@@ -4,8 +4,8 @@ The fotoobo get commands
 import logging
 
 import typer
+from rich import print as rich_print
 from rich.panel import Panel
-from rich import print as rprint
 
 from fotoobo.helpers import cli_path
 from fotoobo.tools import get
@@ -73,4 +73,6 @@ def commands() -> None:
     result = get.commands()
     tree = result.get_result("commands")
 
-    rprint(Panel(tree, border_style="#FF33BB", title="cli commands structure", title_align="right"))
+    rich_print(
+        Panel(tree, border_style="#FF33BB", title="cli commands structure", title_align="right")
+    )

@@ -3,10 +3,11 @@ The FortiGate configuration class represents the whole or parts of a FortiGate c
 """
 import logging
 from pathlib import Path
-from typing import Any, Dict, IO, List, Optional
+from typing import IO, Any, Dict, List, Optional
 
 from fotoobo.exceptions import GeneralWarning
 from fotoobo.helpers.files import load_json_file, save_json_file
+
 from .fortigate_info import FortiGateInfo
 
 log = logging.getLogger("fotoobo")
@@ -293,13 +294,13 @@ class FortiGateConfig:
                 else:
                     FortiGateConfig._config_path.append(line[7:])
                     config_path = [word.strip('"') for word in line[7:].split()]
-                    tempconfig = FortiGateConfig._get_nested_dict(
+                    temp_config = FortiGateConfig._get_nested_dict(
                         config_path[1:], FortiGateConfig._parse_to_dict(config_file)
                     )
 
                     if config_path[0] not in config:
                         config[config_path[0]] = {}
-                    config[config_path[0]] = {**config[config_path[0]], **tempconfig}
+                    config[config_path[0]] = {**config[config_path[0]], **temp_config}
 
             if line.startswith("edit "):
                 FortiGateConfig._config_path.append(line[5:])
