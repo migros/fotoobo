@@ -48,7 +48,7 @@ def get(
     ),
     path: str = typer.Argument("/", help="Configuration path", metavar="[path]"),
 ) -> None:
-    """Get configuration or parts of it from a configuration file"""
+    """Get configuration or parts of it from one or more FortiGate configuration files"""
     result = fgt.config.get(configuration, scope, path)
     result.print_raw()
 
