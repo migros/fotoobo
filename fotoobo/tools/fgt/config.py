@@ -4,7 +4,7 @@ FortiGate configuration check utility
 
 import logging
 from pathlib import Path
-from typing import List
+from typing import Any, List
 
 import typer
 
@@ -82,16 +82,52 @@ def check(config: Path, bundles: Path) -> Result[List[str]]:
     return result
 
 
+def get(config: Path, scope: str = "", path: str = "") -> Result[FortiGateInfo]:
+    """
+    The FortiGate get configuration utility.
+
+    Args:
+        config (Path):  The configuration to get the information from (either a file or directory)
+                        in case it's a directory all .conf files in it will be checked.
+
+    Returns:
+        result: configuration as result object
+
+    Raises:
+        GeneralWarning: GeneralWarning
+    """
+    files: List[Path] = []
+    if config.is_file():
+        files.append(config)
+
+    elif config.is_dir():
+        log.debug("Given config is a directory")
+        files = [file for file in config.iterdir() if file.is_file() and file.suffix == ".conf"]
+
+    if not files:
+        log.warning("there are no configuration files")
+        raise GeneralWarning("there are no configuration files")
+
+    result = Result[Any]()
+
+    for file in files:
+        conf = FortiGateConfig.parse_configuration_file(file)
+        output = conf.get_configuration(scope, path)
+        result.push_result(conf.info.hostname, output)
+
+    return result
+
+
 def info(config: Path) -> Result[FortiGateInfo]:
     """
     The FortiGate configuration information utility.
 
     Args:
         config (Path):  The configuration to get the information from (either a file or directory)
-                 in case it's a directory all .conf files in it will be checked.
+                        in case it's a directory all .conf files in it will be checked.
 
     Returns:
-        list: list of FortiGate configuration information
+        result: FortiGate information as result object
 
     Raises:
         GeneralWarning: GeneralWarning
