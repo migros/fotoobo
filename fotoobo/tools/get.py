@@ -23,15 +23,11 @@ def inventory() -> Result[List[Dict[str, str]]]:
     """
     log.debug("Printing fotoobo inventory information")
 
-    result = Result[List[Dict[str, str]]]()
+    result = Result[Dict[str, str]]()
     _inventory = Inventory(config.inventory_file)
 
-    data_table = []
-
     for host, data in _inventory.assets.items():
-        data_table.append({"host": host, "hostname": data.hostname, "type": data.type})
-
-    result.push_result("inventory", data_table)
+        result.push_result(host, {"hostname": data.hostname, "type": data.type})
 
     return result
 

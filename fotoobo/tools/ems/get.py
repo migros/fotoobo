@@ -48,7 +48,6 @@ def workgroups(host: str, custom: bool = False) -> Result[List[Dict[str, str]]]:
     """
     result = Result[List[Dict[str, str]]]()
 
-    groups = []
     inventory = Inventory(config.inventory_file)
     ems: FortiClientEMS = inventory.get(host, "forticlientems")[host]
 
@@ -57,10 +56,6 @@ def workgroups(host: str, custom: bool = False) -> Result[List[Dict[str, str]]]:
 
     raw_data = ems.api("get", f"/workgroups/index?custom={custom}").json()["data"]
     for entry in raw_data:
-        groups.append(
-            {"Name": entry["name"], "id": str(entry["id"]), "Count": str(entry["total_devices"])}
-        )
-
-    result.push_result(host, groups)
+        result.push_result(entry["name"], entry["total_devices"])
 
     return result

@@ -120,5 +120,4 @@ def hamaster(
             result.print_result_as_table(
                 headers=["FortiGate Cluster", "Status"],
                 title="FortiGate HA master status",
-                host_is_first_column=True,
             )
