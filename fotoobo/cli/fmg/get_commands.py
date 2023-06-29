@@ -40,9 +40,7 @@ def adoms(
     Get the FortiManager ADOM list.
     """
     result = fmg.get.adoms(host)
-    result.print_result_as_table(
-        host_is_first_column=True, title="FortiManager ADOMs", headers=["Name", "Version"]
-    )
+    result.print_result_as_table(title="FortiManager ADOMs", headers=["Name", "Version"])
 
 
 @app.command()
