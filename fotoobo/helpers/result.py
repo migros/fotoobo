@@ -190,7 +190,7 @@ class Result(Generic[T]):
                 data.append({"host": host, **result})
 
             else:
-                data.append({"host": host, "value": result})
+                data.append({"host": host, "value": str(result)})
 
         self.print_table_raw(data, headers, auto_header, title)
 
