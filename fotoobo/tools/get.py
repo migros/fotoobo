@@ -17,7 +17,7 @@ from fotoobo.inventory import Inventory
 log = logging.getLogger("fotoobo")
 
 
-def inventory() -> Result[List[Dict[str, str]]]:
+def inventory() -> Result[Dict[str, str]]:
     """
     Get the fotoobo inventory
     """
