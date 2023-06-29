@@ -50,26 +50,26 @@ class Result(Generic[T]):
         # Console object for rich output
         self.console = Console(theme=ftb_theme)
 
-    def push_result(self, host: str, data: T, successful: bool = True) -> None:
+    def push_result(self, key: str, data: T, successful: bool = True) -> None:
         """
-        Add a result for the host
+        Add a result for the given key
 
         Args:
-            host:       The host to push the results for
-            data:       The output data for this host
+            key:        The key to push the results for
+            data:       The output data for this key
             successful: Whether the call has been successful or not [default: True]
 
         Returns:
 
         """
 
-        self.results[host] = data
+        self.results[key] = data
 
         if successful:
-            self.successful.append(host)
+            self.successful.append(key)
 
         else:
-            self.failed.append(host)
+            self.failed.append(key)
 
     def push_message(self, host: str, message: str, level: str = "info") -> None:
         """
@@ -176,7 +176,6 @@ class Result(Generic[T]):
             title (str): set the preferred title for the table
             auto_header (bool): whether to show the headers (default: off)
             headers (List[str]): Set the headers (if needed)
-            host_is_first_column (bool): add the host as first column
 
         Raises:
             GeneralWarning: If the data cannot be interpreted as a table
@@ -184,13 +183,13 @@ class Result(Generic[T]):
         if not headers:
             headers = []
 
-        data = []
+        data: List[Dict[str, Any]] = []
         for host, result in self.results.items():
             if isinstance(result, dict):
-                data.append({"host": host, **result})
+                data.append({"key": host, **result})
 
             else:
-                data.append({"host": host, "value": str(result)})
+                data.append({"key": host, "value": result})
 
         self.print_table_raw(data, headers, auto_header, title)
 
