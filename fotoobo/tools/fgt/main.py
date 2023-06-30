@@ -1,11 +1,15 @@
 """
 FortiGate backup utility
 """
+import concurrent.futures
 import json
 import logging
-from typing import Union
+from typing import Tuple, Union
+
+from rich.progress import Progress
 
 from fotoobo.exceptions import APIError, GeneralError
+from fotoobo.fortinet.fortigate import FortiGate
 from fotoobo.helpers.config import config
 from fotoobo.helpers.result import Result
 from fotoobo.inventory import Inventory
@@ -20,46 +24,63 @@ def backup(
     Create a FortiGate configuration backup into a file and optionally upload it to an FTP server.
 
     Args:
-        host (str):         The host from the inventory to get the backup. If no host is given all
-                            FortiGate devices in the inventory are backed up.
-        backup_dir (Path):   The directory to save tha backup(s) to
-        ftp_server (str):   The FTP server from the inventory to upload the backup to. You may omit
-                            this argument to only safe the backup to a file. This argument also
-                            compresses the configuration file into a zip file.
-        smtp_server (str):  The SMTP server from the inventory to send mail messages if errors occur
+        host:   The host from the inventory to get the backup. If no host is given all
+                FortiGate devices in the inventory are backed up.
+
+    Returns:
+        The Result object with all the results
     """
     result = Result[str]()
-
     inventory = Inventory(config.inventory_file)
-    fortigates = inventory.get(host, "fortigate")
+    fgts = inventory.get(host, "fortigate")
 
-    # backup every FortiGate
-    for name, fgt in fortigates.items():
+    def _get_single_backup(name: str, fgt: FortiGate) -> Tuple[str, str]:
+        """Get the configuration backup from a single FortiGate.
+
+        This private method is used for multithreading. It only queries one single FortiGate for its
+        configuration backup and returns it.
+
+        Args:
+            name:   The name of the FortiGate (as defined in the inventory)
+            fgt:    The FortiGate object to query
+
+        Returns:
+            name:   The name of the FortiGate (as defined in the inventory)
+            data:   The configuration backup of the FortiGate (fgt)
+        """
         log.debug("backup FortiGate '%s'", name)
-
+        data: str = ""
         try:
-            data: str = fgt.backup()
+            data = fgt.backup()
+            if data.startswith("#config-version"):
+                message = f"config backup for '{name}' succeeded"
+                log.info(message)
+                result.push_message(name, message)
 
-            result.push_result(name, data)
+            else:
+                data_json = json.loads(data)
+                message = f"backup '{name}' failed with error '{data_json['http_status']}'"
+                log.error(message)
+                result.push_message(name, message, level="error")
 
         except GeneralError as err:
             result.push_message(name, err.message, level="error")
-            continue
 
         except APIError as err:
             result.push_message(name, f"{name} returned {err.message}", level="error")
-            continue
 
-        if data.startswith("#config-version"):
-            success_message = f"config backup for '{name}' succeeded"
-            log.info(success_message)
-            result.push_message(name, success_message)
+        return name, data
 
-        else:
-            data_json = json.loads(data)
-            error_str = f"backup '{name}' failed with error '{data_json['http_status']}'"
-            log.error(error_str)
-            result.push_message(name, error_str, level="error")
-            continue
+    with Progress() as progress:
+        task = progress.add_task("getting FortiGate versions...", total=len(fgts))
+        with concurrent.futures.ThreadPoolExecutor(max_workers=10) as executor:
+            futures = []
+            for name, fgt in fgts.items():
+                futures.append(executor.submit(_get_single_backup, name, fgt))
+
+            for future in concurrent.futures.as_completed(futures):
+                name, configuration_backup = future.result()
+                result.push_result(name, configuration_backup)
+                progress.update(task, advance=1)
 
     return result
