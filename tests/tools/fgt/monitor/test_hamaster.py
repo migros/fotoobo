@@ -41,8 +41,28 @@ def fmg_logout(monkeypatch: MonkeyPatch) -> None:
 @pytest.mark.parametrize(
     "ret_val, expected",
     (
-        pytest.param("dummy_1", "not OK", id="not OK"),
-        pytest.param("dummy_2", "OK", id="OK"),
+        pytest.param(
+            {
+                "results": [
+                    {"is_root_master": 0, "serial_no": "FG11111111111111"},
+                    {"is_root_master": 1, "serial_no": "FG00000000000000"},
+                ],
+                "serial": "FG11111111111111",
+            },
+            "is not the expected master",
+            id="not OK",
+        ),
+        pytest.param(
+            {
+                "results": [
+                    {"is_root_master": 1, "serial_no": "FG11111111111111"},
+                    {"is_root_master": 0, "serial_no": "FG00000000000000"},
+                ],
+                "serial": "FG11111111111111",
+            },
+            "ok",
+            id="OK",
+        ),
     ),
 )
 def test_hamaster(monkeypatch: MonkeyPatch, ret_val: str, expected: str) -> None:
@@ -56,14 +76,23 @@ def test_hamaster(monkeypatch: MonkeyPatch, ret_val: str, expected: str) -> None
                         {
                             "data": [
                                 {
+                                    "name": "test_fgt",
+                                    "ha_mode": 1,
+                                    "ha_slave": [
+                                        {"prio": 100, "name": "test_fgt_1"},
+                                        {"prio": 200, "name": "test_fgt_2"},  # designated master
+                                    ],
+                                    "ip": "1.2.3.4",
+                                },
+                                {
                                     "name": "dummy",
                                     "ha_mode": 1,
                                     "ha_slave": [
-                                        {"prio": 1, "name": "dummy_1"},
-                                        {"prio": 2, "name": "dummy_2"},
+                                        {"prio": 100, "name": "dummy_1"},
+                                        {"prio": 200, "name": "dummy_2"},  # designated master
                                     ],
                                     "ip": "1.2.3.4",
-                                }
+                                },
                             ]
                         }
                     ]
@@ -73,11 +102,13 @@ def test_hamaster(monkeypatch: MonkeyPatch, ret_val: str, expected: str) -> None
         ),
     )
     monkeypatch.setattr(
-        "fotoobo.tools.fgt.monitor._snmp_get",
-        MagicMock(return_value=ret_val),
+        "fotoobo.tools.fgt.monitor.FortiGate.api",
+        MagicMock(return_value=ResponseMock(json=ret_val)),
     )
     monkeypatch.setattr(
-        "fotoobo.helpers.result.Result.send_messages_as_mail", MagicMock(return_value=None)
+        "fotoobo.helpers.result.Result.send_messages_as_mail",
+        MagicMock(return_value=None),
     )
     result = hamaster("test_fmg")
-    assert result.get_result("dummy") == expected
+    assert result.get_result("test_fgt_2") == expected
+    assert result.get_result("dummy_2") == "not found in inventory"
