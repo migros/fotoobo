@@ -67,16 +67,6 @@ no_logo
 Suppress the output of the fotoobo logo at the beginning of the execution. Set this value to ``True`` to
 suppress the logo.
 
-snmp_community
-""""""""""""""
-
-*default: ""*
-
-The SNMPv2 community string to use to connect to the Fortinet assets (used for examples by commands
-``fotoobo ...``. By now it's only supported to have one single community string for all devices,
-so make sure you configure the same string on every device. Also SNMPv2 is the only supported SNMP
-version at the moment.
-
 .. _logging:
 
 Logging
