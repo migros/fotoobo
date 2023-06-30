@@ -110,9 +110,10 @@ def test_backup_api_error(monkeypatch: MonkeyPatch) -> None:
     result = backup("test_fgt_2")
 
     all_results = result.all_results()
-    assert len(all_results) == 0
+    assert len(all_results) == 1
+    assert not all_results["test_fgt_2"]
 
     assert len(result.messages["test_fgt_2"]) == 1
     message = result.messages["test_fgt_2"][0]
     assert message["level"] == "error"
-    assert "returned unknown" in message["message"]
+    assert "test_fgt_2 returned unknown" in message["message"]
