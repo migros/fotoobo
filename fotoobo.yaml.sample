@@ -8,9 +8,6 @@ inventory: inventory.yaml
 # Hide the fotoobo logo
 no_logo: false
 
-# The SNMP Community to use for SNMPv2 calls
-snmp_community: ""
-
 # Whether to verify SSL connections or not. Set it to "true", "false" or the path to a CA bundle.
 ssl_verify: True
 

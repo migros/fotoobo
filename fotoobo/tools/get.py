@@ -45,7 +45,7 @@ def version(verbose: bool = False) -> Result[List[Dict[str, str]]]:
     versions = [{"module": "fotoobo", "version": __version__}]
 
     if verbose:
-        modules = ["pysnmp", "jinja2", "PyYAML", "requests", "rich", "typer"]
+        modules = ["jinja2", "PyYAML", "requests", "rich", "typer"]
 
         for module in modules:
             versions.append({"module": module, "version": importlib.metadata.version(module)})
