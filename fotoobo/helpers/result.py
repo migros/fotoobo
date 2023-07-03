@@ -58,9 +58,6 @@ class Result(Generic[T]):
             key:        The key to push the results for
             data:       The output data for this key
             successful: Whether the call has been successful or not [default: True]
-
-        Returns:
-
         """
 
         self.results[key] = data
@@ -80,9 +77,6 @@ class Result(Generic[T]):
             message:    The message to add
             level:      The level to assign to this message, used for later filtering
                         (use for example "info", "warning", "error")
-
-        Returns:
-
         """
 
         if host not in self.messages:
@@ -95,7 +89,7 @@ class Result(Generic[T]):
         Return all the messages for the host given
 
         Args:
-            host:       The host to get the messages for
+            host:   The host to get the messages for
 
         Returns:
             A list of the messages pushed for this host. If there are no messages for this host, it
@@ -114,9 +108,6 @@ class Result(Generic[T]):
         Args:
             only_host:  Only print the messages for host only_host. If None is given, print all
                         messages.
-
-        Returns:
-
         """
 
         out_messages = []
@@ -140,7 +131,7 @@ class Result(Generic[T]):
             The results stored before with push_results, or None if the host does not exist
 
         Raises:
-            GeneralWarning if there is no result for host
+            GeneralWarning: If there is no result for host
         """
 
         if host not in self.results:
@@ -153,10 +144,12 @@ class Result(Generic[T]):
         Return all results
 
         Returns:
-            The results as a dictionary of the following form:
-            {
-                '<name of the host>': <data>
-            }
+            The results as a dictionary of the following form::
+
+                {
+                    '<name of the host>': <data>
+                }
+
             where `<data>` may be of any type
         """
         return self.results
@@ -204,13 +197,10 @@ class Result(Generic[T]):
         Print the data given as a rich table to the console
 
         Args:
-            data:       The data to print formatted as rich.table.Table will expect it
-            headers:    The headers for the table
-            auto_header: Whether to show the headers or not
-            title:      The title for the table
-
-        Returns:
-            Nothing
+            data:           The data to print formatted as rich.table.Table will expect it
+            headers:        The headers for the table
+            auto_header:    Whether to show the headers or not
+            title:          The title for the table
         """
         if not (isinstance(data, list) and isinstance(data[0], dict)):
             raise GeneralWarning("data for print_table_raw must be a list of dicts.")
@@ -246,7 +236,7 @@ class Result(Generic[T]):
 
         Args:
             key (Union[str, None]): Print only the result for the host given
-                                          (default: print all results)
+                                    (default: print all results)
         """
         if key:
             data = {key: self.get_result(key)}
@@ -293,10 +283,10 @@ class Result(Generic[T]):
             count:          Whether to write the message count into the message (default: false)
             smtp_server:    The smtp server from inventory to use
             levels:         The levels to output:
-                              - None means all messages will be output (default)
-                              - 'level' means only messages with level='level' will be output
-                              - ['level1', 'level2'] like 2nd option, but all levels given will get
-                                output
+                            - None means all messages will be output (default)
+                            - 'level' means only messages with level='level' will be output
+                            - ['level1', 'level2'] like 2nd option, but all levels given will get
+                            output
         """
         out_messages: List[str] = []
 

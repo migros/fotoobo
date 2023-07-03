@@ -10,8 +10,16 @@ import pwd
 import socket
 from datetime import datetime
 from logging.handlers import RotatingFileHandler, SysLogHandler
+from syslog import (
+    LOG_AUTH,
+    LOG_CRIT,
+    LOG_DEBUG,
+    LOG_ERR,
+    LOG_INFO,
+    LOG_USER,
+    LOG_WARNING,
+)
 from typing import Optional, Union
-from syslog import LOG_AUTH, LOG_CRIT, LOG_DEBUG, LOG_ERR, LOG_INFO, LOG_USER, LOG_WARNING
 
 from rich.logging import RichHandler
 
@@ -50,9 +58,6 @@ class SysLogFormatter(logging.Formatter):
 
         Args:
             record:
-
-        Returns:
-
         """
 
         if record.levelname == "DEBUG":
@@ -107,11 +112,8 @@ class Log:
             log_switch: Whether we globally turn logging off or on
             log_level:  The desired log_level (given by CLI argument)
 
-        Returns:
-            Nothing
-
         Raises:
-            GeneralError    On unrecoverable errors (usually on non-existing/empty or
+            GeneralError:   On unrecoverable errors (usually on non-existing/empty or
                             invalid logging configuration file
         """
         # pylint: disable=too-many-branches
