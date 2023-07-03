@@ -1,5 +1,5 @@
 """
-The FotooboResult class
+The fotoobo Result class
 """
 import json
 import smtplib
