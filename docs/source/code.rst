@@ -18,6 +18,8 @@ Exceptions
 Fortinet Classes
 ----------------
 
+:ref:`fortinet_classes`
+
 .. autoclass:: fotoobo.fortinet.fortinet.Fortinet
   :members:
 
