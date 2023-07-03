@@ -4,7 +4,7 @@ The fotoobo Result class
 import json
 import smtplib
 from pathlib import Path
-from typing import Any, Dict, Generic, List, TypeVar, Union
+from typing import Any, Dict, Generic, List, Optional, TypeVar, Union
 
 import jinja2
 from rich.console import Console
@@ -158,7 +158,7 @@ class Result(Generic[T]):
         self,
         title: str = "",
         auto_header: bool = False,
-        headers: Union[List[str], None] = None,
+        headers: Optional[List[str]] = None,
     ) -> None:
         """
         Print a table from given data as list or dict.
@@ -189,7 +189,7 @@ class Result(Generic[T]):
     def print_table_raw(
         self,
         data: List[Dict[str, Any]],
-        headers: List[str],
+        headers: Optional[List[str]] = None,
         auto_header: bool = False,
         title: str = "",
     ) -> None:
