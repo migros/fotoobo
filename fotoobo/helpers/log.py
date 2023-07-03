@@ -159,7 +159,7 @@ class Log:
                 raise GeneralWarning(f"Loglevel {log_level} not known")
 
             # If nothing is configured in the config file but logging is requested from
-            # the commandline use a simple basic config
+            # the command line use a simple basic config
             if not config.logging and log_switch:
                 # Configure logger "fotoobo"
                 logger.setLevel(log_level or logging.INFO)
