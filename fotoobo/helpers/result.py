@@ -164,11 +164,11 @@ class Result(Generic[T]):
         Print a table from given data as list or dict.
 
         Args:
-            key (Union[str, None]): Print only the result for the host given
-                                    (default: print all results)
-            title (str): set the preferred title for the table
-            auto_header (bool): whether to show the headers (default: off)
-            headers (List[str]): Set the headers (if needed)
+            key:            Print only the result for the host given
+                            (default: print all results)
+            title:          Set the preferred title for the table
+            auto_header:    Whether to show the headers (default: off)
+            headers:        Set the headers (if needed)
 
         Raises:
             GeneralWarning: If the data cannot be interpreted as a table
@@ -235,8 +235,8 @@ class Result(Generic[T]):
         Print the raw data from Result() in pretty format.
 
         Args:
-            key (Union[str, None]): Print only the result for the host given
-                                    (default: print all results)
+            key:    Print only the result for the host given
+                    (default: print all results)
         """
         if key:
             data = {key: self.get_result(key)}
@@ -255,11 +255,9 @@ class Result(Generic[T]):
         the docs of the used utility to see what variables you're intended to use.
 
         Args:
-            data (Dict[Any, Any]): The data used in the template
-
-            template_file (Path): Filename of the Jinja2 template file
-
-            output_file (Path): The file to write the output to
+            data: The data used in the template
+            template_file: Filename of the Jinja2 template file
+            output_file: The file to write the output to
         """
         template_env = jinja2.Environment(
             loader=jinja2.FileSystemLoader(template_file.parent), trim_blocks=True, autoescape=True
