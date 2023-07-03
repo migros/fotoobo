@@ -81,5 +81,7 @@ output
 result
 ^^^^^^
 
+:ref:`helpers_result`
+
 .. automodule:: fotoobo.helpers.result
   :members:
