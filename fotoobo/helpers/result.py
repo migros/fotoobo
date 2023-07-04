@@ -50,26 +50,26 @@ class Result(Generic[T]):
         # Console object for rich output
         self.console = Console(theme=ftb_theme)
 
-    def push_result(self, host: str, data: T, successful: bool = True) -> None:
+    def push_result(self, key: str, data: T, successful: bool = True) -> None:
         """
-        Add a result for the host
+        Add a result for the given key
 
         Args:
-            host:       The host to push the results for
-            data:       The output data for this host
+            key:        The key to push the results for
+            data:       The output data for this key
             successful: Whether the call has been successful or not [default: True]
 
         Returns:
 
         """
 
-        self.results[host] = data
+        self.results[key] = data
 
         if successful:
-            self.successful.append(host)
+            self.successful.append(key)
 
         else:
-            self.failed.append(host)
+            self.failed.append(key)
 
     def push_message(self, host: str, message: str, level: str = "info") -> None:
         """
@@ -161,25 +161,21 @@ class Result(Generic[T]):
         """
         return self.results
 
-    # pylint: disable=too-many-arguments
     def print_result_as_table(
         self,
-        only_host: Union[str, None] = None,
         title: str = "",
         auto_header: bool = False,
         headers: Union[List[str], None] = None,
-        host_is_first_column: bool = False,
     ) -> None:
         """
         Print a table from given data as list or dict.
 
         Args:
-            only_host (Union[str, None]): Print only the result for the host given
-                                          (default: print all results)
+            key (Union[str, None]): Print only the result for the host given
+                                    (default: print all results)
             title (str): set the preferred title for the table
             auto_header (bool): whether to show the headers (default: off)
             headers (List[str]): Set the headers (if needed)
-            host_is_first_column (bool): add the host as first column
 
         Raises:
             GeneralWarning: If the data cannot be interpreted as a table
@@ -187,31 +183,13 @@ class Result(Generic[T]):
         if not headers:
             headers = []
 
-        if only_host:
-            if host_is_first_column:
-                result = self.results[only_host]
-                if isinstance(result, dict):
-                    data: Any = [{"host": only_host, **result}]
-                else:
-                    data = [{"host": only_host, "value": result}]
-            else:
-                if isinstance(self.results[only_host], list):
-                    data = self.results[only_host]
-                else:
-                    data = [self.results[only_host]]
-
-        else:
-            if host_is_first_column:
-                data = []
-
-                for host, result in self.results.items():
-                    if isinstance(result, dict):
-                        data.append({"host": host, **result})
-                    else:
-                        data.append({"host": host, "value": result})
+        data: List[Dict[str, Any]] = []
+        for host, result in self.results.items():
+            if isinstance(result, dict):
+                data.append({"key": host, **result})
 
             else:
-                data = [self.results]
+                data.append({"key": host, "value": result})
 
         self.print_table_raw(data, headers, auto_header, title)
 
@@ -262,16 +240,16 @@ class Result(Generic[T]):
 
         self.console.print(table)
 
-    def print_raw(self, only_host: Union[str, None] = None) -> None:
+    def print_raw(self, key: Union[str, None] = None) -> None:
         """
         Print the raw data from Result() in pretty format.
 
         Args:
-            only_host (Union[str, None]): Print only the result for the host given
+            key (Union[str, None]): Print only the result for the host given
                                           (default: print all results)
         """
-        if only_host:
-            data = {only_host: self.get_result(only_host)}
+        if key:
+            data = {key: self.get_result(key)}
 
         else:
             data = {}
