@@ -61,7 +61,7 @@ def hamaster(
         None,
         "--smtp",
         help="The smtp configuration from the inventory.",
-        metavar="server",
+        metavar="[server]",
         show_default=False,
     ),
     template_file: Union[None, Path] = typer.Option(
