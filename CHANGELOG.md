@@ -8,7 +8,7 @@ For examples and guidelines see [https://keepachangelog.com/](https://keepachang
 
 ### Added
 
-- Inventory getter now supports wildcard * syntax. Can be at any position (start, end, between)
+- Inventory getter now supports wildcard * syntax
 - Parallel processing bulk queries to FortiGates. This includes the following commands:
   `fgt backup` `fgt get version` `fgt monitor hamaster`
 - Introduce ´fgt config get´ command to (bulk) print parts of saved configuration
