@@ -68,10 +68,10 @@ class Inventory:
             if not name and not type:
                 assets[_name] = _asset
 
-            if not name and getattr(_asset, "type", None) == type:
+            elif not name and getattr(_asset, "type", None) == type:
                 assets[_name] = _asset
 
-            if name and re.match(name_pattern, _name):
+            elif name and re.match(name_pattern, _name):
                 if (type and getattr(_asset, "type", None) == type) or not type:
                     assets[_name] = _asset
 
