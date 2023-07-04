@@ -206,9 +206,9 @@ the key names or order.
     │ host3 │ text        │       │             │
     └───────┴─────────────┴───────┴─────────────┘
 
-You would expect a table with looks like the line for host1. But for host2 you recognize that the
-hostname is in the wrong column. This is because the order of the key value pairs int the dict does
-not match the ordering of the first result. With host3 which not even has a dict als value you see
+You would expect a table which looks like the line for host1. But for host2 you recognize that the
+hostname is in the wrong column. This is because the order of the key value pairs in the dict does
+not match the ordering of the first result. With host3 which not even has a dict as value you see
 that the value given is just printed in the second column.
 
 Conclusion: **Stay consequent with dicts in results!**
@@ -220,7 +220,7 @@ print_table_raw()
 The method :code:`print_table_raw()` takes the data to print as first argument. You always have to
 pass a list of dicts or it will raise an exception. Every item in the list will result in a line in
 the table and every key in the dict will represent a column. The table will only contain the values
-in the dicts whereas the keys wil be interpreted as colum headers. It is very important that every
+in the dicts whereas the keys will be interpreted as colum headers. It is very important that every
 dict in all results have the same keys (names and sequence must match). As a best practice always
 use loop generated dicts whenever you need them in a table.
 
