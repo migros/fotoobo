@@ -33,6 +33,9 @@ Code Style
 -   Use a linter (we suggest `pylint <https://github.com/pylint-dev/pylint>`_) for static code
     analysis.
 
+These styles are enforced by a tox pipeline running pylint and black that also runs on every pull
+request on GitHub.
+
 **Line length**
 
 Maximum line length is 100 characters.
@@ -59,7 +62,7 @@ Test Automation
 
 Use `Tox <https://tox.wiki/en/latest/>`_ for test automation. Whenever you did some changes you wish
 to publish run :code:`tox` before any merge request. Every merge request which does not pass all
-tests wi be rejected.
+tests will be rejected.
 
 Release
 -------
