@@ -2,8 +2,8 @@
 Test the inventory
 """
 
-from typing import Optional
 from pathlib import Path
+from typing import Optional
 
 import pytest
 
@@ -38,6 +38,9 @@ class TestInventory:
         (
             pytest.param(None, None, 7, id="no name, no type"),
             pytest.param("test_fgt_1", None, 1, id="name, no type"),
+            pytest.param("*_fgt_1", None, 1, id="wildcard name 1, no type"),
+            pytest.param("test_*_1", None, 1, id="wildcard name 2, no type"),
+            pytest.param("test_fgt_*", None, 2, id="wildcard name 3, no type"),
             pytest.param(None, "fortigate", 2, id="no name, type"),
         ),
     )
@@ -49,17 +52,19 @@ class TestInventory:
 
     @staticmethod
     @pytest.mark.parametrize(
-        "test_name, test_type, expected_message",
+        "test_name, test_type",
         (
-            pytest.param("dummy", "dummy", r"asset dummy is not.*", id="wrong name, wrong type"),
-            pytest.param("test_fgt_1", "dummy", r"no .*type 'dum.*", id="name, wrong type"),
-            pytest.param(None, "dummy", r"no.*type 'dummy'.*", id="no name, wrong type"),
+            pytest.param("dummy", "dummy", id="wrong name, wrong type"),
+            pytest.param("test_fgt_1", "dummy", id="name, wrong type"),
+            pytest.param(None, "dummy", id="no name, wrong type"),
+            pytest.param("dummy", None, id="wrong name, no type"),
+            pytest.param("*dummy", None, id="wrong wildcard name 1, no type"),
+            pytest.param("dum*my", None, id="wrong wildcard name 2, no type"),
+            pytest.param("dummy*", None, id="wrong wildcard name 3, no type"),
         ),
     )
-    def test_get_with_exception(
-        test_name: Optional[str], test_type: Optional[str], expected_message: str
-    ) -> None:
+    def test_get_with_exception(test_name: Optional[str], test_type: Optional[str]) -> None:
         """Test Inventory.get() when an exception is raised"""
         inventory = Inventory(Path("tests/data/inventory.yaml"))
-        with pytest.raises(GeneralWarning, match=expected_message):
+        with pytest.raises(GeneralWarning, match=r"no asset of type .* and name .*"):
             inventory.get(test_name, test_type)
