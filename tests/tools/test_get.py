@@ -51,12 +51,12 @@ def test_get_inventory(monkeypatch: MonkeyPatch) -> None:
             }
         ),
     )
-    result = inventory().get_result("inventory")
-
-    assert isinstance(result, list)
-    assert result[0]["host"] == "dummy_1"
-    assert result[1]["host"] == "dummy_2"
-    assert result[1]["hostname"] == "name_2"
+    result = inventory().all_results()
+    assert isinstance(result, dict)
+    assert len(result) == 2
+    assert result["dummy_1"]["hostname"] == "name_1"
+    assert result["dummy_2"]["hostname"] == "name_2"
+    assert result["dummy_2"]["type"] == "type_2"
 
 
 def test_get_version() -> None:

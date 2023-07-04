@@ -91,7 +91,9 @@ def connections(
             for connection in result.get_result(host)["data"]:
                 conns.append(
                     {
-                        "token": connection["token"],
+                        "token": connection["token"]
+                        .replace("offline", "Offline ")
+                        .replace("online", "Online"),
                         "value": connection["value"],
                         "name": connection["name"],
                     }
