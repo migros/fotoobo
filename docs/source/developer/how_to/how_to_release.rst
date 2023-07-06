@@ -1,8 +1,8 @@
 .. Describes how to do a new release
 
-.. _HowToRelease:
+.. _how_to_release:
 
-How to Release
+How To Release
 ==============
 
 Only maintainers are allowed to release code. So, if someone did some breaking changes which should
