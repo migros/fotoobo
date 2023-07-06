@@ -100,7 +100,7 @@ description = check pytest coverage for integration tests (which are under tests
 skip_install = true
 allowlist_externals = poetry, pytest
 commands_pre = poetry install
-commands = pytest --cov-report term-missing --cov-fail-under 80 --cov=fotoobo/cli tests/cli {posargs}
+commands = pytest --cov-report term-missing --cov-fail-under 90 --cov=fotoobo/cli tests/cli {posargs}
 
 [testenv:coverage]
 description = check pytest coverage for unit tests (without cli because these are unit-tests)
