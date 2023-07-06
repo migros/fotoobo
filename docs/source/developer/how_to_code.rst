@@ -10,8 +10,8 @@ Before you start contributing in this project please read and accept our :ref:`C
 Before you start coding always remember the *Zen of Python* by Tim Peters. If you don't know it just
 type :code:`import this` in an interactive Python interpreter.
 
-We strongly encourage you to use any Linux environment to code. The project was never tested on 
-a Windows system.
+We strongly encourage you to use any Linux environment to code. WSL on Windows is also possible. The
+project was never tested on a native Windows system.
 
 
 Package Management
