@@ -38,13 +38,13 @@ Start with:
 
 .. code-block:: bash
 
-  fotoobo --help
+    fotoobo --help
 
 An overview of all available fotoobo commands can be shown with:
 
 .. code-block:: bash
 
-  fotoobo get commands
+    fotoobo get commands
 
 
 Connect your first FortiGate
@@ -58,8 +58,8 @@ inventory.
 
 .. code-block:: yaml
 
-  # The path to the inventory file
-  inventory: inventory.yaml
+    # The path to the inventory file
+    inventory: inventory.yaml
 
 For more options see the :ref:`global configuration documentation<usage_configuration>`.
 
@@ -70,12 +70,12 @@ And of course you must also create the inventory file which in this case is call
 
 .. code-block:: yaml
 
-  demo-fortigate:
-    hostname: <YOUR FORTIGATE DNS NAME OR IP-ADDRESS>
-    https_port: 8443
-    ssl_verify: false
-    token: <YOUR FORTIGATE API ACCESS TOKEN>
-    type: fortigate
+    demo-fortigate:
+        hostname: <YOUR FORTIGATE DNS NAME OR IP-ADDRESS>
+        https_port: 8443
+        ssl_verify: false
+        token: <YOUR FORTIGATE API ACCESS TOKEN>
+        type: fortigate
 
 For more options see the :ref:`inventory documentation<usage_inventory>`.
 
@@ -87,7 +87,7 @@ version from the FortiGate by issuing the following command:
 
 .. code-block:: bash
 
-  fotoobo fgt get version demo-fortigate
+    fotoobo fgt get version demo-fortigate
 
 
 Termination
@@ -101,10 +101,15 @@ which do not correspond with the Python logging levels.
 
 .. code-block:: bash
 
-  fotoobo$ fotoobo ems get version
-  FortiClient EMS version: 1.2.3
-  fotoobo$ echo $?
-  0
+    fotoobo$ fotoobo ems get version
+      FortiClient EMS Version   
+    ┏━━━━━━━━━━━━━━━━━┳━━━━━━━━━┓
+    ┃ FortiClient EMS ┃ Version ┃
+    ┡━━━━━━━━━━━━━━━━━╇━━━━━━━━━┩
+    │ ems             │ v1.2.3  │
+    └─────────────────┴─────────┘
+    fotoobo$ echo $?
+    0
 
 The following status codes are defined and used in fotoobo:
 
