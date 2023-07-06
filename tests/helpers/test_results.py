@@ -69,7 +69,7 @@ class TestResults:
         "message,level",
         (
             pytest.param("test message", None, id="default level"),
-            pytest.param("test message", "blabla", id="some custom level"),
+            pytest.param("test message", "dummy", id="some custom level"),
         ),
     )
     def test_push_message(message: str, level: Union[None, str]) -> None:
@@ -175,12 +175,11 @@ class TestResults:
         result = Result[Any]()
         result.push_result("test_host", input_data)
 
-        result.print_result_as_table("test_host")
+        result.print_result_as_table()
 
         out, _ = capsys.readouterr()
-        assert "key1" not in out
+        assert "test_host" in out
         assert "val1" in out
-        assert "key2" not in out
         assert "val2" in out
 
     @staticmethod
@@ -214,7 +213,7 @@ class TestResults:
         result = Result[Dict[str, str]]()
         result.push_result("test_host", {"key1": "val1", "key2": "val2"})
 
-        result.print_result_as_table("test_host", title="title")
+        result.print_result_as_table(title="title")
 
         out, _ = capsys.readouterr()
         assert "title" in out

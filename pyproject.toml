@@ -16,8 +16,6 @@ rich = "~12.5.1"
 PyYAML = "~6.0.0"
 requests = "~2.31.0"
 Jinja2 = "~3.1.2"
-pysnmp = "^4.4.12"
-pyasn1 = "0.4.8"
 
 [tool.poetry.dev-dependencies]
 pytest = "~7.2.0"
@@ -102,7 +100,7 @@ description = check pytest coverage for integration tests (which are under tests
 skip_install = true
 allowlist_externals = poetry, pytest
 commands_pre = poetry install
-commands = pytest --cov-report term-missing --cov-fail-under 80 --cov=fotoobo/cli tests/cli {posargs}
+commands = pytest --cov-report term-missing --cov-fail-under 90 --cov=fotoobo/cli tests/cli {posargs}
 
 [testenv:coverage]
 description = check pytest coverage for unit tests (without cli because these are unit-tests)

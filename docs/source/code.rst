@@ -15,8 +15,11 @@ Exceptions
 
 .. _auto_fortinet_classes:
 
+
 Fortinet Classes
 ----------------
+
+:ref:`fortinet_classes`
 
 .. autoclass:: fotoobo.fortinet.fortinet.Fortinet
   :members:
@@ -52,7 +55,6 @@ cli
 .. automodule:: fotoobo.helpers.cli
   :members:
 
-
 config
 ^^^^^^
 
@@ -75,4 +77,12 @@ output
 ^^^^^^
 
 .. automodule:: fotoobo.helpers.output
+  :members:
+
+result
+^^^^^^
+
+:ref:`how_to_helpers_result`
+
+.. automodule:: fotoobo.helpers.result
   :members:

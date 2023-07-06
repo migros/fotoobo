@@ -3,8 +3,9 @@ Devices class for storing device information
 """
 
 import logging
-from typing import Any, Dict, Optional
+import re
 from pathlib import Path
+from typing import Any, Dict, Optional
 
 from fotoobo.exceptions import GeneralWarning
 from fotoobo.fortinet.fortianalyzer import FortiAnalyzer
@@ -12,6 +13,7 @@ from fotoobo.fortinet.forticlientems import FortiClientEMS
 from fotoobo.fortinet.fortigate import FortiGate
 from fotoobo.fortinet.fortimanager import FortiManager
 from fotoobo.helpers.files import load_yaml_file
+
 from .generic import GenericDevice
 
 log = logging.getLogger("fotoobo")
@@ -49,30 +51,34 @@ class Inventory:
         Get a list of assets from the inventory
 
         Args:
-            name (str, optional): Which asset to get. If blank get every asset
-            type (str, optional) : Which asset type to get. If blank get every asset.
+            name:   Which asset to get. If blank get every asset. Wildcard * is supported in any
+                    position. E.g. "FortiGate", "*Gate", "Forti*ate", "Forti*".
+            type:   Which asset type to get. If blank get every asset.
 
         Returns:
-            Dict[str, Any]: Dict of assets with name as key
+            Dict of assets with name as key
+
+        Raises:
+            GeneralWarning if no asset was found that matches name or type
         """
         log.debug("getting assets with name '%s' and type '%s'", name, type)
-        if name and name not in self.assets:
-            raise GeneralWarning(f"asset {name} is not defined in inventory")
-
+        name_pattern = f"^{name}$".replace("*", ".*")
         assets = {}
         for _name, _asset in self.assets.items():
             if not name and not type:
                 assets[_name] = _asset
 
-            if not name and getattr(_asset, "type", None) == type:
+            elif not name and getattr(_asset, "type", None) == type:
                 assets[_name] = _asset
 
-            if name and _name == name:
+            elif name and re.match(name_pattern, _name):
                 if (type and getattr(_asset, "type", None) == type) or not type:
                     assets[_name] = _asset
 
-        if type and len(assets) == 0:
-            raise GeneralWarning(f"no asset of type '{type}' was found in the inventory")
+        if not assets:
+            raise GeneralWarning(
+                f"no asset of type '{type}' and name '{name}' was found in the inventory"
+            )
 
         return assets
 
@@ -92,7 +98,6 @@ class Inventory:
             self._set_globals(inventory_raw["globals"])
 
         for name, asset in inventory_raw.items():
-
             # skip globals
             if name == "globals":
                 continue
@@ -137,8 +142,8 @@ class Inventory:
         Set some defaults for device types
 
         Args:
-            data (Dict[str, Any]): defaults by device where key is the device type and value defines
-            its defaults
+            data:   defaults by device where key is the device type and value defines
+                    its defaults
         """
         for key, value in data.items():
             self._globals[key] = value

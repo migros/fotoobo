@@ -39,5 +39,4 @@ def version(
     result.print_result_as_table(
         title="FortiAnalyzer Version",
         headers=["FortiAnalyzer", "Version"],
-        host_is_first_column=True,
     )
