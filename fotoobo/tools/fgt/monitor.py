@@ -2,20 +2,13 @@
 FortiGate check hamaster utility
 """
 
+import concurrent.futures
 import logging
+from typing import Dict, Tuple
 
-from pysnmp.hlapi import (
-    CommunityData,
-    ContextData,
-    ObjectIdentity,
-    ObjectType,
-    SnmpEngine,
-    UdpTransportTarget,
-    getCmd,
-)
-from rich.progress import track
+from rich.progress import Progress
 
-from fotoobo.exceptions import GeneralError
+from fotoobo.fortinet.fortigate import FortiGate
 from fotoobo.helpers.config import config
 from fotoobo.helpers.result import Result
 from fotoobo.inventory import Inventory
@@ -23,66 +16,46 @@ from fotoobo.inventory import Inventory
 log = logging.getLogger("fotoobo")
 
 
-def _snmp_get(  # pylint: disable=too-many-arguments
-    oid: str, hostname: str, community: str, version: int = 2, timeout: int = 2, retries: int = 2
-) -> str:
-    """
-    Get a single SNMPv2 value from a given OID
+def hamaster(host: str) -> Result[str]:  # pylint: disable=too-many-locals
+    """FortiGate check hamaster.
+
+    This method first gets all the devices from a FortiManager to find all the managed FortiGates
+    clusters. Then it queries every cluster for its HA status directly to its shared management ip.
+    Be aware that the device names in FortiManager must match the names in the inventory because we
+    search for the devices we found in Fortimanager in our inventory to connect to to them.
 
     Args:
-        hostname (str): Host to send the SNMP query to
-        community (str): SNMP community string
-        version (int, optional): SNMP version. Set it to 2 for SNMPv2c. All other values will result
-            in SNMP version 1. Defaults to 2.
-        timeout (int, optional): Query timeout in seconds. Defaults to 2.
-        retries (int, optional): Retries. Defaults to 2.
-
-    Raises:
-        GeneralError: Any SNMP error ocurred
+        host:   The FortiManager host from the inventory to get the device list from. If you omit
+                host, it will run over the default FortiManager (fmg).
 
     Returns:
-        str: _description_
+        The Result object with all the results
     """
-    mp_model = 1 if version == 2 else 0
-    iterator = getCmd(
-        SnmpEngine(),
-        CommunityData(community, mpModel=mp_model),
-        UdpTransportTarget((hostname, 161), timeout, retries),
-        ContextData(),
-        ObjectType(ObjectIdentity(oid)),
-    )
 
-    error_indication, error_status, error_index, var_binds = next(iterator)
+    def _get_single_status(name: str, fgt: FortiGate) -> Tuple[str, str]:
+        """Get the HA master status from a FortiGate.
 
-    if error_indication:
-        log.debug("SNMP error: %s at %s", error_indication, error_index)
-        raise GeneralError(f"SNMP error: {error_indication}")
+        This private method is used for multithreading. It only queries one single FortiGate for its
+        HA master status and returns it.
 
-    if error_status:
-        log.debug("SNMP error: %s", error_status)
-        raise GeneralError(f"SNMP error: {error_status}")
+        Args:
+            name:   The name of the FortiGate (as defined in the inventory)
+            fgt:    The FortiGate object to query
 
-    for var_bind in var_binds:
-        value: str = var_bind.prettyPrint()
+        Returns:
+            name:   The name of the FortiGate (as defined in the inventory)
+            status: The HA status of the FortiGate (fgt)
+        """
+        response = fgt.api("get", "/monitor/system/ha-checksums")
+        ha_checksums = response.json()
+        status: str = "is not the expected master"
+        for node in ha_checksums["results"]:
+            if node["serial_no"] == ha_checksums["serial"]:
+                if node["is_root_master"] == 1:
+                    status = "ok"
 
-        if "=" in value:
-            value = value.split("=")[-1].strip()
+        return name, status
 
-        else:
-            raise GeneralError(f"SNMP value not found in {value}")
-
-    return value
-
-
-def hamaster(host: str) -> Result[str]:
-    """
-    FortiGate check hamaster
-
-    Args:
-        host (str):  the FortiManager host from the inventory to get the device list from. If you
-                     omit host, it will run over the default FortiManager (fmg).
-        smtp_server: the SMTP server from the inventory to send mail messages if errors occur
-    """
     inventory = Inventory(config.inventory_file)
     fmg = inventory.get(host, "fortimanager")[host]
 
@@ -100,49 +73,42 @@ def hamaster(host: str) -> Result[str]:
     fmg.login()
     response = fmg.api("post", payload=payload)
     fmg.logout()
-    firewalls = []
 
+    result = Result[str]()
+    fgts: Dict[str, FortiGate] = {}
     for device in response.json()["result"][0]["data"]:
         if device["ha_mode"] == 1:
-            expect = ""
+            expected_master = ""
             highest = 0
+            # Loop over all the cluster nodes and find the node with the hightest priority
             for node in device["ha_slave"]:
                 if node["prio"] > highest:
                     highest = node["prio"]
-                    expect = node["name"]
-            firewalls.append({"name": device["name"], "ip": device["ip"], "expect": expect})
+                    expected_master = node["name"].lower()
 
-    result = Result[str]()
+            try:
+                fortigate: FortiGate = inventory.assets[expected_master]
+                # Replace the FortiGates Hostname with the cluster IP address. In case of a HA
+                # failover the designated master may not be reachable so we connect to the cluster
+                # IP address.
+                fortigate.hostname = device["ip"]
+                fgts[expected_master] = fortigate
 
-    for firewall in track(firewalls, description="getting HA info ..."):
-        master_status: str = "unknown"
+            # There is a KeyError if a designated cluster master is not defined in the inventory
+            except KeyError:
+                log.debug("device %s not found in inventory", expected_master)
+                result.push_result(expected_master, "not found in inventory")
 
-        try:
-            ha_master = _snmp_get(
-                "iso.3.6.1.4.1.12356.101.13.2.1.1.11.1",
-                hostname=firewall["ip"],
-                community=config.snmp_community,
-                version=2,
-                timeout=1,
-                retries=3,
-            )
+    with Progress() as progress:
+        task = progress.add_task("getting FortiGate HA status...", total=len(fgts))
+        with concurrent.futures.ThreadPoolExecutor(max_workers=10) as executor:
+            futures = []
+            for name, fgt in fgts.items():
+                futures.append(executor.submit(_get_single_status, name, fgt))
 
-            if ha_master == firewall["expect"]:
-                master_status = "OK"
-                result.push_message(firewall["name"], "HA-Status OK", "info")
-
-            else:
-                master_status = "not OK"
-                result.push_message(
-                    firewall["name"],
-                    f"HA-Status NOT OK - expect: {firewall['expect']} got: {ha_master}",
-                    "error",
-                )
-
-        except GeneralError as err:
-            log.error("%s returned an error: %s", firewall["name"], err)
-            result.push_message(firewall["name"], str(err), "error")
-
-        result.push_result(firewall["name"], master_status)
+            for future in concurrent.futures.as_completed(futures):
+                name, status = future.result()
+                result.push_result(name, status)
+                progress.update(task, advance=1)
 
     return result

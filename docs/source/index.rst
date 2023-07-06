@@ -23,6 +23,7 @@ to `contribute <https://github.com/migros/fotoobo/blob/main/CONTRIBUTING.md>`_ t
   usage/getting_started
   usage/configuration
   usage/inventory
+  usage/fortigate_config_check
   usage/convert
   usage/templating
   usage/import_fotoobo
@@ -33,8 +34,7 @@ to `contribute <https://github.com/migros/fotoobo/blob/main/CONTRIBUTING.md>`_ t
   
   developer/c4
   developer/architecture_documentation
-  developer/how_to_test
-  developer/how_to_release
+  developer/how_to
   code
    
 

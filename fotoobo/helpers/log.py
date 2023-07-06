@@ -10,8 +10,16 @@ import pwd
 import socket
 from datetime import datetime
 from logging.handlers import RotatingFileHandler, SysLogHandler
+from syslog import (
+    LOG_AUTH,
+    LOG_CRIT,
+    LOG_DEBUG,
+    LOG_ERR,
+    LOG_INFO,
+    LOG_USER,
+    LOG_WARNING,
+)
 from typing import Optional, Union
-from syslog import LOG_AUTH, LOG_CRIT, LOG_DEBUG, LOG_ERR, LOG_INFO, LOG_USER, LOG_WARNING
 
 from rich.logging import RichHandler
 
@@ -50,9 +58,6 @@ class SysLogFormatter(logging.Formatter):
 
         Args:
             record:
-
-        Returns:
-
         """
 
         if record.levelname == "DEBUG":
@@ -107,11 +112,8 @@ class Log:
             log_switch: Whether we globally turn logging off or on
             log_level:  The desired log_level (given by CLI argument)
 
-        Returns:
-            Nothing
-
         Raises:
-            GeneralError    On unrecoverable errors (usually on non-existing/empty or
+            GeneralError:   On unrecoverable errors (usually on non-existing/empty or
                             invalid logging configuration file
         """
         # pylint: disable=too-many-branches
@@ -157,7 +159,7 @@ class Log:
                 raise GeneralWarning(f"Loglevel {log_level} not known")
 
             # If nothing is configured in the config file but logging is requested from
-            # the commandline use a simple basic config
+            # the command line use a simple basic config
             if not config.logging and log_switch:
                 # Configure logger "fotoobo"
                 logger.setLevel(log_level or logging.INFO)

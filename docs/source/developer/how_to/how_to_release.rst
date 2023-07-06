@@ -1,8 +1,8 @@
 .. Describes how to do a new release
 
-.. _HowToRelease:
+.. _how_to_release:
 
-How to Release
+How To Release
 ==============
 
 Only maintainers are allowed to release code. So, if someone did some breaking changes which should
@@ -38,7 +38,7 @@ documentation. These are the steps it goes through:
 ---------------
 
 The script `.tag_release.sh <https://github.com/migros/fotoobo/blob/main/.tag_release.sh>`_ just
-creates the release tag. This script has to be run the main repository `migros/fotoobo
+creates the release tag. This script has to be run in the main repository `migros/fotoobo
 <https://github.com/migros/fotoobo>`_.
 
 #. It creates a git tag with the version
