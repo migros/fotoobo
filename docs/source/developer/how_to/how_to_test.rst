@@ -1,8 +1,8 @@
 .. Describes how to do write tests
 
-.. _HowToTest:
+.. _how_to_test:
 
-How to Test
+How To Test
 ===========
 
 To test the code we use pytest `pytest <https://docs.pytest.org/>`_.

@@ -1,13 +1,13 @@
-.. Describes the Fortinet classes for fotoobo
+.. Describes the helper class results
 
 .. :orphan: is used so that Sphinx does not complain about not having this file in any toctree.
 
 :orphan:
 
-.. _helpers_result:
+.. _how_to_helpers_result:
 
-The Result Helper
-=================
+How To Use The Results Helper
+=============================
 
 Here we document some important Result methods.
 

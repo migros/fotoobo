@@ -1,8 +1,8 @@
 .. Describes how to do code
 
-.. _HowToCode:
+.. _how_to_code:
 
-How to Code
+How To Code
 ===========
 
 Before you start contributing in this project please read and accept our :ref:`C4`.
@@ -54,7 +54,7 @@ Testing
 
 Use `Pytest <https://docs.pytest.org/>`_ for code testing and test coverage measurement. We seek a
 coverage of at least 90%. You'll find more detailed information about writing tests in our
-:ref:`HowToTest` documentation.
+:ref:`how_to_test` documentation.
 
 
 Test Automation
@@ -68,5 +68,5 @@ Release
 -------
 
 Periodically the maintainers decide to create a new release. If you did some breaking changes which
-are worth a new release just ask one of them. The process is documented in our :ref:`HowToRelease`
+are worth a new release just ask one of them. The process is documented in our :ref:`how_to_release`
 documentation.
