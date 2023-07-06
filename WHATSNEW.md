@@ -8,8 +8,9 @@
 
 ### Changed
 
+- Improved CHANGELOG and WHATSNEW handling for new releases
 - ´fgt monitor hamaster' now uses the API to query FortiGate instead of SNMP
-- Migrate `fgt config`, `fgt get` and `fmg get` commands to use the Result class.
+- Migrate `fgt config`, `fgt get` and `fmg get` commands to use the Result class
 
 ### Removed
 
