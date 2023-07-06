@@ -12,7 +12,7 @@ This fotoobo package assumes you have
 
 * A Linux environment
 * Network access to Fortinet products
-* Administrative access to the Fortinet products (username/password, api key, snmp community)
+* Administrative access to the Fortinet products (username/password, api key)
 * Fundamental knowledge of what you are doing
 
 
