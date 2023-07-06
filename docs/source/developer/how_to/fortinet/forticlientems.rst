@@ -5,7 +5,10 @@
 How To Use FortiClient EMS Devices
 ==================================
 
-.. toctree::
-  :maxdepth: 1
-  
-  forticlientems/forticlientems_login
+
+FortiClient EMS Login
+---------------------
+
+.. image:: forticlientems/forticlientems_login.drawio.svg
+  :width: 100%
+  :alt: The FortiClient EMS login process

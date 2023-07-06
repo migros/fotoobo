@@ -6,7 +6,7 @@ The FortiGate Configuration Check
 =================================
 
 
-The FortiGate configuration check module let's you check the configuration of a FortiGate.
+The FortiGate configuration check module lets you check the configuration of a FortiGate.
 
 If a file is given it checks this file. If you pass a directory, it will do the checks for all the
 .conf files in this directory. Exciting, isn't it?
