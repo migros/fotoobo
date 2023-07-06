@@ -18,7 +18,7 @@ To have a good understanding on how fotoobo handles FortiGate configurations hav
 Usage
 -----
 
-``fotoobo fgt confcheck [configuration] [check_bundle]``
+``fotoobo fgt config check [configuration] [check_bundle]``
 
 Arguments to pass:
 
