@@ -6,8 +6,8 @@ the cli help system.
 If there are configuration options available in the global configuration file and also as a command
 line option, the command line option takes precedence over the global configuration file option.
 """
-from pathlib import Path
 from dataclasses import dataclass, field
+from pathlib import Path
 from typing import Any, Dict, Union
 
 from fotoobo.helpers.files import load_yaml_file
@@ -26,7 +26,6 @@ class Config:
     logging: Union[Dict[str, Any], None] = None
     audit_logging: Union[Dict[str, Any], None] = None
     no_logo: bool = False
-    snmp_community: str = ""
     cli_info: Dict[str, Any] = field(default_factory=dict)
     ssl_verify: Union[str, bool] = True
 
@@ -79,7 +78,6 @@ class Config:
                     self.audit_logging = loaded_config["audit_logging"]
 
                 self.no_logo = loaded_config.get("no_logo", self.no_logo)
-                self.snmp_community = loaded_config.get("snmp_community", self.snmp_community)
 
                 self.ssl_verify = loaded_config.get("ssl_verify", self.ssl_verify)
 
