@@ -33,9 +33,7 @@ def inventory() -> None:
     """
     result = get.inventory()
 
-    result.print_result_as_table(
-        "inventory", title="fotoobo inventory", headers=["Device", "Hostname", "Type"]
-    )
+    result.print_result_as_table(title="fotoobo inventory", headers=["Device", "Hostname", "Type"])
 
 
 @app.command()

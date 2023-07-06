@@ -1,10 +1,10 @@
 """
-The FotooboResult class
+The fotoobo Result class
 """
 import json
 import smtplib
 from pathlib import Path
-from typing import Any, Dict, Generic, List, TypeVar, Union
+from typing import Any, Dict, Generic, List, Optional, TypeVar, Union
 
 import jinja2
 from rich.console import Console
@@ -50,26 +50,23 @@ class Result(Generic[T]):
         # Console object for rich output
         self.console = Console(theme=ftb_theme)
 
-    def push_result(self, host: str, data: T, successful: bool = True) -> None:
+    def push_result(self, key: str, data: T, successful: bool = True) -> None:
         """
-        Add a result for the host
+        Add a result for the given key
 
         Args:
-            host:       The host to push the results for
-            data:       The output data for this host
+            key:        The key to push the results for
+            data:       The output data for this key
             successful: Whether the call has been successful or not [default: True]
-
-        Returns:
-
         """
 
-        self.results[host] = data
+        self.results[key] = data
 
         if successful:
-            self.successful.append(host)
+            self.successful.append(key)
 
         else:
-            self.failed.append(host)
+            self.failed.append(key)
 
     def push_message(self, host: str, message: str, level: str = "info") -> None:
         """
@@ -80,9 +77,6 @@ class Result(Generic[T]):
             message:    The message to add
             level:      The level to assign to this message, used for later filtering
                         (use for example "info", "warning", "error")
-
-        Returns:
-
         """
 
         if host not in self.messages:
@@ -95,7 +89,7 @@ class Result(Generic[T]):
         Return all the messages for the host given
 
         Args:
-            host:       The host to get the messages for
+            host:   The host to get the messages for
 
         Returns:
             A list of the messages pushed for this host. If there are no messages for this host, it
@@ -114,9 +108,6 @@ class Result(Generic[T]):
         Args:
             only_host:  Only print the messages for host only_host. If None is given, print all
                         messages.
-
-        Returns:
-
         """
 
         out_messages = []
@@ -140,7 +131,7 @@ class Result(Generic[T]):
             The results stored before with push_results, or None if the host does not exist
 
         Raises:
-            GeneralWarning if there is no result for host
+            GeneralWarning: If there is no result for host
         """
 
         if host not in self.results:
@@ -153,33 +144,31 @@ class Result(Generic[T]):
         Return all results
 
         Returns:
-            The results as a dictionary of the following form:
-            {
-                '<name of the host>': <data>
-            }
+            The results as a dictionary of the following form::
+
+                {
+                    '<name of the host>': <data>
+                }
+
             where `<data>` may be of any type
         """
         return self.results
 
-    # pylint: disable=too-many-arguments
     def print_result_as_table(
         self,
-        only_host: Union[str, None] = None,
         title: str = "",
         auto_header: bool = False,
-        headers: Union[List[str], None] = None,
-        host_is_first_column: bool = False,
+        headers: Optional[List[str]] = None,
     ) -> None:
         """
         Print a table from given data as list or dict.
 
         Args:
-            only_host (Union[str, None]): Print only the result for the host given
-                                          (default: print all results)
-            title (str): set the preferred title for the table
-            auto_header (bool): whether to show the headers (default: off)
-            headers (List[str]): Set the headers (if needed)
-            host_is_first_column (bool): add the host as first column
+            key:            Print only the result for the host given
+                            (default: print all results)
+            title:          Set the preferred title for the table
+            auto_header:    Whether to show the headers (default: off)
+            headers:        Set the headers (if needed)
 
         Raises:
             GeneralWarning: If the data cannot be interpreted as a table
@@ -187,38 +176,20 @@ class Result(Generic[T]):
         if not headers:
             headers = []
 
-        if only_host:
-            if host_is_first_column:
-                result = self.results[only_host]
-                if isinstance(result, dict):
-                    data: Any = [{"host": only_host, **result}]
-                else:
-                    data = [{"host": only_host, "value": result}]
-            else:
-                if isinstance(self.results[only_host], list):
-                    data = self.results[only_host]
-                else:
-                    data = [self.results[only_host]]
-
-        else:
-            if host_is_first_column:
-                data = []
-
-                for host, result in self.results.items():
-                    if isinstance(result, dict):
-                        data.append({"host": host, **result})
-                    else:
-                        data.append({"host": host, "value": result})
+        data: List[Dict[str, Any]] = []
+        for host, result in self.results.items():
+            if isinstance(result, dict):
+                data.append({"key": host, **result})
 
             else:
-                data = [self.results]
+                data.append({"key": host, "value": result})
 
         self.print_table_raw(data, headers, auto_header, title)
 
     def print_table_raw(
         self,
         data: List[Dict[str, Any]],
-        headers: List[str],
+        headers: Optional[List[str]] = None,
         auto_header: bool = False,
         title: str = "",
     ) -> None:
@@ -226,13 +197,10 @@ class Result(Generic[T]):
         Print the data given as a rich table to the console
 
         Args:
-            data:       The data to print formatted as rich.table.Table will expect it
-            headers:    The headers for the table
-            auto_header: Whether to show the headers or not
-            title:      The title for the table
-
-        Returns:
-            Nothing
+            data:           The data to print formatted as rich.table.Table will expect it
+            headers:        The headers for the table
+            auto_header:    Whether to show the headers or not
+            title:          The title for the table
         """
         if not (isinstance(data, list) and isinstance(data[0], dict)):
             raise GeneralWarning("data for print_table_raw must be a list of dicts.")
@@ -262,16 +230,16 @@ class Result(Generic[T]):
 
         self.console.print(table)
 
-    def print_raw(self, only_host: Union[str, None] = None) -> None:
+    def print_raw(self, key: Union[str, None] = None) -> None:
         """
         Print the raw data from Result() in pretty format.
 
         Args:
-            only_host (Union[str, None]): Print only the result for the host given
-                                          (default: print all results)
+            key:    Print only the result for the host given
+                    (default: print all results)
         """
-        if only_host:
-            data = {only_host: self.get_result(only_host)}
+        if key:
+            data = {key: self.get_result(key)}
 
         else:
             data = {}
@@ -287,11 +255,9 @@ class Result(Generic[T]):
         the docs of the used utility to see what variables you're intended to use.
 
         Args:
-            data (Dict[Any, Any]): The data used in the template
-
-            template_file (Path): Filename of the Jinja2 template file
-
-            output_file (Path): The file to write the output to
+            data: The data used in the template
+            template_file: Filename of the Jinja2 template file
+            output_file: The file to write the output to
         """
         template_env = jinja2.Environment(
             loader=jinja2.FileSystemLoader(template_file.parent), trim_blocks=True, autoescape=True
@@ -315,10 +281,10 @@ class Result(Generic[T]):
             count:          Whether to write the message count into the message (default: false)
             smtp_server:    The smtp server from inventory to use
             levels:         The levels to output:
-                              - None means all messages will be output (default)
-                              - 'level' means only messages with level='level' will be output
-                              - ['level1', 'level2'] like 2nd option, but all levels given will get
-                                output
+                            - None means all messages will be output (default)
+                            - 'level' means only messages with level='level' will be output
+                            - ['level1', 'level2'] like 2nd option, but all levels given will get
+                            output
         """
         out_messages: List[str] = []
 

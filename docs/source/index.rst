@@ -32,10 +32,11 @@ to `contribute <https://github.com/migros/fotoobo/blob/main/CONTRIBUTING.md>`_ t
   :caption: Developer Documentation
   
   developer/c4
-  developer/package_structure
-  developer/fortinet/classes
+  developer/how_to_code
   developer/how_to_test
   developer/how_to_release
+  developer/package_structure
+  developer/fortinet/classes
   code
    
 

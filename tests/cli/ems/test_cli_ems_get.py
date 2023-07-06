@@ -53,7 +53,7 @@ def test_cli_app_ems_get_workgroups(monkeypatch: MonkeyPatch) -> None:
             return_value=ResponseMock(
                 json={
                     "data": [
-                        {"name": "Test-grp", "id": 12345, "total_devices": 123},
+                        {"name": "Test-grp1", "id": 12345, "total_devices": 123},
                         {"name": "Test-grp2", "id": 54321, "total_devices": 321},
                     ]
                 },
@@ -65,8 +65,8 @@ def test_cli_app_ems_get_workgroups(monkeypatch: MonkeyPatch) -> None:
         app, ["-c", "tests/fotoobo.yaml", "ems", "get", "workgroups", "test_ems"]
     )
     assert result.exit_code == 0
-    assert "Test-grp  │ 12345 │ 123" in result.stdout
-    assert "Test-grp2 │ 54321 │ 321" in result.stdout
+    assert "Test-grp1 │ 123" in result.stdout
+    assert "Test-grp2 │ 321" in result.stdout
 
 
 def test_cli_app_ems_get_version(monkeypatch: MonkeyPatch) -> None:

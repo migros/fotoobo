@@ -2,9 +2,9 @@
 Test fgt tools get version
 """
 
+from pathlib import Path
 from typing import Any
 from unittest.mock import MagicMock
-from pathlib import Path
 
 import pytest
 from _pytest.monkeypatch import MonkeyPatch
@@ -53,7 +53,7 @@ def test_version_exception_from_fortigate(side_effect: Any, monkeypatch: MonkeyP
     """Test get version with exception thrown from FortiGate module"""
     monkeypatch.setattr(
         "fotoobo.fortinet.fortigate.FortiGate.get_version",
-        MagicMock(side_effect=(side_effect)),
+        MagicMock(side_effect=side_effect),
     )
     result = version("test_fgt_1")
     assert result.get_result("test_fgt_1") == "unknown due to dummy message"
@@ -64,5 +64,5 @@ def test_version_no_fortigates(monkeypatch: MonkeyPatch) -> None:
     monkeypatch.setattr(
         "fotoobo.tools.fgt.get.Inventory._load_inventory", MagicMock(return_value=None)
     )
-    with pytest.raises(GeneralWarning, match=r"no asset of type 'fortigate' was found in.*"):
+    with pytest.raises(GeneralWarning, match=r"no asset of type 'fortigate' .* was found.*"):
         version("")
