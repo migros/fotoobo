@@ -10,7 +10,9 @@
 Package structure
 -----------------
 
-.. image:: ../package_structure.drawio.svg
+The package structure describes the internal structure of fotoobo
+
+.. image:: diagrams/package_structure.drawio.svg
   :width: 100%
   :alt: The fotoobo package structure visualized
 
@@ -18,7 +20,7 @@ Package structure
 Class view
 ----------
 
-.. image:: ../classes.drawio.svg
+.. image:: diagrams/classes.drawio.svg
   :width: 100%
   :alt: The fotoobo Fortinet classes visualized
 

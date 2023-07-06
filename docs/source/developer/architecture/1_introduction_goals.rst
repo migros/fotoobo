@@ -32,7 +32,7 @@ Supported Fortinet products
 
 At the moment **fotoobo** supports the following Fortinet products:
 
-- FortiGate (tested with FortiOS 6.4, 7.0 and 7.2)
+- FortiGate (tested with FortiOS 6.4, 7.0 and partially with 7.2)
 - FortiManager
 - FortiClient EMS
 - FortiAnalyzer
@@ -47,13 +47,12 @@ Some of **fotoobo**'s main use cases are:
 - Fill in gaps in the monitoring of different Fortinet products (e.g. SSLVPN pool usage when more
   than one IP subnet is available for client IPs).
 - Give an overview over your infrastructure in a nice way:
+  - Version of your Fortinet devices,
+  - Version distribution of the FortiClients managed by your FortiClient EMS
+  - Some summary information of your (backed up) FortiGate configurations
 
-    - Version of your Fortinet devices,
-    - Version distribution of the FortiClients managed by your FortiClient EMS
-    - Some summary information of your (backed up) FortiGate configurations
 
-
-fotoobo vs. FortiXYZ REST API
+fotoobo vs. Fortinet REST API
 -----------------------------
 
 There is a general purpose API for all of the supported devices. Fotoobo uses them all to "talk" to
@@ -62,6 +61,7 @@ implement your use cases in own scripts directly utilizing the REST API. What fo
 is to remove the boiler plate code needed to get and push data to the respective APIs. See the
 `fotoobo Module Documentation <_ModuleDocumentation>`_ for further information on whether fotoobo
 is usable to you. If not, please help us to make it so :-).
+
 
 fotoobo vs. Fortinet ansible module
 -----------------------------------

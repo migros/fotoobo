@@ -8,4 +8,5 @@
 
 - use of common result class
 - separate tools from UX-layer
+
 ...?

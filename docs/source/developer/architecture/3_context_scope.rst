@@ -8,7 +8,7 @@
 Context
 -------
 
-**fotoobo** communicates with different FortiXYZ products on one side and other devices like
+**fotoobo** communicates with different Fortinet products on one side and other devices like
 SFTP and SMPT servers on the other side.
 
 (Picture)
@@ -23,13 +23,13 @@ Fortinet products are used worldwide and by large number of companies. There is 
 tooling to support Fortinet devices. **fotoobo** aims to fill a gap in this tooling support and
 solve some common tasks in a simple way.
 
-Based on this the scope of the **fotoobo** is defined as follows:
+Based on this the scope of **fotoobo** is defined as follows:
 
-- Get, enrich and summarize information from a Fortinet product, that is otherwise not easily
-  available
+- Get, enrich and summarize information from one or more Fortinet product(s), that is otherwise not
+  easily available
 
     - for presentation on console
-    - for further use as raw JSON output
+    - for further use as raw JSON output (for a monitoring system for example)
     - to render any Jinja2 template based on it (for HTML-Reports or config input to other systems
       for example).
 

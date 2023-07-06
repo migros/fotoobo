@@ -5,9 +5,12 @@
 4. Solution Strategy
 ====================
 
-**fotoobo** should be a flexible "ToolBox" where you can easily add new tools and functionality.
+Design Goals
+------------
+
+**fotoobo** is meant to be a flexible "ToolBox" where you can easily add new tools and functionality.
 Furthermore, **fotoobo** should have a flexible output system that supports printing data to the
-console, rendering files (local or remote) or even sending messages about a job by email.
+console, rendering files (local or remote) or even sending results of a command by email.
 
 
 Core building blocks
@@ -34,10 +37,10 @@ Decoupling of the building blocks
 These building blocks are meant to be decoupled as much as possible to allow for easy extension in
 the following directions:
 
-- Add new **tools**: These are single functions per use case that accept the required input as
-  parameters and render the result into a `Result` object.
+- Add new **tools**: These are single functions or methods per use case that accept the required
+  input as parameters and render the result into a `Result` object.
 - Add new **frontends**: Through decoupling of any input and output with well defined function
-  parameters and a `Result` class, fotoobo should be adaptable to new interfaces easily and provide
+  parameters and a `Result` class, fotoobo should be easily adaptable to new interfaces and provide
   full flexibility on how to render the output (data, messages generated during processing, ...) to
   any requested output format (RAW json, beautiful console output, any format using Jinja2).
 - Add new **Fortinet devices**: Adding of new Fortinet devices is possible in the Fortinet library.
