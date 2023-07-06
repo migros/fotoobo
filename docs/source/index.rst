@@ -23,6 +23,7 @@ to `contribute <https://github.com/migros/fotoobo/blob/main/CONTRIBUTING.md>`_ t
   usage/getting_started
   usage/configuration
   usage/inventory
+  usage/fortigate_config_check
   usage/convert
   usage/templating
   usage/import_fotoobo
