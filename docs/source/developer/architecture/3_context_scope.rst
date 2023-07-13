@@ -9,9 +9,9 @@ Context
 -------
 
 **fotoobo** communicates with different Fortinet products on one side and other devices like
-SFTP and SMPT servers on the other side.
+SFTP and SMTP servers on the other side.
 
-(Picture)
+TODO: (Picture)
 
 The main output formats are console or files written to the file system.
 

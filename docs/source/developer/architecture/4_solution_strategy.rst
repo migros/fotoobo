@@ -64,3 +64,9 @@ The functionality to authenticate to the API and do basic API calls should be en
 respective per-device class inside the Fortinet-Library. The tools will use this as a building
 block to build the required functionality. Doing this the respective per-device class should
 abstract the API through the interface as defined in the abstract `Fortinet` class.
+
+
+Used Frameworks
+---------------
+
+TODO

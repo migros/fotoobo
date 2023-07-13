@@ -17,6 +17,8 @@ The package structure describes the internal structure of fotoobo
   :alt: The fotoobo package structure visualized
 
 
+.. _fortinet_classes:
+
 Class view
 ----------
 

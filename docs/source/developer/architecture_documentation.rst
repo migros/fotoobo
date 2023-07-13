@@ -22,10 +22,8 @@ builds the developer documentation of **fotoobo**.
    architecture/3_context_scope
    architecture/4_solution_strategy
    architecture/5_building_block_view
-   architecture/6_runtime_view
-   architecture/7_deployment_view
-   architecture/8_crosscutting_concepts
-   architecture/9_architectural_decisions
-   architecture/10_quality_requirements
-   architecture/11_risks_technical_depths
-   architecture/12_glossary
+   architecture/6_runtime_deployment_view
+   architecture/7_crosscutting_concepts
+   architecture/8_quality_requirements
+   architecture/9_risks_technical_depths
+   architecture/10_glossary
