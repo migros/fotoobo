@@ -2,8 +2,8 @@
 # Bump a new release. Handling is the same as with poetry version,
 # but also takes care of __init__.py:version, git tag, ...
 
-if [[ -n "$(git status --porcelain | grep -v ' M CHANGELOG.md')" ]] ; then
-  echo "error: git repository is not clean (except of CHANGELOG.md), please commit and/or stash all changes (except of CHANGELOG.md) before running this script."
+if [[ -n "$(git status --porcelain | grep -v ' M WHATSNEW.md')" ]] ; then
+  echo "error: git repository is not clean (except of WHATSNEW.md), please commit and/or stash all changes (except of WHATSNEW.md) before running this script."
   exit 1
 fi
 
@@ -27,13 +27,8 @@ poetry version $version_bump
 
 new_version=`poetry version | sed 's/fotoobo \(.*\)/\1/'`
 
-if [[ -n `grep "## \[$new_version\]" ./CHANGELOG.md` ]] ; then
-  echo "New version would be $new_version. Is this ok? [y/N]"
-  read ok
-else
-  echo "ERROR: New version not found in the CHANGELOG.md, please update the CHANGELOG.md first."
-  ok='N'
-fi
+echo "New version would be $new_version. Is this ok? [y/N]"
+read ok
 
 case $ok in
   y)
@@ -46,6 +41,15 @@ esac
 
 echo 'Writing new version to "fotoobo/__init__.py"...'
 sed -i "s/$old_version/$new_version/g" fotoobo/__init__.py
+
+echo "Updating CHANGELOG.md"
+sed -i -e '/./,$!d' -e :a -e '/^\n*$/{$d;N;ba' -e '}' WHATSNEW.md
+VERSION="## [$new_version] - $(date +%Y-%m-%d)"
+WHATSNEW="$(<WHATSNEW.md)"
+sed -i "1s/^/\n$VERSION\n\n/" WHATSNEW.md
+echo "" >> WHATSNEW.md
+sed -i '/# \[Released\]/r WHATSNEW.md' CHANGELOG.md
+
 
 git add pyproject.toml
 git add fotoobo/__init__.py
