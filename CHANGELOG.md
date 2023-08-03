@@ -10,6 +10,12 @@ For unreleased changes see [WHATSNEW.md](WHATSNEW.md)
 
 # [Released]
 
+## [1.0.1] - 2023-08-03
+
+### Changed
+
+- Improve release process - WHATSNEW.md now handled correctly
+
 ## [1.0.0] - 2023-08-03
 
 ### Added
