@@ -44,6 +44,7 @@ any device with the same name.
     hostname: myfortimanager.local
     username: the_fortimanager_username
     password: the_fortimanager_password
+    session_path: the_path_to_the_session_file
     type: fortimanager
 
 
@@ -144,6 +145,14 @@ FortiManager / FortiAnalyzer Devices
 
   The password used to login to the FortiManager or FortiAnalyzer device.
 
+**session_path**
+
+  Use this option to specify a directory where the session key should be stored. The name of the
+  file will be generated from the hostname. During login to FortiManager/FortiAnalyzer this session
+  key is used if the file exists.
+  If you omit this option the session key store feature is disabled and every login to
+  FortiManager/FortiClient is done with its username and password.
+
 **ssl_verify** *bool | string* (optional, default: true)
 
   Check host SSL certificate (true) or not (false). You can also provide a path to a custom
@@ -168,6 +177,7 @@ FortiManager / FortiAnalyzer Devices
     https_port: 4443
     username: myusername
     password: mysupersecurepassword
+    session_path: ~/.cache
     type: fortimanager
 
 
