@@ -204,7 +204,7 @@ class FortiManager(Fortinet):
 
         if self.session_path:
             session_file = Path(self.session_path).expanduser() / f"{self.hostname}.key"
-            try:
+            if session_file.exists():
                 log.debug("loading session key from file %s", session_file)
                 with session_file.open(encoding="UTF-8") as file:
                     self.session_key = file.read()
@@ -224,7 +224,7 @@ class FortiManager(Fortinet):
                         log.debug("Session key is invalid")
                         self.session_key = ""
 
-            except FileNotFoundError:
+            else:
                 log.debug("session file %s does ot exist", session_file)
 
         if not self.session_key and self.username and self.password:
@@ -241,7 +241,7 @@ class FortiManager(Fortinet):
             response = super().api("post", payload=payload)
             if response.status_code == 200:
                 if "session" in response.json():
-                    log.debug("enrich object with session key")
+                    log.debug("store session key")
                     self.session_key = response.json()["session"]
                     if self.session_path:
                         log.debug("saving session key into file %s", session_file)
