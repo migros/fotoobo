@@ -1,5 +1,6 @@
 .. Here we add the modules which should be documented with autodoc
 
+.. _ModuleDocumentation:
 
 fotoobo Module Documentation
 ============================

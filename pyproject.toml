@@ -107,7 +107,7 @@ description = check pytest coverage for unit tests (without cli because these ar
 skip_install = true
 allowlist_externals = poetry, pytest
 commands_pre = poetry install
-commands = pytest --cov-report term-missing --cov-fail-under 80 --cov=fotoobo --cov-config=.coverage_unittests_rc --ignore=tests/cli tests/ {posargs}
+commands = pytest --cov-report term-missing --cov-fail-under 90 --cov=fotoobo --cov-config=.coverage_unittests_rc --ignore=tests/cli tests/ {posargs}
 
 [testenv:requirements]
 description = Create a requirements.txt from the Poetry dependencies (used for readthedocs)

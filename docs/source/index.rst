@@ -16,6 +16,9 @@ by the standard Fortinet management suite. It is meant to be extendable to your 
 to add or update the utilities as needed but please be aware that there are some guidelines on how
 to `contribute <https://github.com/migros/fotoobo/blob/main/CONTRIBUTING.md>`_ to the development.
 
+For a more detailed introduction to what **fotoobo** is, read chapter 1 of the architecture
+documentation: :ref:`1IntroductionGoals`.
+
 .. toctree::
   :maxdepth: 1
   :caption: User Documentation
@@ -33,9 +36,8 @@ to `contribute <https://github.com/migros/fotoobo/blob/main/CONTRIBUTING.md>`_ t
   :caption: Developer Documentation
   
   developer/c4
+  developer/architecture_documentation
   developer/how_to
-  developer/package_structure
-  developer/fortinet/classes
   code
    
 
