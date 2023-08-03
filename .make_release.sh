@@ -54,6 +54,7 @@ sed -i '/# \[Released\]/r WHATSNEW.md' CHANGELOG.md
 git add pyproject.toml
 git add fotoobo/__init__.py
 git add CHANGELOG.md
+git add WHATSNEW.md
 
 echo 'Committing version bump...'
 git commit -m ":bookmark: Commit version v$new_version"
