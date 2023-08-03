@@ -276,7 +276,7 @@ class FortiManager(Fortinet):
 
         Args:
             adom (str): the ADOM name to issue the set commands to. If you wish to update the
-            Global ADOM specify 'global' as ADOM.
+                        Global ADOM specify 'global' as ADOM.
 
             payload(s) (Any): one payload (Dict) or a list of payloads (List of Dict)
 
