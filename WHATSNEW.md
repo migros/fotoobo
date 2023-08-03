@@ -1,5 +1,6 @@
 ### Added
 
+- First version of architecture documentation (according to Arc42)
 - Inventory getter now supports wildcard * syntax
 - Parallel processing bulk queries to FortiGates. This includes the following commands:
   `fgt backup` `fgt get version` `fgt monitor hamaster`
