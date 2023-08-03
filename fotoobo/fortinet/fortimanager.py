@@ -3,6 +3,7 @@ FortiManager Class
 """
 import logging
 import re
+from pathlib import Path
 from time import sleep
 from typing import Any, Dict, List, Optional
 
@@ -23,17 +24,20 @@ class FortiManager(Fortinet):
         Set some initial parameters.
 
         Args:
-            hostname (str): the hostname of the FortiGate to connect to
-            username (str): username
-            password (str): password
-            **kwargs (dict): see Fortinet class for available arguments
+            hostname:       The hostname of the FortiGate to connect to
+            username:       The Username
+            password:       The password
+
+        Keyword Args:
+            session_dir:    The path where to load/save the FortiManager session key
+            **kwargs:       See Fortinet class for more available arguments
         """
         super().__init__(hostname, **kwargs)
         self.api_url = f"https://{self.hostname}:{self.https_port}/jsonrpc"
         self.password = password
-        self.sessionkey: str = ""
         self.username = username
-        # self.login()
+        self.session_key: str = ""
+        self.session_path: str = kwargs.get("session_path", "")
         self.type = "fortimanager"
         self.ignored_adoms = [
             "FortiAnalyzer",
@@ -58,6 +62,11 @@ class FortiManager(Fortinet):
             "rootp",
         ]
 
+    def __del__(self) -> None:
+        """The destructor"""
+        if self.session_key and not self.session_path:
+            self.logout()
+
     def api(  # pylint: disable=too-many-arguments
         self,
         method: str,
@@ -71,21 +80,23 @@ class FortiManager(Fortinet):
         API request to a FortiManager device.
 
         It uses the super.api method but it has to enrich the payload in post requests with the
-        needed sessionkey.
+        needed session key.
 
         Args:
-            method (str): request method from [get, post]
-            url (str): rest API URL to request data from
-            params (dict): dictionary with parameters (if needed)
-            payload (dict): JSON body for post requests (if needed)
-            timeout (float): the requests read timeout in seconds
+            method:     Request method from [get, post]
+            url:        Rest API URL to request data from
+            params:     Dictionary with parameters (if needed)
+            payload:    JSON body for post requests (if needed)
+            timeout:    The requests read timeout in seconds
 
         Returns:
-            response: response from the request
+            Response from the request
         """
+        if not self.session_key:
+            self.login()
         payload = payload or {}
         if method.lower() == "post":
-            payload["session"] = self.sessionkey
+            payload["session"] = self.session_key
 
         return super().api(
             method, url, headers=headers, payload=payload, params=params, timeout=timeout
@@ -183,14 +194,41 @@ class FortiManager(Fortinet):
         """
         Login to the FortiManager.
 
-        If the login to the FortiManager was successful it stores the session key in rhe object
+        If the login to the FortiManager was successful it stores the session key in the object.
         We do not use requests.session as the session key is just a string which is saved directly.
 
         Returns:
             int: status code from the FortiManager login
         """
         status: int = 401
-        if self.username and self.password:
+
+        if self.session_path:
+            session_file = Path(self.session_path).expanduser() / f"{self.hostname}.key"
+            if session_file.exists():
+                log.debug("loading session key from file %s", session_file)
+                with session_file.open(encoding="UTF-8") as file:
+                    self.session_key = file.read()
+                    payload = {
+                        "method": "get",
+                        "params": [{"url": "/sys/status"}],
+                        "session": self.session_key,
+                    }
+                    response = super().api("post", payload=payload)
+                    status = response.status_code
+                    if (
+                        response.status_code == 200
+                        and response.json()["result"][0]["status"]["code"] == 0
+                    ):
+                        log.debug("Session key is still valid")
+                    else:
+                        log.debug("Session key is invalid")
+                        self.session_key = ""
+
+            else:
+                log.debug("session file %s does ot exist", session_file)
+
+        if not self.session_key and self.username and self.password:
+            log.debug("login to %s", self.hostname)
             payload = {
                 "method": "exec",
                 "params": [
@@ -200,12 +238,15 @@ class FortiManager(Fortinet):
                     }
                 ],
             }
-            response = self.api("post", payload=payload)
-
+            response = super().api("post", payload=payload)
             if response.status_code == 200:
                 if "session" in response.json():
-                    log.debug("save session key")
-                    self.sessionkey = response.json()["session"]
+                    log.debug("store session key")
+                    self.session_key = response.json()["session"]
+                    if self.session_path:
+                        log.debug("saving session key into file %s", session_file)
+                        with session_file.open("w", encoding="UTF-8") as file:
+                            file.write(self.session_key)
 
             status = response.status_code
 
@@ -221,9 +262,10 @@ class FortiManager(Fortinet):
         payload: Dict[str, Any] = {
             "method": "exec",
             "params": [{"url": "/sys/logout"}],
-            "session": self.sessionkey,
+            "session": self.session_key,
         }
         response = self.api("post", payload=payload)
+        self.session_key = ""
         return response.status_code
 
     def post(self, adom: str, payloads: Any) -> int:
@@ -247,7 +289,6 @@ class FortiManager(Fortinet):
         errors = 0
         for payload in payloads:
             for i, _ in enumerate(payload["params"]):
-
                 # Here we have to replace the {adom} in the URL entry:
                 #    for Global: /pm/config/ global      /obj/firewall/address/{address}
                 #    for ADOM:   /pm/config/ adom/{adom} /obj/firewall/address/{address}
