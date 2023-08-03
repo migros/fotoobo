@@ -340,9 +340,6 @@ class TestFortiManager:
     def test_logout(monkeypatch: MonkeyPatch) -> None:
         """Test the logout of a FortiManager"""
         monkeypatch.setattr(
-            "fotoobo.fortinet.fortimanager.FortiManager.login", MagicMock(return_value=200)
-        )
-        monkeypatch.setattr(
             "fotoobo.fortinet.fortinet.requests.Session.post",
             MagicMock(
                 return_value=ResponseMock(
@@ -360,7 +357,11 @@ class TestFortiManager:
         requests.Session.post.assert_called_with(  # type: ignore
             "https://host:443/jsonrpc",
             headers=None,
-            json={"method": "exec", "params": [{"url": "/sys/logout"}], "session": ""},
+            json={
+                "method": "exec",
+                "params": [{"url": "/sys/logout"}],
+                "session": "dummy_session_key",
+            },
             verify=True,
             timeout=3,
         )
