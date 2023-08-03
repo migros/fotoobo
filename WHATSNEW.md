@@ -1,6 +1,8 @@
-
-## [1.0.2] - 2023-08-03
+### Added
 
 ### Changed
 
-- Improve new lines in WHATSNEW.md template
+### Removed
+
+
+
