@@ -38,10 +38,3 @@ linked (binary) libraries. So you may use fotoobo (unmodified) with code under a
 or commercial).
 
 All changes to the fotoobo code itself are subject to the LGPL v3.
-
-# Legacy documentation
-
-This documentation has not yet been migrated to the Sphinx documentation.
-
-- [The FortiGate configuration structure in fotoobo](docs_legacy/fortinet/fortigate_config.md)
-- [FortiGate configuration check](docs_legacy/fortinet/fortigate_config_check.md)
