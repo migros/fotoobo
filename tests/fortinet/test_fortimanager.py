@@ -194,7 +194,7 @@ class TestFortiManager:
 
     @staticmethod
     def test_login(monkeypatch: MonkeyPatch) -> None:
-        """Test the login to a fortimanager"""
+        """Test the login to a FortiManager"""
         monkeypatch.setattr(
             "fotoobo.fortinet.fortinet.requests.Session.post",
             MagicMock(
@@ -204,7 +204,7 @@ class TestFortiManager:
                         "result": [
                             {"status": {"code": 0, "message": "OK"}, "url": "/sys/login/user"}
                         ],
-                        "session": "dummy_session",
+                        "session": "dummy_session_key",
                     },
                     status=200,
                 )
@@ -218,7 +218,119 @@ class TestFortiManager:
             json={
                 "method": "exec",
                 "params": [{"data": {"passwd": "pass", "user": "user"}, "url": "/sys/login/user"}],
-                "session": "",
+            },
+            verify=True,
+            timeout=3,
+        )
+
+    @staticmethod
+    def test_login_with_session_path(monkeypatch: MonkeyPatch) -> None:
+        """Test the login to a FortiManager when a session_path is given"""
+        monkeypatch.setattr(
+            "fotoobo.fortinet.fortinet.requests.Session.post",
+            MagicMock(
+                return_value=ResponseMock(
+                    json={
+                        "id": 1,
+                        "result": [
+                            {
+                                "status": {"code": 0, "message": "dummy"},
+                                "url": "/sys/status",
+                            }
+                        ],
+                        "session": "dummy_session_key",
+                    },
+                    status=200,
+                )
+            ),
+        )
+        fmg = FortiManager("host", "user", "pass")
+        fmg.hostname = "test_fmg"
+        fmg.session_path = "tests/data"
+        assert fmg.login() == 200
+        requests.Session.post.assert_called_with(  # type: ignore
+            "https://host:443/jsonrpc",
+            headers=None,
+            json={
+                "method": "get",
+                "params": [{"url": "/sys/status"}],
+                "session": "dummy_session_key",
+            },
+            verify=True,
+            timeout=3,
+        )
+
+    @staticmethod
+    def test_login_with_session_path_invalid_key(monkeypatch: MonkeyPatch) -> None:
+        """
+        Test the login to a FortiManager when a session_path is given but the session key is invalid
+        """
+        monkeypatch.setattr(
+            "fotoobo.fortinet.fortinet.requests.Session.post",
+            MagicMock(
+                return_value=ResponseMock(
+                    json={
+                        "id": 1,
+                        "result": [
+                            {
+                                "status": {"code": -11, "message": "dummy"},
+                                "url": "/sys/status",
+                            }
+                        ],
+                        "session": "dummy_session_key",
+                    },
+                    status=200,
+                )
+            ),
+        )
+        fmg = FortiManager("host", "user", "pass")
+        fmg.hostname = "test_fmg"
+        fmg.session_path = "tests/data"
+        assert fmg.login() == 200
+        requests.Session.post.assert_called_with(  # type: ignore
+            "https://host:443/jsonrpc",
+            headers=None,
+            json={
+                "method": "exec",
+                "params": [{"data": {"passwd": "pass", "user": "user"}, "url": "/sys/login/user"}],
+            },
+            verify=True,
+            timeout=3,
+        )
+
+    @staticmethod
+    def test_login_with_session_path_not_found(temp_dir: str, monkeypatch: MonkeyPatch) -> None:
+        """
+        Test the login to a FortiManager when a session_path is given but the session key is invalid
+        """
+        monkeypatch.setattr(
+            "fotoobo.fortinet.fortinet.requests.Session.post",
+            MagicMock(
+                return_value=ResponseMock(
+                    json={
+                        "id": 1,
+                        "result": [
+                            {
+                                "status": {"code": 0, "message": "dummy"},
+                                "url": "/sys/status",
+                            }
+                        ],
+                        "session": "dummy_session_key",
+                    },
+                    status=200,
+                )
+            ),
+        )
+        fmg = FortiManager("host", "user", "pass")
+        fmg.hostname = "test_fmg_dummy"
+        fmg.session_path = temp_dir
+        assert fmg.login() == 200
+        requests.Session.post.assert_called_with(  # type: ignore
+            "https://host:443/jsonrpc",
+            headers=None,
+            json={
+                "method": "exec",
+                "params": [{"data": {"passwd": "pass", "user": "user"}, "url": "/sys/login/user"}],
             },
             verify=True,
             timeout=3,
@@ -226,10 +338,7 @@ class TestFortiManager:
 
     @staticmethod
     def test_logout(monkeypatch: MonkeyPatch) -> None:
-        """Test the logout of a fortimanager"""
-        monkeypatch.setattr(
-            "fotoobo.fortinet.fortimanager.FortiManager.login", MagicMock(return_value=200)
-        )
+        """Test the logout of a FortiManager"""
         monkeypatch.setattr(
             "fotoobo.fortinet.fortinet.requests.Session.post",
             MagicMock(
@@ -237,7 +346,7 @@ class TestFortiManager:
                     json={
                         "method": "exec",
                         "params": [{"url": "/sys/logout"}],
-                        "session": "dummy_session",
+                        "session": "dummy_session_key",
                     },
                     status=200,
                 )
@@ -248,7 +357,11 @@ class TestFortiManager:
         requests.Session.post.assert_called_with(  # type: ignore
             "https://host:443/jsonrpc",
             headers=None,
-            json={"method": "exec", "params": [{"url": "/sys/logout"}], "session": ""},
+            json={
+                "method": "exec",
+                "params": [{"url": "/sys/logout"}],
+                "session": "dummy_session_key",
+            },
             verify=True,
             timeout=3,
         )

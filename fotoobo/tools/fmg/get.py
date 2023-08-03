@@ -151,9 +151,7 @@ def version(host: str) -> Result[str]:
     inventory = Inventory(config.inventory_file)
     fmg = inventory.get(host, "fortimanager")[host]
     log.debug("FortiManager get version ...")
-    fmg.login()
     fmg_version = fmg.get_version()
-    fmg.logout()
     result = Result[str]()
     result.push_result(host, fmg_version)
 
