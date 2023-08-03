@@ -1,3 +1,6 @@
+
+## [1.0.0] - 2023-08-03
+
 ### Added
 
 - First version of architecture documentation (according to Arc42)
@@ -18,3 +21,4 @@
 ### Removed
 
 - Module pysnmp is not used anymore as we use API for all use cases now
+
