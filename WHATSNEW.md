@@ -1,3 +1,3 @@
-### Added\n\n
-### Changed\n\n
-### Removed\n\n
+### Changed
+
+- Improve new lines in WHATSNEW.md template
