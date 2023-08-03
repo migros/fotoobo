@@ -14,9 +14,11 @@ echo -e "Congratulations"
 
 # After the release we have to empty the WHATSNEW file and commit/push it again
 echo "Emptiying WHATSNEW.md"
-echo "### Added\n\n" > WHATSNEW.md
-echo "### Changed\n\n" >> WHATSNEW.md
-echo "### Removed\n\n" >> WHATSNEW.md
+printf "### Added\n\n" > WHATSNEW.md
+printf "### Changed\n\n" >> WHATSNEW.md
+printf "### Removed\n\n" >> WHATSNEW.md
+printf "\n\n" >> WHATSNEW.md
 git add WHATSNEW.md
 git commit -m ":memo: Reset WHATSNEW.md with template"
 git push
+echo "finished"
