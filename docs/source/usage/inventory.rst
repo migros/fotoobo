@@ -5,16 +5,30 @@
 The fotoobo inventory
 =====================
 
-If you need to access any device you have to define the fotoobo inventory in the
-:ref:`global configuration<usage_configuration>`. From there fotoobo reads all the information about
-the devices to use during operation. Even if you may name it however you want it's best practice to
-name it *inventory.yaml*.
+Any device you want to access needs to be defined in the fotoobo inventory. The path to this
+inventory you have to set in the :ref:`global configuration<usage_configuration>`. From there
+fotoobo reads all the information about the devices to use during operation. Even if you may name
+it whatever you want it's best practice to name it *inventory.yaml*.
+
+
+Important Security Consideration
+--------------------------------
 
 The fotoobo inventory is a `yaml file <https://yaml.org/>`_ containing your Fortinet and other 
 devices. It is used to connect to these devices. Every device is listed with its name and the 
-required connection parameters. It may also contain secret access keys for the devices so make 
-sure it is never exposed to unauthorized individuals.
+required connection parameters. At the moment this also means secret access keys for the devices,
+so make sure it is never exposed to unauthorized individuals. Usually this means you need to make
+sure that the inventory is...
+
+1. only stored on the host you want to run fotoobo (never checked into a git repository, ...)
+2. only readable to the user that runs fotoobo (and there is absolutely no reason that this user
+   is root!)
+
 `Don't say I didn't tell you <https://www.youtube.com/watch?v=1bVy1sLVasY>`_.
+
+
+fotoobo Inventory Basics
+------------------------
 
 The entry for each device begins with its name which can be used in the fotoobo cli to access it.
 

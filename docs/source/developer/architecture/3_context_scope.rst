@@ -11,7 +11,10 @@ Context
 **fotoobo** communicates with different Fortinet products on one side and other devices like
 SFTP and SMTP servers on the other side.
 
-TODO: (Picture)
+.. image:: diagrams/fotoobo_context.drawio.svg
+  :width: 100%
+  :alt: The fotoobo context visualized with FortiGate, FortiManager, FortiAnalyzer and FortiClient
+        EMS on one side and (S)FTP-, SMTP- and Syslog server on the other.
 
 The main output formats are console or files written to the file system.
 
@@ -19,7 +22,7 @@ The main output formats are console or files written to the file system.
 Scope
 -----
 
-Fortinet products are used worldwide and by large number of companies. There is already a lot of
+Fortinet products are used worldwide and by a large number of companies. There is already a lot of
 tooling to support Fortinet devices. **fotoobo** aims to fill a gap in this tooling support and
 solve some common tasks in a simple way.
 
@@ -31,7 +34,7 @@ Based on this the scope of **fotoobo** is defined as follows:
     - for presentation on console
     - for further use as raw JSON output (for a monitoring system for example)
     - to render any Jinja2 template based on it (for HTML-Reports or config input to other systems
-      for example).
+      for example)
 
 - **fotoobo** will basically only *read* from the respective Fortinet devices. Write operations
   should be done with the `Fortinet ansible Module <https://docs.ansible.com/ansible/latest/collections/fortinet/index.html>`_
