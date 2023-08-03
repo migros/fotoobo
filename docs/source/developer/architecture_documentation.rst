@@ -26,4 +26,3 @@ builds the developer documentation of **fotoobo**.
    architecture/7_crosscutting_concepts
    architecture/8_quality_requirements
    architecture/9_risks_technical_depths
-   architecture/10_glossary
