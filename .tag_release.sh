@@ -17,7 +17,6 @@ echo "Emptiying WHATSNEW.md"
 printf "### Added\n\n" > WHATSNEW.md
 printf "### Changed\n\n" >> WHATSNEW.md
 printf "### Removed\n\n" >> WHATSNEW.md
-printf "\n\n" >> WHATSNEW.md
 git add WHATSNEW.md
 git commit -m ":memo: Reset WHATSNEW.md with template"
 git push
