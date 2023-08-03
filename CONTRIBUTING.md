@@ -8,6 +8,21 @@ Contributions to this project are [released](https://help.github.com/articles/gi
 Please note that this project is released with a [Collective Code Construction Contract](https://fotoobo.readthedocs.io/en/latest/developer/c4.html).
 By participating in this project you agree to abide by its terms.
 
+## Submitting a feature request or bug report
+
+If you find a bug or miss a feature feel free to submit a bug report or a feature request 
+respectively in the [GitHub issues](https://github.com/migros/fotoobo/issues).
+
+The following few things will increase the likelihood of your bug report or feature request being 
+processed in a timely manner:
+
+- Describe in a simple, easily to reproduce example how to reproduce the bug or what the feature 
+  request should do.
+- Mark it with the respective labels (bugs with "bug", features with "enhancement" and any other
+  that apply).
+- Help us clarify the issue by answering our possible questions in a timely manner.
+
+
 ## Submitting a pull request
 
 1. Fork and clone the repository
