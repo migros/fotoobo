@@ -265,6 +265,7 @@ class FortiManager(Fortinet):
             "session": self.session_key,
         }
         response = self.api("post", payload=payload)
+        self.session_key = ""
         return response.status_code
 
     def post(self, adom: str, payloads: Any) -> int:
