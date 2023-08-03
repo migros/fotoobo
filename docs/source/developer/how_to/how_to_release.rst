@@ -14,7 +14,7 @@ some scripts and workflows which do some checks and automation.
 Here are the steps you need to perform to make a release.
 
 #. Make sure all tests pass
-#. Update the changelog
+#. Update the WHATSNEW file
 #. Execute the ``.make_release.sh`` script giving the type of release (major/minor/patch)
 #. Make a pull request
 #. Switch to the main repository (migros/fotoobo)

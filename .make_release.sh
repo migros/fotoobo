@@ -47,13 +47,14 @@ sed -i -e '/./,$!d' -e :a -e '/^\n*$/{$d;N;ba' -e '}' WHATSNEW.md
 VERSION="## [$new_version] - $(date +%Y-%m-%d)"
 WHATSNEW="$(<WHATSNEW.md)"
 sed -i "1s/^/\n$VERSION\n\n/" WHATSNEW.md
-echo "" >> WHATSNEW.md
+echo "" > WHATSNEW.md
 sed -i '/# \[Released\]/r WHATSNEW.md' CHANGELOG.md
 
 
 git add pyproject.toml
 git add fotoobo/__init__.py
 git add CHANGELOG.md
+git add WHATSNEW.md
 
 echo 'Committing version bump...'
 git commit -m ":bookmark: Commit version v$new_version"
