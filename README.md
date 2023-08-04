@@ -1,4 +1,4 @@
-<p style="text-align: right"><img src=docs/source/fotoobo.png width="200px"></p>
+<p style="text-align: right"><img src=https://raw.githubusercontent.com/migros/fotoobo/main/docs/source/fotoobo.png width="200px"></p>
 
 # fotoobo | Fortinet Toolbox
 **make IT easy**
