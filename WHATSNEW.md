@@ -1,3 +1,6 @@
+
+## [1.0.3] - 2023-08-17
+
 ### Added
 
 - Add Python 3.12 pre release to GitHub actions for compatibility checking
