@@ -8,7 +8,7 @@ Getting Started
 Prerequisites
 -------------
 
-This fotoobo package assumes you have
+This **fotoobo** package assumes you have
 
 * A Linux environment
 * Network access to Fortinet products
@@ -19,9 +19,9 @@ This fotoobo package assumes you have
 Installing fotoobo
 ------------------
 
-Please install fotoobo on any Linux machine or container with Python on it. Although Python is an os
-independent programming language fotoobo is not meant to be installed and is not tested on any
-Windows machine. Not yet. If you want to use Windows then run fotoobo in
+Please install **fotoobo** on any Linux machine or container with Python on it. Although Python is
+an os independent programming language **fotoobo** is not meant to be installed and is not tested on
+any Windows machine. Not yet. If you want to use Windows then run **fotoobo** in
 `WSL <https://learn.microsoft.com/de-de/windows/wsl/>`_.
 
 .. code-block:: bash
@@ -32,7 +32,7 @@ Windows machine. Not yet. If you want to use Windows then run fotoobo in
 Execution
 ---------
 
-In its simplest form fotoobo lets you run different predefined functions as a cli application.
+In its simplest form **fotoobo** lets you run different predefined functions as a cli application.
 
 Start with:
 
@@ -40,7 +40,7 @@ Start with:
 
     fotoobo --help
 
-An overview of all available fotoobo commands can be shown with:
+An overview of all available **fotoobo** commands can be shown with:
 
 .. code-block:: bash
 
@@ -82,8 +82,8 @@ For more options see the :ref:`inventory documentation<usage_inventory>`.
 Let's have fun with the first query
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Now you can run fotoobo commands to the configured FortiGate. As an example you can get the FortiOS
-version from the FortiGate by issuing the following command:
+Now you can run **fotoobo** commands to the configured FortiGate. As an example you can get the
+FortiOS version from the FortiGate by issuing the following command:
 
 .. code-block:: bash
 
@@ -93,8 +93,8 @@ version from the FortiGate by issuing the following command:
 Termination
 -----------
 
-fotoobo exits with defined status codes. You can show the status code in bash with ``echo $?``. The
-fotoobo status code values are based on the
+**fotoobo** exits with defined status codes. You can show the status code in bash with ``echo $?``.
+The **fotoobo** status code values are based on the
 `levels from the Python logging module <https://docs.python.org/3/library/logging.html#logging-levels>`_.
 The cli application (made with `typer <https://typer.tiangolo.com/>`_) exits with its own exit codes
 which do not correspond with the Python logging levels.
@@ -111,7 +111,7 @@ which do not correspond with the Python logging levels.
     fotoobo$ echo $?
     0
 
-The following status codes are defined and used in fotoobo:
+The following status codes are defined and used in **fotoobo**:
 
 
 .. list-table::
