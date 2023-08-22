@@ -11,7 +11,7 @@ The FortiGate configuration check module lets you check the configuration of a F
 If a file is given it checks this file. If you pass a directory, it will do the checks for all the
 .conf files in this directory. Exciting, isn't it?
 
-To have a good understanding on how fotoobo handles FortiGate configurations have a look at the
+To have a good understanding on how **fotoobo** handles FortiGate configurations have a look at the
 `README <https://github.com/migros/fotoobo/blob/main/README.md>`_.
 
 
@@ -32,8 +32,8 @@ Check Bundles
 A check bundle contains one ore more checks that are logically related to each other. These checks
 are defined by the individual fields for each entry in *checks*.
 
-This section contains all check bundles which have been implemented in fotoobo,
-you can incorporate them in your own bundles.
+This section contains all check bundles which have been implemented in **fotoobo**, you can
+incorporate them in your own bundles.
 
 Note that you need one or more saved FortiGate configuration files to run these check against.
 

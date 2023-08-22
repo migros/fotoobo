@@ -5,11 +5,11 @@
 Importing fotoobo
 =================
 
-Although fotoobo is meant to be used as a CLI application you may also import it into your own 
-Python modules. With this you can write your own business logic without changing the fotoobo code
-itself.
+Although **fotoobo** is meant to be used as a CLI application you may also import it into your own 
+Python modules. With this you can write your own business logic without changing the **fotoobo**
+code itself.
 
-First install fotoobo as documented in :ref:`usage_getting_started`:
+First install **fotoobo** as documented in :ref:`usage_getting_started`:
 
 .. code-block:: bash
 
