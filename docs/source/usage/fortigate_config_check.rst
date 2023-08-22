@@ -194,7 +194,7 @@ Special options are:
 
 ..  code-block:: yaml
 
-    - type: value
+    - type: value_in_list
       name: check_1
       scope: global
       path: /system/session-helper
