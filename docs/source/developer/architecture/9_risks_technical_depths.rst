@@ -2,11 +2,11 @@
 
 .. _RisksTechnicalDepths:
 
-11. Risks & Technical Depths
+9. Risks & Technical Depths
 ============================
 
-11.1 Use of undocumented API parts
-----------------------------------
+Use of undocumented API parts
+-----------------------------
 
 Description
 ^^^^^^^^^^^
@@ -30,8 +30,8 @@ when some API calls break and break the respective **fotoobo** part.
 regular use of the current* **fotoobo** *features using cron-jobs and alike.*
 
 
-11.2 Use of unencrypted inventory including credentials
--------------------------------------------------------
+Use of unencrypted inventory including credentials
+--------------------------------------------------
 
 Description
 ^^^^^^^^^^^

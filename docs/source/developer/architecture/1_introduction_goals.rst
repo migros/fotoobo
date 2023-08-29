@@ -57,21 +57,21 @@ Some of **fotoobo**'s main use cases are:
 fotoobo vs. Fortinet REST API
 -----------------------------
 
-There is a general purpose API for all of the supported devices. Fotoobo uses them all to "talk" to
-the respective device, so basically its no "vs.". For you this means you are always free to
-implement your use cases in own scripts directly utilizing the REST API. What fotoobo can offer you
-is to remove the boiler plate code needed to get and push data to the respective APIs. See the
-`fotoobo Module Documentation <_ModuleDocumentation>`_ for further information on whether fotoobo
-is usable to you. If not, please help us to make it so :-).
+There is a general purpose API for all of the supported devices. **fotoobo** uses them all to "talk"
+to the respective device, so basically its no "vs.". For you this means you are always free to
+implement your use cases in own scripts directly utilizing the REST API. What **fotoobo** can offer
+you is to remove the boiler plate code needed to get and push data to the respective APIs. See the
+:ref:`ModuleDocumentation` for further information on whether **fotoobo** is usable to you. If not,
+please help us to make it so :-).
 
 
 fotoobo vs. Fortinet ansible module
 -----------------------------------
 
-The main goal of fotoobo is not (yet) to provide tools to manipulate the configuration of the
+The main goal of **fotoobo** is not (yet) to provide tools to manipulate the configuration of the
 respective devices. For this please use the
 `Fortinet ansible module <https://docs.ansible.com/ansible/latest/collections/fortinet/index.html>`_
 or the REST API's directly.
 
-What fotoobo can do for you in this cases is for example information gathering and enhancing, e.g.
+What **fotoobo** can do for you in this cases is for example information gathering and enhancing, e.g.
 through the `convert` commands.

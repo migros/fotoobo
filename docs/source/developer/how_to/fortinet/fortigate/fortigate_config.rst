@@ -9,9 +9,9 @@ The FortiGate Configuration Structure
 Structure
 ---------
 
-The FortiGate configuration used in fotoobo uses a generic structure independent of the VDOM mode
-your FortiGate uses. The structure is saved in JSON format and used as a native Python object. This
-way you can access every configuration leaf by giving it's path.
+The FortiGate configuration used in **fotoobo** uses a generic structure independent of the VDOM
+mode your FortiGate uses. The structure is saved in JSON format and used as a native Python object.
+This way you can access every configuration leaf by giving it's path.
 
 Every configuration data structure has a global part where non VDOM relevant configuration is
 stored. All VDOM configuration is in the vdom part of the data structure. If you use a FortiGate

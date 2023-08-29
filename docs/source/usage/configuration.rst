@@ -11,17 +11,17 @@ Introduction
 fotoobo.yaml
 ^^^^^^^^^^^^
 
-fotoobo reads its configuration from a global configuration file, usually named `fotoobo.yaml`. If
-you do not explicitly set a file (with the command line option `-c` ) fotoobo searches at the following
-locations for a file named `fotoobo.yaml` (in the order given here):
+**fotoobo** reads its configuration from a global configuration file, usually named `fotoobo.yaml`.
+If you do not explicitly set a file (with the command line option `-c` ) **fotoobo** searches at the
+following locations for a file named `fotoobo.yaml` (in the order given here):
 
 1. In the current working directory
 2. In `$HOME/.config/`
 
 It will take the first file given and stop searching for other files.
 
-If you do not specify a configuration file and fotoobo does not find it in the local directory it
-runs with default settings which are referenced below.
+If you do not specify a configuration file and **fotoobo** does not find it in the local directory
+it runs with default settings which are referenced below.
 
 The file `fotoobo.yaml.sample`_ provides a skeleton of a `fotoobo.yaml` configuration with all
 possible options and the respective documentation for it. Use this as a starting point for your own
@@ -37,11 +37,11 @@ Always keep in mind that the cli options take precedence over the global configu
 even if there is a global configuration file you may override some of the settings in it with cli
 options.
 
-The following list of options are in alphabetical order. In the configuration file the order of the options
-does not matter, even if there are dependencies between them.
+The following list of options are in alphabetical order. In the configuration file the order of the
+options does not matter, even if there are dependencies between them.
 
-Note that you can have many basic settings changed by CLI-options, but some more advanced things like audit
-logging to a syslog server can only be achieved by using file based configuration.
+Note that you can have many basic settings changed by CLI-options, but some more advanced things
+like audit logging to a syslog server can only be achieved by using file based configuration.
 
 
 Settings Reference
@@ -55,17 +55,17 @@ inventory
 
 *default: "inventory.yaml"*
 
-The **path** and/or **filename** of the :ref:`usage_inventory`. If fotoobo needs to connect to a Fortinet device it
-loads the needed configuration from this inventory. If you omit the path ``fotoobo`` will search in the
-current working directory.
+The **path** and/or **filename** of the :ref:`usage_inventory`. If **fotoobo** needs to connect to a
+Fortinet device it loads the needed configuration from this inventory. If you omit the path
+``fotoobo`` will search in the current working directory.
 
 no_logo
 """""""
 
 *default: false*
 
-Suppress the output of the fotoobo logo at the beginning of the execution. Set this value to ``True`` to
-suppress the logo.
+Suppress the output of the **fotoobo** logo at the beginning of the execution. Set this value to
+``True`` to suppress the logo.
 
 .. _logging:
 
@@ -101,8 +101,8 @@ log_console
 
 *default: enabled*
 
-Whether fotoobo should print all logs to console or not. Defaults to **yes** (if logging is :ref:`logging_enabled`).
-To disable console logging comment out this line using a ``#``.
+Whether **fotoobo** should print all logs to console or not. Defaults to **yes** (if logging is
+:ref:`logging_enabled`). To disable console logging comment out this line using a ``#``.
 
 
 log_file
@@ -110,9 +110,9 @@ log_file
 
 *default: enabled*
 
-The sup-option ``name`` holds the **path** and/or **filename** where ``fotoobo`` writes the logfile to (if logging
-is :ref:`logging_enabled`). If you set a log file the logs are appended to a file if the file already exists. If
-you omit the path the current working directory is used.
+The sup-option ``name`` holds the **path** and/or **filename** where ``fotoobo`` writes the logfile
+to (if logging is :ref:`logging_enabled`). If you set a log file the logs are appended to a file if
+the file already exists. If you omit the path the current working directory is used.
 
 If you want to disable file logging, comment the respective lines out using a ``#``.
 
@@ -148,8 +148,8 @@ NOTE:
 Audit-Logging
 ^^^^^^^^^^^^^
 
-fotoobo can produce audit log trails (usually this is just which user called what fotoobo command
-line from which host when).
+**fotoobo** can produce audit log trails (usually this is just which user called what **fotoobo**
+command line from which host when).
 
 The configuration options work the same as described in :ref:`logging`.
 

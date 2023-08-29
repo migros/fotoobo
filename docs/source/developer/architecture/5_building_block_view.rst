@@ -10,7 +10,7 @@
 Package structure
 -----------------
 
-The package structure describes the internal structure of fotoobo
+The package structure describes the internal structure of **fotoobo**.
 
 .. image:: diagrams/package_structure.drawio.svg
   :width: 100%
