@@ -2,7 +2,7 @@
 
 .. _QualityAssurance:
 
-10. Quality Assurance
+8. Quality Assurance
 =====================
 
 Since most Fortinet products are security devices the stability and reliability of those devices is
@@ -70,7 +70,7 @@ enforced by the repository settings.
 Extensive Documentation
 ^^^^^^^^^^^^^^^^^^^^^^^
 
-Part of the **usability** goal is to not only have a simple to use user interface but also a well
+Part of the usability goal is to not only have a simple to use user interface but also a well
 understandable documentation.
 
 Every new user is encouraged to give us feedback where possible problems were and how we could

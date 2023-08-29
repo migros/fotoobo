@@ -5,23 +5,23 @@
 The fotoobo inventory
 =====================
 
-Any device you want to access needs to be defined in the fotoobo inventory. The path to this
+Any device you want to access needs to be defined in the **fotoobo** inventory. The path to this
 inventory you have to set in the :ref:`global configuration<usage_configuration>`. From there
-fotoobo reads all the information about the devices to use during operation. Even if you may name
-it whatever you want it's best practice to name it *inventory.yaml*.
+**fotoobo** reads all the information about the devices to use during operation. Even if you may
+name it whatever you want it's best practice to name it *inventory.yaml*.
 
 
 Important Security Consideration
 --------------------------------
 
-The fotoobo inventory is a `yaml file <https://yaml.org/>`_ containing your Fortinet and other 
+The **fotoobo** inventory is a `yaml file <https://yaml.org/>`_ containing your Fortinet and other 
 devices. It is used to connect to these devices. Every device is listed with its name and the 
 required connection parameters. At the moment this also means secret access keys for the devices,
 so make sure it is never exposed to unauthorized individuals. Usually this means you need to make
 sure that the inventory is...
 
-1. only stored on the host you want to run fotoobo (never checked into a git repository, ...)
-2. only readable to the user that runs fotoobo (and there is absolutely no reason that this user
+1. only stored on the host you want to run **fotoobo** (never checked into a git repository, ...)
+2. only readable to the user that runs **fotoobo** (and there is absolutely no reason that this user
    is root!)
 
 `Don't say I didn't tell you <https://www.youtube.com/watch?v=1bVy1sLVasY>`_.
@@ -30,7 +30,8 @@ sure that the inventory is...
 fotoobo Inventory Basics
 ------------------------
 
-The entry for each device begins with its name which can be used in the fotoobo cli to access it.
+The entry for each device begins with its name which can be used in the **fotoobo** cli to access
+it.
 
 Beneath the simple device information it may also contain global configuration fer every type of
 device. The section which holds the global configuration is named `globals` so make sure you haven't
@@ -122,8 +123,8 @@ an API access token in every request.
 
 **type** *string* (required)
 
-  Specifies the type of device. Use 'fortigate' for FortiGate devices. It is used if fotoobo has to
-  search for specific types of devices, e.g. when it should iterate over all FortiGate devices in
+  Specifies the type of device. Use 'fortigate' for FortiGate devices. It is used if **fotoobo** has
+  to search for specific types of devices, e.g. when it should iterate over all FortiGate devices in
   the inventory.
 
 **example**
@@ -252,7 +253,7 @@ FortiClient EMS Devices
 Generic Devices
 ---------------
 
-There are several non Fortinet devices you may use within fotoobo. They each need different or
+There are several non Fortinet devices you may use within **fotoobo**. They each need different or
 additional arguments to initialize.
 
 ftp
