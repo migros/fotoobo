@@ -8,6 +8,8 @@ import typer
 
 from fotoobo.cli.fmg import get_commands as get
 from fotoobo.helpers import cli_path
+from fotoobo.helpers.config import config as fotoobo_config
+from fotoobo.inventory import Inventory
 from fotoobo.tools import fmg
 
 app = typer.Typer(no_args_is_help=True, rich_markup_mode="rich")
@@ -47,6 +49,13 @@ def assign(
         help="The FortiManager to access (must be defined in the inventory).",
         metavar="[host]",
     ),
+    smtp_server: str = typer.Option(
+        None,
+        "--smtp",
+        "-s",
+        help="The smtp configuration from the inventory to send potential errors to.",
+        metavar="[server]",
+    ),
     timeout: int = typer.Option(
         60,
         "--timeout",
@@ -58,7 +67,14 @@ def assign(
     """
     Assign a global policy to a specified ADOM or to a list of ADOMs.
     """
-    fmg.assign(adoms=adoms, policy=policy, host=host, timeout=timeout)
+    inventory = Inventory(fotoobo_config.inventory_file)
+    result = fmg.assign(adoms=adoms, policy=policy, host=host, timeout=timeout)
+
+    if smtp_server:
+        if smtp_server in inventory.assets:
+            result.send_messages_as_mail(inventory.assets[smtp_server], "error")
+        else:
+            log.warning("SMTP server %s not in found in inventory.", smtp_server)
 
 
 @app.command(no_args_is_help=True)
