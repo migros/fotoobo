@@ -68,3 +68,32 @@ class TestInventory:
         inventory = Inventory(Path("tests/data/inventory.yaml"))
         with pytest.raises(GeneralWarning, match=r"no asset of type .* and name .*"):
             inventory.get(test_name, test_type)
+
+    @staticmethod
+    @pytest.mark.parametrize(
+        "test_type",
+        (
+            pytest.param(None, id="without type"),
+            pytest.param("fortigate", id="with type"),
+        ),
+    )
+    def test_get_item(test_type: Optional[str]) -> None:
+        """Test Inventory.get_item()"""
+        inventory = Inventory(Path("tests/data/inventory.yaml"))
+        asset = inventory.get_item("test_fgt_1", test_type)
+        assert asset.hostname == "dummy"
+
+    @staticmethod
+    @pytest.mark.parametrize(
+        "test_name, test_type",
+        (
+            pytest.param("", None, id="empty name"),
+            pytest.param("dummy", None, id="nonexisting name"),
+            pytest.param("test_fgt_1", "dummy_type", id="wrong type"),
+        ),
+    )
+    def test_get_item_with_exception(test_name: str, test_type: Optional[str]) -> None:
+        """Test Inventory.get_item() when an exception is raised"""
+        inventory = Inventory(Path("tests/data/inventory.yaml"))
+        with pytest.raises(GeneralWarning, match=r"Asset with name"):
+            inventory.get_item(test_name, test_type)

@@ -24,7 +24,7 @@ def adoms(host: str) -> Result[str]:
         list of dict: list of ADOMs where ADOM is a dict with keys: name, version
     """
     inventory = Inventory(config.inventory_file)
-    fmg = inventory.get(host, "fortimanager")[host]
+    fmg = inventory.get_item(host, "fortimanager")
     result = Result[str]()
 
     log.debug("FortiManager get adoms ...")
@@ -52,7 +52,7 @@ def devices(host: str) -> Result[Dict[str, str]]:
         list of dict: list of devices where
     """
     inventory = Inventory(config.inventory_file)
-    fmg = inventory.get(host, "fortimanager")[host]
+    fmg = inventory.get_item(host, "fortimanager")
     log.debug("FortiManager get devices ...")
     fmg.login()
     payload = {
@@ -104,7 +104,7 @@ def policy(
         "comments",
     ]
     inventory = Inventory(config.inventory_file)
-    fmg = inventory.get(host, "fortimanager")[host]
+    fmg = inventory.get_item(host, "fortimanager")
     log.debug("FortiManager get policy '%s' from '%s' ...", policy_name, adom)
     fmg.login()
     payload = {
@@ -149,7 +149,7 @@ def version(host: str) -> Result[str]:
         Dict[str, str]: version data in a dict with keys: host, version
     """
     inventory = Inventory(config.inventory_file)
-    fmg = inventory.get(host, "fortimanager")[host]
+    fmg = inventory.get_item(host, "fortimanager")
     log.debug("FortiManager get version ...")
     fmg_version = fmg.get_version()
     result = Result[str]()

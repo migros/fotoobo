@@ -57,7 +57,7 @@ def hamaster(host: str) -> Result[str]:  # pylint: disable=too-many-locals
         return name, status
 
     inventory = Inventory(config.inventory_file)
-    fmg = inventory.get(host, "fortimanager")[host]
+    fmg = inventory.get_item(host, "fortimanager")
 
     payload = {
         "method": "get",
