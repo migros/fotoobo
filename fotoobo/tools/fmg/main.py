@@ -25,7 +25,7 @@ def assign(adoms: str, policy: str, host: str, timeout: int = 60) -> None:
         timeout (int): Timeout in sec. to wait for the FortiManager task to finish [Default: 60].
     """
     inventory = Inventory(config.inventory_file)
-    fmg = inventory.get(host, "fortimanager")[host]
+    fmg = inventory.get_item(host, "fortimanager")
     fmg.login()
 
     log.debug("Assigning global policy/objects to ADOM %s", adoms)
@@ -70,7 +70,7 @@ def post(file: Path, adom: str, host: str) -> None:
         raise GeneralWarning(f"there is no data in the given file ({file})")
 
     inventory = Inventory(config.inventory_file)
-    fmg = inventory.get(host, "fortimanager")[host]
+    fmg = inventory.get_item(host, "fortimanager")
     fmg.login()
 
     log.debug("FortiManager post command ...")
