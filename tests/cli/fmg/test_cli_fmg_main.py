@@ -26,7 +26,7 @@ def test_cli_app_fmg_assign_help() -> None:
     assert result.exit_code == 0
     arguments, options, commands = parse_help_output(result.stdout)
     assert set(arguments) == {"adoms", "host", "policy"}
-    assert options == {"-h", "--help", "-t", "--timeout"}
+    assert options == {"-h", "--help", "-s", "--smtp", "-t", "--timeout"}
     assert not commands
 
 
