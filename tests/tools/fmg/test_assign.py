@@ -1,8 +1,8 @@
 """Test fmg tools assign"""
 
 
-from unittest.mock import MagicMock
 from pathlib import Path
+from unittest.mock import MagicMock
 
 import pytest
 from _pytest.monkeypatch import MonkeyPatch
@@ -48,16 +48,20 @@ def test_assign(monkeypatch: MonkeyPatch) -> None:
                 [
                     {
                         "name": "dummy",
-                        "state": 0,
+                        "state": 4,
                         "task_id": 42,
-                        "detail": "",
+                        "detail": "dummy_detail",
                         "start_tm": 10,
                         "end_tm": 20,
-                        "history": [{"detail": ""}],
+                        "history": [{"detail": "dummy_history"}],
                     }
                 ]
             )
         ),
     )
-    assign("dummy_adoms", "dummy_policy", "test_fmg")
-    assert True
+    result = assign("dummy_adoms", "dummy_policy", "test_fmg")
+    messages = result.get_messages("test_fmg")
+    assert len(messages) == 2
+    assert messages[0]["level"] == "debug"
+    assert messages[0]["message"] == "42: dummy / dummy_detail (10 sec)"
+    assert messages[1]["message"] == "- dummy_history"

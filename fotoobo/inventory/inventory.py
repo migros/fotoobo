@@ -48,7 +48,7 @@ class Inventory:
         type: Optional[str] = None,  # pylint: disable=redefined-builtin
     ) -> Dict[str, Any]:
         """
-        Get a list of assets from the inventory
+        Get a dictionary of assets from the inventory with given 'filters'.
 
         Args:
             name:   Which asset to get. If blank get every asset. Wildcard * is supported in any
@@ -56,10 +56,10 @@ class Inventory:
             type:   Which asset type to get. If blank get every asset.
 
         Returns:
-            Dict of assets with name as key
+            Dictionary of assets with name as key
 
         Raises:
-            GeneralWarning if no asset was found that matches name or type
+            GeneralWarning if no asset was found in the inventory that matches name or type
         """
         log.debug("getting assets with name '%s' and type '%s'", name, type)
         name_pattern = f"^{name}$".replace("*", ".*")
@@ -81,6 +81,40 @@ class Inventory:
             )
 
         return assets
+
+    def get_item(
+        self,
+        name: str = "",
+        type: Optional[str] = None,  # pylint: disable=redefined-builtin
+    ) -> Any:
+        """
+        Get a single asset from the inventory. To be sure the item has the correct type you can
+        specify the desired type and a GeneralWarning is raised if the type does not match.
+
+        Args:
+            name:   Which exact asset to get.
+            type:   If you specify a type it is checked if it matches the type of the asset
+
+        Returns:
+            Inventory asset
+
+        Raises:
+            GeneralWarning if the asset was not found in the inventory
+            GeneralWarning if the specified type does not match the type of the item
+        """
+        log.debug("getting asset with name '%s'", name)
+        try:
+            asset = self.assets[name]
+
+        except KeyError as error:
+            raise GeneralWarning(
+                f"Asset with name '{name}' was not found in the inventory"
+            ) from error
+
+        if type and type != asset.type:
+            raise GeneralWarning(f"Asset with name '{name}' is not of type '{type}'")
+
+        return asset
 
     def _load_inventory(self) -> None:
         """

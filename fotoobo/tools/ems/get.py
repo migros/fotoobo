@@ -25,7 +25,7 @@ def version(host: str) -> Result[str]:
     result = Result[str]()
 
     inventory = Inventory(config.inventory_file)
-    ems: FortiClientEMS = inventory.get(host, "forticlientems")[host]
+    ems: FortiClientEMS = inventory.get_item(host, "forticlientems")
     log.debug("FortiClient EMS get version ...")
     ems.login()
     ems_version = ems.get_version()
@@ -49,7 +49,7 @@ def workgroups(host: str, custom: bool = False) -> Result[List[Dict[str, str]]]:
     result = Result[List[Dict[str, str]]]()
 
     inventory = Inventory(config.inventory_file)
-    ems: FortiClientEMS = inventory.get(host, "forticlientems")[host]
+    ems: FortiClientEMS = inventory.get_item(host, "forticlientems")
 
     log.debug("FortiClient EMS get workgroups ...")
     ems.login()
