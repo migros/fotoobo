@@ -30,7 +30,7 @@ def connections(host: str) -> Result[Dict[str, Any]]:
     result = Result[Dict[str, Any]]()
     inventory = Inventory(config.inventory_file)
 
-    ems: FortiClientEMS = inventory.get(host, "forticlientems")[host]
+    ems: FortiClientEMS = inventory.get_item(host, "forticlientems")
     ems.login()
 
     response = ems.api("get", "/endpoints/connection/donut")
@@ -64,7 +64,7 @@ def endpoint_management_status(host: str) -> Result[Dict[str, Any]]:
     result = Result[Dict[str, Any]]()
     inventory = Inventory(config.inventory_file)
 
-    ems: FortiClientEMS = inventory.get(host, "forticlientems")[host]
+    ems: FortiClientEMS = inventory.get_item(host, "forticlientems")
     ems.login()
 
     response = ems.api("get", "/endpoints/management/donut")
@@ -104,7 +104,7 @@ def endpoint_online_outofsync(host: str) -> Result[Dict[str, Any]]:
     """
     result = Result[Dict[str, Any]]()
     inventory = Inventory(config.inventory_file)
-    ems: FortiClientEMS = inventory.get(host, "forticlientems")[host]
+    ems: FortiClientEMS = inventory.get_item(host, "forticlientems")
     ems.login()
 
     response = ems.api(
@@ -139,7 +139,7 @@ def endpoint_os_versions(host: str) -> Result[Dict[str, Dict[str, Any]]]:
     result = Result[Dict[str, Dict[str, Any]]]()
     inventory = Inventory(config.inventory_file)
 
-    ems: FortiClientEMS = inventory.get(host, "forticlientems")[host]
+    ems: FortiClientEMS = inventory.get_item(host, "forticlientems")
     ems.login()
 
     data: Dict[str, Any] = {"data": {}, "fotoobo": {}}
@@ -167,7 +167,7 @@ def system(host: str) -> Result[Dict[str, Any]]:
     result = Result[Dict[str, Any]]()
     inventory = Inventory(config.inventory_file)
 
-    ems: FortiClientEMS = inventory.get(host, "forticlientems")[host]
+    ems: FortiClientEMS = inventory.get_item(host, "forticlientems")
     ems.login()
 
     # get EMS serial number (just for debug logging and because it's possible)
@@ -214,7 +214,7 @@ def license(host: str) -> Result[Dict[str, Any]]:  # pylint: disable=redefined-b
     """
     result = Result[Dict[str, Any]]()
     inventory = Inventory(config.inventory_file)
-    ems: FortiClientEMS = inventory.get(host, "forticlientems")[host]
+    ems: FortiClientEMS = inventory.get_item(host, "forticlientems")
     ems.login()
 
     response = ems.api("get", "/license/get")
