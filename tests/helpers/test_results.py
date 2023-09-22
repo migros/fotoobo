@@ -163,6 +163,14 @@ class TestResults:
         assert result.all_results() == {"test_host": "test_result"}
 
     @staticmethod
+    def test_print_result_as_table_empty(capsys: Any) -> None:
+        """Test print_result_as_table() with no results pushed to the object"""
+        result = Result[Any]()
+        result.print_result_as_table()
+        out, _ = capsys.readouterr()
+        assert len(out) == 1  # There is a "\n" in an empty rich.Table
+
+    @staticmethod
     @pytest.mark.parametrize(
         "input_data",
         (
@@ -252,11 +260,21 @@ class TestResults:
     def test_print_raw(input_data: Any, expect: str, capsys: Any) -> None:
         """Test print_raw() method"""
         result = Result[Any]()
-        result.push_result("test_host", input_data)
+        result.push_result("test_host_1", input_data)
+        result.push_result("test_host_2", "dummy_2")
 
-        result.print_raw("test_host")
-
+        # Test without key
+        result.print_raw()
         out, _ = capsys.readouterr()
+        assert "test_host_1" in out
+        assert "test_host_2" in out
+        assert expect in out
+
+        # Test with key
+        result.print_raw("test_host_1")
+        out, _ = capsys.readouterr()
+        assert "test_host_1" in out
+        assert "test_host_2" not in out
         assert expect in out
 
     @staticmethod
@@ -272,10 +290,19 @@ class TestResults:
         assert "42" in content
 
     @staticmethod
-    def test_send_messages_as_mail(monkeypatch: MonkeyPatch) -> None:
+    @pytest.mark.parametrize(
+        "command, count",
+        (
+            pytest.param(False, False, id="no command, no count"),
+            pytest.param(True, False, id="with command, no count"),
+            pytest.param(False, True, id="no command, with count"),
+            pytest.param(True, True, id="with command, with count"),
+        ),
+    )
+    def test_send_messages_as_mail(command: bool, count: bool, monkeypatch: MonkeyPatch) -> None:
         """Test send_messages_as_mail
-        Here we do not really test something. We just run through the send_mail method to see if
-        it raises any error or exception. In fact no mail is really sent.
+        Here we check with the assert_called_with method if the mail function was called with
+        expected input. No mail will actually be sent.
         """
         sendmail_mock = MagicMock()
 
@@ -285,22 +312,17 @@ class TestResults:
         monkeypatch.setattr(
             "fotoobo.helpers.result.smtplib.SMTP.__enter__", MagicMock(return_value=sendmail_mock)
         )
-        cli_path.append("dummy_cli_path")
+        smtp = GenericDevice(
+            hostname="dummy.local",
+            recipient="fotoobo_recipient@domain",
+            sender="fotoobo_sender@domain",
+            subject="fotoobo test notification",
+        )
 
         # Prepare result
         result = Result[Any]()
         result.push_message("test_host", "dummy line 1")
         result.push_message("test_host", "dummy line 2")
-
-        result.send_messages_as_mail(
-            GenericDevice(
-                hostname="dummy.local",
-                recipient="fotoobo_recipient@domain",
-                sender="fotoobo_sender@domain",
-                subject="fotoobo test notification",
-            )
-        )
-
         mail = (
             "To:fotoobo_recipient@domain\n"
             "From:fotoobo_sender@domain\n"
@@ -309,7 +331,14 @@ class TestResults:
             "test_host: dummy line 1\n"
             "test_host: dummy line 2\n"
         )
+        add_command = "\ncommand: dummy_cli_path\n" if command else ""
+        add_count = "\n2 messages in list" if count else ""
+        cli_path.clear()  # previous cli tests already appended some commands
+        cli_path.append("dummy_cli_path")
 
+        result.send_messages_as_mail(smtp, command=command, count=count)
         sendmail_mock.sendmail.assert_called_with(
-            "fotoobo_sender@domain", "fotoobo_recipient@domain", mail
+            "fotoobo_sender@domain",
+            "fotoobo_recipient@domain",
+            mail + add_command + add_count,
         )
