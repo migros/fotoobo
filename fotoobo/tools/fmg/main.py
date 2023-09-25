@@ -28,7 +28,6 @@ def assign(adoms: str, policy: str, host: str, timeout: int = 60) -> Result[str]
     result = Result[str]()
     inventory = Inventory(config.inventory_file)
     fmg = inventory.get_item(host, "fortimanager")
-    fmg.login()
 
     log.debug("Assigning global policy/objects to ADOM %s", adoms)
     task_id = fmg.assign_all_objects(adoms=adoms, policy=policy)
@@ -55,31 +54,34 @@ def assign(adoms: str, policy: str, host: str, timeout: int = 60) -> Result[str]
                     getattr(log, level)(result_message)
                     result.push_message(host, result_message, level)
 
-    fmg.logout()
     return result
 
 
-def post(file: Path, adom: str, host: str) -> None:
+def post(file: Path, adom: str, host: str) -> Result[str]:
     """
     POST the given configuration from a JSON file to the FortiManager
 
     Args:
-        file (str): The configuration file to oad the configuration from
-        adom (str): The ADOM to assign the global policy to
-        host (str): The FortiManager defined in inventory
+        file:   The configuration file to oad the configuration from
+        adom:   The ADOM to assign the global policy to
+        host:   The FortiManager defined in inventory
 
     Raises:
-        GeneralWarning: GeneralWarning
+        GeneralWarning
     """
     if not (payloads := load_json_file(file)):
         raise GeneralWarning(f"there is no data in the given file ({file})")
 
     inventory = Inventory(config.inventory_file)
+    result: Result[str] = Result()
     fmg = inventory.get_item(host, "fortimanager")
-    fmg.login()
 
     log.debug("FortiManager post command ...")
-    log.info("start POSTing assets to '%s'", host + "/" + adom)
+    log.info("start posting assets to '%s'", host + "/" + adom)
 
-    fmg.post(adom, payloads)
-    fmg.logout()
+    result_list = fmg.post(adom, payloads)
+    if result_list:
+        for line in result_list:
+            result.push_message(host, line, "error")
+
+    return result
