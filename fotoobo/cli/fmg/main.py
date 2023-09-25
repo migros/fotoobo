@@ -90,13 +90,27 @@ def post(
         help="The FortiManager to access (must be defined in the inventory).",
         metavar="[host]",
     ),
+    smtp_server: str = typer.Option(
+        None,
+        "--smtp",
+        "-s",
+        help="The smtp configuration from the inventory to send potential errors to.",
+        metavar="[server]",
+    ),
 ) -> None:
     """
     POST any valid JSON request to the FortiManager.
 
     Configure the FortiManager with any valid API call(s) given within the JSON file.
     """
-    fmg.post(file=file, adom=adom, host=host)
+    inventory = Inventory(fotoobo_config.inventory_file)
+    result = fmg.post(file=file, adom=adom, host=host)
+
+    if smtp_server:
+        if smtp_server in inventory.assets:
+            result.send_messages_as_mail(inventory.assets[smtp_server], "error", command=True)
+        else:
+            log.warning("SMTP server %s not in found in inventory.", smtp_server)
 
 
 app.add_typer(get.app, name="get", help="FortiManager get commands.")
