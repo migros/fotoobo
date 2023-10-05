@@ -5,5 +5,7 @@
 
 ### Changed
 
+- We now officially support Python 3.12
+
 ### Removed
 
