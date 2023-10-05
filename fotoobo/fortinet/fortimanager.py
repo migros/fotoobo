@@ -268,7 +268,7 @@ class FortiManager(Fortinet):
         self.session_key = ""
         return response.status_code
 
-    def post(self, adom: str, payloads: Any) -> int:
+    def post(self, adom: str, payloads: Any) -> List[str]:
         """
         POST method to FortiManager.
 
@@ -286,7 +286,9 @@ class FortiManager(Fortinet):
         # if payload is a dict convert it to a list with one dict in it.
         if isinstance(payloads, dict):
             payloads = [payloads]
-        errors = 0
+
+        results = []
+
         for payload in payloads:
             for i, _ in enumerate(payload["params"]):
                 # Here we have to replace the {adom} in the URL entry:
@@ -302,9 +304,13 @@ class FortiManager(Fortinet):
             for result in response.json()["result"]:
                 if result["status"]["code"] != 0:
                     log.error("%s: %s", result["status"]["message"], result["url"])
-                    errors += 1
+                    results.append(
+                        f"{result['status']['message']}: "
+                        f"{result['url']} "
+                        f"(code: {result['status']['code']})"
+                    )
 
-        return errors
+        return results
 
     def wait_for_task(self, task_id: int, timeout: int = 60) -> List[Any]:
         """

@@ -367,15 +367,15 @@ class TestFortiManager:
         )
 
     @staticmethod
-    def test_set_single(monkeypatch: MonkeyPatch) -> None:
-        """Test fmg set with a single dict"""
+    def test_post_single(monkeypatch: MonkeyPatch) -> None:
+        """Test fmg post with a single dict"""
         monkeypatch.setattr(
             "fotoobo.fortinet.fortinet.requests.Session.post",
             MagicMock(
                 return_value=ResponseMock(json={"result": [{"status": {"code": 0}}]}, status=200)
             ),
         )
-        assert FortiManager("host", "", "").post("ADOM", {"params": [{"url": "{adom}"}]}) == 0
+        assert not FortiManager("host", "", "").post("ADOM", {"params": [{"url": "{adom}"}]})
         requests.Session.post.assert_called_with(  # type:ignore
             "https://host:443/jsonrpc",
             headers=None,
@@ -385,15 +385,15 @@ class TestFortiManager:
         )
 
     @staticmethod
-    def test_set_multiple(monkeypatch: MonkeyPatch) -> None:
-        """Test fmg set with a list of dicts"""
+    def test_post_multiple(monkeypatch: MonkeyPatch) -> None:
+        """Test fmg post with a list of dicts"""
         monkeypatch.setattr(
             "fotoobo.fortinet.fortinet.requests.Session.post",
             MagicMock(
                 return_value=ResponseMock(json={"result": [{"status": {"code": 0}}]}, status=200)
             ),
         )
-        assert FortiManager("host", "", "").post("ADOM", [{"params": [{"url": "{adom}"}]}]) == 0
+        assert not FortiManager("host", "", "").post("ADOM", [{"params": [{"url": "{adom}"}]}])
         requests.Session.post.assert_called_with(  # type:ignore
             "https://host:443/jsonrpc",
             headers=None,
@@ -403,15 +403,15 @@ class TestFortiManager:
         )
 
     @staticmethod
-    def test_set_single_global(monkeypatch: MonkeyPatch) -> None:
-        """Test fmg set with a single dict"""
+    def test_post_single_global(monkeypatch: MonkeyPatch) -> None:
+        """Test fmg post with a single dict"""
         monkeypatch.setattr(
             "fotoobo.fortinet.fortinet.requests.Session.post",
             MagicMock(
                 return_value=ResponseMock(json={"result": [{"status": {"code": 0}}]}, status=200)
             ),
         )
-        assert FortiManager("host", "", "").post("global", {"params": [{"url": "{adom}"}]}) == 0
+        assert not FortiManager("host", "", "").post("global", {"params": [{"url": "{adom}"}]})
         requests.Session.post.assert_called_with(  # type:ignore
             "https://host:443/jsonrpc",
             headers=None,
@@ -421,8 +421,8 @@ class TestFortiManager:
         )
 
     @staticmethod
-    def test_set_response_error(monkeypatch: MonkeyPatch) -> None:
-        """Test fmg set with en error in the response"""
+    def test_post_response_error(monkeypatch: MonkeyPatch) -> None:
+        """Test post set with en error in the response"""
         monkeypatch.setattr(
             "fotoobo.fortinet.fortinet.requests.Session.post",
             MagicMock(
@@ -434,7 +434,9 @@ class TestFortiManager:
                 )
             ),
         )
-        assert FortiManager("host", "", "").post("ADOM", [{"params": [{"url": "{adom}"}]}]) == 1
+        assert FortiManager("host", "", "").post("ADOM", [{"params": [{"url": "{adom}"}]}]) == [
+            "dummy: dummy (code: 444)"
+        ]
         requests.Session.post.assert_called_with(  # type:ignore
             "https://host:443/jsonrpc",
             headers=None,
@@ -444,8 +446,8 @@ class TestFortiManager:
         )
 
     @staticmethod
-    def test_set_http_error(monkeypatch: MonkeyPatch) -> None:
-        """Test fmg set with an error in the response"""
+    def test_post_http_error(monkeypatch: MonkeyPatch) -> None:
+        """Test fmg post with an error in the response"""
         monkeypatch.setattr(
             "fotoobo.fortinet.fortinet.requests.Session.post",
             MagicMock(return_value=ResponseMock(json={}, status=444)),
