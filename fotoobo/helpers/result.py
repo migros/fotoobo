@@ -164,8 +164,6 @@ class Result(Generic[T]):
         Print a table from given data as list or dict.
 
         Args:
-            key:            Print only the result for the host given
-                            (default: print all results)
             title:          Set the preferred title for the table
             auto_header:    Whether to show the headers (default: off)
             headers:        Set the headers (if needed)
@@ -202,7 +200,7 @@ class Result(Generic[T]):
             auto_header:    Whether to show the headers or not
             title:          The title for the table
         """
-        if not (isinstance(data, list) and isinstance(data[0], dict)):
+        if not isinstance(data, list):
             raise GeneralWarning("data for print_table_raw must be a list of dicts.")
 
         table = Table(title=title, show_header=auto_header or bool(headers))
@@ -293,25 +291,23 @@ class Result(Generic[T]):
                 if not levels or message["level"] in levels:
                     out_messages.append(f"{host}: {message['message']}")
 
-        if not out_messages:
-            return
+        if out_messages:
+            body = "To:" + smtp_server.recipient + "\n"
+            body += "From:" + smtp_server.sender + "\n"
+            body += "Subject:" + smtp_server.subject + "\n\n"
 
-        body = "To:" + smtp_server.recipient + "\n"
-        body += "From:" + smtp_server.sender + "\n"
-        body += "Subject:" + smtp_server.subject + "\n\n"
+            for message_line in out_messages:
+                body += message_line + "\n"
 
-        for message_line in out_messages:
-            body += message_line + "\n"
+            if command and cli_path:
+                body += "\ncommand: " + " ".join(cli_path) + "\n"
 
-        if command and cli_path:
-            body += "\ncommand: " + " ".join(cli_path) + "\n"
+            if count:
+                adds = "s" if len(out_messages) > 1 else ""
+                body += "\n" + str(len(out_messages)) + " message" + adds + " in list"
 
-        if count:
-            adds = "s" if len(out_messages) > 1 else ""
-            body += "\n" + str(len(out_messages)) + " message" + adds + " in list"
-
-        # Prepare server connection and send mail
-        smtp_server.port = getattr(smtp_server, "port", 25)
-        with smtplib.SMTP(smtp_server.hostname, smtp_server.port) as mail_server:
-            # server.set_debuglevel(1)
-            mail_server.sendmail(smtp_server.sender, smtp_server.recipient, body)
+            # Prepare server connection and send mail
+            smtp_server.port = getattr(smtp_server, "port", 25)
+            with smtplib.SMTP(smtp_server.hostname, smtp_server.port) as mail_server:
+                # server.set_debuglevel(1)
+                mail_server.sendmail(smtp_server.sender, smtp_server.recipient, body)
