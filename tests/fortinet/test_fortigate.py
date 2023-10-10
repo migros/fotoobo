@@ -20,13 +20,24 @@ class TestFortiGate:
     """Test the FortiGate class"""
 
     @staticmethod
+    def test_init_no_hostname(monkeypatch: MonkeyPatch) -> None:
+        """Test the FortiGate init when not specifying a hostname"""
+        monkeypatch.setattr(
+            "fotoobo.fortinet.fortinet.Fortinet.api",
+            MagicMock(return_value=ResponseMock(json={"key": "value"}, status=200)),
+        )
+        with pytest.raises(GeneralWarning) as err:
+            FortiGate("", "token")
+        assert "No hostname specified" in str(err.value)
+
+    @staticmethod
     def test_api(monkeypatch: MonkeyPatch) -> None:
         """Test the FortiGate api method"""
         monkeypatch.setattr(
             "fotoobo.fortinet.fortinet.Fortinet.api",
             MagicMock(return_value=ResponseMock(json={"key": "value"}, status=200)),
         )
-        fortigate = FortiGate("", "token")
+        fortigate = FortiGate("dummy_hostname", "token")
         assert fortigate.api("get", "dummy").json() == {"key": "value"}
         assert fortigate.session.headers["Authorization"] == "Bearer token"
         Fortinet.api.assert_called_with(
@@ -40,7 +51,7 @@ class TestFortiGate:
             "fotoobo.fortinet.fortigate.FortiGate.api",
             MagicMock(return_value=ResponseMock(text="Dummy Backup Data", status=200)),
         )
-        assert FortiGate("", "").backup(timeout=66) == "Dummy Backup Data"
+        assert FortiGate("dummy_hostname", "").backup(timeout=66) == "Dummy Backup Data"
         FortiGate.api.assert_called_with(
             "get", "monitor/system/config/backup", params={"scope": "global"}, timeout=66
         )
@@ -61,7 +72,7 @@ class TestFortiGate:
             "fotoobo.fortinet.fortigate.FortiGate.api",
             MagicMock(return_value=ResponseMock(json=response, status=200)),
         )
-        assert FortiGate("", "").get_version() == expected
+        assert FortiGate("dummy_hostname", "").get_version() == expected
         FortiGate.api.assert_called_with("get", "monitor/system/status")
 
     @staticmethod
@@ -72,5 +83,5 @@ class TestFortiGate:
             MagicMock(return_value=ResponseMock(json={"dummy": "dummy"}, status=404)),
         )
         with pytest.raises(GeneralWarning) as err:
-            FortiGate("", "").get_version()
+            FortiGate("dummy_hostname", "").get_version()
         assert "HTTP/404 Resource Not Found" in str(err.value)
