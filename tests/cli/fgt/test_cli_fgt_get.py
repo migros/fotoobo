@@ -57,7 +57,7 @@ def test_cli_app_fgt_get_version_all(monkeypatch: MonkeyPatch) -> None:
     )
     result = runner.invoke(app, ["-c", "tests/fotoobo.yaml", "fgt", "get", "version"])
     assert result.exit_code == 0
-    assert result.stdout.count("1.1.1") == 2
+    assert result.stdout.count("1.1.1") == 3
 
 
 def test_cli_app_fgt_get_version_401(monkeypatch: MonkeyPatch) -> None:

@@ -141,7 +141,10 @@ class Inventory:
                 asset = {**self._globals[asset["type"]], **asset}
 
             if asset.get("type", "") == "fortigate":
-                self.assets[name] = FortiGate(**asset)
+                try:
+                    self.assets[name] = FortiGate(**asset)
+                except GeneralWarning as err:
+                    log.warning("%s: %s", name, err)
 
             elif asset.get("type", "") == "forticlientems":
                 self.assets[name] = FortiClientEMS(**asset)

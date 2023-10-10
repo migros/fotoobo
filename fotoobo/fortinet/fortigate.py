@@ -20,20 +20,21 @@ class FortiGate(Fortinet):
 
     def __init__(
         self,
-        hostname: str,
-        token: str,
-        **kwargs: Any,
+        hostname: str = "",
+        token: str = "",
+        **kwargs: Dict[str, str],
     ) -> None:
         """
         Set some initial parameters.
 
         Args:
-            hostname (str): the hostname of the FortiGate to connect to
-
-            token (str): api access token from the FortiGate
-
-            **kwargs (dict): see Fortinet class for available arguments
+            hostname:   The hostname of the FortiGate to connect to
+            token:      API access token from the FortiGate
+            **kwargs:   See Fortinet class for available arguments
         """
+        if not hostname:
+            raise GeneralWarning("No hostname specified")
+
         super().__init__(hostname=hostname, **kwargs)
         self.api_url = f"https://{self.hostname}:{self.https_port}/api/v2"
         self.token = token
@@ -51,7 +52,7 @@ class FortiGate(Fortinet):
         """
         API request to a FortiGate device.
         It uses the super.api method but it has to enrich the payload in post requests with the
-        needed sessionkey.
+        needed session key.
 
         Args:
             method (str): request method from [get, post]
