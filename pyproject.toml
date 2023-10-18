@@ -113,7 +113,7 @@ commands = pytest --cov-report term-missing --cov-fail-under 90 --cov=fotoobo --
 description = Create a requirements.txt from the Poetry dependencies (used for readthedocs)
 skip_install = True
 allowlist_externals = poetry
-commands = poetry export --without-hashes --format=requirements.txt --output=docs/requirements.txt
+commands = poetry export --without-hashes --with dev --format=requirements.txt --output=docs/requirements.txt
 
 [testenv:docs]
 description = Create the documentation with sphinx
