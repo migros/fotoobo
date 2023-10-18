@@ -1,5 +1,6 @@
 ### Added
 
+- Add support for Python 3.12
 - Option `--smtp` for `fmg assign` and `fmg_post`
 - Method `inventory.get_item()` to only get one single item from the inventory
 
@@ -12,6 +13,7 @@ if no results were pushed.
 
 ### Changed
 
+- Disable caching in Github Actions due to an error since Python 3.12
 - `fortimanager.post()` now returns list of errors instead of just the number of errors
 
 ### Removed
