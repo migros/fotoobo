@@ -28,11 +28,11 @@ def test_backup_all(monkeypatch: MonkeyPatch) -> None:
     result = backup()
 
     all_results = result.all_results()
-    assert len(all_results) == 2
+    assert len(all_results) == 3
     assert all_results["test_fgt_1"] == test_config
     assert all_results["test_fgt_2"] == test_config
 
-    assert len(result.messages) == 2
+    assert len(result.messages) == 3
     assert len(result.messages["test_fgt_1"]) == 1
     message = result.messages["test_fgt_1"][0]
     assert message["level"] == "info"
@@ -40,6 +40,11 @@ def test_backup_all(monkeypatch: MonkeyPatch) -> None:
 
     assert len(result.messages["test_fgt_2"]) == 1
     message = result.messages["test_fgt_2"][0]
+    assert message["level"] == "info"
+    assert "succeeded" in message["message"]
+
+    assert len(result.messages["test_fgt_4"]) == 1
+    message = result.messages["test_fgt_4"][0]
     assert message["level"] == "info"
     assert "succeeded" in message["message"]
 
