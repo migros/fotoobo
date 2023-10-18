@@ -1,3 +1,6 @@
+
+## [1.1.0] - 2023-10-18
+
 ### Added
 
 - Add support for Python 3.12
@@ -16,6 +19,3 @@ if no results were pushed.
 
 - Disable caching in Github Actions due to an error since Python 3.12
 - `fortimanager.post()` now returns list of errors instead of just the number of errors
-
-### Removed
-
