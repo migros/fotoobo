@@ -38,7 +38,7 @@ def test_version(host: str, monkeypatch: MonkeyPatch) -> None:
         assert isinstance(result.get_result(host), str)
         assert result.get_result(host) == "1.1.1"
     else:
-        assert len(result.results) == 2
+        assert len(result.results) == 3
         assert result.get_result("test_fgt_2") == "1.1.1"
 
 
