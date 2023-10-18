@@ -26,22 +26,26 @@ class TestInventory:
         """
         inventory = Inventory(Path("tests/data/inventory.yaml"))
         assert isinstance(inventory.assets, dict)
-        assert len(inventory.assets) == 7
-        assert len(inventory.fortigates) == 2
+        assert len(inventory.assets) == 8
+        assert len(inventory.fortigates) == 3
         assert inventory.assets["test_fgt_1"].https_port == 111
         assert inventory.assets["test_fgt_2"].https_port == 222
+        assert "test_fgt_3" not in inventory.assets  # not in inventory due to no hostname
+        assert inventory.assets["test_fgt_4"].hostname == "dummy"
+        assert inventory.assets["test_fgt_4"].token == ""
+        assert "test_fgt_5" not in inventory.assets  # not in inventory due to no hostname
         assert inventory.assets["test_ems"].https_port == 443
 
     @staticmethod
     @pytest.mark.parametrize(
         "test_name, test_type, expected_len",
         (
-            pytest.param(None, None, 7, id="no name, no type"),
+            pytest.param(None, None, 8, id="no name, no type"),
             pytest.param("test_fgt_1", None, 1, id="name, no type"),
             pytest.param("*_fgt_1", None, 1, id="wildcard name 1, no type"),
             pytest.param("test_*_1", None, 1, id="wildcard name 2, no type"),
-            pytest.param("test_fgt_*", None, 2, id="wildcard name 3, no type"),
-            pytest.param(None, "fortigate", 2, id="no name, type"),
+            pytest.param("test_fgt_*", None, 3, id="wildcard name 3, no type"),
+            pytest.param(None, "fortigate", 3, id="no name, type"),
         ),
     )
     def test_get(test_name: Optional[str], test_type: Optional[str], expected_len: int) -> None:

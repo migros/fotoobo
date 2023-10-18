@@ -1,37 +1,55 @@
 globals:
   fortigate:
     https_port: 222
+
 test_fgt_1:
   hostname: dummy
   ssl_verify: false
   https_port: 111
   token: dummy
   type: fortigate
+
 test_fgt_2:
   hostname: dummy
   token: dummy
   type: fortigate
+
+test_fgt_3:       # no hostname specified
+  token: dummy
+  type: fortigate
+
+test_fgt_4:       # no token specified
+  hostname: dummy
+  type: fortigate
+
+test_fgt_5:       # no hostname and token specified
+  type: fortigate
+
 test_ems:
   hostname: dummy
   username: dummy
   password: dummy
   type: forticlientems
+
 test_fmg:
   hostname: dummy
   username: dummy
   password: dummy
   type: fortimanager
+
 test_faz:
   hostname: dummy
   username: dummy
   password: dummy
   type: fortianalyzer
+
 test_ftp:
   hostname: dummy_hostname
   directory: dummy_directory
   username: dummy_username
   password: dummy_password
   type: ftp
+
 test_smtp:
   hostname: dummy_hostname
   recipient: fotoobo@local
