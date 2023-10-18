@@ -6,6 +6,7 @@
 
 ### Fixed
 
+- Add dev dependencies to docs requirements file (due to readthedocs build error)
 - Update to urllib3 2.0.6 due to dependabot security warning
 - No more Traceback for FortiGates without hostname or token specified
 - Result.print_result_as_table() gives error with empty Response. Now it just prints an empty line
