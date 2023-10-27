@@ -12,7 +12,9 @@ from fotoobo.fortinet.fortianalyzer import FortiAnalyzer
 from fotoobo.fortinet.forticlientems import FortiClientEMS
 from fotoobo.fortinet.fortigate import FortiGate
 from fotoobo.fortinet.fortimanager import FortiManager
+from fotoobo.helpers.config import config
 from fotoobo.helpers.files import load_yaml_file
+from fotoobo.helpers.vault import Client
 
 from .generic import GenericDevice
 
@@ -37,6 +39,11 @@ class Inventory:
         }
         self.assets: Dict[str, Any] = {}
 
+        # Load credentials from a configured Hashicorp vault
+        if config.vault:
+            self._load_data_from_vault(config.vault)
+
+        # Load assets from inventory file and enrich with vault data
         self._load_inventory()
         self.fortigates = {
             name: asset for (name, asset) in self.assets.items() if isinstance(asset, FortiGate)
@@ -173,6 +180,13 @@ class Inventory:
             case _:
                 self.assets[name] = GenericDevice(**asset)
     """
+
+    def _load_data_from_vault(self, vault_dict: Dict[str, Any]) -> None:
+        """Load the credentials from a vault"""
+        log.debug("Loading credentials from vault '%s'", config.vault["url"])
+        vault = Client(**vault_dict)
+        data = vault.get_data("/v1/kv/data/fortinet/fotoobo")
+        self.vault_data = data.get("ok", {}).get("data", {}).get("data", {})
 
     def _set_globals(self, data: Dict[str, Any]) -> None:
         """
