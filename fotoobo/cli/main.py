@@ -10,8 +10,8 @@ Caution: Use docstrings with care as they are used to print help texts on any co
 
 import logging
 import os
-from pathlib import Path
 import sys
+from pathlib import Path
 from typing import Optional, Union
 
 import typer
@@ -94,8 +94,19 @@ def callback(  # pylint: disable=too-many-arguments
 
     log.debug("let the magic begin")
 
+    # Log all the configuration options
+    # If a config option is a datastructure (dict) unpack it and write it linewise
+    # For security reasons all sensitive values are shortened
     for attr in dir(config):
         if attr.startswith("_") or attr in ["config", "load_configuration"]:
+            continue
+
+        if attr in ["audit_logging", "logging", "vault"] and getattr(config, attr):
+            for sub_attr, value in getattr(config, attr).items():
+                if attr == "vault" and sub_attr in ["role_id", "secret_id"]:
+                    value = f"{value[:4]}...{value[-5:-1]}"
+
+                log.debug("option '%s.%s' is '%s'", attr, sub_attr, value)
             continue
 
         log.debug("option '%s' is '%s'", attr, getattr(config, attr))
@@ -103,10 +114,6 @@ def callback(  # pylint: disable=too-many-arguments
     cli_path.append(str(context.invoked_subcommand))
     log.debug("about to execute command: '%s'", context.invoked_subcommand)
     log.audit(f'command="{" ".join(sys.argv)}"')  # type: ignore
-
-    # info = context.to_info_dict()
-    # rprint(info)
-    # save_json_file("data/cli.json", info)
     config.cli_info = context.to_info_dict()
 
 
