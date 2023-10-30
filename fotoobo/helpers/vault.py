@@ -26,6 +26,7 @@ class Client:
         self,
         url: str,
         namespace: str,
+        data_path: str,
         role_id: str,
         secret_id: str,
         token_file: Optional[str] = None,
@@ -36,6 +37,7 @@ class Client:
         Args:
             url:                The URL of your vault service (eg. https://vault.local:443)
             namespace:          The namespace of your vault
+            data_path:          The path where the vault data for fotoobo is stored
             role_id:            The approle role_id
             secret_id:          The approle secret_id
             token_file:         The file to store the access token to. If no file is given the token
@@ -46,6 +48,7 @@ class Client:
         """
         log.debug("Initialize the vault client")
         self.namespace: str = namespace
+        self.data_path: str = data_path
         self.role_id: str = role_id
         self.secret_id: str = secret_id
         self.token: str = ""
@@ -55,6 +58,7 @@ class Client:
 
         log.debug("vault_client_url: '%s'", self.url)
         log.debug("vault_client_namespace: '%s'", self.namespace)
+        log.debug("vault_data_path: '%s'", self.data_path)
         log.debug("vault_client_role_id: '%s...%s'", self.role_id[:4], self.role_id[-5:-1])
         log.debug("vault_client_secret_id: '%s...%s'", self.secret_id[:4], self.secret_id[-5:-1])
         log.debug("vault_client_token_ttl_limit: '%s'", self.token_ttl_limit)
@@ -84,10 +88,12 @@ class Client:
             "X-Vault-Namespace": self.namespace,
         }
         response = requests.get(url=url, headers=headers, timeout=timeout)
-        log.debug("Response status_code is '%s'", response.status_code)
+
         if response.ok:
+            log.debug("Response status_code is '%s'", response.status_code)
             return {"ok": response.json()}
 
+        log.warning("Resonse is '%s %s'", response.status_code, response.reason)
         return {
             "error": {
                 "status_code": response.status_code,
@@ -151,23 +157,23 @@ class Client:
     def validate_token(self, timeout: int = 3) -> bool:
         """Check if the token still is valid
 
-        Validate the vault token against the vault service. If the token ttl is lower then the
+        Validate the Vault token against the Vault service. If the token ttl is lower then the
         token_ttl_limit the token is cleared. This prevents a token with ttl short before 0 to be
-        used in future calls. Instead a new token should be generated.
+        used in future calls. Instead a new token should be requestsed.
 
         Args:
-            timeout: The time before a request to the vault is cancelled
+            timeout: The time before a request to the Vault service is cancelled
 
         Returns:
             True if the token is valid, otherwise False
         """
         url = f"{self.url}/v1/auth/token/lookup-self"
-        log.debug("Check if token still is valid")
+        log.debug("Check if vault token still is valid")
         headers = {"X-Vault-Token": self.token}
         response = requests.get(url=url, headers=headers, timeout=timeout)
         log.debug("Response status_code is '%s'", response.status_code)
         if response.ok:
-            log.debug("Token is valid for '%s' seconds", response.json()["data"]["ttl"])
+            log.debug("Vault token is valid for '%s' seconds", response.json()["data"]["ttl"])
             log.debug("vault_client_token: '%s...%s'", self.token[:8], self.token[-5:-1])
             if response.json()["data"]["ttl"] < self.token_ttl_limit:
                 log.debug("Invalidate token due to ttl limit")
