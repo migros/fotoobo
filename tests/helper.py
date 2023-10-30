@@ -11,7 +11,7 @@ from requests.exceptions import HTTPError
 class ResponseMock:
     """This class mocks a http response object."""
 
-    def __init__(self, **kwargs) -> None:
+    def __init__(self, **kwargs: Any) -> None:
         """
         Give the mock the response you except.
 
