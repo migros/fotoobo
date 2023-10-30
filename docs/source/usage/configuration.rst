@@ -57,7 +57,7 @@ inventory
 
 The **path** and/or **filename** of the :ref:`usage_inventory`. If **fotoobo** needs to connect to a
 Fortinet device it loads the needed configuration from this inventory. If you omit the path
-``fotoobo`` will search in the current working directory.
+**fotoobo** will search in the current working directory.
 
 no_logo
 """""""
@@ -110,7 +110,7 @@ log_file
 
 *default: enabled*
 
-The sup-option ``name`` holds the **path** and/or **filename** where ``fotoobo`` writes the logfile
+The sup-option ``name`` holds the **path** and/or **filename** where **fotoobo** writes the logfile
 to (if logging is :ref:`logging_enabled`). If you set a log file the logs are appended to a file if
 the file already exists. If you omit the path the current working directory is used.
 
@@ -156,6 +156,91 @@ The configuration options work the same as described in :ref:`logging`.
 NOTE:
   * If :ref:`log_configuration_file` is set, the settings of this part has no effect and you MUST
     configure audit logging in the :ref:`log_configuration_file` too.
+
+
+.. _vault_service:
+
+Hashicorp Vault Service
+^^^^^^^^^^^^^^^^^^^^^^^
+
+For security reasons it may not be safe enough to store sensitive data like credentials and tokens
+directly in the **fotoobo** inventory file. Instead the
+`Hashicorp Vault <https://www.vaultproject.io/>`_ service may be used to store such data. 
+In the **fotoobo** inventory file you may use ``VAULT`` as a placeholder for any attribute. 
+
+The Vault client in **fotoobo** will use the 
+`approle <https://developer.hashicorp.com/vault/docs/auth/approle>`_ login to get the data.
+
+The data stored in the Vault service has to be a dictionary which reflects the structure of the
+**fotoobo** inventory and its attributes. **fotoobo** will replace all attributes that have the
+value ``VAULT`` with the value stored in the vault dictionary.
+
+**Example** 
+
+.. code-block:: yaml
+  :caption: An example inventory file
+
+  fortigate-demo:
+    hostname: fortigate.local
+    token: VAULT
+    type: fortigate
+
+  fortimanager-demo:
+    hostname: fortimanager.local
+    username: demo
+    password: VAULT
+    type: fortimanager 
+
+.. code-block::
+  :caption: Data structure in the Vault servcie
+
+  {
+    "fortigate-demo": {
+      "token": "your-secret-token"
+    },
+    "fortimanager-demo": {
+      "password": "your-secret-password"
+    }
+  }
+
+The following configuration options are to be set under a settings group called ``vault``. If you
+omit the whole ``vault`` section, the use of the Hashicorp Vault service is disabled (default).
+
+url
+"""
+
+The Hashicorp Vault Service URL in the form ``https://vault.local``
+
+namespace
+"""""""""
+
+The Namespace to access
+
+data_path
+"""""""""
+
+The path in the Vault service where the sensitive data is stored. The data has to be a dictionary
+which reflects the structure of the **fotoobo** inventory and its attributes.
+
+role_id
+"""""""
+
+The approle role_id
+
+secret_id
+"""""""""
+
+The approle secret_id
+
+
+token_file (optional)
+"""""""""""""""""""""
+
+The file to cache the vault token. If you omit this cache file the Vault client will always
+relogin with ``role_id`` and ``secret_id`` to get a valid token.
+If a cached token is expired or about to expire the Vault client will automatically login and get a
+new token.
+
 
 
 Example configuration
