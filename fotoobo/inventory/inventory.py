@@ -28,8 +28,13 @@ class Inventory:
     https://fotoobo.readthedocs.io/en/latest/usage/inventory.html
     """
 
-    def __init__(self, inventory_file: Path):
-        """Initialize the inventory"""
+    def __init__(self, inventory_file: Path) -> None:
+        """Initialize the inventory
+
+        Args:
+            inventory file: The Path object to the inventory file.
+        """
+        log.debug("Initialize the fotoobo inventory")
         self._inventory_file: Path = inventory_file
         self._globals: Dict[str, Any] = {
             "fortianalyzer": {},
@@ -39,12 +44,15 @@ class Inventory:
         }
         self.assets: Dict[str, Any] = {}
 
-        # Load credentials from a configured Hashicorp vault
+        # Load assets from inventory file
+        self._load_inventory()
+
+        # Load credentials from a configured Hashicorp vault and enrich assets
         if config.vault:
             self._load_data_from_vault(config.vault)
+            self._replace_with_vault_data()
 
-        # Load assets from inventory file and enrich with vault data
-        self._load_inventory()
+        # Create object for FortiGates
         self.fortigates = {
             name: asset for (name, asset) in self.assets.items() if isinstance(asset, FortiGate)
         }
@@ -127,13 +135,14 @@ class Inventory:
         """
         Load the inventory from a file given
         """
+        log.debug("Load the assets from the inventory file")
         # Expand user home shortcuts in the inventory file path
         expanded_inventory_file = self._inventory_file.expanduser()
         log.debug("loading assets from '%s'", expanded_inventory_file)
         inventory_raw: Dict[str, Any] = dict(load_yaml_file(expanded_inventory_file) or {})
 
-        # set the globals
-        # this has to be done before the looping over all inventory items so that the globals are
+        # Set the globals
+        # This has to be done before the looping over all inventory items so that the globals are
         # already set during looping
         if "globals" in inventory_raw:
             self._set_globals(inventory_raw["globals"])
@@ -185,8 +194,22 @@ class Inventory:
         """Load the credentials from a vault"""
         log.debug("Loading credentials from vault '%s'", config.vault["url"])
         vault = Client(**vault_dict)
-        data = vault.get_data("/v1/kv/data/fortinet/fotoobo")
+        data = vault.get_data(vault.data_path)
         self.vault_data = data.get("ok", {}).get("data", {}).get("data", {})
+
+    def _replace_with_vault_data(self) -> None:
+        """Replace asset attributes with data from the vault"""
+        for name, asset in self.assets.items():
+            for attribute in dir(asset):
+                if not attribute.startswith("_"):
+                    if getattr(asset, attribute) == "VAULT":
+                        try:
+                            setattr(asset, attribute, self.vault_data[name][attribute])
+                            log.debug(
+                                "Vault attribute '%s.%s' replaced successfully", name, attribute
+                            )
+                        except KeyError:
+                            log.warning("Vault attribute '%s.%s' not found", name, attribute)
 
     def _set_globals(self, data: Dict[str, Any]) -> None:
         """
