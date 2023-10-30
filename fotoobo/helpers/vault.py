@@ -15,7 +15,7 @@ import requests
 log = logging.getLogger("fotoobo")
 
 
-class Client:
+class Client:  # pylint: disable=too-many-instance-attributes
     """The approle helper class for the Hashicorp Vault
 
     This vault client gives you methods for your login with approle and maintaining token and data

@@ -20,11 +20,11 @@ class TestClient:
     @pytest.mark.parametrize(
         "token_file",
         (
-            pytest.param(None, id="no token file"),
-            pytest.param(Path("data/vault_token.key"), id="with token file"),
+            pytest.param("", id="no token file"),
+            pytest.param("tests/data/vault_token.key", id="with token file"),
         ),
     )
-    def test_init(token_file: Path, monkeypatch: MonkeyPatch) -> None:
+    def test_init(token_file: str, monkeypatch: MonkeyPatch) -> None:
         """Test the Client __init__"""
         monkeypatch.setattr("fotoobo.helpers.vault.Client.load_token", MagicMock(result=True))
         client = Client(
@@ -36,18 +36,23 @@ class TestClient:
             token_file=token_file,
         )
         assert client.url == "dummy_url"
-        assert client.token_file == token_file
+        if token_file:
+            assert client.token_file == Path(token_file)
+
+        else:
+            assert client.token_file == None
+
         assert client.token == ""
 
     @staticmethod
     @pytest.mark.parametrize(
         "token_file, expect",
         (
-            pytest.param(Path("tests/data/vault_token.key"), "dummy_vault_token", id="valid file"),
-            pytest.param(Path("tests/data/invault_token_file"), "", id="invalid file"),
+            pytest.param("tests/data/vault_token.key", "dummy_vault_token", id="valid file"),
+            pytest.param("tests/data/invault_token_file", "", id="invalid file"),
         ),
     )
-    def test_load_token(token_file: Path, expect: str, monkeypatch: MonkeyPatch) -> None:
+    def test_load_token(token_file: str, expect: str, monkeypatch: MonkeyPatch) -> None:
         """Test the Client load_token"""
         monkeypatch.setattr("fotoobo.helpers.vault.Client.validate_token", MagicMock(result=True))
         client = Client(
@@ -151,7 +156,7 @@ class TestClient:
             data_path="dummy_data_path",
             role_id="dummy_role_id",
             secret_id="dummy_secret_id",
-            token_file=token_file,
+            token_file=token_file.as_posix(),
         )
         client.token = "dummy_token"
         assert client.get_token() == bool(token)
