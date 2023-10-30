@@ -11,7 +11,7 @@ from requests.exceptions import HTTPError
 class ResponseMock:
     """This class mocks a http response object."""
 
-    def __init__(self, text: str = "", json: Any = None, status: int = 444) -> None:
+    def __init__(self, **kwargs) -> None:
         """
         Give the mock the response you except.
 
@@ -20,10 +20,14 @@ class ResponseMock:
             json (Any, optional): json response. Defaults to "".
             status (int, optional): http status code. Defaults to 444 (No Response)
         """
-        self.text = text
-        self.json = MagicMock(return_value=json)
-        self.status_code = status
+        self.text = kwargs.get("text", "")
+        self.json = MagicMock(return_value=kwargs.get("json", None))
+        self.status_code = kwargs.get("status", 444)
+        self.ok = kwargs.get("ok", True)
+        self.content = kwargs.get("content", "")
+        self.reason = kwargs.get("reason", "")
         self.raise_for_status = MagicMock()
+
         if self.status_code >= 300:
             self.raise_for_status = MagicMock(
                 side_effect=HTTPError("mocked HTTPError", response=self)
@@ -48,7 +52,6 @@ def parse_help_output(  # pylint: disable=too-many-branches
     commands = {}
     context = None
     for line in output.split("\n"):
-
         if line.startswith("╰──"):
             context = None
             continue
