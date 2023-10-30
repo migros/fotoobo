@@ -225,7 +225,7 @@ class FortiManager(Fortinet):
                         self.session_key = ""
 
             else:
-                log.debug("session file %s does ot exist", session_file)
+                log.debug("session file '%s' does ot exist", session_file)
 
         if not self.session_key and self.username and self.password:
             log.debug("login to %s", self.hostname)
