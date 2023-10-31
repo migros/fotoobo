@@ -68,7 +68,7 @@ class Client:  # pylint: disable=too-many-instance-attributes
             log.debug("vault_client_token_file: '%s'", self.token_file)
             self.load_token()
 
-    def get_data(self, path: str, timeout: int = 3) -> Any:
+    def get_data(self, timeout: int = 3) -> Any:
         """Get data from the key/value store
 
         Args:
@@ -81,7 +81,7 @@ class Client:  # pylint: disable=too-many-instance-attributes
         if not self.token:
             self.get_token()
 
-        url = f"{self.url}/{path.strip('/')}"
+        url = f"{self.url}/{self.data_path.strip('/')}"
         log.debug("Get data from '%s'", url)
         headers = {
             "X-Vault-Token": self.token,
