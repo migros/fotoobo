@@ -11,6 +11,7 @@ from zipfile import ZIP_DEFLATED, ZipFile
 
 import yaml
 
+
 from fotoobo.exceptions import GeneralError
 
 log = logging.getLogger("fotoobo")
@@ -21,14 +22,14 @@ def create_dir(directory: Path) -> None:
     Try to create a given directory if it does not exist.
 
     Args:
-        directory (Path): The directory to create (in case it not already exists)
+        directory: The directory to create (in case it not already exists)
 
     Raises:
-        DirectoryError: Error with message
+        OSError: Error with message
     """
     if not directory.is_dir():
         try:
-            directory.mkdir()
+            directory.mkdir(parents=True)
         except OSError as err:
             raise GeneralError(f"Unable to create directory {directory}") from err
 
