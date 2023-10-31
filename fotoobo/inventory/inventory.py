@@ -43,6 +43,7 @@ class Inventory:
             "fortimanager": {},
         }
         self.assets: Dict[str, Any] = {}
+        self.vault_data: Dict[str, Dict[str, str]] = {}
 
         # Load assets from inventory file
         self._load_inventory()
@@ -192,9 +193,9 @@ class Inventory:
 
     def _load_data_from_vault(self, vault_dict: Dict[str, Any]) -> None:
         """Load the credentials from a vault"""
-        log.debug("Loading credentials from vault '%s'", config.vault["url"])
+        log.debug("Loading credentials from vault '%s'", vault_dict["url"])
         vault = Client(**vault_dict)
-        data = vault.get_data(vault.data_path)
+        data = vault.get_data()
         self.vault_data = data.get("ok", {}).get("data", {}).get("data", {})
 
     def _replace_with_vault_data(self) -> None:
