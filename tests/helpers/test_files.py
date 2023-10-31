@@ -312,9 +312,8 @@ def test_create_dir_for_existing_directory(temp_dir: Path) -> None:
 def test_create_dir_for_sub_sub_directory(temp_dir: Path) -> None:
     """Test create_dir when trying to create a sub, subdirectory"""
     directory = temp_dir / "test_dir_3" / "test_dir_4"
-    assert not directory.is_dir()
-    with pytest.raises(GeneralError, match=r"Unable to create directory .*/test_dir_3/test_dir_4"):
-        create_dir(directory)
+    create_dir(directory)
+    assert directory.is_dir()
 
 
 def test_create_dir_with_os_error(monkeypatch: MonkeyPatch) -> None:
