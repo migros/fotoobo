@@ -223,4 +223,4 @@ class TestClient:
             role_id="dummy_role_id",
             secret_id="dummy_secret_id",
         )
-        assert client.get_data("dummy_path") == data
+        assert client.get_data() == data
