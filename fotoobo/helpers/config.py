@@ -10,6 +10,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Dict, Union
 
+from fotoobo.exceptions import GeneralError
 from fotoobo.helpers.files import load_yaml_file
 
 
@@ -28,6 +29,7 @@ class Config:
     no_logo: bool = False
     cli_info: Dict[str, Any] = field(default_factory=dict)
     ssl_verify: Union[str, bool] = True
+    vault: Dict[str, Union[str, int]] = field(default_factory=dict)
 
     def load_configuration(self, config_file: Union[Path, None]) -> None:
         """
@@ -71,15 +73,26 @@ class Config:
                 if not self.inventory_file.is_absolute():
                     self.inventory_file = config_file.parent / self.inventory_file
 
-                if loaded_config.get("logging"):
-                    self.logging = loaded_config["logging"]
-
-                if loaded_config.get("audit_logging"):
-                    self.audit_logging = loaded_config["audit_logging"]
-
+                self.logging = loaded_config.get("logging", {})
+                self.audit_logging = loaded_config.get("audit_logging", {})
                 self.no_logo = loaded_config.get("no_logo", self.no_logo)
-
                 self.ssl_verify = loaded_config.get("ssl_verify", self.ssl_verify)
+
+                self.vault = loaded_config.get("vault", {})
+                if self.vault:
+                    # Check if all the mandatory settings in vault section are given by substracting
+                    # the list of keys in vault config from list of mandatory keys.
+                    if (
+                        missing := [
+                            "url",
+                            "namespace",
+                            "data_path",
+                            "role_id",
+                            "secret_id",
+                        ]
+                        - self.vault.keys()
+                    ):
+                        raise GeneralError(f"Missing vault configuration data: {missing}")
 
 
 config = Config()

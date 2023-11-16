@@ -16,15 +16,20 @@ Important Security Consideration
 
 The **fotoobo** inventory is a `yaml file <https://yaml.org/>`_ containing your Fortinet and other 
 devices. It is used to connect to these devices. Every device is listed with its name and the 
-required connection parameters. At the moment this also means secret access keys for the devices,
-so make sure it is never exposed to unauthorized individuals. Usually this means you need to make
-sure that the inventory is...
+required connection parameters. This also means secret access keys for the devices, so make sure it
+is never exposed to unauthorized individuals. Usually this means you need to make sure that the
+inventory is...
 
 1. only stored on the host you want to run **fotoobo** (never checked into a git repository, ...)
 2. only readable to the user that runs **fotoobo** (and there is absolutely no reason that this user
    is root!)
 
 `Don't say I didn't tell you <https://www.youtube.com/watch?v=1bVy1sLVasY>`_.
+
+To make the handling of sensitive data a bit safer you may store such data in a Hashicorp Vault
+service. To do so you just give your sensitive attributes the value ``VAULT`` and **fotoobo** will
+lookup them in the Vault service. To configure your Hashicorp Vault access, have a look at
+:ref:`global configuration<vault_service>`
 
 
 fotoobo Inventory Basics
@@ -34,8 +39,8 @@ The entry for each device begins with its name which can be used in the **fotoob
 it.
 
 Beneath the simple device information it may also contain global configuration fer every type of
-device. The section which holds the global configuration is named `globals` so make sure you haven't
-any device with the same name.
+device. The section which holds the global configuration is named ``globals`` so make sure you
+haven't any device with the same name.
 
 **Simple Example**
 
