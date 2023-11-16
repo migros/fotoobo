@@ -3,11 +3,14 @@ Test the inventory
 """
 
 from pathlib import Path
-from typing import Optional
+from typing import Any, Dict, Optional
+from unittest.mock import MagicMock
 
 import pytest
+from _pytest.monkeypatch import MonkeyPatch
 
 from fotoobo.exceptions import GeneralWarning
+from fotoobo.helpers.config import config
 from fotoobo.inventory.inventory import Inventory
 
 
@@ -15,7 +18,7 @@ class TestInventory:
     """Test inventory"""
 
     @staticmethod
-    def test_init() -> None:
+    def test_init(monkeypatch: MonkeyPatch) -> None:
         """
         Test the __init__ method
 
@@ -35,6 +38,15 @@ class TestInventory:
         assert inventory.assets["test_fgt_4"].token == ""
         assert "test_fgt_5" not in inventory.assets  # not in inventory due to no hostname
         assert inventory.assets["test_ems"].https_port == 443
+        config.vault = {"dummy": "dummy"}
+        monkeypatch.setattr(
+            "fotoobo.inventory.Inventory._load_data_from_vault", MagicMock(return_value=None)
+        )
+        monkeypatch.setattr(
+            "fotoobo.inventory.Inventory._replace_with_vault_data", MagicMock(return_value=None)
+        )
+        inventory = Inventory(Path("tests/data/inventory.yaml"))
+        config.vault = {}
 
     @staticmethod
     @pytest.mark.parametrize(
@@ -101,3 +113,44 @@ class TestInventory:
         inventory = Inventory(Path("tests/data/inventory.yaml"))
         with pytest.raises(GeneralWarning, match=r"Asset with name"):
             inventory.get_item(test_name, test_type)
+
+    @staticmethod
+    @pytest.mark.parametrize(
+        "result, expected",
+        (
+            pytest.param(
+                {"ok": {"data": {"data": {"devicy": {"key": "dummy_data"}}}}},
+                {"devicy": {"key": "dummy_data"}},
+                id="valid data",
+            ),
+            pytest.param({"error": {}}, {}, id="invalid data"),
+        ),
+    )
+    def test_load_data_from_vault(
+        result: Dict[str, Any], expected: Dict[str, Any], monkeypatch: MonkeyPatch
+    ) -> None:
+        """Test Inventory._laod_data_from_vault"""
+        monkeypatch.setattr("fotoobo.helpers.vault.Client.get_data", MagicMock(return_value=result))
+        inventory = Inventory(Path("tests/data/inventory.yaml"))
+        vault_dict = {
+            "url": "https://dummy_url",
+            "namespace": "dummy_namespace",
+            "data_path": "dummy_data_path",
+            "role_id": "dummy_role_id",
+            "secret_id": "dummy_secret_id",
+        }
+        assert inventory.vault_data == {}
+        inventory._load_data_from_vault(vault_dict)
+        assert inventory.vault_data == expected
+
+    @staticmethod
+    def test_replace_with_vault_data() -> None:
+        """Test Inventory._replace_with_vault_data"""
+        inventory = Inventory(Path("tests/data/inventory.yaml"))
+        assert inventory.assets["test_fgt_1"].token == "dummy"
+        inventory.assets["test_fgt_1"].token = "VAULT"
+        inventory.assets["test_fgt_1"].dummy = "VAULT"
+        inventory.vault_data = {"test_fgt_1": {"token": "secret_token"}}
+        inventory._replace_with_vault_data()
+        assert inventory.assets["test_fgt_1"].token == "secret_token"
+        assert inventory.assets["test_fgt_1"].dummy == "VAULT"  # because key not in vault_data

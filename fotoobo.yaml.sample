@@ -2,14 +2,11 @@
 # Note: All paths may be absolute or relative. If they are given relative, it is
 #       from the cwd where fotoobo has been run.
 
-# The path to a
+# The path to a inventory file
 inventory: inventory.yaml
 
 # Hide the fotoobo logo
 no_logo: false
-
-# Whether to verify SSL connections or not. Set it to "true", "false" or the path to a CA bundle.
-ssl_verify: True
 
 # Configure how fotoobo logs
 # - Each section ("log_file", "log_console" and "log_syslog") can be commented out
@@ -41,7 +38,7 @@ logging:
 #    log_configuration_file: "logging-config.yaml"
 
 
-## Configure how fotoobo handles audit logs
+# Configure how fotoobo handles audit logs
 # Each section ("log_file", "log_console" and "log_syslog") can be commented out
 # to disable this output completely
 # NOTE: If you have given a log_configuration_file above, the options given here have no effect
@@ -58,3 +55,18 @@ logging:
 #        host: localhost
 #        port: 514
 #        protocol: UDP   # UDP or TCP
+
+
+# Configure the Hashicorp Vault service
+# Instead of storing credentials in the inventory file you may use VAULT as a placeholder. All asset
+# attributes that are VAULT will be retreived from the Hashicorp Vault service specified here.
+# The Hashicorp Vault service will use approle login to get the data.
+# This section is optional and may pose a security issue. In future versions we may also read the
+# role_id and secret_id from the system environment.
+vault:
+    url: https://vault.local
+    namespace: vault_namespace
+    data_path: /v1/kv/data/fotoobo
+    role_id: ...
+    secret_id: ...
+    token_file: ~/.cache/token.key
