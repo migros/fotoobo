@@ -80,6 +80,8 @@ class Config:
 
                 self.vault = loaded_config.get("vault", {})
                 if self.vault:
+                    # Check if all the mandatory settings in vault section are given by substracting
+                    # the list of keys in vault config from list of mandatory keys.
                     if (
                         missing := [
                             "url",
