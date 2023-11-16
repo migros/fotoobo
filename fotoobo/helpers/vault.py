@@ -12,6 +12,8 @@ from typing import Any, Optional
 
 import requests
 
+from fotoobo.exceptions.exceptions import GeneralError
+
 log = logging.getLogger("fotoobo")
 
 
@@ -72,14 +74,18 @@ class Client:  # pylint: disable=too-many-instance-attributes
         """Get data from the key/value store
 
         Args:
-            path:       The path to your data in the key/value store
             timeout:    The time before a request to the vault is cancelled
 
         Returns:
-            The date from the vault
+            The date from the vault or the error that occured
+
+        Raises:
+            GeneralError: If no token could be retreived
         """
-        if not self.token:
-            self.get_token()
+        if not self.token and not self.get_token():
+            error_message = "Unable to get vault token"
+            log.error(error_message)
+            raise GeneralError(error_message)
 
         url = f"{self.url}/{self.data_path.strip('/')}"
         log.debug("Get data from '%s'", url)
@@ -107,7 +113,6 @@ class Client:  # pylint: disable=too-many-instance-attributes
 
         Args:
             timeout: The time before a request to the vault is cancelled
-
         """
         url = f"{self.url}/v1/auth/approle/login"
         log.debug("Get new token from '%s'", url)

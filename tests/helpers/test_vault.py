@@ -9,6 +9,7 @@ from unittest.mock import MagicMock
 import pytest
 from _pytest.monkeypatch import MonkeyPatch
 
+from fotoobo.exceptions.exceptions import GeneralError
 from fotoobo.helpers.vault import Client
 from tests.helper import ResponseMock
 
@@ -40,7 +41,7 @@ class TestClient:
             assert client.token_file == Path(token_file)
 
         else:
-            assert client.token_file == None
+            assert client.token_file is None
 
         assert client.token == ""
 
@@ -211,10 +212,10 @@ class TestClient:
         ),
     )
     def test_get_data(
-        response: ResponseMock, data: Dict[str, Any], monkeypatch: MonkeyPatch, temp_dir: Path
+        response: ResponseMock, data: Dict[str, Any], monkeypatch: MonkeyPatch
     ) -> None:
         """Test the Client get_data"""
-        monkeypatch.setattr("fotoobo.helpers.vault.Client.get_token", MagicMock(result=True))
+        monkeypatch.setattr("fotoobo.helpers.vault.Client.get_token", MagicMock(return_value=True))
         monkeypatch.setattr("fotoobo.helpers.vault.requests.get", MagicMock(return_value=response))
         client = Client(
             url="https://dummy_url",
@@ -224,3 +225,20 @@ class TestClient:
             secret_id="dummy_secret_id",
         )
         assert client.get_data() == data
+
+    @staticmethod
+    def test_get_data_no_token(monkeypatch: MonkeyPatch) -> None:
+        """Test the Client get_data when no token could be retreived"""
+        monkeypatch.setattr("fotoobo.helpers.vault.Client.get_token", MagicMock(return_value=False))
+        monkeypatch.setattr(
+            "fotoobo.helpers.vault.requests.get", MagicMock(return_value=ResponseMock(ok=True))
+        )
+        client = Client(
+            url="https://dummy_url",
+            namespace="dummy_namespace",
+            data_path="dummy_data_path",
+            role_id="dummy_role_id",
+            secret_id="dummy_secret_id",
+        )
+        with pytest.raises(GeneralError, match=r"Unable to get vault token"):
+            client.get_data()
