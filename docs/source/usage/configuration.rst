@@ -227,10 +227,18 @@ role_id
 
 The approle role_id
 
+Instead of storing the role_id in the yaml configuration file you may use the system environment
+variable ``FOTOOBO_VAULT_ROLE_ID`` to store that value. The environment variable takes precedence
+over the configuration file should both be defined.
+
 secret_id
 """""""""
 
 The approle secret_id
+
+Instead of storing the secret_id in the yaml configuration file you may use the system environment
+variable ``FOTOOBO_VAULT_SECRET_ID`` to store that value. The environment variable takes precedence
+over the configuration file should both be defined.
 
 
 token_file (optional)

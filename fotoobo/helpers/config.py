@@ -6,6 +6,7 @@ the cli help system.
 If there are configuration options available in the global configuration file and also as a command
 line option, the command line option takes precedence over the global configuration file option.
 """
+import os
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Dict, Union
@@ -29,7 +30,7 @@ class Config:
     no_logo: bool = False
     cli_info: Dict[str, Any] = field(default_factory=dict)
     ssl_verify: Union[str, bool] = True
-    vault: Dict[str, Union[str, int]] = field(default_factory=dict)
+    vault: Dict[str, str] = field(default_factory=dict)
 
     def load_configuration(self, config_file: Union[Path, None]) -> None:
         """
@@ -80,6 +81,14 @@ class Config:
 
                 self.vault = loaded_config.get("vault", {})
                 if self.vault:
+                    # role_id and secret_id may be stored in environment variables (they overwrite
+                    # the ones configured in the fotoobo.yaml)
+                    if os.getenv("FOTOOBO_VAULT_ROLE_ID"):
+                        self.vault["role_id"] = os.getenv("FOTOOBO_VAULT_ROLE_ID", "")
+
+                    if os.getenv("FOTOOBO_VAULT_SECRET_ID"):
+                        self.vault["secret_id"] = os.getenv("FOTOOBO_VAULT_SECRET_ID", "")
+
                     # Check if all the mandatory settings in vault section are given by substracting
                     # the list of keys in vault config from list of mandatory keys.
                     if (
