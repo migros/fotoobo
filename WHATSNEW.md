@@ -1,3 +1,6 @@
+
+## [2.0.0] - 2023-11-28
+
 ### Added
 
 - Support for Hashicorp Vault service to store sensitive inventory data
@@ -9,4 +12,3 @@
 - Change default logging (console logging enabled with log-level WARNING)
 
 ### Removed
-
