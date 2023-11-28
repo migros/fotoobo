@@ -55,10 +55,10 @@ def test_cli_app_help() -> None:
         "-h",
         "--help",
         "--install-completion",
-        "-l",
-        "--log",
         "--loglevel",
         "--nologo",
+        "-q",
+        "--quiet",
         "--show-completion",
         "-V",
         "--version",
@@ -139,15 +139,15 @@ def test_cli_main_logging() -> None:
     """test the logging switch"""
     result = runner.invoke(app, ["-c", "tests/fotoobo.yaml", "greet"])
     assert result.exit_code == 0
-    result = runner.invoke(app, ["-c", "tests/fotoobo.yaml", "-l", "greet"])
+    result = runner.invoke(app, ["-c", "tests/fotoobo.yaml", "greet"])
     assert result.exit_code == 0
 
 
 def test_cli_main_logging_log_level() -> None:
     """test the log level setting"""
-    result = runner.invoke(app, ["-c", "tests/fotoobo.yaml", "-l", "--loglevel", "INFO", "greet"])
+    result = runner.invoke(app, ["-c", "tests/fotoobo.yaml", "--loglevel", "INFO", "greet"])
     assert result.exit_code == 0
-    result = runner.invoke(app, ["-c", "tests/fotoobo.yaml", "-l", "--loglevel", "DUMMY", "greet"])
+    result = runner.invoke(app, ["-c", "tests/fotoobo.yaml", "--loglevel", "DUMMY", "greet"])
     assert result.exit_code == 1
 
 

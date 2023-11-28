@@ -14,8 +14,6 @@ no_logo: false
 # - The log level given on the command line will overwrite all given log-levels for
 #   each output configuration.
 logging:
-    # Globally enable or disable logging
-    enabled: false
     # The log level
     level: INFO
 
@@ -43,9 +41,6 @@ logging:
 # to disable this output completely
 # NOTE: If you have given a log_configuration_file above, the options given here have no effect
 #audit_logging:
-#    # Globally enable or disable audit logging
-#    enabled: false
-#
 #    # File to log audit logs to
 #    log_file:
 #        name: fotoobo_audit.log
