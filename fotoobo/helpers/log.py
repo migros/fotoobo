@@ -104,12 +104,12 @@ class Log:
     """
 
     @staticmethod
-    def configure_logging(log_switch: Union[bool, None], log_level: Union[str, None]) -> None:
+    def configure_logging(quiet: Union[bool, None], log_level: Union[str, None]) -> None:
         """
         This function will configure the logging for fotoobo
 
         Args:
-            log_switch: Whether we globally turn logging off or on
+            quiet:      Disables the console logging
             log_level:  The desired log_level (given by CLI argument)
 
         Raises:
@@ -158,11 +158,10 @@ class Log:
             ]:
                 raise GeneralWarning(f"Loglevel {log_level} not known")
 
-            # If nothing is configured in the config file but logging is requested from
-            # the command line use a simple basic config
-            if not config.logging and log_switch:
+            # If nothing is configured in the config file use a simple basic config
+            if not config.logging:
                 # Configure logger "fotoobo"
-                logger.setLevel(log_level or logging.INFO)
+                logger.setLevel(log_level or logging.WARNING)
                 console_handler = RichHandler(markup=True)
                 console_handler.setFormatter(
                     logging.Formatter(fmt="[grey37]%(name)s[/] %(message)s", datefmt="[%X]")
@@ -176,7 +175,7 @@ class Log:
             else:
                 # Only configure something if there is a logging configuration and logging is
                 # requested
-                if config.logging and (config.logging["enabled"] or log_switch):
+                if config.logging:
                     log_level = log_level if log_level else config.logging["level"]
 
                     logger.setLevel(log_level)
@@ -231,11 +230,8 @@ class Log:
 
                         logger.addHandler(syslog_handler)
 
-                else:
-                    logger.disabled = True
-
                 # Configure audit logging
-                if config.audit_logging and (config.audit_logging["enabled"] or log_switch):
+                if config.audit_logging:
                     audit_logger.setLevel(logging.INFO)
 
                     if "log_file" in config.audit_logging:
@@ -271,11 +267,13 @@ class Log:
                             ) from error
 
                         audit_syslog_handler.setFormatter(SysLogFormatter(LOG_AUTH))
-
                         audit_logger.addHandler(audit_syslog_handler)
 
                 else:
                     audit_logger.disabled = True
+
+            if quiet:
+                logger.disabled = True
 
     @staticmethod
     def audit(message: str) -> None:

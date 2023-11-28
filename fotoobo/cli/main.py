@@ -56,9 +56,6 @@ def callback(  # pylint: disable=too-many-arguments
         show_default=False,
         metavar="[file]",
     ),
-    log_switch: bool = typer.Option(
-        None, "--log", "-l", help="Enable logging. \[default: disabled]"
-    ),
     log_level: str = typer.Option(
         None,
         "--loglevel",
@@ -67,6 +64,9 @@ def callback(  # pylint: disable=too-many-arguments
         show_default=False,
     ),
     nologo: bool = typer.Option(None, "--nologo", help="Do not print the beautiful fotoobo logo."),
+    log_quiet: bool = typer.Option(
+        None, "--quiet", "-q", help="Disable console logging. \[default: not quiet]"
+    ),
     version: Optional[bool] = typer.Option(  # pylint: disable=unused-argument
         None, "--version", "-V", help="Print the fotoobo version.", callback=version_callback
     ),
@@ -87,7 +87,7 @@ def callback(  # pylint: disable=too-many-arguments
     if log_level:
         log_level = log_level.upper()
 
-    Log.configure_logging(log_switch, log_level)
+    Log.configure_logging(log_quiet, log_level)
 
     if not config.no_logo:
         print_logo()

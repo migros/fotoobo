@@ -184,23 +184,23 @@ class TestLog:
     """
 
     @pytest.mark.parametrize(
-        "config,log_switch,log_level,expected_fotoobo_logger_config,expected_audit_logger_config",
+        "config,quiet,log_level,expected_fotoobo_logger_config,expected_audit_logger_config",
         (
-            pytest.param(
-                Config(),
-                None,
-                None,
-                LoggerConfig(disabled=True, log_level=logging.INFO, handlers=[]),
-                LoggerConfig(disabled=True, log_level=logging.INFO, handlers=[]),
-                id="default logging config",
-            ),
             pytest.param(
                 Config(),
                 True,
                 None,
-                LoggerConfig(disabled=False, log_level=logging.INFO, handlers=[RichHandler]),
+                LoggerConfig(disabled=True, log_level=logging.WARNING, handlers=[]),
                 LoggerConfig(disabled=True, log_level=logging.INFO, handlers=[]),
-                id="default logging config, active by config switch",
+                id="default logging config 1",
+            ),
+            pytest.param(
+                Config(),
+                None,
+                None,
+                LoggerConfig(disabled=False, log_level=logging.WARNING, handlers=[RichHandler]),
+                LoggerConfig(disabled=True, log_level=logging.INFO, handlers=[]),
+                id="default logging config 2",
             ),
             pytest.param(
                 Config(logging={"enabled": True, "level": "INFO", "log_console": {}}),
@@ -217,7 +217,6 @@ class TestLog:
             pytest.param(
                 Config(
                     logging={
-                        "enabled": True,
                         "level": "DEBUG",
                         "log_console": {},
                         "log_file": {
@@ -242,7 +241,7 @@ class TestLog:
     def test_configure_logging(
         self,
         config: Config,
-        log_switch: bool,
+        quiet: bool,
         log_level: str,
         expected_fotoobo_logger_config: LoggerConfig,
         expected_audit_logger_config: LoggerConfig,
@@ -251,7 +250,7 @@ class TestLog:
         """
         Test the configure_logging() method
         Args:
-            log_switch:
+            quiet:
             log_level:
 
         Returns:
@@ -276,7 +275,7 @@ class TestLog:
         monkeypatch.setattr(fotoobo_logger, "handlers", [])
         monkeypatch.setattr(audit_logger, "handlers", [])
 
-        Log.configure_logging(log_switch, log_level)
+        Log.configure_logging(quiet, log_level)
 
         if expected_fotoobo_logger_config.disabled:
             assert fotoobo_logger.disabled is True
@@ -291,12 +290,12 @@ class TestLog:
             for handler in fotoobo_logger.handlers:
                 assert type(handler) in expected_fotoobo_logger_config.handlers
 
-            if log_switch and not config.logging:
-                assert requests_logger.level == logging.CRITICAL
-                assert urllib3_logger.level == logging.CRITICAL
-            else:
+            if config.logging:
                 assert requests_logger.level == expected_fotoobo_logger_config.log_level
                 assert urllib3_logger.level == expected_fotoobo_logger_config.log_level
+            else:
+                assert requests_logger.level == logging.CRITICAL
+                assert urllib3_logger.level == logging.CRITICAL
 
         if expected_audit_logger_config.disabled:
             assert audit_logger.disabled is True
@@ -306,6 +305,9 @@ class TestLog:
                 assert type(handler) in expected_audit_logger_config.handlers
 
         assert urllib3_connectionpool_logger.level == logging.CRITICAL
+
+        if quiet:
+            assert fotoobo_logger.disabled is True
 
     def test_audit(self, monkeypatch: MonkeyPatch) -> None:
         """
