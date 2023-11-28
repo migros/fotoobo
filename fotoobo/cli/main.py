@@ -65,7 +65,7 @@ def callback(  # pylint: disable=too-many-arguments
     ),
     nologo: bool = typer.Option(None, "--nologo", help="Do not print the beautiful fotoobo logo."),
     log_quiet: bool = typer.Option(
-        None, "--quiet", "-q", help="Disable console logging. \[default: no quiet]"
+        None, "--quiet", "-q", help="Disable console logging. \[default: not quiet]"
     ),
     version: Optional[bool] = typer.Option(  # pylint: disable=unused-argument
         None, "--version", "-V", help="Print the fotoobo version.", callback=version_callback
