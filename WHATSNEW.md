@@ -10,5 +10,3 @@
 
 - Enhance create_dir() in files helper
 - Change default logging (console logging enabled with log-level WARNING)
-
-### Removed

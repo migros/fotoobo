@@ -22,8 +22,6 @@ For unreleased changes see [WHATSNEW.md](WHATSNEW.md)
 - Enhance create_dir() in files helper
 - Change default logging (console logging enabled with log-level WARNING)
 
-### Removed
-
 ## [1.1.0] - 2023-10-18
 
 ### Added
