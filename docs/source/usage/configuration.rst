@@ -74,36 +74,27 @@ Logging
 
 NOTE: The settings here apply the same to normal logging and audit logging.
 
-.. _logging_enabled:
-
-enabled
-"""""""
-
-*default: false*
-
-Set this value to **true** or **false** to enable or disable all logging. Of course after setting
-``enabled`` to **false** the option :ref:`logging_level` has no effect anymore.
+If you configure a logging setting it is automatically enabled. Otherwise defaut logging will be
+used. Default logging is set to log to **console** with log-level **WARNING**.
 
 .. _logging_level:
 
 level
 """""
 
-*default: "INFO"*
+*default: "WARNING"*
 
-Choose one of the following log levels for logging: **CRITICAL**, **ERROR**, **WARNING**, **INFO**, **DEBUG**.
-This option is not case sensitive, so it also works if you set it to **warning** instead of **WARNING**.
-If the option :ref:`logging_enabled` is set to **false** this option does not have any effect.
-
+Choose one of the following log levels for logging: **CRITICAL**, **ERROR**, **WARNING**, **INFO**,
+**DEBUG**. This option is not case sensitive, so it also works if you set it to **warning** instead
+of **WARNING**.
 
 log_console
 """""""""""
 
 *default: enabled*
 
-Whether **fotoobo** should print all logs to console or not. Defaults to **yes** (if logging is
-:ref:`logging_enabled`). To disable console logging comment out this line using a ``#``.
-
+Whether **fotoobo** should print all logs to console or not. Defaults to **yes**.
+To disable console logging comment out this line using a ``#``.
 
 log_file
 """"""""
@@ -111,8 +102,8 @@ log_file
 *default: enabled*
 
 The sup-option ``name`` holds the **path** and/or **filename** where **fotoobo** writes the logfile
-to (if logging is :ref:`logging_enabled`). If you set a log file the logs are appended to a file if
-the file already exists. If you omit the path the current working directory is used.
+to. If you set a log file the logs are appended to a file if the file already exists. If you omit
+the path the current working directory is used.
 
 If you want to disable file logging, comment the respective lines out using a ``#``.
 
@@ -133,11 +124,11 @@ log_configuration_file
 
 If you want to fine tune logging even more, you can provide an own python logging configuration
 file. There is a `logging.config.sample`_ where you can find more information about this.
-Uncomment the line and point it to your ``logging.config`` -file to have the custom logging
+Uncomment the line and point it to your ``logging.config`` file to have the custom logging
 configuration take effect.
 
 NOTE:
-  * If this settings is set, all the above (including :ref:`logging_enabled`) will be ignored.
+  * If this settings is set, all the above will be ignored.
   * If this settings is set, the audit logging too must be configured in the custom logging config.
     Mixing logging configurations from ``fotoobo.yaml`` and a custom ``logging.config`` is not
     supported.
