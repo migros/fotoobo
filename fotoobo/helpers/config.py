@@ -29,7 +29,6 @@ class Config:
     audit_logging: Union[Dict[str, Any], None] = None
     no_logo: bool = False
     cli_info: Dict[str, Any] = field(default_factory=dict)
-    ssl_verify: Union[str, bool] = True
     vault: Dict[str, str] = field(default_factory=dict)
 
     def load_configuration(self, config_file: Union[Path, None]) -> None:
