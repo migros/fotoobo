@@ -60,6 +60,8 @@ class Client:  # pylint: disable=too-many-instance-attributes
         self.token_ttl_limit: int = token_ttl_limit
         self.url: str = url.strip("/")
         self.ssl_verify: bool = ssl_verify
+        if not self.ssl_verify:
+            log.warning("SSL verify for vault service is disabled which may be a security issue")
 
         log.debug("vault_client_url: '%s'", self.url)
         log.debug("vault_client_ssl_verify: '%s'", self.ssl_verify)
@@ -121,15 +123,17 @@ class Client:  # pylint: disable=too-many-instance-attributes
         url = f"{self.url}/v1/auth/approle/login"
         log.debug("Get new token from '%s'", url)
         data = {"role_id": self.role_id, "secret_id": self.secret_id}
-        response = requests.post(url, data=data, timeout=timeout, verify=self.ssl_verify)
-        log.debug("Response status_code is '%s'", response.status_code)
-        if response.ok:
-            self.token = response.json()["auth"]["client_token"]
-            if self.token_file:
-                self.save_token()
+        try:
+            response = requests.post(url, data=data, timeout=timeout, verify=self.ssl_verify)
+            log.debug("Response status_code is '%s'", response.status_code)
+            if response.ok:
+                self.token = response.json()["auth"]["client_token"]
+                if self.token_file:
+                    self.save_token()
 
-        else:
+        except (requests.exceptions.SSLError, requests.exceptions.ConnectionError) as err:
             self.token = ""
+            log.error("Request Error: %s", str(err))
 
         return response.ok
 
