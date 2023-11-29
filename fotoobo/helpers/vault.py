@@ -183,17 +183,24 @@ class Client:  # pylint: disable=too-many-instance-attributes
         url = f"{self.url}/v1/auth/token/lookup-self"
         log.debug("Check if vault token still is valid")
         headers = {"X-Vault-Token": self.token}
-        response = requests.get(url=url, headers=headers, timeout=timeout, verify=self.ssl_verify)
-        log.debug("Response status_code is '%s'", response.status_code)
-        if response.ok:
-            log.debug("Vault token is valid for '%s' seconds", response.json()["data"]["ttl"])
-            log.debug("vault_client_token: '%s...%s'", self.token[:8], self.token[-5:-1])
-            if response.json()["data"]["ttl"] < self.token_ttl_limit:
-                log.debug("Invalidate token due to ttl limit")
+        try:
+            response = requests.get(
+                url=url, headers=headers, timeout=timeout, verify=self.ssl_verify
+            )
+            log.debug("Response status_code is '%s'", response.status_code)
+            if response.ok:
+                log.debug("Vault token is valid for '%s' seconds", response.json()["data"]["ttl"])
+                log.debug("vault_client_token: '%s...%s'", self.token[:8], self.token[-5:-1])
+                if response.json()["data"]["ttl"] < self.token_ttl_limit:
+                    log.debug("Invalidate token due to ttl limit")
+                    self.token = ""
+
+            else:
+                log.debug("Token is not valid")
                 self.token = ""
 
-        else:
-            log.debug("Token is not valid")
+        except (requests.exceptions.SSLError, requests.exceptions.ConnectionError) as err:
             self.token = ""
+            log.error("Request Error: %s", str(err))
 
         return bool(self.token)
