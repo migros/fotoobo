@@ -8,9 +8,10 @@ makes this module very independent.
 
 import logging
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any, Optional, Union
 
 import requests
+import urllib3
 
 from fotoobo.exceptions.exceptions import GeneralError
 
@@ -31,7 +32,7 @@ class Client:  # pylint: disable=too-many-instance-attributes
         data_path: str,
         role_id: str,
         secret_id: str,
-        ssl_verify: bool = True,
+        ssl_verify: Union[bool, str] = True,
         token_file: Optional[str] = None,
         token_ttl_limit: int = 0,
     ) -> None:
@@ -43,7 +44,11 @@ class Client:  # pylint: disable=too-many-instance-attributes
             data_path:          The path where the vault data for fotoobo is stored
             role_id:            The approle role_id
             secret_id:          The approle secret_id
-            ssl_verify:         Whether to check the SSL certificate chain (default: true)
+            ssl_verify:         Enable/disable SSL certificate check
+                When ssl_verify is enabled you have to install a trusted SSL certificate onto
+                the device you wish to connect to. If you set ssl_verify to false it will also
+                disable the warnings in urllib3. This prevents unwanted SSL warnings to be
+                logged.
             token_file:         The file to store the access token to. If no file is given the token
                                 is not loaded or stored to a file and every execution will issue a
                                 new token.
@@ -59,9 +64,10 @@ class Client:  # pylint: disable=too-many-instance-attributes
         self.token_file: Optional[Path] = None
         self.token_ttl_limit: int = token_ttl_limit
         self.url: str = url.strip("/")
-        self.ssl_verify: bool = ssl_verify
+        self.ssl_verify: Union[bool, str] = ssl_verify
         if not self.ssl_verify:
             log.warning("SSL verify for vault service is disabled which may be a security issue")
+            urllib3.disable_warnings(category=urllib3.exceptions.InsecureRequestWarning)
 
         log.debug("vault_client_url: '%s'", self.url)
         log.debug("vault_client_ssl_verify: '%s'", self.ssl_verify)
