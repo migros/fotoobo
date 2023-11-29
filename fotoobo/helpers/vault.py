@@ -123,7 +123,7 @@ class Client:  # pylint: disable=too-many-instance-attributes
         url = f"{self.url}/v1/auth/approle/login"
         log.debug("Get new token from '%s'", url)
         data = {"role_id": self.role_id, "secret_id": self.secret_id}
-        status = True
+        self.token = ""
         try:
             response = requests.post(url, data=data, timeout=timeout, verify=self.ssl_verify)
             log.debug("Response status_code is '%s'", response.status_code)
@@ -133,11 +133,9 @@ class Client:  # pylint: disable=too-many-instance-attributes
                     self.save_token()
 
         except (requests.exceptions.SSLError, requests.exceptions.ConnectionError) as err:
-            self.token = ""
             log.error("Request Error: %s", str(err))
-            status = False
 
-        return status
+        return bool(self.token)
 
     def load_token(self) -> bool:
         """Load the token from a file
