@@ -58,7 +58,7 @@ class Fortinet(ABC):
         if proxy := kwargs.get("proxy", ""):
             self.session.proxies = {"http": f"{proxy}", "https": f"{proxy}"}
 
-        self.ssl_verify: bool = kwargs.get("ssl_verify", config.ssl_verify)
+        self.ssl_verify: bool = kwargs.get("ssl_verify", True)
         if not self.ssl_verify:
             urllib3.disable_warnings()
 
@@ -156,7 +156,7 @@ class Fortinet(ABC):
 
         try:
             response.raise_for_status()
-        except (requests.exceptions.HTTPError) as err:
+        except requests.exceptions.HTTPError as err:
             raise APIError(err) from err
 
         return response
