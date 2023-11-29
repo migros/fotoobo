@@ -31,6 +31,7 @@ class Client:  # pylint: disable=too-many-instance-attributes
         data_path: str,
         role_id: str,
         secret_id: str,
+        ssl_verify: bool = True,
         token_file: Optional[str] = None,
         token_ttl_limit: int = 0,
     ) -> None:
@@ -42,6 +43,7 @@ class Client:  # pylint: disable=too-many-instance-attributes
             data_path:          The path where the vault data for fotoobo is stored
             role_id:            The approle role_id
             secret_id:          The approle secret_id
+            ssl_verify:         Whether to check the SSL certificate chain (default: true)
             token_file:         The file to store the access token to. If no file is given the token
                                 is not loaded or stored to a file and every execution will issue a
                                 new token.
@@ -57,10 +59,12 @@ class Client:  # pylint: disable=too-many-instance-attributes
         self.token_file: Optional[Path] = None
         self.token_ttl_limit: int = token_ttl_limit
         self.url: str = url.strip("/")
+        self.ssl_verify: bool = ssl_verify
 
         log.debug("vault_client_url: '%s'", self.url)
+        log.debug("vault_client_ssl_verify: '%s'", self.ssl_verify)
         log.debug("vault_client_namespace: '%s'", self.namespace)
-        log.debug("vault_data_path: '%s'", self.data_path)
+        log.debug("vault_client_data_path: '%s'", self.data_path)
         log.debug("vault_client_role_id: '%s...%s'", self.role_id[:4], self.role_id[-5:-1])
         log.debug("vault_client_secret_id: '%s...%s'", self.secret_id[:4], self.secret_id[-5:-1])
         log.debug("vault_client_token_ttl_limit: '%s'", self.token_ttl_limit)
@@ -93,7 +97,7 @@ class Client:  # pylint: disable=too-many-instance-attributes
             "X-Vault-Token": self.token,
             "X-Vault-Namespace": self.namespace,
         }
-        response = requests.get(url=url, headers=headers, timeout=timeout)
+        response = requests.get(url=url, headers=headers, timeout=timeout, verify=self.ssl_verify)
 
         if response.ok:
             log.debug("Response status_code is '%s'", response.status_code)
@@ -117,7 +121,7 @@ class Client:  # pylint: disable=too-many-instance-attributes
         url = f"{self.url}/v1/auth/approle/login"
         log.debug("Get new token from '%s'", url)
         data = {"role_id": self.role_id, "secret_id": self.secret_id}
-        response = requests.post(url, data=data, timeout=timeout)
+        response = requests.post(url, data=data, timeout=timeout, verify=self.ssl_verify)
         log.debug("Response status_code is '%s'", response.status_code)
         if response.ok:
             self.token = response.json()["auth"]["client_token"]
@@ -175,7 +179,7 @@ class Client:  # pylint: disable=too-many-instance-attributes
         url = f"{self.url}/v1/auth/token/lookup-self"
         log.debug("Check if vault token still is valid")
         headers = {"X-Vault-Token": self.token}
-        response = requests.get(url=url, headers=headers, timeout=timeout)
+        response = requests.get(url=url, headers=headers, timeout=timeout, verify=self.ssl_verify)
         log.debug("Response status_code is '%s'", response.status_code)
         if response.ok:
             log.debug("Vault token is valid for '%s' seconds", response.json()["data"]["ttl"])
