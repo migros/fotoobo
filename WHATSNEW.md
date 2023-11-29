@@ -1,6 +1,3 @@
 ### Added
 
-### Changed
-
-### Removed
-
+- Option ssl_verify for Vault service
