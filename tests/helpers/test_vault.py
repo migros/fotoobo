@@ -7,6 +7,7 @@ from typing import Any, Dict
 from unittest.mock import MagicMock
 
 import pytest
+import requests
 from _pytest.monkeypatch import MonkeyPatch
 
 from fotoobo.exceptions.exceptions import GeneralError
@@ -30,6 +31,7 @@ class TestClient:
         monkeypatch.setattr("fotoobo.helpers.vault.Client.load_token", MagicMock(result=True))
         client = Client(
             url="dummy_url",
+            ssl_verify=False,
             namespace="dummy_namespace",
             data_path="dummy_data_path",
             role_id="dummy_role_id",
@@ -129,6 +131,34 @@ class TestClient:
 
     @staticmethod
     @pytest.mark.parametrize(
+        "mock",
+        (
+            pytest.param(
+                MagicMock(side_effect=requests.exceptions.SSLError("dummy")),
+                id="SSLError",
+            ),
+            pytest.param(
+                MagicMock(side_effect=requests.exceptions.ConnectionError("dummy")),
+                id="ConnectionError",
+            ),
+        ),
+    )
+    def test_validate_token_exception(mock: ResponseMock, monkeypatch: MonkeyPatch) -> None:
+        """Test the Client validate_token with exception"""
+        monkeypatch.setattr("fotoobo.helpers.vault.requests.get", mock)
+        client = Client(
+            url="https://dummy_url",
+            namespace="dummy_namespace",
+            data_path="dummy_data_path",
+            role_id="dummy_role_id",
+            secret_id="dummy_secret_id",
+        )
+        client.token = "dummy_token"
+        assert client.validate_token() is False
+        assert client.token == ""
+
+    @staticmethod
+    @pytest.mark.parametrize(
         "response, token",
         (
             pytest.param(
@@ -164,6 +194,34 @@ class TestClient:
         assert client.token == token
         if token:
             assert token_file.is_file()
+
+    @staticmethod
+    @pytest.mark.parametrize(
+        "mock",
+        (
+            pytest.param(
+                MagicMock(side_effect=requests.exceptions.SSLError("dummy")),
+                id="SSLError",
+            ),
+            pytest.param(
+                MagicMock(side_effect=requests.exceptions.ConnectionError("dummy")),
+                id="ConnectionError",
+            ),
+        ),
+    )
+    def test_get_token_exception(mock: ResponseMock, monkeypatch: MonkeyPatch) -> None:
+        """Test the Client get_token with exception"""
+        monkeypatch.setattr("fotoobo.helpers.vault.requests.post", mock)
+        client = Client(
+            url="https://dummy_url",
+            namespace="dummy_namespace",
+            data_path="dummy_data_path",
+            role_id="dummy_role_id",
+            secret_id="dummy_secret_id",
+        )
+        client.token = "dummy_token"
+        assert client.get_token() is False
+        assert client.token == ""
 
     @staticmethod
     @pytest.mark.parametrize(
