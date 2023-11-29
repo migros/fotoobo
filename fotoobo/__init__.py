@@ -8,4 +8,4 @@ to be extendable to your needs. It's most likely the swiss army knife for Fortin
 from .fortinet import FortiAnalyzer, FortiClientEMS, FortiGate, FortiManager
 
 __all__ = ["FortiAnalyzer", "FortiClientEMS", "FortiGate", "FortiManager"]
-__version__: str = "2.0.0"
+__version__: str = "2.0.1"
