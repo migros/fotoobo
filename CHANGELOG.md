@@ -10,6 +10,12 @@ For unreleased changes see [WHATSNEW.md](WHATSNEW.md)
 
 # [Released]
 
+## [2.0.1] - 2023-11-29
+
+### Added
+
+- Option ssl_verify for Vault service
+
 ## [2.0.0] - 2023-11-28
 
 ### Added

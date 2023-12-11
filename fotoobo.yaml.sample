@@ -56,10 +56,11 @@ logging:
 # Instead of storing credentials in the inventory file you may use VAULT as a placeholder. All asset
 # attributes that are VAULT will be retreived from the Hashicorp Vault service specified here.
 # The Hashicorp Vault service will use approle login to get the data.
-# This section is optional and may pose a security issue. In future versions we may also read the
-# role_id and secret_id from the system environment.
+# We may also read the role_id and secret_id from the system environment. This makes it a little bit
+# more secure.
 vault:
     url: https://vault.local
+    ssl_verify: false
     namespace: vault_namespace
     data_path: /v1/kv/data/fotoobo
     role_id: ...
