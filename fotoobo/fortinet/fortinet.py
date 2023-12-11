@@ -5,13 +5,12 @@ variables and methods.
 import logging
 from abc import ABC, abstractmethod
 from time import time
-from typing import Any, Dict, Optional
+from typing import Any, Dict, Optional, Union
 
 import requests
 import urllib3
 
 from fotoobo.exceptions import APIError, GeneralError
-from fotoobo.helpers.config import config
 
 log = logging.getLogger("fotoobo")
 
@@ -41,7 +40,7 @@ class Fortinet(ABC):
                 If you need to connect to your Fortinet device through a proxy server you can
                 set it here as as string. If needed you may append the proxy server port with a
                 column to the proxy server. e.g. "proxy.local:8000".
-            ssl_verify (bool): enable/disable SSL certificate check
+            ssl_verify (bool | str): enable/disable SSL certificate check
                 When ssl_verify is enabled you have to install a trusted SSL certificate onto
                 the device you wish to connect to. If you set ssl_verify to false it will also
                 disable the warnings in urllib3. This prevents unwanted SSL warnings to be
@@ -58,9 +57,9 @@ class Fortinet(ABC):
         if proxy := kwargs.get("proxy", ""):
             self.session.proxies = {"http": f"{proxy}", "https": f"{proxy}"}
 
-        self.ssl_verify: bool = kwargs.get("ssl_verify", config.ssl_verify)
+        self.ssl_verify: Union[bool, str] = kwargs.get("ssl_verify", True)
         if not self.ssl_verify:
-            urllib3.disable_warnings()
+            urllib3.disable_warnings(category=urllib3.exceptions.InsecureRequestWarning)
 
         self.timeout = kwargs.get("timeout", 3)
         self.type: str = ""
@@ -156,7 +155,7 @@ class Fortinet(ABC):
 
         try:
             response.raise_for_status()
-        except (requests.exceptions.HTTPError) as err:
+        except requests.exceptions.HTTPError as err:
             raise APIError(err) from err
 
         return response

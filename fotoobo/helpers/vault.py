@@ -8,9 +8,10 @@ makes this module very independent.
 
 import logging
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any, Optional, Union
 
 import requests
+import urllib3
 
 from fotoobo.exceptions.exceptions import GeneralError
 
@@ -31,6 +32,7 @@ class Client:  # pylint: disable=too-many-instance-attributes
         data_path: str,
         role_id: str,
         secret_id: str,
+        ssl_verify: Union[bool, str] = True,
         token_file: Optional[str] = None,
         token_ttl_limit: int = 0,
     ) -> None:
@@ -42,6 +44,11 @@ class Client:  # pylint: disable=too-many-instance-attributes
             data_path:          The path where the vault data for fotoobo is stored
             role_id:            The approle role_id
             secret_id:          The approle secret_id
+            ssl_verify:         Enable/disable SSL certificate check
+                When ssl_verify is enabled you have to install a trusted SSL certificate onto
+                the device you wish to connect to. If you set ssl_verify to false it will also
+                disable the warnings in urllib3. This prevents unwanted SSL warnings to be
+                logged.
             token_file:         The file to store the access token to. If no file is given the token
                                 is not loaded or stored to a file and every execution will issue a
                                 new token.
@@ -57,10 +64,15 @@ class Client:  # pylint: disable=too-many-instance-attributes
         self.token_file: Optional[Path] = None
         self.token_ttl_limit: int = token_ttl_limit
         self.url: str = url.strip("/")
+        self.ssl_verify: Union[bool, str] = ssl_verify
+        if not self.ssl_verify:
+            log.warning("SSL verify for vault service is disabled which may be a security issue")
+            urllib3.disable_warnings(category=urllib3.exceptions.InsecureRequestWarning)
 
         log.debug("vault_client_url: '%s'", self.url)
+        log.debug("vault_client_ssl_verify: '%s'", self.ssl_verify)
         log.debug("vault_client_namespace: '%s'", self.namespace)
-        log.debug("vault_data_path: '%s'", self.data_path)
+        log.debug("vault_client_data_path: '%s'", self.data_path)
         log.debug("vault_client_role_id: '%s...%s'", self.role_id[:4], self.role_id[-5:-1])
         log.debug("vault_client_secret_id: '%s...%s'", self.secret_id[:4], self.secret_id[-5:-1])
         log.debug("vault_client_token_ttl_limit: '%s'", self.token_ttl_limit)
@@ -93,7 +105,7 @@ class Client:  # pylint: disable=too-many-instance-attributes
             "X-Vault-Token": self.token,
             "X-Vault-Namespace": self.namespace,
         }
-        response = requests.get(url=url, headers=headers, timeout=timeout)
+        response = requests.get(url=url, headers=headers, timeout=timeout, verify=self.ssl_verify)
 
         if response.ok:
             log.debug("Response status_code is '%s'", response.status_code)
@@ -117,17 +129,19 @@ class Client:  # pylint: disable=too-many-instance-attributes
         url = f"{self.url}/v1/auth/approle/login"
         log.debug("Get new token from '%s'", url)
         data = {"role_id": self.role_id, "secret_id": self.secret_id}
-        response = requests.post(url, data=data, timeout=timeout)
-        log.debug("Response status_code is '%s'", response.status_code)
-        if response.ok:
-            self.token = response.json()["auth"]["client_token"]
-            if self.token_file:
-                self.save_token()
+        self.token = ""
+        try:
+            response = requests.post(url, data=data, timeout=timeout, verify=self.ssl_verify)
+            log.debug("Response status_code is '%s'", response.status_code)
+            if response.ok:
+                self.token = response.json()["auth"]["client_token"]
+                if self.token_file:
+                    self.save_token()
 
-        else:
-            self.token = ""
+        except (requests.exceptions.SSLError, requests.exceptions.ConnectionError) as err:
+            log.error("Request Error: %s", str(err))
 
-        return response.ok
+        return bool(self.token)
 
     def load_token(self) -> bool:
         """Load the token from a file
@@ -175,17 +189,24 @@ class Client:  # pylint: disable=too-many-instance-attributes
         url = f"{self.url}/v1/auth/token/lookup-self"
         log.debug("Check if vault token still is valid")
         headers = {"X-Vault-Token": self.token}
-        response = requests.get(url=url, headers=headers, timeout=timeout)
-        log.debug("Response status_code is '%s'", response.status_code)
-        if response.ok:
-            log.debug("Vault token is valid for '%s' seconds", response.json()["data"]["ttl"])
-            log.debug("vault_client_token: '%s...%s'", self.token[:8], self.token[-5:-1])
-            if response.json()["data"]["ttl"] < self.token_ttl_limit:
-                log.debug("Invalidate token due to ttl limit")
+        try:
+            response = requests.get(
+                url=url, headers=headers, timeout=timeout, verify=self.ssl_verify
+            )
+            log.debug("Response status_code is '%s'", response.status_code)
+            if response.ok:
+                log.debug("Vault token is valid for '%s' seconds", response.json()["data"]["ttl"])
+                log.debug("vault_client_token: '%s...%s'", self.token[:8], self.token[-5:-1])
+                if response.json()["data"]["ttl"] < self.token_ttl_limit:
+                    log.debug("Invalidate token due to ttl limit")
+                    self.token = ""
+
+            else:
+                log.debug("Token is not valid")
                 self.token = ""
 
-        else:
-            log.debug("Token is not valid")
+        except (requests.exceptions.SSLError, requests.exceptions.ConnectionError) as err:
             self.token = ""
+            log.error("Request Error: %s", str(err))
 
         return bool(self.token)

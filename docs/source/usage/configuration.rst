@@ -231,6 +231,12 @@ Instead of storing the secret_id in the yaml configuration file you may use the 
 variable ``FOTOOBO_VAULT_SECRET_ID`` to store that value. The environment variable takes precedence
 over the configuration file should both be defined.
 
+ssl_verify (optional, default: True)
+""""""""""""""""""""""""""""""""""""
+
+Check host SSL certificate (true) or not (false). You can also provide a path to a custom CA
+certificate or CA bundle. Please be aware that disabling SSL certificate verification is a security
+risk and should not be used in a production environment.
 
 token_file (optional)
 """""""""""""""""""""
