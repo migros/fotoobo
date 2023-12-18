@@ -3,11 +3,13 @@ The FortiManager get commands
 """
 import logging
 from pathlib import Path
+from typing import Dict, List, Union
 
 import typer
 
 from fotoobo.helpers import cli_path
 from fotoobo.helpers.output import write_policy_to_html
+from fotoobo.helpers.result import Result
 from fotoobo.tools import fmg
 
 app = typer.Typer(no_args_is_help=True, rich_markup_mode="rich")
@@ -49,19 +51,30 @@ def devices(
         "fmg",
         help=HELP_TEXT_HOST,
         metavar="[host]",
-    )
+    ),
+    raw: bool = typer.Option(False, "-r", "--raw", help="Output raw data."),
 ) -> None:
     """
-    Get the FortiManager logical devices list.
+    Get the FortiManager devices list.
 
-    Be aware that if a device is a cluster only the cluster
-    device is returned, not all its physical nodes.
+    In case of a cluster the 'Device Name' is the name of the cluster and the 'HA Nodes' holds the
+    hostnames of the actuall cluser nodes.
     """
     result = fmg.get.devices(host)
-    result.print_result_as_table(
-        title="Fortinet devices",
-        headers=["Device Name", "Version", "HA", "Platform", "Description"],
-    )
+    if raw:
+        result.print_raw()
+
+    else:
+        # Make a string from the list of ha nodes
+        new_result = Result[Dict[str, Union[str, List[str]]]]()
+        for key, value in result.all_results().items():
+            value["ha_nodes"] = ", ".join(value["ha_nodes"])
+            new_result.push_result(key, value)
+
+        new_result.print_result_as_table(
+            title="Fortinet devices",
+            headers=["Device Name", "Version", "HA", "Platform", "Description", "HA nodes"],
+        )
 
 
 @app.command(no_args_is_help=True)

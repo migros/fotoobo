@@ -40,7 +40,7 @@ def test_cli_app_fmg_get_devices_help() -> None:
     assert result.exit_code == 0
     arguments, options, commands = parse_help_output(result.stdout)
     assert set(arguments) == {"host"}
-    assert options == {"-h", "--help"}
+    assert options == {"-h", "--help", "-r", "--raw"}
     assert not commands
 
 
