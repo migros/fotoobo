@@ -1,8 +1,8 @@
 """Test fmg tools get devices"""
 
 
-from unittest.mock import MagicMock
 from pathlib import Path
+from unittest.mock import MagicMock
 
 import pytest
 from _pytest.monkeypatch import MonkeyPatch
@@ -64,6 +64,7 @@ def test_devices(monkeypatch: MonkeyPatch) -> None:
                                     "ha_mode": 1,
                                     "platform_str": "dummy_platform_2",
                                     "desc": "dummy_description_2",
+                                    "ha_slave": [{"name": "node_1"}, {"name": "node_2"}],
                                 },
                             ],
                         },
@@ -82,9 +83,11 @@ def test_devices(monkeypatch: MonkeyPatch) -> None:
     assert host_1["ha_mode"] == "0"
     assert host_1["platform"] == "dummy_platform_1"
     assert host_1["desc"] == "dummy_description_1"
+    assert host_1["ha_nodes"] == []
 
     host_2 = result.get_result("dummy_2")
     assert host_2["version"] == "4.5.6"
     assert host_2["ha_mode"] == "1"
     assert host_2["platform"] == "dummy_platform_2"
     assert host_2["desc"] == "dummy_description_2"
+    assert host_2["ha_nodes"] == ["node_1", "node_2"]

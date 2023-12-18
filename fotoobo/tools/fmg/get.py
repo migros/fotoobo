@@ -3,7 +3,7 @@ FortiManager get ADOMs utility
 """
 
 import logging
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Union
 
 from fotoobo.exceptions.exceptions import GeneralError
 from fotoobo.helpers.config import config
@@ -40,7 +40,7 @@ def adoms(host: str) -> Result[str]:
     return result
 
 
-def devices(host: str) -> Result[Dict[str, str]]:
+def devices(host: str) -> Result[Dict[str, Union[str, List[str]]]]:
     """
     FortiManager get logical devices
     In a cluster only the cluster device is returned, not the physical nodes
@@ -68,17 +68,20 @@ def devices(host: str) -> Result[Dict[str, str]]:
     }
     response = fmg.api("post", payload=payload)
     fmg.logout()
-    result = Result[Dict[str, str]]()
+    result = Result[Dict[str, Union[str, List[str]]]]()
     for device in response.json()["result"][0]["data"]:
-        result.push_result(
-            device["name"],
-            {
-                "version": f"{device['os_ver']}.{device['mr']}.{device['patch']}",
-                "ha_mode": str(device["ha_mode"]),
-                "platform": device["platform_str"],
-                "desc": device["desc"],
-            },
-        )
+        data = {
+            "version": f"{device['os_ver']}.{device['mr']}.{device['patch']}",
+            "ha_mode": str(device["ha_mode"]),
+            "platform": device["platform_str"],
+            "desc": device["desc"],
+            "ha_nodes": [],
+        }
+        if device["ha_mode"] == 1:
+            ha_nodes = [node["name"] for node in device["ha_slave"]]
+            data["ha_nodes"] = ha_nodes
+
+        result.push_result(device["name"], data)
 
     return result
 
