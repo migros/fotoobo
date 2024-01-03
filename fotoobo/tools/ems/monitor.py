@@ -221,12 +221,14 @@ def license(host: str) -> Result[Dict[str, Any]]:  # pylint: disable=redefined-b
     data = {}
     data["data"] = dict(response.json()["data"])
 
+    license_expiry_days = 0
     for lic in data["data"]["licenses"]:
-        if lic["type"] == "ztna":
-            log.debug("license expiry: %s", lic["expiry_date"])
-            license_expiry = datetime.strptime(lic["expiry_date"], "%Y-%m-%dT%H:%M:%S")
-            license_expiry_days = int((license_expiry - datetime.now()).days)
-            log.debug("days to license expiry: %s", license_expiry_days)
+        log.debug("license expiry for '%s': '%s'", lic["type"], lic["expiry_date"])
+        license_expiry = datetime.strptime(lic["expiry_date"], "%Y-%m-%dT%H:%M:%S")
+        expiry_days = int((license_expiry - datetime.now()).days)
+        if expiry_days < license_expiry_days or license_expiry_days == 0:
+            license_expiry_days = expiry_days
+    log.debug("days to license expiry: %s", license_expiry_days)
 
     data["fotoobo"] = {}
     data["fotoobo"]["license_expiry_days"] = license_expiry_days
