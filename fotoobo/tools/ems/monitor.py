@@ -222,7 +222,7 @@ def license(host: str) -> Result[Dict[str, Any]]:  # pylint: disable=redefined-b
     data["data"] = dict(response.json()["data"])
 
     for lic in data["data"]["licenses"]:
-        if lic["type"] == "fabric_agent":
+        if lic["type"] == "ztna":
             log.debug("license expiry: %s", lic["expiry_date"])
             license_expiry = datetime.strptime(lic["expiry_date"], "%Y-%m-%dT%H:%M:%S")
             license_expiry_days = int((license_expiry - datetime.now()).days)
