@@ -191,13 +191,13 @@ def license(host: str) -> Result[Dict[str, Any]]:  # pylint: disable=redefined-b
     with calculated and interesting values. All the enriched values are in the key "fotoobo" in the
     returned dict:
 
-        - {{ fotoobo.[MODULE]_usage }}          License usage in percent by MODULE where MODULE is
-            one of:
+        - {{ fotoobo.[MODULE]_usage }}
+            License usage in percent by MODULE where MODULE is one of:
                 - fabric_agent
-                - ztna
-                - epp
                 - sandbox_cloud
                 - chromebook
+                - ztna
+                - epp
                 - sase
                 - ztna_user
                 - epp_user
