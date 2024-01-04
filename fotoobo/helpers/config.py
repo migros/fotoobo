@@ -9,7 +9,7 @@ line option, the command line option takes precedence over the global configurat
 import os
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any, Dict, Union
+from typing import Any, Dict, Optional, Union
 
 from fotoobo.exceptions import GeneralError
 from fotoobo.helpers.files import load_yaml_file
@@ -31,7 +31,7 @@ class Config:
     cli_info: Dict[str, Any] = field(default_factory=dict)
     vault: Dict[str, str] = field(default_factory=dict)
 
-    def load_configuration(self, config_file: Union[Path, None]) -> None:
+    def load_configuration(self, config_file: Optional[Path] = None) -> None:
         """
         Load the global fotoobo configuration file. If the configuration file is not present it just
         will be ignored and all the options remain as they are.
@@ -87,7 +87,7 @@ class Config:
                     if os.getenv("FOTOOBO_VAULT_SECRET_ID"):
                         self.vault["secret_id"] = os.getenv("FOTOOBO_VAULT_SECRET_ID", "")
 
-                    # Check if all the mandatory settings in vault section are given by substracting
+                    # Check if all the mandatory settings in vault section are given by subtracting
                     # the list of keys in vault config from list of mandatory keys.
                     if (
                         missing := [
