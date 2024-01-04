@@ -154,7 +154,7 @@ It has these specific goals:
 
     #.  The user who created an issue SHOULD close the issue after checking the patch is successful.
 
-    #.  Any Contributor who has value judgments on a patch SHOULD express these via their own$
+    #.  Any Contributor who has value judgments on a patch SHOULD express these via their own
         patches.
 
     #.  Maintainers SHOULD close user issues that are left open without action for an uncomfortable
@@ -169,7 +169,7 @@ It has these specific goals:
     #.  The project SHALL NOT use topic branches for any reason. Personal forks MAY use topic
         branches.
 
-    #.  To make a stable release a Maintainer shall tag the repository. Stable releases SHALL always
+    #.  To make a stable release a Maintainer SHALL tag the repository. Stable releases SHALL always
         be released from the repository main branch.
 
 2.6. Evolution of Public Contracts
