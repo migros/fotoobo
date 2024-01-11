@@ -75,7 +75,7 @@ def test_cli_app_fgt_config_info_empty_config() -> None:
 
 def test_cli_app_fgt_config_info_nonexist_config_file() -> None:
     """Test cli options and commands for fgt config info with an nonexisting configuration"""
-    with pytest.raises(GeneralWarning, match=r"there are no"):
+    with pytest.raises(GeneralWarning, match=r"There are no"):
         runner.invoke(
             app,
             [

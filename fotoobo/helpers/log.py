@@ -19,7 +19,7 @@ from syslog import (
     LOG_USER,
     LOG_WARNING,
 )
-from typing import Optional, Union
+from typing import Optional
 
 from rich.logging import RichHandler
 
@@ -49,7 +49,6 @@ class SysLogFormatter(logging.Formatter):
         # See https://stackoverflow.com/questions/4399617/python-os-getlogin-problem
         self.user = pwd.getpwuid(os.getuid())[0]
         self.hostname = socket.gethostname()
-
         super().__init__(fmt=fmt, datefmt=datefmt)
 
     def format(self, record: logging.LogRecord) -> str:
@@ -58,18 +57,25 @@ class SysLogFormatter(logging.Formatter):
 
         Args:
             record:
-        """
 
+        Returns:
+            A string
+        """
         if record.levelname == "DEBUG":
             level: int = LOG_DEBUG
+
         elif record.levelname == "INFO":
             level = LOG_INFO
+
         elif record.levelname == "WARNING":
             level = LOG_WARNING
+
         elif record.levelname == "ERROR":
             level = LOG_ERR
+
         elif record.levelname == "CRITICAL":
             level = LOG_CRIT
+
         else:
             raise NotImplementedError(f"Loglevel {record.levelname} cannot be processed!")
 
@@ -77,7 +83,6 @@ class SysLogFormatter(logging.Formatter):
 
         prival = self.facility + level
         timestamp = datetime.fromtimestamp(record.created).astimezone().isoformat()
-
         return (
             " ".join(
                 [
@@ -104,17 +109,17 @@ class Log:
     """
 
     @staticmethod
-    def configure_logging(quiet: Union[bool, None], log_level: Union[str, None]) -> None:
+    def configure_logging(quiet: Optional[bool], log_level: Optional[str]) -> None:
         """
         This function will configure the logging for fotoobo
 
         Args:
-            quiet:      Disables the console logging
-            log_level:  The desired log_level (given by CLI argument)
+            quiet:     Disables the console logging
+            log_level: The desired log_level (given by CLI argument)
 
         Raises:
-            GeneralError:   On unrecoverable errors (usually on non-existing/empty or
-                            invalid logging configuration file
+            GeneralError: On unrecoverable errors (usually on non-existing/empty or
+                          invalid logging configuration file
         """
         # pylint: disable=too-many-branches
         # pylint: disable=too-many-statements
@@ -132,10 +137,13 @@ class Log:
 
                 except ValueError as error:
                     raise GeneralError(f"Cannot configure logging: {str(error)}") from error
+
                 except TypeError as error:
                     raise GeneralError(f"Cannot configure logging: {str(error)}") from error
+
                 except AttributeError as error:
                     raise GeneralError(f"Cannot configure logging: {str(error)}") from error
+
                 except ImportError as error:
                     raise GeneralError(f"Cannot configure logging: {str(error)}") from error
 
@@ -177,21 +185,17 @@ class Log:
                 # requested
                 if config.logging:
                     log_level = log_level if log_level else config.logging["level"]
-
                     logger.setLevel(log_level)
                     logging.getLogger("requests").setLevel(log_level)
                     logging.getLogger("urllib3").setLevel(log_level)
-
                     logger.handlers = []
 
                     # Configure console logging
                     if "log_console" in config.logging:
                         console_handler = RichHandler(markup=True)
-
                         console_handler.setFormatter(
                             logging.Formatter(fmt="[grey37]%(name)s[/] %(message)s", datefmt="[%X]")
                         )
-
                         logger.addHandler(console_handler)
 
                     if "log_file" in config.logging:
@@ -200,14 +204,12 @@ class Log:
                             maxBytes=10485760,  # 10 MByte
                             backupCount=3,
                         )
-
                         file_handler.setFormatter(
                             logging.Formatter(
                                 "%(asctime)s - %(name)s - %(levelname)s - %(filename)s:%(lineno)d: "
                                 "%(message)s"
                             )
                         )
-
                         logger.addHandler(file_handler)
 
                     if "log_syslog" in config.logging:
@@ -221,32 +223,29 @@ class Log:
                                 if config.logging["log_syslog"]["protocol"] == "TCP"
                                 else socket.SOCK_DGRAM,
                             )
+
                         except (OSError, socket.gaierror) as error:
                             raise GeneralError(
                                 f"Cannot configure SysLog logging: {str(error)}"
                             ) from error
 
                         syslog_handler.setFormatter(SysLogFormatter(LOG_USER))
-
                         logger.addHandler(syslog_handler)
 
                 # Configure audit logging
                 if config.audit_logging:
                     audit_logger.setLevel(logging.INFO)
-
                     if "log_file" in config.audit_logging:
                         audit_file_handler = RotatingFileHandler(
                             filename=config.audit_logging["log_file"]["name"],
                             maxBytes=10485760,  # 10 MByte
                             backupCount=3,
                         )
-
                         audit_file_handler.setFormatter(
                             logging.Formatter(
                                 fmt="%(asctime)s - AUDIT - %(filename)s:%(lineno)d: %(message)s"
                             )
                         )
-
                         audit_logger.addHandler(audit_file_handler)
 
                     if "log_syslog" in config.audit_logging:
@@ -261,6 +260,7 @@ class Log:
                                 if config.audit_logging["log_syslog"]["protocol"] == "TCP"
                                 else socket.SOCK_DGRAM,
                             )
+
                         except (OSError, socket.gaierror) as error:
                             raise GeneralError(
                                 f"Cannot configure SysLog logging: {str(error)}"
@@ -280,7 +280,6 @@ class Log:
         """
         Create an audit log message
         """
-
         audit_logger.info(message)
 
 

@@ -7,12 +7,11 @@ more than a few subcommands.
 Caution: Use docstrings with care as they are used to print help texts on any command.
 """
 # pylint: disable=anomalous-backslash-in-string
-
 import logging
 import os
 import sys
 from pathlib import Path
-from typing import Optional, Union
+from typing import Optional
 
 import typer
 
@@ -48,7 +47,7 @@ def version_callback(value: bool) -> None:
 @app.callback()
 def callback(  # pylint: disable=too-many-arguments
     context: typer.Context,
-    config_file: Union[Path, None] = typer.Option(
+    config_file: Optional[Path] = typer.Option(
         None,
         "--config",
         "-c",
@@ -83,19 +82,17 @@ def callback(  # pylint: disable=too-many-arguments
     """
     config.load_configuration(config_file)
     config.no_logo = True if nologo else config.no_logo
-
     if log_level:
         log_level = log_level.upper()
 
     Log.configure_logging(log_quiet, log_level)
-
     if not config.no_logo:
         print_logo()
 
-    log.debug("let the magic begin")
+    log.debug("Let the magic begin")
 
     # Log all the configuration options
-    # If a config option is a datastructure (dict) unpack it and write it linewise
+    # If a config option is a data-structure (dict) unpack it and write it line-by-line
     # For security reasons all sensitive values are shortened
     for attr in dir(config):
         if attr.startswith("_") or attr in ["config", "load_configuration"]:
@@ -106,13 +103,14 @@ def callback(  # pylint: disable=too-many-arguments
                 if attr == "vault" and sub_attr in ["role_id", "secret_id"]:
                     value = f"{value[:4]}...{value[-5:-1]}"
 
-                log.debug("option '%s.%s' is '%s'", attr, sub_attr, value)
+                log.debug("Option '%s.%s' is '%s'", attr, sub_attr, value)
+
             continue
 
-        log.debug("option '%s' is '%s'", attr, getattr(config, attr))
+        log.debug("Option '%s' is '%s'", attr, getattr(config, attr))
 
     cli_path.append(str(context.invoked_subcommand))
-    log.debug("about to execute command: '%s'", context.invoked_subcommand)
+    log.debug("About to execute command: '%s'", context.invoked_subcommand)
     log.audit(f'command="{" ".join(sys.argv)}"')  # type: ignore
     config.cli_info = context.to_info_dict()
 
@@ -132,8 +130,10 @@ def greet(
     if not name:
         try:
             name = os.getlogin().capitalize()
+
         except OSError:  # We need this, will fail on GitHub otherwise...
             name = ""
+
     tools.greet(str(name), bye, log_enabled)
 
 

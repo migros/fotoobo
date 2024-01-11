@@ -24,10 +24,10 @@ def callback(context: typer.Context) -> None:
     The fmg get subcommand callback
 
     Args:
-        context (Context): the context object of the typer app
+        context: The context object of the typer app
     """
     cli_path.append(str(context.invoked_subcommand))
-    log.debug("about to execute command: '%s'", context.invoked_subcommand)
+    log.debug("About to execute command: '%s'", context.invoked_subcommand)
 
 
 @app.command()
@@ -58,7 +58,7 @@ def devices(
     Get the FortiManager devices list.
 
     In case of a cluster the 'Device Name' is the name of the cluster and the 'HA Nodes' holds the
-    hostnames of the actuall cluser nodes.
+    hostnames of the actual cluster nodes.
     """
     result = fmg.get.devices(host)
     if raw:

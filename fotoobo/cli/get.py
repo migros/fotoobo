@@ -20,10 +20,10 @@ def callback(context: typer.Context) -> None:
     The fotoobo get command callback
 
     Args:
-        context (Context): the context object of the typer app
+        context: The context object of the typer app
     """
     cli_path.append(str(context.invoked_subcommand))
-    log.debug("about to execute command: '%s'", context.invoked_subcommand)
+    log.debug("About to execute command: '%s'", context.invoked_subcommand)
 
 
 @app.command()
@@ -32,7 +32,6 @@ def inventory() -> None:
     Print a summary over your fotoobo inventory.
     """
     result = get.inventory()
-
     result.print_result_as_table(title="fotoobo inventory", headers=["Device", "Hostname", "Type"])
 
 
@@ -54,7 +53,6 @@ def version(
                 "version": f"[bold]{result.get_result('version')[0]['version']}[/]",
             }
         ]
-
         out_list += result.get_result("version")[1:]
 
     else:
@@ -70,7 +68,6 @@ def commands() -> None:
     """
     result = get.commands()
     tree = result.get_result("commands")
-
     rich_print(
         Panel(tree, border_style="#FF33BB", title="cli commands structure", title_align="right")
     )

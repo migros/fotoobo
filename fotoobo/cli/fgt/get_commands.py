@@ -2,7 +2,6 @@
 The FortiGate get commands
 """
 # pylint: disable=anomalous-backslash-in-string
-
 import logging
 
 import typer
@@ -20,10 +19,10 @@ def callback(context: typer.Context) -> None:
     The fgt get subcommand callback
 
     Args:
-        context (Context): the context object of the typer app
+        context: The context object of the typer app
     """
     cli_path.append(str(context.invoked_subcommand))
-    log.debug("about to execute command: '%s'", context.invoked_subcommand)
+    log.debug("About to execute command: '%s'", context.invoked_subcommand)
 
 
 @app.command()

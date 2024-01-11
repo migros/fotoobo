@@ -20,12 +20,13 @@ log = logging.getLogger("fotoobo")
 def inventory() -> Result[Dict[str, str]]:
     """
     Get the fotoobo inventory
-    """
-    log.debug("Printing fotoobo inventory information")
 
+    Returns:
+        Result
+    """
+    log.debug("Print fotoobo inventory information")
     result = Result[Dict[str, str]]()
     _inventory = Inventory(config.inventory_file)
-
     for host, data in _inventory.assets.items():
         result.push_result(host, {"hostname": data.hostname, "type": data.type})
 
@@ -37,13 +38,12 @@ def version(verbose: bool = False) -> Result[List[Dict[str, str]]]:
     Get the fotoobo version
 
     Args:
-        verbose:    Whether we want verbose output
+        verbose: Whether we want verbose output
     """
-    log.debug("printing fotoobo version information: %s", __version__)
+    log.debug("Print fotoobo version information: '%s'", __version__)
 
     result = Result[List[Dict[str, str]]]()
     versions = [{"module": "fotoobo", "version": __version__}]
-
     if verbose:
         modules = ["jinja2", "PyYAML", "requests", "rich", "typer"]
 
@@ -51,7 +51,6 @@ def version(verbose: bool = False) -> Result[List[Dict[str, str]]]:
             versions.append({"module": module, "version": importlib.metadata.version(module)})
 
     result.push_result("version", versions)
-
     return result
 
 
@@ -62,7 +61,6 @@ def commands() -> Result[Tree]:
     are sorted in alphabetical order
     """
     result = Result[Tree]()
-
     result.push_result(
         "commands",
         walk_cli_info(

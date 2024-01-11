@@ -20,10 +20,10 @@ def callback(context: typer.Context) -> None:
     The fotoobo convert command callback
 
     Args:
-        context (Context): the context object of the typer app
+        context: The context object of the typer app
     """
     cli_path.append(str(context.invoked_subcommand))
-    log.debug("about to execute command: '%s'", context.invoked_subcommand)
+    log.debug("About to execute command: '%s'", context.invoked_subcommand)
 
 
 @app.command(no_args_is_help=True)
@@ -60,7 +60,5 @@ def checkpoint(
     https://fotoobo.readthedocs.io/en/latest/usage/convert.html for more information.
     """
     checkpoint_assets = load_json_file(infile)
-
     result = convert.checkpoint(checkpoint_assets, obj_type, outfile.name, cache_dir)
-
     save_json_file(outfile, result.get_result("fortinet_assets"))

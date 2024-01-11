@@ -1,7 +1,6 @@
 """
 FortiClient EMS monitor module
 """
-
 import logging
 from datetime import datetime
 from typing import Any, Dict
@@ -23,25 +22,21 @@ def connections(host: str) -> Result[Dict[str, Any]]:
     returned dict.
 
     Args:
-        host (str): FortiClient EMS host defined in the inventory
+        host: FortiClient EMS host defined in the inventory
 
-    Returns: Result[Dict[str, Any]]
+    Returns:
+        Result
     """
     result = Result[Dict[str, Any]]()
     inventory = Inventory(config.inventory_file)
-
     ems: FortiClientEMS = inventory.get_item(host, "forticlientems")
     ems.login()
-
     response = ems.api("get", "/endpoints/connection/donut")
-
     data: Dict[str, Any] = {"data": list(response.json()["data"]), "fotoobo": {}}
-
     for item in data["data"]:
         data["fotoobo"][item["token"]] = item["value"]
 
     result.push_result(host, data)
-
     return result
 
 
@@ -57,32 +52,28 @@ def endpoint_management_status(host: str) -> Result[Dict[str, Any]]:
         - {{ fotoobo.unmanaged }}   Amount of unmanaged endpoints
 
     Args:
-        host (str): FortiClient EMS host defined in the inventory
+        host: FortiClient EMS host defined in the inventory
 
-    Returns: Result
+    Returns:
+        Result
     """
     result = Result[Dict[str, Any]]()
     inventory = Inventory(config.inventory_file)
-
     ems: FortiClientEMS = inventory.get_item(host, "forticlientems")
     ems.login()
-
     response = ems.api("get", "/endpoints/management/donut")
-
     data = {"data": dict(response.json())["data"]}
-
     managed = unmanaged = 0
     for item in data["data"]:
         if item["token"] == "managed":
             managed = item["value"]
-            log.debug("management: managed: %s", managed)
+            log.debug("Management: managed: '%s'", managed)
 
         if item["token"] == "unmanaged":
             unmanaged = item["value"]
-            log.debug("management: unmanaged: %s", unmanaged)
+            log.debug("Management: unmanaged: '%s'", unmanaged)
 
     data["fotoobo"] = {"managed": managed, "unmanaged": unmanaged}
-
     result.push_result(host, data)
     return result
 
@@ -98,24 +89,21 @@ def endpoint_online_outofsync(host: str) -> Result[Dict[str, Any]]:
             is not in synch with FortiClient EMS
 
     Args:
-        host (str): FortiClient EMS host defined in the inventory
+        host: FortiClient EMS host defined in the inventory
 
-    Returns: Result
+    Returns:
+        Result
     """
     result = Result[Dict[str, Any]]()
     inventory = Inventory(config.inventory_file)
     ems: FortiClientEMS = inventory.get_item(host, "forticlientems")
     ems.login()
-
     response = ems.api(
         "get", "/endpoints/index?offset=0&count=1&connection=online&status=outofsync"
     )
-
     data = {"fotoobo": {"outofsync": response.json()["data"]["total"]}}
-    log.debug("endpoints outofsync: %s", data["fotoobo"]["outofsync"])
-
+    log.debug("Endpoints outofsync: '%s'", data["fotoobo"]["outofsync"])
     result.push_result(host, data)
-
     return result
 
 
@@ -132,18 +120,17 @@ def endpoint_os_versions(host: str) -> Result[Dict[str, Dict[str, Any]]]:
         - {{ fotoobo.fctversionwindows }}   Amount of managed windows endpoints
 
     Args:
-        host (str): FortiClient EMS host defined in the inventory
+        host: FortiClient EMS host defined in the inventory
 
-    Returns: Result[Dict[str, Dict[str, Any]]]
+    Returns:
+        Result
     """
     result = Result[Dict[str, Dict[str, Any]]]()
     inventory = Inventory(config.inventory_file)
 
     ems: FortiClientEMS = inventory.get_item(host, "forticlientems")
     ems.login()
-
     data: Dict[str, Any] = {"data": {}, "fotoobo": {}}
-
     for fctversion_os in ["fctversionwindows", "fctversionmac", "fctversionlinux"]:
         response = ems.api("get", f"/endpoints/{fctversion_os}/donut")
         data["data"][fctversion_os] = dict(response.json())["data"]
@@ -151,7 +138,6 @@ def endpoint_os_versions(host: str) -> Result[Dict[str, Dict[str, Any]]]:
         data["fotoobo"][fctversion_os] = count
 
     result.push_result(host, data)
-
     return result
 
 
@@ -160,26 +146,24 @@ def system(host: str) -> Result[Dict[str, Any]]:
     Get system information from FortiClient EMS.
 
     Args:
-        host (str): FortiClient EMS host defined in inventory
+        host: FortiClient EMS host defined in inventory
 
-    Returns: Result[Dict[str, Any]]
+    Returns:
+        Result
     """
     result = Result[Dict[str, Any]]()
     inventory = Inventory(config.inventory_file)
-
     ems: FortiClientEMS = inventory.get_item(host, "forticlientems")
     ems.login()
 
     # get EMS serial number (just for debug logging and because it's possible)
     response = ems.api("get", "/system/serial_number")
-    log.debug("serial number: %s (from /system/serial_number)", response.json()["data"])
+    log.debug("Serial number: '%s' (from /system/serial_number)", response.json()["data"])
 
     # get EMS system info
     response = ems.api("get", "/system/info/")
-    log.debug("serial number: %s (from /system/info/)", response.json()["data"]["license"]["sn"])
-
+    log.debug("Serial number: '%s' (from /system/info/)", response.json()["data"]["license"]["sn"])
     result.push_result(host, dict(response.json()["data"]))
-
     return result
 
 
@@ -208,39 +192,36 @@ def license(host: str) -> Result[Dict[str, Any]]:  # pylint: disable=redefined-b
             If you wish more granular view this utility has to be improved accordingly.
 
     Args:
-        host (str): FortiClient EMS host defined in the inventory
+        host: FortiClient EMS host defined in the inventory
 
-    Returns: Result
+    Returns:
+        Result
     """
     result = Result[Dict[str, Any]]()
     inventory = Inventory(config.inventory_file)
     ems: FortiClientEMS = inventory.get_item(host, "forticlientems")
     ems.login()
-
     response = ems.api("get", "/license/get")
     data = {}
     data["data"] = dict(response.json()["data"])
-
     license_expiry_days = 0
     for lic in data["data"]["licenses"]:
-        log.debug("license expiry for '%s': '%s'", lic["type"], lic["expiry_date"])
+        log.debug("License expiry for '%s': '%s'", lic["type"], lic["expiry_date"])
         license_expiry = datetime.strptime(lic["expiry_date"], "%Y-%m-%dT%H:%M:%S")
         expiry_days = int((license_expiry - datetime.now()).days)
         if expiry_days < license_expiry_days or license_expiry_days == 0:
             license_expiry_days = expiry_days
-    log.debug("days to license expiry: %s", license_expiry_days)
 
+    log.debug("Days to license expiry: '%s'", license_expiry_days)
     data["fotoobo"] = {}
     data["fotoobo"]["license_expiry_days"] = license_expiry_days
-
     for key in data["data"]["seats"]:
         if data["data"]["seats"][key] > 0:
-            log.debug(f"{key} license count: %s", data["data"]["seats"][key])
-            log.debug(f"{key} license used: %s", data["data"]["used"][key])
+            log.debug(f"{key} license count: '%s'", data["data"]["seats"][key])
+            log.debug(f"{key} license used: '%s'", data["data"]["used"][key])
             license_usage = int(100 / data["data"]["seats"][key] * data["data"]["used"][key])
-            log.debug(f"{key} license usage : %s%%", license_usage)
+            log.debug(f"{key} license usage : '%s%%'", license_usage)
             data["fotoobo"][key + "_usage"] = license_usage
 
     result.push_result(host, data)
-
     return result

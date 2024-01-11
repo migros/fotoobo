@@ -1,7 +1,6 @@
 """
 Devices class for storing device information
 """
-
 import logging
 import re
 from pathlib import Path
@@ -67,17 +66,17 @@ class Inventory:
         Get a dictionary of assets from the inventory with given 'filters'.
 
         Args:
-            name:   Which asset to get. If blank get every asset. Wildcard * is supported in any
-                    position. E.g. "FortiGate", "*Gate", "Forti*ate", "Forti*".
-            type:   Which asset type to get. If blank get every asset.
+            name: Which asset to get. If blank get every asset. Wildcard * is supported in any
+                  position. E.g. "FortiGate", "*Gate", "Forti*ate", "Forti*".
+            type: Which asset type to get. If blank get every asset.
 
         Returns:
             Dictionary of assets with name as key
 
         Raises:
-            GeneralWarning if no asset was found in the inventory that matches name or type
+            GeneralWarning: If no asset was found in the inventory that matches name or type
         """
-        log.debug("getting assets with name '%s' and type '%s'", name, type)
+        log.debug("Getting assets with name '%s' and type '%s'", name, type)
         name_pattern = f"^{name}$".replace("*", ".*")
         assets = {}
         for _name, _asset in self.assets.items():
@@ -108,17 +107,17 @@ class Inventory:
         specify the desired type and a GeneralWarning is raised if the type does not match.
 
         Args:
-            name:   Which exact asset to get.
-            type:   If you specify a type it is checked if it matches the type of the asset
+            name: Which exact asset to get.
+            type: If you specify a type it is checked if it matches the type of the asset
 
         Returns:
             Inventory asset
 
         Raises:
-            GeneralWarning if the asset was not found in the inventory
-            GeneralWarning if the specified type does not match the type of the item
+            GeneralWarning: If the asset was not found in the inventory
+            GeneralWarning: If the specified type does not match the type of the item
         """
-        log.debug("getting asset with name '%s'", name)
+        log.debug("Getting asset with name '%s'", name)
         try:
             asset = self.assets[name]
 
@@ -139,7 +138,7 @@ class Inventory:
         log.debug("Load the assets from the inventory file")
         # Expand user home shortcuts in the inventory file path
         expanded_inventory_file = self._inventory_file.expanduser()
-        log.debug("loading assets from '%s'", expanded_inventory_file)
+        log.debug("Loading assets from '%s'", expanded_inventory_file)
         inventory_raw: Dict[str, Any] = dict(load_yaml_file(expanded_inventory_file) or {})
 
         # Set the globals
@@ -160,6 +159,7 @@ class Inventory:
             if asset.get("type", "") == "fortigate":
                 try:
                     self.assets[name] = FortiGate(**asset)
+
                 except GeneralWarning as err:
                     log.warning("%s: %s", name, err)
 
@@ -192,7 +192,11 @@ class Inventory:
     """
 
     def _load_data_from_vault(self, vault_dict: Dict[str, Any]) -> None:
-        """Load the credentials from a vault"""
+        """Load the credentials from a vault
+
+        Args:
+            vault_dict: The Dictionary with the vault configuration
+        """
         log.debug("Loading credentials from vault '%s'", vault_dict["url"])
         vault = Client(**vault_dict)
         data = vault.get_data()
@@ -209,6 +213,7 @@ class Inventory:
                             log.debug(
                                 "Vault attribute '%s.%s' replaced successfully", name, attribute
                             )
+
                         except KeyError:
                             log.warning("Vault attribute '%s.%s' not found", name, attribute)
 
@@ -217,8 +222,7 @@ class Inventory:
         Set some defaults for device types
 
         Args:
-            data:   defaults by device where key is the device type and value defines
-                    its defaults
+            data: defaults by device where key is the device type and value defines its defaults
         """
         for key, value in data.items():
             self._globals[key] = value

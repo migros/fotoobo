@@ -22,19 +22,18 @@ def callback(context: typer.Context) -> None:
     The fmg subcommand callback
 
     Args:
-        context (Context): the context object of the typer app
+        context: The context object of the typer app
     """
     cli_path.append(str(context.invoked_subcommand))
-    log.debug("about to execute command: '%s'", context.invoked_subcommand)
+    log.debug("About to execute command: '%s'", context.invoked_subcommand)
 
 
 @app.command(no_args_is_help=True)
 def assign(
     adoms: str = typer.Argument(
         ...,
-        help="The ADOMs to assign the global policy/objects to. Use "
-        "'fotoobo fmg get adoms' to get a list of "
-        "available ADOMs. Separate multiple ADOMs by comma (no spaces).",
+        help="The ADOMs to assign the global policy/objects to. Use 'fotoobo fmg get adoms' to "
+        "get a list of available ADOMs. Separate multiple ADOMs by comma (no spaces).",
         metavar="[adoms]",
         show_default=False,
     ),
@@ -69,12 +68,12 @@ def assign(
     """
     inventory = Inventory(fotoobo_config.inventory_file)
     result = fmg.assign(adoms=adoms, policy=policy, host=host, timeout=timeout)
-
     if smtp_server:
         if smtp_server in inventory.assets:
             result.send_messages_as_mail(inventory.assets[smtp_server], "error")
+
         else:
-            log.warning("SMTP server %s not in found in inventory.", smtp_server)
+            log.warning("SMTP server '%s' not in found in inventory.", smtp_server)
 
 
 @app.command(no_args_is_help=True)
@@ -105,12 +104,12 @@ def post(
     """
     inventory = Inventory(fotoobo_config.inventory_file)
     result = fmg.post(file=file, adom=adom, host=host)
-
     if smtp_server:
         if smtp_server in inventory.assets:
             result.send_messages_as_mail(inventory.assets[smtp_server], "error", command=True)
+
         else:
-            log.warning("SMTP server %s not in found in inventory.", smtp_server)
+            log.warning("SMTP server '%s' not in found in inventory.", smtp_server)
 
 
 app.add_typer(get.app, name="get", help="FortiManager get commands.")

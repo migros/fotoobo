@@ -1,7 +1,6 @@
 """
 FortiManager assign utility
 """
-
 import logging
 from pathlib import Path
 
@@ -28,11 +27,10 @@ def assign(adoms: str, policy: str, host: str, timeout: int = 60) -> Result[str]
     result = Result[str]()
     inventory = Inventory(config.inventory_file)
     fmg = inventory.get_item(host, "fortimanager")
-
-    log.debug("Assigning global policy/objects to ADOM %s", adoms)
+    log.debug("Assigning global policy/objects to ADOM '%s'", adoms)
     task_id = fmg.assign_all_objects(adoms=adoms, policy=policy)
     if task_id > 0:
-        log.info("created FortiManager task id %s", task_id)
+        log.info("Created FortiManager task id '%s'", task_id)
         messages = fmg.wait_for_task(task_id, timeout=timeout)
         for message in messages:
             level = "debug" if message["state"] == 4 else "error"
@@ -62,23 +60,24 @@ def post(file: Path, adom: str, host: str) -> Result[str]:
     POST the given configuration from a JSON file to the FortiManager
 
     Args:
-        file:   The configuration file to oad the configuration from
-        adom:   The ADOM to assign the global policy to
-        host:   The FortiManager defined in inventory
+        file: The configuration file to oad the configuration from
+        adom: The ADOM to assign the global policy to
+        host: The FortiManager defined in inventory
+
+    Returns:
+        Result
 
     Raises:
         GeneralWarning
     """
     if not (payloads := load_json_file(file)):
-        raise GeneralWarning(f"there is no data in the given file ({file})")
+        raise GeneralWarning(f"There is no data in the given file ({file})")
 
     inventory = Inventory(config.inventory_file)
     result: Result[str] = Result()
     fmg = inventory.get_item(host, "fortimanager")
-
     log.debug("FortiManager post command ...")
-    log.info("start posting assets to '%s'", host + "/" + adom)
-
+    log.info("Start posting assets to '%s'", host + "/" + adom)
     result_list = fmg.post(adom, payloads)
     if result_list:
         for line in result_list:

@@ -162,7 +162,7 @@ class TestFortiClientEMS:
         ems = FortiClientEMS("host", "dummy_user", "dummy_pass", ssl_verify=False)
         with pytest.raises(GeneralWarning) as err:
             ems.get_version()
-        assert "did not find any FortiClient EMS version number in response" in str(err.value)
+        assert "Did not find any FortiClient EMS version number in response" in str(err.value)
         requests.Session.get.assert_called_with(
             "https://host:443/api/v1/system/consts/get?system_update_time=1",
             params={},

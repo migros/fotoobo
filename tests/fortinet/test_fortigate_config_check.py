@@ -74,7 +74,7 @@ class TestFortiGateConfigCheck:
             assert False
         except GeneralError as err:
             assert True
-            assert "there are no checks defined" in err.message
+            assert "There are no checks defined" in err.message
 
     @staticmethod
     @pytest.mark.parametrize(

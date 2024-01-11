@@ -5,7 +5,6 @@ Use this module to add business logic for your Fortinet infrastructure. This mod
 relevant fotoobo and Fortinet modules. By default the tools functions are invoked by the cli app,
 but they may also be accessed directly.
 """
-
 from . import convert, ems, faz, fgt, fmg, get
 from .greet import greet
 

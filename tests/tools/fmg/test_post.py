@@ -52,5 +52,5 @@ def test_post(monkeypatch: MonkeyPatch) -> None:
 def test_post_exception_empty_payload_file(monkeypatch: MonkeyPatch) -> None:
     """Test POST with exception when there is no data in the payload file"""
     monkeypatch.setattr("fotoobo.tools.fmg.main.load_json_file", MagicMock(return_value=[]))
-    with pytest.raises(GeneralWarning, match=r"there is no data in the given file"):
+    with pytest.raises(GeneralWarning, match=r"There is no data in the given file"):
         post(file=Path("dummy_file"), adom="dummy_adom", host="dummy_host")

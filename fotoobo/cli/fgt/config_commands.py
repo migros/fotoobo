@@ -31,7 +31,6 @@ def check(
     Check one or more FortiGate configuration files.
     """
     result = fgt.config.check(configuration, bundles)
-
     result.print_messages()
 
 
@@ -69,10 +68,8 @@ def info(
     Get the information from one or more FortiGate configuration files.
     """
     result = fgt.config.info(configuration)
-
     if as_list:
         info_dicts = []
-
         for _, _info in result.all_results().items():
             info_dicts.append(_info.__dict__)
 

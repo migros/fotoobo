@@ -4,7 +4,6 @@ The fotoobo greeting utility
 This function is a hidden fotoobo command which is meant for testing purposes. It has no functional
 effect. Use and modify it whenever you want. But be sure to also write the tests for it.
 """
-
 import logging
 
 import typer
@@ -16,8 +15,13 @@ def greet(name: str, bye: bool, log_enabled: bool) -> None:
     """
     This is the hidden Greeting function.
     It allows you to greet someone with different colors in different languages.
+
+    Args:
+        name:
+        bye:
+        log_enabled:
     """
-    log.debug("local logging option is: %s", log_enabled)
+    log.debug("Local logging option is: '%s'", log_enabled)
     greeting = f"{typer.style('🌼Aloha🌼', fg=typer.colors.GREEN)}"
     greeting += f", {typer.style('⚽Hola⚽', fg=typer.colors.YELLOW)}"
     greeting += f", {typer.style('✨Bonjour✨', fg=typer.colors.BLUE)}"

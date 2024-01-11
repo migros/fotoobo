@@ -28,9 +28,9 @@ class FortiGate(Fortinet):
         Set some initial parameters.
 
         Args:
-            hostname:   The hostname of the FortiGate to connect to
-            token:      API access token from the FortiGate
-            **kwargs:   See Fortinet class for available arguments
+            hostname: The hostname of the FortiGate to connect to
+            token:    API access token from the FortiGate
+            **kwargs: See Fortinet class for available arguments
         """
         if not hostname:
             raise GeneralWarning("No hostname specified")
@@ -55,14 +55,14 @@ class FortiGate(Fortinet):
         needed session key.
 
         Args:
-            method (str): request method from [get, post]
-            url (str): rest API URL to request data from
-            params (dict): dictionary with parameters (if needed)
-            payload (dict): JSON body for post requests (if needed)
-            timeout (float): the requests read timeout
+            method:  Request method from [get, post]
+            url:     Rest API URL to request data from
+            params:  Dictionary with parameters (if needed)
+            payload: JSON body for post requests (if needed)
+            timeout: The requests read timeout
 
         Returns:
-            response: response from the request
+            Response from the request
         """
         self.session.headers.update({"Authorization": f"Bearer {self.token}"})
         return super().api(
@@ -74,10 +74,10 @@ class FortiGate(Fortinet):
         Get the configuration backup from a FortiGate.
 
         Args:
-            timeout (int): Timeout in sec to wait for the response
+            timeout: Timeout in sec to wait for the response
 
         Returns:
-            str: Configuration backup as text
+            Configuration backup as text
         """
         data = self.api(
             "get", "monitor/system/config/backup", params={"scope": "global"}, timeout=timeout
@@ -89,15 +89,15 @@ class FortiGate(Fortinet):
         Get FortiGate version
 
         Returns:
-            str: version
+            FortiGate version
         """
         fgt_version: str = ""
         try:
             response = self.api("get", "monitor/system/status")
+
         except APIError as err:
-            log.warning("%s returned: %s", self.hostname, err.message)
+            log.warning("'%s' returned: '%s'", self.hostname, err.message)
             raise GeneralWarning(f"{self.hostname} returned: {err.message}") from err
 
         fgt_version = response.json().get("version", "unknown")
-
         return fgt_version

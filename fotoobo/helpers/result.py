@@ -59,9 +59,7 @@ class Result(Generic[T]):
             data:       The output data for this key
             successful: Whether the call has been successful or not [default: True]
         """
-
         self.results[key] = data
-
         if successful:
             self.successful.append(key)
 
@@ -73,12 +71,11 @@ class Result(Generic[T]):
         Add a message for the host
 
         Args:
-            host:       The host to add the message for
-            message:    The message to add
-            level:      The level to assign to this message, used for later filtering
-                        (use for example "info", "warning", "error")
+            host:    The host to add the message for
+            message: The message to add
+            level:   The level to assign to this message, used for later filtering
+                     (use for example "info", "warning", "error")
         """
-
         if host not in self.messages:
             self.messages[host] = []
 
@@ -89,7 +86,7 @@ class Result(Generic[T]):
         Return all the messages for the host given
 
         Args:
-            host:   The host to get the messages for
+            host: The host to get the messages for
 
         Returns:
             A list of the messages pushed for this host. If there are no messages for this host, it
@@ -124,8 +121,9 @@ class Result(Generic[T]):
     def get_result(self, host: str) -> T:
         """
         Return the result pushed by this
+
         Args:
-            host:   The name of the host to retrieve the result for
+            host: The name of the host to retrieve the result for
 
         Returns:
             The results stored before with push_results, or None if the host does not exist
@@ -133,7 +131,6 @@ class Result(Generic[T]):
         Raises:
             GeneralWarning: If there is no result for host
         """
-
         if host not in self.results:
             raise GeneralWarning(f"Host {host} is not in results.")
 
@@ -144,13 +141,9 @@ class Result(Generic[T]):
         Return all results
 
         Returns:
-            The results as a dictionary of the following form::
-
-                {
-                    '<name of the host>': <data>
-                }
-
-            where `<data>` may be of any type
+            The results as a dictionary of the following form:
+                { '<name of the host>': <data> }
+            where <data> may be of any type
         """
         return self.results
 
@@ -164,9 +157,9 @@ class Result(Generic[T]):
         Print a table from given data as list or dict.
 
         Args:
-            title:          Set the preferred title for the table
-            auto_header:    Whether to show the headers (default: off)
-            headers:        Set the headers (if needed)
+            title:       Set the preferred title for the table
+            auto_header: Whether to show the headers (default: off)
+            headers:     Set the headers (if needed)
 
         Raises:
             GeneralWarning: If the data cannot be interpreted as a table
@@ -195,10 +188,10 @@ class Result(Generic[T]):
         Print the data given as a rich table to the console
 
         Args:
-            data:           The data to print formatted as rich.table.Table will expect it
-            headers:        The headers for the table
-            auto_header:    Whether to show the headers or not
-            title:          The title for the table
+            data:        The data to print formatted as rich.table.Table will expect it
+            headers:     The headers for the table
+            auto_header: Whether to show the headers or not
+            title:       The title for the table
         """
         if not isinstance(data, list):
             raise GeneralWarning("data for print_table_raw must be a list of dicts.")
@@ -221,6 +214,7 @@ class Result(Generic[T]):
             for entry in _values:
                 if isinstance(entry, (dict, list)):
                     values.append(json.dumps(entry, indent=4))
+
                 else:
                     values.append(str(entry))
 
@@ -228,13 +222,13 @@ class Result(Generic[T]):
 
         self.console.print(table)
 
-    def print_raw(self, key: Union[str, None] = None) -> None:
+    def print_raw(self, key: Optional[str] = None) -> None:
         """
         Print the raw data from Result() in pretty format.
 
         Args:
-            key:    Print only the result for the host given
-                    (default: print all results)
+            key: Print only the result for the host given
+                 (default: print all results)
         """
         if key:
             data = {key: self.get_result(key)}
@@ -253,9 +247,9 @@ class Result(Generic[T]):
         the docs of the used utility to see what variables you're intended to use.
 
         Args:
-            data: The data used in the template
+            data:          The data used in the template
             template_file: Filename of the Jinja2 template file
-            output_file: The file to write the output to
+            output_file:   The file to write the output to
         """
         template_env = jinja2.Environment(
             loader=jinja2.FileSystemLoader(template_file.parent), trim_blocks=True, autoescape=True
@@ -285,7 +279,6 @@ class Result(Generic[T]):
                             output
         """
         out_messages: List[str] = []
-
         for host, messages in self.messages.items():
             for message in messages:
                 if not levels or message["level"] in levels:

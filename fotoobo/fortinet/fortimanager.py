@@ -24,13 +24,13 @@ class FortiManager(Fortinet):
         Set some initial parameters.
 
         Args:
-            hostname:       The hostname of the FortiGate to connect to
-            username:       The Username
-            password:       The password
+            hostname: The hostname of the FortiGate to connect to
+            username: The Username
+            password: The password
 
         Keyword Args:
-            session_dir:    The path where to load/save the FortiManager session key
-            **kwargs:       See Fortinet class for more available arguments
+            session_dir: The path where to load/save the FortiManager session key
+            **kwargs:    See Fortinet class for more available arguments
         """
         super().__init__(hostname, **kwargs)
         self.api_url = f"https://{self.hostname}:{self.https_port}/jsonrpc"
@@ -83,17 +83,19 @@ class FortiManager(Fortinet):
         needed session key.
 
         Args:
-            method:     Request method from [get, post]
-            url:        Rest API URL to request data from
-            params:     Dictionary with parameters (if needed)
-            payload:    JSON body for post requests (if needed)
-            timeout:    The requests read timeout in seconds
+            method:  Request method from [get, post]
+            url:     Rest API URL to request data from
+            headers: Dictionary with headers (if needed)
+            params:  Dictionary with parameters (if needed)
+            payload: JSON body for post requests (if needed)
+            timeout: The requests read timeout in seconds
 
         Returns:
             Response from the request
         """
         if not self.session_key:
             self.login()
+
         payload = payload or {}
         if method.lower() == "post":
             payload["session"] = self.session_key
@@ -107,20 +109,20 @@ class FortiManager(Fortinet):
         Copies all objects from the global ADOM database to a given ADOM.
 
         Args:
-            adoms (str): The ADOM to assign the global policy/objects to. If you specify an invalid
-                ADOM name you'll get a permission error. You can specify multiple ADOMs by
-                separating them with a comma (no spaces)
-
-            policy (str): Specify the global policy to assign [Default: 'default'].
+            adoms:  The ADOM to assign the global policy/objects to. If you specify an invalid ADOM
+                    name you'll get a permission error. You can specify multiple ADOMs by separating
+                    them with a comma (no spaces)
+            policy: Specify the global policy to assign [Default: 'default'].
 
         Returns:
-            int: The id of the FortiManager task created or 0 (zero) if unsuccessful
+            The id of the FortiManager task created or 0 (zero) if unsuccessful
 
         """
         task_id = 0
         adom_payload = []
         for adom in adoms.split(","):
             adom_payload.append({"adom": adom, "excluded": "disable"})
+
         payload = {
             "method": "exec",
             "params": [
@@ -138,10 +140,11 @@ class FortiManager(Fortinet):
         if response.status_code == 200:
             if response.json()["result"][0]["status"]["code"] == 0:
                 task_id = response.json()["result"][0]["data"]["task"]
-                log.debug("assign task created with id %s", task_id)
+                log.debug("Assign task created with id '%s'", task_id)
+
             else:
                 log.debug(
-                    "did not assign to '%s' with error '%s'",
+                    "Did not assign to '%s' with error '%s'",
                     adoms,
                     response.json()["result"][0]["status"]["message"],
                 )
@@ -156,7 +159,7 @@ class FortiManager(Fortinet):
         Some of the ADOMs are ignored by default as the are not used in most cases
 
         Returns:
-            list: list of FortiManager ADOMs
+            List of FortiManager ADOMs
         """
         if not ignored_adoms:
             ignored_adoms = self.ignored_adoms
@@ -174,7 +177,7 @@ class FortiManager(Fortinet):
         Get FortiManager version.
 
         Returns:
-            str: version
+            FortiManager version
         """
         fmg_version: str = ""
         payload = {"method": "get", "params": [{"url": "/sys/status"}]}
@@ -185,6 +188,7 @@ class FortiManager(Fortinet):
                     r"(v\d+\.\d+\.\d+)-", response.json()["result"][0]["data"]["Version"]
                 )
                 fmg_version = str(match.group(1))  # type: ignore
+
             except (KeyError, IndexError, AttributeError):
                 log.debug("did not find any FortiManager version number in response")
 
@@ -198,14 +202,14 @@ class FortiManager(Fortinet):
         We do not use requests.session as the session key is just a string which is saved directly.
 
         Returns:
-            int: status code from the FortiManager login
+            Status code from the FortiManager login
         """
         status: int = 401
 
         if self.session_path:
             session_file = Path(self.session_path).expanduser() / f"{self.hostname}.key"
             if session_file.exists():
-                log.debug("loading session key from file '%s'", session_file)
+                log.debug("Loading session key from file '%s'", session_file)
                 with session_file.open(encoding="UTF-8") as file:
                     self.session_key = file.read()
                     payload = {
@@ -225,10 +229,10 @@ class FortiManager(Fortinet):
                         self.session_key = ""
 
             else:
-                log.debug("session file '%s' does ot exist", session_file)
+                log.debug("Session file '%s' does ot exist", session_file)
 
         if not self.session_key and self.username and self.password:
-            log.debug("login to %s", self.hostname)
+            log.debug("Login to '%s'", self.hostname)
             payload = {
                 "method": "exec",
                 "params": [
@@ -244,7 +248,7 @@ class FortiManager(Fortinet):
                     log.debug("store session key")
                     self.session_key = response.json()["session"]
                     if self.session_path:
-                        log.debug("saving session key into file '%s'", session_file)
+                        log.debug("Saving session key into file '%s'", session_file)
                         with session_file.open("w", encoding="UTF-8") as file:
                             file.write(self.session_key)
 
@@ -257,7 +261,7 @@ class FortiManager(Fortinet):
         Logout from FortiManager.
 
         Returns:
-            int: status code from the FortiManager logout
+            Status code from the FortiManager logout
         """
         payload: Dict[str, Any] = {
             "method": "exec",
@@ -275,13 +279,12 @@ class FortiManager(Fortinet):
         You can pass a single payload (Dict) or a list of payloads (List of Dict).
 
         Args:
-            adom (str): the ADOM name to issue the set commands to. If you wish to update the
-                        Global ADOM specify 'global' as ADOM.
-
-            payload(s) (Any): one payload (Dict) or a list of payloads (List of Dict)
+            adom:     The ADOM name to issue the set commands to. If you wish to update the
+                      Global ADOM specify 'global' as ADOM.
+            payloads: One payload (Dict) or a list of payloads (List of Dict)
 
         Returns:
-            int: amount of errors ocurred during the set command
+            Amount of errors ocurred during the set command
         """
         # if payload is a dict convert it to a list with one dict in it.
         if isinstance(payloads, dict):
@@ -317,14 +320,13 @@ class FortiManager(Fortinet):
         Wait for a task with a given id for its end and returns the message(s).
 
         Args:
-            id (int): Task id to wait for
-
-            timeout (int): Timeout in seconds
+            id:      Task id to wait for
+            timeout: Timeout in seconds
 
         Returns:
-            List: Message list
+            Message list
         """
-        log.debug("waiting for task id %s", task_id)
+        log.debug("Waiting for task id '%s'", task_id)
         messages: List[Any] = []
         payload = {
             "method": "get",

@@ -1,7 +1,6 @@
 """
 FortiGate configuration check utility
 """
-
 import logging
 from pathlib import Path
 from typing import Any, List
@@ -30,7 +29,7 @@ def check(config: Path, bundles: Path) -> Result[List[str]]:
 
     Raises:
         GeneralWarning: GeneralWarning
-        GeneralError: GeneralError
+        GeneralError:   GeneralError
     """
     files: List[Path] = []
     config = Path(config)
@@ -42,19 +41,19 @@ def check(config: Path, bundles: Path) -> Result[List[str]]:
         files = [file for file in config.iterdir() if file.suffix == ".conf"]
 
     else:
-        log.error("no valid configuration file")
+        log.error("No valid configuration file")
 
     if not files:
-        log.warning("there are no configuration files to check")
-        raise GeneralWarning("there are no configuration files to check")
+        log.warning("There are no configuration files to check")
+        raise GeneralWarning("There are no configuration files to check")
 
     bundles = Path(bundles)
     if bundles.is_file():
         checks = load_yaml_file(bundles)
 
     else:
-        log.error("no valid bundle file")
-        raise GeneralError("no valid bundle file")
+        log.error("No valid bundle file")
+        raise GeneralError("No valid bundle file")
 
     total_results: int = 0
     result = Result[List[str]]()
@@ -71,10 +70,10 @@ def check(config: Path, bundles: Path) -> Result[List[str]]:
         conf_check.execute_checks()
 
         num_results = len(result.get_messages(fortigate_config.info.hostname))
-        log.info("all checks in '%s' done with '%s' messages", file.name, num_results)
+        log.info("All checks in '%s' done with '%s' messages", file.name, num_results)
         total_results += num_results
 
-    log.info("all checks done with '%s' messages", total_results)
+    log.info("All checks done with '%s' messages", total_results)
 
     if total_results == 0:
         result.push_message("fotoobo", "There were no errors in the configuration file(s)")
@@ -87,11 +86,11 @@ def get(config: Path, scope: str = "", path: str = "") -> Result[FortiGateInfo]:
     The FortiGate get configuration utility.
 
     Args:
-        config (Path):  The configuration to get the information from (either a file or directory)
-                        in case it's a directory all .conf files in it will be checked.
+        config: The configuration to get the information from (either a file or directory)
+                In case it's a directory all .conf files in it will be checked.
 
     Returns:
-        result: configuration as result object
+        Configuration as result object
 
     Raises:
         GeneralWarning: GeneralWarning
@@ -105,8 +104,8 @@ def get(config: Path, scope: str = "", path: str = "") -> Result[FortiGateInfo]:
         files = [file for file in config.iterdir() if file.is_file() and file.suffix == ".conf"]
 
     if not files:
-        log.warning("there are no configuration files")
-        raise GeneralWarning("there are no configuration files")
+        log.warning("There are no configuration files")
+        raise GeneralWarning("There are no configuration files")
 
     result = Result[Any]()
 
@@ -123,11 +122,11 @@ def info(config: Path) -> Result[FortiGateInfo]:
     The FortiGate configuration information utility.
 
     Args:
-        config (Path):  The configuration to get the information from (either a file or directory)
-                        in case it's a directory all .conf files in it will be checked.
+        config: The configuration to get the information from (either a file or directory)
+                In case it's a directory all .conf files in it will be checked.
 
     Returns:
-        result: FortiGate information as result object
+        FortiGate information as result object
 
     Raises:
         GeneralWarning: GeneralWarning
@@ -141,8 +140,8 @@ def info(config: Path) -> Result[FortiGateInfo]:
         files = [file for file in config.iterdir() if file.is_file() and file.suffix == ".conf"]
 
     if not files:
-        log.warning("there are no configuration files")
-        raise GeneralWarning("there are no configuration files")
+        log.warning("There are no configuration files")
+        raise GeneralWarning("There are no configuration files")
 
     result = Result[FortiGateInfo]()
 

@@ -86,13 +86,13 @@ class Client:  # pylint: disable=too-many-instance-attributes
         """Get data from the key/value store
 
         Args:
-            timeout:    The time before a request to the vault is cancelled
+            timeout: The time before a request to the vault is cancelled
 
         Returns:
-            The date from the vault or the error that occured
+            The date from the vault or the error that occurred
 
         Raises:
-            GeneralError: If no token could be retreived
+            GeneralError: If no token could be retrieved
         """
         if not self.token and not self.get_token():
             error_message = "Unable to get vault token"
@@ -111,7 +111,7 @@ class Client:  # pylint: disable=too-many-instance-attributes
             log.debug("Response status_code is '%s'", response.status_code)
             return {"ok": response.json()}
 
-        log.warning("Resonse is '%s %s'", response.status_code, response.reason)
+        log.warning("Response is '%s %s'", response.status_code, response.reason)
         return {
             "error": {
                 "status_code": response.status_code,
@@ -178,7 +178,7 @@ class Client:  # pylint: disable=too-many-instance-attributes
 
         Validate the Vault token against the Vault service. If the token ttl is lower then the
         token_ttl_limit the token is cleared. This prevents a token with ttl short before 0 to be
-        used in future calls. Instead a new token should be requestsed.
+        used in future calls. Instead a new token should be requested.
 
         Args:
             timeout: The time before a request to the Vault service is cancelled

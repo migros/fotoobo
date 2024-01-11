@@ -1,11 +1,9 @@
 """
 The FortiGate check commands
 """
-# pylint: disable=anomalous-backslash-in-string
-
 import logging
 from pathlib import Path
-from typing import Dict, Union
+from typing import Dict, Optional
 
 import typer
 from rich.pretty import pprint
@@ -36,10 +34,10 @@ def callback(context: typer.Context) -> None:
     The fgt check subcommand callback
 
     Args:
-        context (Context): the context object of the typer app
+        context: The context object of the typer app
     """
     cli_path.append(str(context.invoked_subcommand))
-    log.debug("about to execute command: '%s'", context.invoked_subcommand)
+    log.debug("About to execute command: '%s'", context.invoked_subcommand)
 
 
 @app.command()
@@ -49,7 +47,7 @@ def hamaster(
         help="The FortiManager hostname to access (must be defined in the inventory).",
         metavar="[host]",
     ),
-    output_file: Union[None, Path] = typer.Option(
+    output_file: Optional[Path] = typer.Option(
         None,
         "--output",
         "-o",
@@ -64,7 +62,7 @@ def hamaster(
         metavar="[server]",
         show_default=False,
     ),
-    template_file: Union[None, Path] = typer.Option(
+    template_file: Optional[Path] = typer.Option(
         None,
         "--template",
         "-t",
@@ -79,13 +77,12 @@ def hamaster(
     FortiManager to access. The command searches for all FortiGate clusters in the FortiManager
     and checks if the designated primary node really is the HA master node.
 
-    The optional argument \[host] makes this command somewhat magic. If you omit \[host] it searches
+    The optional argument 'host' makes this command somewhat magic. If you omit 'host' it searches
     for all devices in the default FortiManager (fmg) in the inventory.
     """
     inventory = Inventory(config.inventory_file)
     result = fgt.monitor.hamaster(host)
     data = {"fotoobo": result.all_results()}
-
     if smtp_server:
         if smtp_server in inventory.assets:
             result.send_messages_as_mail(
@@ -96,13 +93,12 @@ def hamaster(
             )
 
         else:
-            log.warning("SMTP server %s not in found in inventory.", smtp_server)
+            log.warning("SMTP server '%s' not in found in inventory.", smtp_server)
 
     if output_file:
-        log.debug("output_file is: %s", output_file)
-
+        log.debug("output_file is: '%s'", output_file)
         if template_file:
-            log.debug("template_file is: %s", template_file)
+            log.debug("template_file is: '%s'", template_file)
             output: Result[Dict[str, Dict[str, str]]] = Result()
             output.push_result("_hamaster", data)
             output.save_with_template("_hamaster", template_file, output_file)

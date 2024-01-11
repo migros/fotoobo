@@ -1,8 +1,6 @@
 """
 This is the fotoobo exception module.
 """
-
-
 from typing import Any
 
 from requests.exceptions import HTTPError
@@ -50,7 +48,7 @@ class APIError(GeneralException):
 class GeneralError(GeneralException):
     """
     The exception to raise if a general error occurred.
-    The class does not have any methods as the only one (__init__) is inherited from it's parent.
+    The class does not have any methods as the only one (__init__) is inherited from its parent.
     Raise a GeneralError when it does not make sense to do further processing and the program should
     stop and exit.
     """
@@ -59,6 +57,6 @@ class GeneralError(GeneralException):
 class GeneralWarning(GeneralException):
     """
     The exception to raise if a general warning occurred.
-    The class does not have any methods as the only one (__init__) is inherited from it's parent.
-    Raise a GeneralWarning if a part of the program fails but it is safe to du further processing.
+    The class does not have any methods as the only one (__init__) is inherited from its parent.
+    Raise a GeneralWarning if a part of the program fails but it is safe to do further processing.
     """

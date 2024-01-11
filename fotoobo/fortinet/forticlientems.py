@@ -32,11 +32,11 @@ class FortiClientEMS(Fortinet):
         Set some initial parameters.
 
         Args:
-            hostname (str): the hostname of the FortiClient EMS to connect to
-            username (str): username
-            password (str): password
-            cookie_path (str): path to write the cookie files (no cookie if empty)
-            **kwargs (dict): see Fortinet class for available arguments
+            hostname:    The hostname of the FortiClient EMS to connect to
+            username:    Username
+            password:    Password
+            cookie_path: Path to write the cookie files (no cookie if empty)
+            **kwargs:    See Fortinet class for available arguments
         """
         super().__init__(hostname, **kwargs)
         self.api_url = f"https://{self.hostname}:{self.https_port}/api/v1"
@@ -58,15 +58,15 @@ class FortiClientEMS(Fortinet):
         API request to a FortiClientEMS device.
 
         Args:
-            method (str): request method from [get, post]
-            url (str): rest API URL to request data from
-            headers (dict): additional headers (if needed)
-            params (dict): dictionary with parameters (if needed)
-            payload (dict): JSON body for post requests (if needed)
-            timeout (float): the requests read timeout
+            method:  Request method from [get, post]
+            url:     Rest API URL to request data from
+            headers: Additional headers (if needed)
+            params:  Dictionary with parameters (if needed)
+            payload: JSON body for post requests (if needed)
+            timeout: The requests read timeout
 
         Returns:
-            response: response from the request
+            Response from the request
         """
         return super().api(
             method, url, payload=payload, params=params, timeout=timeout, headers=headers
@@ -80,22 +80,22 @@ class FortiClientEMS(Fortinet):
         they support it in case of any issue.
 
         Returns:
-            str: version
+            FortiClient EMS version
         """
         try:
             response = self.api("get", "/system/consts/get?system_update_time=1")
 
         except APIError as err:
-            log.warning("%s returned: %s", self.hostname, err.message)
+            log.warning("'%s' returned: '%s'", self.hostname, err.message)
             raise GeneralWarning(f"{self.hostname} returned: {err.message}") from err
 
         try:
             ems_version: str = response.json()["data"]["System"]["VERSION"]
 
         except KeyError as err:
-            log.warning("did not find any FortiClient EMS version number in response")
+            log.warning("Did not find any FortiClient EMS version number in response")
             raise GeneralWarning(
-                "did not find any FortiClient EMS version number in response"
+                "Did not find any FortiClient EMS version number in response"
             ) from err
 
         return ems_version
@@ -105,14 +105,14 @@ class FortiClientEMS(Fortinet):
         Login to the FortiClientEMS.
 
         Returns:
-            int: status code from the FortiClient EMS logon
+            Status code from the FortiClient EMS logon
         """
         status = 401
         cookie = Path(self.cookie_path).expanduser() / f"{self.hostname}.cookie"
         if self.cookie_path:
-            log.debug("searching cookie in %s", cookie)
+            log.debug("Searching cookie in '%s'", cookie)
             if cookie.is_file():
-                log.debug("cookie exists. skipping login")
+                log.debug("Cookie exists. Skipping login")
                 with cookie.open("rb") as cookie_file:
                     self.session.cookies.update(pickle.load(cookie_file))  # type: ignore
 
@@ -123,30 +123,31 @@ class FortiClientEMS(Fortinet):
                         and int(response.json()["result"]["retval"]) == 1
                     ):
                         log.debug(
-                            "session with given cookie is valid (status: %s)", response.status_code
+                            "Session with given cookie is valid (status: '%s')",
+                            response.status_code,
                         )
                         status = response.status_code
 
                 except APIError as err:
-                    log.debug("session with given cookie is invalid (status: %s)", err.code)
+                    log.debug("Session with given cookie is invalid (status: '%s')", err.code)
                     status = err.code
 
             else:
-                log.debug("no cookie found for : %s", self.hostname)
+                log.debug("No cookie found for '%s'", self.hostname)
 
         if status == 401:
-            log.debug("login to %s", self.hostname)
+            log.debug("Login to '%s'", self.hostname)
             payload = {"name": self.username, "password": self.password}
             response = self.api("post", "/auth/signin", payload=payload)
             if response.status_code == 200 and self.cookie_path:
-                log.debug("saving cookie for %s", self.hostname)
+                log.debug("Saving cookie for '%s'", self.hostname)
 
                 try:
                     with cookie.open("wb") as cookie_file:
                         pickle.dump(self.session.cookies, cookie_file)
 
                 except FileNotFoundError:
-                    log.warning("unable to save cookie file: %s", str(cookie.resolve()))
+                    log.warning("Unable to save cookie file '%s'", str(cookie.resolve()))
 
             status = response.status_code
 
@@ -157,8 +158,8 @@ class FortiClientEMS(Fortinet):
         Logout from FortiClient EMS.
 
         Returns:
-            int: status code from the FortiClient EMS logout
+            Status code from the FortiClient EMS logout
         """
         response = self.api("get", "/auth/signout")
-        log.debug("logged out from %s (status: %s)", self.hostname, response.status_code)
+        log.debug("Logged out from '%s' (status: '%s')", self.hostname, response.status_code)
         return response.status_code

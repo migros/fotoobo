@@ -2,8 +2,8 @@
 The beautiful output helper
 """
 import os
-from pathlib import Path
 from datetime import datetime
+from pathlib import Path
 from typing import Any, Dict, List
 
 from rich.console import Console
@@ -25,11 +25,11 @@ def print_logo() -> None:
 
 def write_policy_to_html(data: List[Dict[str, Any]], out_file: Path) -> None:
     """
-    Write a
+    Write a Firewall policy to a HTML file
 
     Args:
-        data (List)   : List of Dicts with data
-        out_file (Path): Filename to write the HTML output to
+        data:     List of Dicts with data
+        out_file: Filename to write the HTML output to
     """
     ignored_rows = ["status", "global-label", "send-deny-packet"]
     table = '<table class="table table-bordered">\n'
@@ -41,6 +41,7 @@ def write_policy_to_html(data: List[Dict[str, Any]], out_file: Path) -> None:
     for header in headers:
         if header not in ignored_rows:
             table += f"<th>{header}</th>\n"
+
     table += '</tr><thead><tbody id="myTable">\n'
 
     # Create the table's row data

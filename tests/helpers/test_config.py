@@ -3,7 +3,7 @@ Test the config helper
 """
 import os
 from pathlib import Path
-from typing import Callable, Union
+from typing import Callable, Optional, Union
 from unittest.mock import MagicMock
 
 import pytest
@@ -60,7 +60,7 @@ class TestConfig:
         ),
     )
     def test_load_configuration(
-        config_file: Union[Path, None],
+        config_file: Optional[Path],
         isfile_mock: Union[MagicMock, Callable[[str], bool]],
         load_yaml_file_mock: MagicMock,
         expected_inventory: Path,

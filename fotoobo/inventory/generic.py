@@ -1,8 +1,6 @@
 """
 A module for defining a generic device
 """
-
-
 from typing import Union
 
 
@@ -17,5 +15,6 @@ class GenericDevice:
     def __init__(self, **kwargs: Union[str, int, bool]) -> None:
         for key, value in kwargs.items():
             setattr(self, key, value)
+
         self.hostname = getattr(self, "hostname", "")
         self.type = getattr(self, "type", "generic")
