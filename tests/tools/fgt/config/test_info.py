@@ -38,5 +38,5 @@ def test_info_empty(file: Path) -> None:
 
 def test_info_no_files_in_dir() -> None:
     """test the info utility with directory and empty configuration file"""
-    with pytest.raises(GeneralWarning, match=r"there are no configuration files"):
+    with pytest.raises(GeneralWarning, match=r"There are no configuration files"):
         info(Path("tests/"))

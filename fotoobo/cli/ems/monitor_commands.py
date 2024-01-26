@@ -1,10 +1,9 @@
 """
 The FortiClient EMS monitor commands
 """
-
 import logging
 from pathlib import Path
-from typing import Union
+from typing import Optional, Union
 
 import typer
 
@@ -34,10 +33,10 @@ def callback(context: typer.Context) -> None:
     The ems get subcommand callback
 
     Args:
-        context (Context): the context object of the typer app
+        context: The context object of the typer app
     """
     cli_path.append(str(context.invoked_subcommand))
-    log.debug("about to execute command: '%s'", context.invoked_subcommand)
+    log.debug("About to execute command: '%s'", context.invoked_subcommand)
 
 
 @app.command(help="Monitor the FortiClient EMS connections.\n\n" + HELP_TEXT_TEMPLATE)
@@ -55,7 +54,7 @@ def connections(
         metavar="[output]",
     ),
     raw: bool = typer.Option(False, "-r", "--raw", help="Output raw data."),
-    template_file: Union[None, Path] = typer.Option(
+    template_file: Optional[Path] = typer.Option(
         None,
         "--template",
         "-t",
@@ -67,14 +66,13 @@ def connections(
     Monitor the FortiClient EMS connections.
     """
     result = monitor.connections(host)
-
     data = result.get_result(host)
 
     if output_file:
-        log.debug("output_file is: %s", output_file)
+        log.debug("output_file is: '%s'", output_file)
 
         if template_file:
-            log.debug("template_file is: %s", template_file)
+            log.debug("template_file is: '%s'", template_file)
             result.save_with_template(host, template_file, output_file)
 
         else:
@@ -120,7 +118,7 @@ def endpoint_management_status(
         metavar="[output]",
     ),
     raw: bool = typer.Option(False, "-r", "--raw", help="Output raw data."),
-    template_file: Union[None, Path] = typer.Option(
+    template_file: Optional[Path] = typer.Option(
         None,
         "--template",
         "-t",
@@ -132,11 +130,10 @@ def endpoint_management_status(
     Monitor the endpoint management status in FortiClient EMS.
     """
     result = monitor.endpoint_management_status(host)
-
     data = result.get_result(host)
 
     if output_file:
-        log.debug("output_file is: %s", output_file)
+        log.debug("output_file is: '%s'", output_file)
 
         if template_file:
             result.save_with_template(host, template_file, output_file)
@@ -179,7 +176,7 @@ def endpoint_os_versions(
         metavar="[output]",
     ),
     raw: bool = typer.Option(False, "-r", "--raw", help="Output raw data."),
-    template_file: Union[None, Path] = typer.Option(
+    template_file: Optional[Path] = typer.Option(
         None,
         "--template",
         "-t",
@@ -191,11 +188,10 @@ def endpoint_os_versions(
     Monitor the endpoint os versions in FortiClient EMS.
     """
     result = monitor.endpoint_os_versions(host)
-
     data = result.get_result(host)
 
     if output_file:
-        log.debug("output_file is: %s", output_file)
+        log.debug("output_file is: '%s'", output_file)
 
         if template_file:
             result.save_with_template(host, template_file, output_file)
@@ -221,6 +217,7 @@ def endpoint_os_versions(
             totals = []
             for _os, count in result.get_result(host)["fotoobo"].items():
                 totals.append({"os": _os[10:], "count": count})
+
             result.print_table_raw(totals, ["OS", "Total"], title="Summary")
 
 
@@ -242,7 +239,7 @@ def endpoint_outofsync(
         metavar="[output]",
     ),
     raw: bool = typer.Option(False, "-r", "--raw", help="Output raw data."),
-    template_file: Union[None, Path] = typer.Option(
+    template_file: Optional[Path] = typer.Option(
         None,
         "--template",
         "-t",
@@ -257,7 +254,7 @@ def endpoint_outofsync(
     data = result.get_result(host)
 
     if output_file:
-        log.debug("output_file is: %s", output_file)
+        log.debug("output_file is: '%s'", output_file)
 
         if template_file:
             result.save_with_template(host, template_file, output_file)
@@ -294,7 +291,7 @@ def license(  # pylint: disable=redefined-builtin
         metavar="[output]",
     ),
     raw: bool = typer.Option(False, "-r", "--raw", help="Output raw data."),
-    template_file: Union[None, Path] = typer.Option(
+    template_file: Optional[Path] = typer.Option(
         None,
         "--template",
         "-t",
@@ -309,7 +306,7 @@ def license(  # pylint: disable=redefined-builtin
     data = result.get_result(host)
 
     if output_file:
-        log.debug("output_file is: %s", output_file)
+        log.debug("output_file is: '%s'", output_file)
 
         if template_file:
             result.save_with_template(host, template_file, output_file)
@@ -322,10 +319,12 @@ def license(  # pylint: disable=redefined-builtin
         # if no output file is given just pretty print the output to the console
         if raw:
             result.print_raw()
+
         else:
             licenses = []
             for key, value in result.get_result(host)["data"].items():
                 licenses.append({"key": key, "value": value})
+
             result.print_table_raw(
                 licenses, ["Key", "Value"], title="FortiClient EMS license information"
             )
@@ -333,6 +332,7 @@ def license(  # pylint: disable=redefined-builtin
             licenses = []
             for key, value in result.get_result(host)["fotoobo"].items():
                 licenses.append({"key": key, "value": value})
+
             result.print_table_raw(
                 licenses, ["Key", "Value"], title="FortiClient EMS license summary"
             )
@@ -358,7 +358,6 @@ def system(
 
     else:
         _ = data.pop("license", {})  # pop "license" key as ist is not used (it's another command)
-
         result.print_table_raw(
             [
                 {"key": "hostname", "hostname": data["name"]},

@@ -6,7 +6,6 @@ going to be converted into a Fortinet asset.
 The Fortinet assets are referenced by their names. Even if we set an uuid we cannot use the uuid to
 access the asset. The uuid is only supported for network assets and not for service assets.
 """
-
 import copy
 import logging
 from pathlib import Path
@@ -44,13 +43,12 @@ class CheckpointConverter:
         Convert Checkpoint configuration objects into Fortinet syntax.
 
         Args:
-            obj_type (str): define the type of objects to convert
-            bulk_size: the bulk size to generate
+            obj_type:   Define the type of objects to convert
+            bulk_size:  The bulk size to generate
 
         Returns:
-            List: the converted assets
+            The converted assets
         """
-
         # fix for bulk problem with groups:
         # It seems that adding groups in bulk mode does not work correctly. If one of the entries
         # in a bulk set is invalid all of them are not added with the same error.
@@ -63,20 +61,20 @@ class CheckpointConverter:
         if obj_type not in self.assets:
             raise GeneralError(f"type '{obj_type}' is not present in the infile")
 
-        log.debug("converting asset type '%s'", obj_type)
-        log.debug("found '%s' asset(s)", len(self.assets[obj_type]))
+        log.debug("Converting asset type '%s'", obj_type)
+        log.debug("Found '%s' asset(s)", len(self.assets[obj_type]))
         assets = getattr(self, "_convert_" + obj_type)()
 
         # Now do the caching if cache_file is given
         if self.cache_file:
             cache: List[Any] = []
             if self.cache_file.is_file():
-                log.debug("found cache file '%s'", self.cache_file)
+                log.debug("Found cache file '%s'", self.cache_file)
                 cache = list(load_json_file(self.cache_file) or [])
 
             save_json_file(self.cache_file, assets)
             assets = [asset for asset in assets if asset not in cache]
-            log.debug("found '%s' new asset(s) not in cache", len(assets))
+            log.debug("Found '%s' new asset(s) not in cache", len(assets))
 
         # Now do the bulking
         i = 0
@@ -102,7 +100,7 @@ class CheckpointConverter:
         Convert Checkpoint host objects
 
         Returns:
-            Any: converted Fortinet objects
+            Converted Fortinet objects
         """
         objects = self.assets["hosts"]
         assets = []
@@ -127,7 +125,7 @@ class CheckpointConverter:
         Convert Checkpoint network objects
 
         Returns:
-            list: converted Fortinet objects
+            Converted Fortinet objects
         """
         objects = self.assets["networks"]
         assets = []
@@ -152,7 +150,7 @@ class CheckpointConverter:
         Convert Checkpoint address range objects
 
         Returns:
-            list: converted Fortinet objects
+            Converted Fortinet objects
         """
         objects = self.assets["address_ranges"]
         assets = []
@@ -179,7 +177,7 @@ class CheckpointConverter:
         Convert Checkpoint group objects
 
         Returns:
-            list: converted Fortinet objects
+            Converted Fortinet objects
         """
         objects = copy.deepcopy(self.assets["groups"])
         assets = []
@@ -194,8 +192,9 @@ class CheckpointConverter:
                         if net_object["uid"] == uid:
                             forti_members.append(net_object["name"])
                             found = True
+
                 if not found:
-                    log.error("Object with uid %s not found", uid)
+                    log.error("Object with uid '%s' not found", uid)
 
             param = {
                 "data": {
@@ -210,7 +209,7 @@ class CheckpointConverter:
                 assets.append(param)
 
             else:
-                log.error("network group %s is empty", url_name)
+                log.error("Network group '%s' is empty", url_name)
 
         return assets
 
@@ -219,7 +218,7 @@ class CheckpointConverter:
         Convert Checkpoint services_icmp objects
 
         Returns:
-            list: converted Fortinet objects
+            Converted Fortinet objects
         """
         objects = self.assets["services_icmp"]
         assets = []
@@ -247,7 +246,7 @@ class CheckpointConverter:
         Convert Checkpoint services_icmp6 objects
 
         Returns:
-            list: converted Fortinet objects
+            Converted Fortinet objects
         """
         objects = self.assets["services_icmp6"]
         assets = []
@@ -278,7 +277,7 @@ class CheckpointConverter:
         - "<5000" will be converted to "1-4999"
 
         Returns:
-            list: converted Fortinet objects
+            Converted Fortinet objects
         """
         objects = self.assets["services_tcp"]
         assets = []
@@ -287,10 +286,13 @@ class CheckpointConverter:
             url_name = obj["name"].replace("/", "\\/")
             if obj["port"][0] == ">":
                 port_range = str(int(obj["port"][1:]) + 1) + "-65535"
+
             elif obj["port"][0] == "<":
                 port_range = "1-" + str(int(obj["port"][1:]) - 1)
+
             else:
                 port_range = obj["port"]
+
             param: Dict[str, Any] = {
                 "data": {
                     "comment": obj["comments"],
@@ -303,6 +305,7 @@ class CheckpointConverter:
             if not obj["use-default-session-timeout"]:
                 if (ttl := obj["session-timeout"]) < 300:  # FortiGate does not allow ttl < 300
                     ttl = 300
+
                 param["data"]["session-ttl"] = str(ttl)
 
             assets.append(param)
@@ -319,7 +322,7 @@ class CheckpointConverter:
         to the _convert_services_tcp function.
 
         Returns:
-            list: converted Fortinet objects
+            Converted Fortinet objects
         """
         objects = self.assets["services_udp"]
         assets = []
@@ -328,10 +331,13 @@ class CheckpointConverter:
             url_name = obj["name"].replace("/", "\\/")
             if obj["port"][0] == ">":
                 port_range = str(int(obj["port"][1:]) + 1) + "-65535"
+
             elif obj["port"][0] == "<":
                 port_range = "1-" + str(int(obj["port"][1:]) - 1)
+
             else:
                 port_range = obj["port"]
+
             param: Dict[str, Any] = {
                 "data": {
                     "comment": obj["comments"],
@@ -344,6 +350,7 @@ class CheckpointConverter:
             if not obj["use-default-session-timeout"]:
                 if (ttl := obj["session-timeout"]) < 300:  # FortiGate does not allow ttl < 300
                     ttl = 300
+
                 param["data"]["session-ttl"] = str(ttl)
 
             assets.append(param)
@@ -355,7 +362,7 @@ class CheckpointConverter:
         Convert Checkpoint service group objects
 
         Returns:
-            list: converted Fortinet objects
+            Converted Fortinet objects
         """
         objects = copy.deepcopy(self.assets["service_groups"])
         assets = []
@@ -384,8 +391,10 @@ class CheckpointConverter:
                         if net_object["uid"] == uid:
                             forti_members.append(net_object["name"])
                             found = True
+
                 if not found:
-                    log.error("Object with uid %s not found", uid)
+                    log.error("Object with uid '%s' not found", uid)
+
             param = {
                 "data": {
                     "comment": obj["comments"],
@@ -398,6 +407,6 @@ class CheckpointConverter:
                 assets.append(param)
 
             else:
-                log.error("service group %s is empty", url_name)
+                log.error("service group '%s' is empty", url_name)
 
         return assets

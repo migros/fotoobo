@@ -90,7 +90,7 @@ class TestFortinet:
         )
         with pytest.raises(GeneralError) as err:
             FortinetTestClass("dummy").api(method, "url")
-        assert "connection timeout" in str(err.value)
+        assert "Connection timeout" in str(err.value)
 
     @staticmethod
     @pytest.mark.parametrize(
@@ -114,7 +114,7 @@ class TestFortinet:
             assert False
         except GeneralError as err:
             assert True
-            assert "unknown API method" in err.message
+            assert "Unknown API method" in err.message
 
     @staticmethod
     @pytest.mark.parametrize(
@@ -130,7 +130,7 @@ class TestFortinet:
         )
         with pytest.raises(GeneralError) as err:
             FortinetTestClass("dummy").api(method, "url")
-        assert "unknown connection error" in str(err.value)
+        assert "Unknown connection error" in str(err.value)
 
     @staticmethod
     @pytest.mark.parametrize(
@@ -141,12 +141,12 @@ class TestFortinet:
         (
             pytest.param(
                 "... Connection refused ...",
-                "connection refused",
+                "Connection refused",
                 id="connection refused",
             ),
             pytest.param(
                 "... Name or service not known ...",
-                "name or service not known",
+                "Name or service not known",
                 id="unknown hostname",
             ),
         ),
@@ -194,7 +194,7 @@ class TestFortinet:
         )
         with pytest.raises(GeneralError) as err:
             FortinetTestClass("dummy").api(method, "url")
-        assert "unable to get local issuer certificate" in str(err.value)
+        assert "Unable to get local issuer certificate" in str(err.value)
 
     @staticmethod
     @pytest.mark.parametrize(

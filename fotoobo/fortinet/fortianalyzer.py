@@ -21,10 +21,10 @@ class FortiAnalyzer(FortiManager):
         Set some initial parameters.
 
         Args:
-            hostname (str): the hostname of the FortiGate to connect to
-            username (str): username
-            password (str): password
-            **kwargs (dict): see Fortinet class for available arguments
+            hostname: The hostname of the FortiGate to connect to
+            username: Username
+            password: Password
+            **kwargs: See Fortinet class for available arguments
         """
         super().__init__(hostname, username, password, **kwargs)
         self.type = "fortianalyzer"
@@ -34,7 +34,7 @@ class FortiAnalyzer(FortiManager):
         Get FortiAnalyzer version
 
         Returns:
-            str: version
+            FortiAnalyzer version
         """
         faz_version = super().get_version()
         return faz_version

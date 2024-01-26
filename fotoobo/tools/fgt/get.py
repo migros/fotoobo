@@ -1,7 +1,6 @@
 """
 FortiGate get version utility
 """
-
 import concurrent.futures
 import logging
 from typing import Optional, Tuple
@@ -23,8 +22,8 @@ def version(host: Optional[str] = None) -> Result[str]:
     Get the version(s) of one ore more FortiGates.
 
     Args:
-        host:   The host from the inventory to get the version. If you omit host, it will run over
-                all FortiGates in the inventory.
+        host: The host from the inventory to get the version. If you omit host, it will run over
+              all FortiGates in the inventory.
 
     Returns:
         The Result object with all the results
@@ -37,16 +36,17 @@ def version(host: Optional[str] = None) -> Result[str]:
         version number status and returns it.
 
         Args:
-            name:   The name of the FortiGate (as defined in the inventory)
-            fgt:    The FortiGate object to query
+            name: The name of the FortiGate (as defined in the inventory)
+            fgt:  The FortiGate object to query
 
         Returns:
             name:   The name of the FortiGate (as defined in the inventory)
             status: The HA status of the FortiGate (fgt)
         """
-        log.debug("getting FortiGate version for %s", name)
+        log.debug("Getting FortiGate version for '%s'", name)
         try:
             fortigate_version = fgt.get_version()
+
         except (GeneralWarning, GeneralError) as exception:
             fortigate_version = f"unknown due to {exception.message}"
 
@@ -54,7 +54,6 @@ def version(host: Optional[str] = None) -> Result[str]:
 
     inventory = Inventory(config.inventory_file)
     fgts = inventory.get(host, "fortigate")
-
     result = Result[str]()
 
     with Progress() as progress:

@@ -1,8 +1,6 @@
 """
 init.py
 """
-
-
 from .generic import GenericDevice
 from .inventory import Inventory
 

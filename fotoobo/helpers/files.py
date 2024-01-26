@@ -11,7 +11,6 @@ from zipfile import ZIP_DEFLATED, ZipFile
 
 import yaml
 
-
 from fotoobo.exceptions import GeneralError
 
 log = logging.getLogger("fotoobo")
@@ -30,6 +29,7 @@ def create_dir(directory: Path) -> None:
     if not directory.is_dir():
         try:
             directory.mkdir(parents=True)
+
         except OSError as err:
             raise GeneralError(f"Unable to create directory {directory}") from err
 
@@ -39,10 +39,8 @@ def file_to_ftp(file: Path, server: Any) -> int:
     Upload a file to a ftp server.
 
     Args:
-        file (Path): The source file to upload
-
-        server (dict): the ftp sever definition dict containing the following keys:
-
+        file:   The source file to upload
+        server: The ftp sever definition dict containing the following keys:
             * hostname
             * directory
             * username
@@ -50,12 +48,14 @@ def file_to_ftp(file: Path, server: Any) -> int:
             * protocol (default="sftp")
 
     Returns:
-        int: return code
+        Return code
     """
     return_code = 0
+
     if file.is_file():
         if hasattr(server, "protocol"):
             protocol = server.protocol
+
         else:
             protocol = "sftp"
 
@@ -65,6 +65,7 @@ def file_to_ftp(file: Path, server: Any) -> int:
                 ftp.sendcmd(f"USER {server.username}")
                 ftp.sendcmd(f"PASS {server.password}")
                 ftp.cwd(server.directory)
+
                 with file.open("rb") as ftp_file:
                     response = ftp.storbinary(f"STOR {file.name}", ftp_file)
                     if response != "226 Transfer complete.":
@@ -75,6 +76,7 @@ def file_to_ftp(file: Path, server: Any) -> int:
             with FTP(server.hostname, server.username, server.password) as ftp:
                 log.debug("FTP transfer for '%s'", server.hostname)
                 ftp.cwd(server.directory)
+
                 with file.open("rb") as ftp_file:
                     response = ftp.storbinary(f"STOR {file.name}", ftp_file)
                     if response != "226 Transfer complete.":
@@ -95,15 +97,13 @@ def file_to_zip(src: Path, dst: Path, level: int = 9) -> None:
     Zip (compress) a file.
 
     Args:
-        src (Path): the source file
-
-        dst (Path): the destination file (zipfile). If the dst file ends with extension '.zip'
-        the inner file will omit the '.zip' extension.
-
-        level (int): compression level, as accepted by `zipfile.ZipFile`
+        src:   The source file
+        dst:   The destination file (zipfile). If the dst file ends with extension '.zip' the inner
+               file will omit the '.zip' extension.
+        level: Compression level, as accepted by `zipfile.ZipFile`
 
     Returns:
-        int: return code
+        Return code
     """
     if level < 0 or level > 9:
         raise GeneralError("zip level must between 0 and 9")
@@ -119,10 +119,10 @@ def load_json_file(json_file: Path) -> Union[List[Any], Dict[str, Any], None]:
     Loads the content of a json file into a list or dict.
 
     Args:
-        json_file (Path): The path to the json file to load
+        json_file: The path to the json file to load
 
     Returns:
-        list|dict|None: list or dict with json data from filename or None if file is not found
+        List or dict with json data from filename or None if file is not found
     """
     content = None
     if json_file.is_file():
@@ -137,10 +137,10 @@ def load_yaml_file(yaml_file: Path) -> Union[List[Any], Dict[str, Any], None]:
     Loads the content of a yaml file into a list or dict.
 
     Args:
-        yaml_file (Path): The file of the yaml file to load
+        yaml_file: The file of the yaml file to load
 
     Returns:
-        list|dict: yaml data from filename
+        Yaml data from filename
     """
     content = None
     if yaml_file.is_file():
@@ -154,8 +154,11 @@ def save_json_file(json_file: Path, data: Union[List[Any], Dict[Any, Any]]) -> b
     Saves the content of a list or dict to a json file.
 
     Args:
-        json_file (Path): The file to write the json dato into
-        data (list|dict): data to save
+        json_file: The file to write the data into
+        data:      The data to save
+
+        Returns:
+        True if data was valid
     """
     status = True
     if isinstance(data, (list, dict)):
@@ -173,12 +176,11 @@ def save_yaml_file(yaml_file: Path, data: Union[List[Any], Dict[str, Any]]) -> b
     Saves the content of a list or dict to a yaml file.
 
     Args:
-        yaml_file (Path): the file to write the yaml data into
-
-        data (list|dict): data to save
+        yaml_file: The file to write the data into
+        data:      The data to save
 
     Returns:
-        bool: returns true if data was valid
+        True if data was valid
     """
     status = True
     if isinstance(data, (list, dict)):

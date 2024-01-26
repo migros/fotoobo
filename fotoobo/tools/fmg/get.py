@@ -1,7 +1,6 @@
 """
 FortiManager get ADOMs utility
 """
-
 import logging
 from typing import Any, Dict, List, Optional, Union
 
@@ -18,17 +17,15 @@ def adoms(host: str) -> Result[str]:
     FortiManager get ADOMs
 
     Args:
-        host (str): the host from the inventory to get the ADOMs list from
+        host: The host from the inventory to get the ADOMs list from
 
     Returns:
-        list of dict: list of ADOMs where ADOM is a dict with keys: name, version
+        List of ADOMs where ADOM is a dict with keys: name, version
     """
     inventory = Inventory(config.inventory_file)
     fmg = inventory.get_item(host, "fortimanager")
     result = Result[str]()
-
     log.debug("FortiManager get adoms ...")
-
     fmg.login()
     fmg_adoms = fmg.get_adoms()
 
@@ -36,7 +33,6 @@ def adoms(host: str) -> Result[str]:
         result.push_result(adom["name"], f"{adom['os_ver']}.{adom['mr']}")
 
     fmg.logout()
-
     return result
 
 
@@ -46,10 +42,10 @@ def devices(host: str) -> Result[Dict[str, Union[str, List[str]]]]:
     In a cluster only the cluster device is returned, not the physical nodes
 
     Args:
-        host (str): the FortiManager from the inventory to get the Fortinet devices list from
+        host: The FortiManager from the inventory to get the Fortinet devices list from
 
     Returns:
-        list of dict: list of devices where
+        List of devices
     """
     inventory = Inventory(config.inventory_file)
     fmg = inventory.get_item(host, "fortimanager")
@@ -69,6 +65,7 @@ def devices(host: str) -> Result[Dict[str, Union[str, List[str]]]]:
     response = fmg.api("post", payload=payload)
     fmg.logout()
     result = Result[Dict[str, Union[str, List[str]]]]()
+
     for device in response.json()["result"][0]["data"]:
         data = {
             "version": f"{device['os_ver']}.{device['mr']}.{device['patch']}",
@@ -91,6 +88,15 @@ def policy(
 ) -> Result[List[Dict[str, Any]]]:
     """
     FortiManager get policy
+
+    Args:
+        host:
+        adom:
+        policy_name:
+        fields:
+
+    Returns:
+        Result
     """
     fields = fields or [
         "status",
@@ -135,7 +141,6 @@ def policy(
         policies.append({field: pol.get(field, None) for field in fields})
 
     fmg.logout()
-
     out_result = Result[List[Dict[str, Any]]]()
     out_result.push_result(host, policies)
     return out_result
@@ -146,10 +151,10 @@ def version(host: str) -> Result[str]:
     FortiManager get version
 
     Args:
-        host (str): the host from the inventory to get the version
+        host: The host from the inventory to get the version
 
     Returns:
-        Dict[str, str]: version data in a dict with keys: host, version
+        Version data in a dict with keys: host, version
     """
     inventory = Inventory(config.inventory_file)
     fmg = inventory.get_item(host, "fortimanager")
@@ -157,5 +162,4 @@ def version(host: str) -> Result[str]:
     fmg_version = fmg.get_version()
     result = Result[str]()
     result.push_result(host, fmg_version)
-
     return result

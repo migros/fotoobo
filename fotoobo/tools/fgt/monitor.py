@@ -1,7 +1,6 @@
 """
 FortiGate check hamaster utility
 """
-
 import concurrent.futures
 import logging
 from typing import Dict, Tuple
@@ -25,8 +24,8 @@ def hamaster(host: str) -> Result[str]:  # pylint: disable=too-many-locals
     search for the devices we found in Fortimanager in our inventory to connect to to them.
 
     Args:
-        host:   The FortiManager host from the inventory to get the device list from. If you omit
-                host, it will run over the default FortiManager (fmg).
+        host: The FortiManager host from the inventory to get the device list from. If you omit
+              host, it will run over the default FortiManager (fmg).
 
     Returns:
         The Result object with all the results
@@ -39,8 +38,8 @@ def hamaster(host: str) -> Result[str]:  # pylint: disable=too-many-locals
         HA master status and returns it.
 
         Args:
-            name:   The name of the FortiGate (as defined in the inventory)
-            fgt:    The FortiGate object to query
+            name: The name of the FortiGate (as defined in the inventory)
+            fgt:  The FortiGate object to query
 
         Returns:
             name:   The name of the FortiGate (as defined in the inventory)
@@ -49,6 +48,7 @@ def hamaster(host: str) -> Result[str]:  # pylint: disable=too-many-locals
         response = fgt.api("get", "/monitor/system/ha-checksums")
         ha_checksums = response.json()
         status: str = "is not the expected master"
+
         for node in ha_checksums["results"]:
             if node["serial_no"] == ha_checksums["serial"]:
                 if node["is_root_master"] == 1:
@@ -58,7 +58,6 @@ def hamaster(host: str) -> Result[str]:  # pylint: disable=too-many-locals
 
     inventory = Inventory(config.inventory_file)
     fmg = inventory.get_item(host, "fortimanager")
-
     payload = {
         "method": "get",
         "params": [
@@ -73,9 +72,9 @@ def hamaster(host: str) -> Result[str]:  # pylint: disable=too-many-locals
     fmg.login()
     response = fmg.api("post", payload=payload)
     fmg.logout()
-
     result = Result[str]()
     fgts: Dict[str, FortiGate] = {}
+
     for device in response.json()["result"][0]["data"]:
         if device["ha_mode"] == 1:
             expected_master = ""
@@ -96,11 +95,11 @@ def hamaster(host: str) -> Result[str]:  # pylint: disable=too-many-locals
 
             # There is a KeyError if a designated cluster master is not defined in the inventory
             except KeyError:
-                log.debug("device %s not found in inventory", expected_master)
+                log.debug("Device '%s' not found in inventory", expected_master)
                 result.push_result(expected_master, "not found in inventory")
 
     with Progress() as progress:
-        task = progress.add_task("getting FortiGate HA status...", total=len(fgts))
+        task = progress.add_task("Getting FortiGate HA status...", total=len(fgts))
         with concurrent.futures.ThreadPoolExecutor(max_workers=10) as executor:
             futures = []
             for name, fgt in fgts.items():

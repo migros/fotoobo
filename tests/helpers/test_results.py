@@ -4,7 +4,7 @@ Test the results helper class
 
 
 from pathlib import Path
-from typing import Any, Dict, List, Tuple, Union
+from typing import Any, Dict, List, Optional, Tuple, Union
 from unittest.mock import MagicMock
 
 import pytest
@@ -42,7 +42,7 @@ class TestResults:
     )
     def test_push_result(
         inputs: Union[str, List[str]],
-        successful: Union[bool, None],
+        successful: Optional[bool],
         expected_result: Dict[str, Any],
     ) -> None:
         """Test the push_result() method"""
@@ -72,7 +72,7 @@ class TestResults:
             pytest.param("test message", "dummy", id="some custom level"),
         ),
     )
-    def test_push_message(message: str, level: Union[None, str]) -> None:
+    def test_push_message(message: str, level: Optional[str]) -> None:
         """Test the push_message() method"""
 
         result = Result[Any]()

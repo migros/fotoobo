@@ -31,22 +31,21 @@ class Fortinet(ABC):
         increase. (https://docs.python-requests.org/en/master/user/advanced/)
 
         Args:
-            hostname (str): the hostname of the Fortinet device to connect to
+            hostname: The hostname of the Fortinet device to connect to
 
         Keyword Args:
-            https_port (int): The tcp port number to connect to the https api
+            https_port: The tcp port number to connect to the https api
                 If you do not specify a port number it is set to 443 by default.
-            proxy (str): proxy server to use to connect to the Fortinet device
+            proxy: The Proxy server to use to connect to the Fortinet device
                 If you need to connect to your Fortinet device through a proxy server you can
                 set it here as as string. If needed you may append the proxy server port with a
                 column to the proxy server. e.g. "proxy.local:8000".
-            ssl_verify (bool | str): enable/disable SSL certificate check
+            ssl_verify: Enable or disable SSL certificate check
                 When ssl_verify is enabled you have to install a trusted SSL certificate onto
                 the device you wish to connect to. If you set ssl_verify to false it will also
                 disable the warnings in urllib3. This prevents unwanted SSL warnings to be
                 logged.
-
-            timeout (float): connection timeout in seconds
+            timeout: Connection timeout in seconds
         """
         self.api_url: str = ""
         self.hostname: str = hostname
@@ -54,6 +53,7 @@ class Fortinet(ABC):
         self.session = requests.Session()
         self.session.trust_env = False
         self.session.proxies: Dict[str, Any] = {"http": None, "https": None}  # type: ignore
+
         if proxy := kwargs.get("proxy", ""):
             self.session.proxies = {"http": f"{proxy}", "https": f"{proxy}"}
 
@@ -77,14 +77,15 @@ class Fortinet(ABC):
         API request to a Fortinet device.
 
         Args:
-            method (str): request method from [get, post]
-            url (str): rest API URL to request data from
-            params (dict): dictionary with parameters (if needed)
-            payload (dict): JSON body for post requests (if needed)
-            timeout (float): the requests read timeout
+            method:  Request method from [get, post]
+            url:     Rest API URL to request data from
+            headers: Dictionary with headers (if needed)
+            params:  Dictionary with parameters (if needed)
+            payload: JSON body for post requests (if needed)
+            timeout: The requests read timeout
 
         Returns:
-            response: response from the request
+            Response from the request
         """
         full_url = f"{self.api_url}/{url.strip('/')}".strip("/")
         params = params or {}
@@ -111,22 +112,23 @@ class Fortinet(ABC):
                 )
 
             else:
-                log.debug("unknown API method")
-                raise GeneralError("unknown API method")
+                log.debug("Unknown API method")
+                raise GeneralError("Unknown API method")
 
         except requests.exceptions.ConnectTimeout as err:
             log.debug(err)
-            raise GeneralError(f"connection timeout ({self.hostname})") from err
+            raise GeneralError(f"Connection timeout ({self.hostname})") from err
 
         except requests.exceptions.ConnectionError as err:
             log.debug(err)
-            error = "unknown connection error"
+            error = "Unknown connection error"
+
             try:
                 if "Name or service not known" in err.args[0].reason.args[0]:
-                    error = "name or service not known"
+                    error = "Name or service not known"
 
                 elif "Connection refused" in err.args[0].reason.args[0]:
-                    error = "connection refused"
+                    error = "Connection refused"
 
             except (IndexError, AttributeError, TypeError):
                 pass
@@ -136,7 +138,7 @@ class Fortinet(ABC):
                     err.args[0].reason.args[0].verify_message
                     == "unable to get local issuer certificate"
                 ):
-                    error = "unable to get local issuer certificate"
+                    error = "Unable to get local issuer certificate"
             except (IndexError, AttributeError, TypeError):
                 pass
 
@@ -147,7 +149,7 @@ class Fortinet(ABC):
             raise GeneralError(f"read timeout ({self.hostname})") from err
 
         log.debug(
-            'request time: [bold green]%2dms[/] "%s %s"',
+            'Request time: [bold green]%2dms[/] "%s %s"',
             ((time() - start) * 1000),
             method.upper(),
             full_url,
@@ -155,6 +157,7 @@ class Fortinet(ABC):
 
         try:
             response.raise_for_status()
+
         except requests.exceptions.HTTPError as err:
             raise APIError(err) from err
 
@@ -166,7 +169,7 @@ class Fortinet(ABC):
         Returns the vendor of the product (which always is Fortinet).
 
         Returns:
-            str: always returns "Fortinet" (what a cool method ;-)
+            Always returns "Fortinet" (what a cool method ;-)
         """
         return "Fortinet"
 

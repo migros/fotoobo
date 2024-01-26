@@ -9,7 +9,7 @@ line option, the command line option takes precedence over the global configurat
 import os
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any, Dict, Optional, Union
+from typing import Any, Dict, Optional
 
 from fotoobo.exceptions import GeneralError
 from fotoobo.helpers.files import load_yaml_file
@@ -25,8 +25,8 @@ class Config:
 
     # set default values
     inventory_file: Path = Path("inventory.yaml")
-    logging: Union[Dict[str, Any], None] = None
-    audit_logging: Union[Dict[str, Any], None] = None
+    logging: Optional[Dict[str, Any]] = None
+    audit_logging: Optional[Dict[str, Any]] = None
     no_logo: bool = False
     cli_info: Dict[str, Any] = field(default_factory=dict)
     vault: Dict[str, str] = field(default_factory=dict)
@@ -40,7 +40,7 @@ class Config:
         option not present in the configuration file is set with its default.
 
         Args:
-            config_file (Path): fotoobo configuration file to load configuration from
+            config_file: fotoobo configuration file to load configuration from
         """
 
         # If no explicit config file has been given, search at the predefined places

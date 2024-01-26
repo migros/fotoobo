@@ -100,7 +100,7 @@ def test_cli_app_fgt_config_check_empty_config() -> None:
 
 def test_cli_app_fgt_config_check_nonexist_config_file() -> None:
     """Test cli options and commands for fgt config check with an nonexisting configuration"""
-    with pytest.raises(GeneralWarning, match=r"there are no"):
+    with pytest.raises(GeneralWarning, match=r"There are no"):
         runner.invoke(
             app,
             [
@@ -135,7 +135,7 @@ def test_cli_app_fgt_config_check_dir() -> None:
 
 def test_cli_app_fgt_config_check_invalid_bundle_file() -> None:
     """Test cli options and commands for fgt config check with an invalid check bundle file"""
-    with pytest.raises(GeneralError, match=r"no valid bundle file"):
+    with pytest.raises(GeneralError, match=r"No valid bundle file"):
         runner.invoke(
             app,
             [
