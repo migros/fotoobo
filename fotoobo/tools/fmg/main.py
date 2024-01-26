@@ -64,7 +64,7 @@ def post(file: Path, adom: str, host: str) -> Result[str]:
     POST the given configuration from a JSON file to the FortiManager
 
     Args:
-        file: The configuration file to oad the configuration from
+        file: The configuration file to add the configuration from
         adom: The ADOM to assign the global policy to
         host: The FortiManager defined in inventory
 

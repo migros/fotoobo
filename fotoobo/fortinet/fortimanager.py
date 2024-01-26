@@ -25,7 +25,7 @@ class FortiManager(Fortinet):
 
         Args:
             hostname: The hostname of the FortiGate to connect to
-            username: The Username
+            username: The username
             password: The password
 
         Keyword Args:

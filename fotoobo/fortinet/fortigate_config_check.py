@@ -33,7 +33,7 @@ class FortiGateConfigCheck:
 
         Args:
             chk: The check which generated the message
-            msg: The message to sent to the messages list
+            msg: The message to send to the messages list
         """
         check_name = f" (check_name: [var]{chk['name']}[/])" if "name" in chk else ""
         message = f"[chk]{chk['type']}[/]: {msg}{check_name}"
