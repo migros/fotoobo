@@ -109,8 +109,10 @@ class FortiClientEMS(Fortinet):
         """
         status = 401
         cookie = Path(self.cookie_path).expanduser() / f"{self.hostname}.cookie"
+
         if self.cookie_path:
             log.debug("Searching cookie in '%s'", cookie)
+
             if cookie.is_file():
                 log.debug("Cookie exists. Skipping login")
                 with cookie.open("rb") as cookie_file:
@@ -139,6 +141,7 @@ class FortiClientEMS(Fortinet):
             log.debug("Login to '%s'", self.hostname)
             payload = {"name": self.username, "password": self.password}
             response = self.api("post", "/auth/signin", payload=payload)
+
             if response.status_code == 200 and self.cookie_path:
                 log.debug("Saving cookie for '%s'", self.hostname)
 

@@ -27,6 +27,7 @@ def inventory() -> Result[Dict[str, str]]:
     log.debug("Print fotoobo inventory information")
     result = Result[Dict[str, str]]()
     _inventory = Inventory(config.inventory_file)
+
     for host, data in _inventory.assets.items():
         result.push_result(host, {"hostname": data.hostname, "type": data.type})
 
@@ -41,9 +42,9 @@ def version(verbose: bool = False) -> Result[List[Dict[str, str]]]:
         verbose: Whether we want verbose output
     """
     log.debug("Print fotoobo version information: '%s'", __version__)
-
     result = Result[List[Dict[str, str]]]()
     versions = [{"module": "fotoobo", "version": __version__}]
+
     if verbose:
         modules = ["jinja2", "PyYAML", "requests", "rich", "typer"]
 

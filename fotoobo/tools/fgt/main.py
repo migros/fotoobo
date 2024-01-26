@@ -50,6 +50,7 @@ def backup(
         """
         log.debug("Backup FortiGate '%s'", name)
         data: str = ""
+
         try:
             data = fgt.backup()
             if data.startswith("#config-version"):

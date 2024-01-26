@@ -79,6 +79,7 @@ class Inventory:
         log.debug("Getting assets with name '%s' and type '%s'", name, type)
         name_pattern = f"^{name}$".replace("*", ".*")
         assets = {}
+
         for _name, _asset in self.assets.items():
             if not name and not type:
                 assets[_name] = _asset
@@ -118,6 +119,7 @@ class Inventory:
             GeneralWarning: If the specified type does not match the type of the item
         """
         log.debug("Getting asset with name '%s'", name)
+
         try:
             asset = self.assets[name]
 

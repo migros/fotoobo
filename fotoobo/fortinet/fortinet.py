@@ -53,6 +53,7 @@ class Fortinet(ABC):
         self.session = requests.Session()
         self.session.trust_env = False
         self.session.proxies: Dict[str, Any] = {"http": None, "https": None}  # type: ignore
+
         if proxy := kwargs.get("proxy", ""):
             self.session.proxies = {"http": f"{proxy}", "https": f"{proxy}"}
 
@@ -91,6 +92,7 @@ class Fortinet(ABC):
         payload = payload or {}
         timeout = timeout or self.timeout
         start = time()
+
         try:
             if method.lower() == "get":
                 response = self.session.get(
@@ -120,6 +122,7 @@ class Fortinet(ABC):
         except requests.exceptions.ConnectionError as err:
             log.debug(err)
             error = "Unknown connection error"
+
             try:
                 if "Name or service not known" in err.args[0].reason.args[0]:
                     error = "Name or service not known"

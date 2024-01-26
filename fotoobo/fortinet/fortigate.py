@@ -92,6 +92,7 @@ class FortiGate(Fortinet):
             FortiGate version
         """
         fgt_version: str = ""
+
         try:
             response = self.api("get", "monitor/system/status")
 

@@ -28,10 +28,12 @@ def assign(adoms: str, policy: str, host: str, timeout: int = 60) -> Result[str]
     inventory = Inventory(config.inventory_file)
     fmg = inventory.get_item(host, "fortimanager")
     log.debug("Assigning global policy/objects to ADOM '%s'", adoms)
+
     task_id = fmg.assign_all_objects(adoms=adoms, policy=policy)
     if task_id > 0:
         log.info("Created FortiManager task id '%s'", task_id)
         messages = fmg.wait_for_task(task_id, timeout=timeout)
+
         for message in messages:
             level = "debug" if message["state"] == 4 else "error"
             elapsed = (
@@ -40,12 +42,14 @@ def assign(adoms: str, policy: str, host: str, timeout: int = 60) -> Result[str]
                 else "unfinished"
             )
             result_message = f"{message['task_id']}: {message['name']}"
+
             if message["detail"]:
                 result_message += f" / {message['detail']}"
 
             result_message += f" ({elapsed})"
             getattr(log, level)(result_message)
             result.push_message(host, result_message, level)
+
             if message["history"]:
                 for line in message["history"]:
                     result_message = f"- {line['detail']}"
@@ -78,6 +82,7 @@ def post(file: Path, adom: str, host: str) -> Result[str]:
     fmg = inventory.get_item(host, "fortimanager")
     log.debug("FortiManager post command ...")
     log.info("Start posting assets to '%s'", host + "/" + adom)
+
     result_list = fmg.post(adom, payloads)
     if result_list:
         for line in result_list:

@@ -29,6 +29,7 @@ def checkpoint(
     """
     log.info("Start converting checkpoint assets of type '%s'", obj_type)
     result = Result[List[Any]]()
+
     if cache_dir:
         create_dir(cache_dir)
         cache_file = Path(cache_dir, conversion_id)

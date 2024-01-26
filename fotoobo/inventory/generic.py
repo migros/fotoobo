@@ -13,6 +13,7 @@ class GenericDevice:
     """
 
     def __init__(self, **kwargs: Union[str, int, bool]) -> None:
+        """init"""
         for key, value in kwargs.items():
             setattr(self, key, value)
 

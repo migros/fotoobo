@@ -33,6 +33,7 @@ def connections(host: str) -> Result[Dict[str, Any]]:
     ems.login()
     response = ems.api("get", "/endpoints/connection/donut")
     data: Dict[str, Any] = {"data": list(response.json()["data"]), "fotoobo": {}}
+
     for item in data["data"]:
         data["fotoobo"][item["token"]] = item["value"]
 
@@ -64,6 +65,7 @@ def endpoint_management_status(host: str) -> Result[Dict[str, Any]]:
     response = ems.api("get", "/endpoints/management/donut")
     data = {"data": dict(response.json())["data"]}
     managed = unmanaged = 0
+
     for item in data["data"]:
         if item["token"] == "managed":
             managed = item["value"]
@@ -127,10 +129,10 @@ def endpoint_os_versions(host: str) -> Result[Dict[str, Dict[str, Any]]]:
     """
     result = Result[Dict[str, Dict[str, Any]]]()
     inventory = Inventory(config.inventory_file)
-
     ems: FortiClientEMS = inventory.get_item(host, "forticlientems")
     ems.login()
     data: Dict[str, Any] = {"data": {}, "fotoobo": {}}
+
     for fctversion_os in ["fctversionwindows", "fctversionmac", "fctversionlinux"]:
         response = ems.api("get", f"/endpoints/{fctversion_os}/donut")
         data["data"][fctversion_os] = dict(response.json())["data"]
@@ -205,16 +207,19 @@ def license(host: str) -> Result[Dict[str, Any]]:  # pylint: disable=redefined-b
     data = {}
     data["data"] = dict(response.json()["data"])
     license_expiry_days = 0
+
     for lic in data["data"]["licenses"]:
         log.debug("License expiry for '%s': '%s'", lic["type"], lic["expiry_date"])
         license_expiry = datetime.strptime(lic["expiry_date"], "%Y-%m-%dT%H:%M:%S")
         expiry_days = int((license_expiry - datetime.now()).days)
+
         if expiry_days < license_expiry_days or license_expiry_days == 0:
             license_expiry_days = expiry_days
 
     log.debug("Days to license expiry: '%s'", license_expiry_days)
     data["fotoobo"] = {}
     data["fotoobo"]["license_expiry_days"] = license_expiry_days
+
     for key in data["data"]["seats"]:
         if data["data"]["seats"][key] > 0:
             log.debug(f"{key} license count: '%s'", data["data"]["seats"][key])

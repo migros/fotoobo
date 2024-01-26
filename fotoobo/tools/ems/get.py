@@ -49,6 +49,7 @@ def workgroups(host: str, custom: bool = False) -> Result[List[Dict[str, str]]]:
     log.debug("FortiClient EMS get workgroups ...")
     ems.login()
     raw_data = ems.api("get", f"/workgroups/index?custom={custom}").json()["data"]
+
     for entry in raw_data:
         result.push_result(entry["name"], entry["total_devices"])
 

@@ -33,6 +33,7 @@ def check(config: Path, bundles: Path) -> Result[List[str]]:
     """
     files: List[Path] = []
     config = Path(config)
+
     if config.is_file():
         files.append(config)
 

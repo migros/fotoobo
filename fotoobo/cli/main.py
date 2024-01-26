@@ -82,10 +82,12 @@ def callback(  # pylint: disable=too-many-arguments
     """
     config.load_configuration(config_file)
     config.no_logo = True if nologo else config.no_logo
+
     if log_level:
         log_level = log_level.upper()
 
     Log.configure_logging(log_quiet, log_level)
+
     if not config.no_logo:
         print_logo()
 

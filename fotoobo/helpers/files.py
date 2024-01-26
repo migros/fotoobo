@@ -51,6 +51,7 @@ def file_to_ftp(file: Path, server: Any) -> int:
         Return code
     """
     return_code = 0
+
     if file.is_file():
         if hasattr(server, "protocol"):
             protocol = server.protocol
@@ -64,6 +65,7 @@ def file_to_ftp(file: Path, server: Any) -> int:
                 ftp.sendcmd(f"USER {server.username}")
                 ftp.sendcmd(f"PASS {server.password}")
                 ftp.cwd(server.directory)
+
                 with file.open("rb") as ftp_file:
                     response = ftp.storbinary(f"STOR {file.name}", ftp_file)
                     if response != "226 Transfer complete.":
@@ -74,6 +76,7 @@ def file_to_ftp(file: Path, server: Any) -> int:
             with FTP(server.hostname, server.username, server.password) as ftp:
                 log.debug("FTP transfer for '%s'", server.hostname)
                 ftp.cwd(server.directory)
+
                 with file.open("rb") as ftp_file:
                     response = ftp.storbinary(f"STOR {file.name}", ftp_file)
                     if response != "226 Transfer complete.":

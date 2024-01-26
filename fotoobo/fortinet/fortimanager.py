@@ -120,6 +120,7 @@ class FortiManager(Fortinet):
         """
         task_id = 0
         adom_payload = []
+
         for adom in adoms.split(","):
             adom_payload.append({"adom": adom, "excluded": "disable"})
 
@@ -137,6 +138,7 @@ class FortiManager(Fortinet):
             ],
         }
         response = self.api("post", payload=payload)
+
         if response.status_code == 200:
             if response.json()["result"][0]["status"]["code"] == 0:
                 task_id = response.json()["result"][0]["data"]["task"]
@@ -163,9 +165,11 @@ class FortiManager(Fortinet):
         """
         if not ignored_adoms:
             ignored_adoms = self.ignored_adoms
+
         fmg_adoms: List[Any] = []
         payload = {"method": "get", "params": [{"url": "/dvmdb/adom"}]}
         response = self.api("post", payload=payload)
+
         for adom in response.json()["result"][0]["data"]:
             if not adom["name"] in ignored_adoms:
                 fmg_adoms.append(adom)
@@ -182,6 +186,7 @@ class FortiManager(Fortinet):
         fmg_version: str = ""
         payload = {"method": "get", "params": [{"url": "/sys/status"}]}
         response = self.api("post", payload=payload)
+
         if response.status_code == 200:
             try:
                 match: Optional[re.Match[Any]] = re.search(
@@ -210,6 +215,7 @@ class FortiManager(Fortinet):
             session_file = Path(self.session_path).expanduser() / f"{self.hostname}.key"
             if session_file.exists():
                 log.debug("Loading session key from file '%s'", session_file)
+
                 with session_file.open(encoding="UTF-8") as file:
                     self.session_key = file.read()
                     payload = {
@@ -219,11 +225,13 @@ class FortiManager(Fortinet):
                     }
                     response = super().api("post", payload=payload)
                     status = response.status_code
+
                     if (
                         response.status_code == 200
                         and response.json()["result"][0]["status"]["code"] == 0
                     ):
                         log.debug("Session key is still valid")
+
                     else:
                         log.debug("Session key is invalid")
                         self.session_key = ""
@@ -247,8 +255,10 @@ class FortiManager(Fortinet):
                 if "session" in response.json():
                     log.debug("store session key")
                     self.session_key = response.json()["session"]
+
                     if self.session_path:
                         log.debug("Saving session key into file '%s'", session_file)
+
                         with session_file.open("w", encoding="UTF-8") as file:
                             file.write(self.session_key)
 
@@ -333,6 +343,7 @@ class FortiManager(Fortinet):
             "params": [{"url": f"/task/task/{task_id}"}],
         }
         percent_cache = -1
+
         while timeout:
             response = self.api("post", payload=payload)
             percent = response.json()["result"][0]["data"]["percent"]
@@ -352,6 +363,7 @@ class FortiManager(Fortinet):
             "params": [{"url": f"/task/task/{task_id}/line"}],
         }
         response = self.api("post", payload=payload)
+
         if response.status_code == 200:
             messages = response.json()["result"][0]["data"]
             # enrich the message(s) with the task_id (otherwise it will be lost)

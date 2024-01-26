@@ -130,9 +130,11 @@ class Client:  # pylint: disable=too-many-instance-attributes
         log.debug("Get new token from '%s'", url)
         data = {"role_id": self.role_id, "secret_id": self.secret_id}
         self.token = ""
+
         try:
             response = requests.post(url, data=data, timeout=timeout, verify=self.ssl_verify)
             log.debug("Response status_code is '%s'", response.status_code)
+
             if response.ok:
                 self.token = response.json()["auth"]["client_token"]
                 if self.token_file:
@@ -189,11 +191,13 @@ class Client:  # pylint: disable=too-many-instance-attributes
         url = f"{self.url}/v1/auth/token/lookup-self"
         log.debug("Check if vault token still is valid")
         headers = {"X-Vault-Token": self.token}
+
         try:
             response = requests.get(
                 url=url, headers=headers, timeout=timeout, verify=self.ssl_verify
             )
             log.debug("Response status_code is '%s'", response.status_code)
+
             if response.ok:
                 log.debug("Vault token is valid for '%s' seconds", response.json()["data"]["ttl"])
                 log.debug("vault_client_token: '%s...%s'", self.token[:8], self.token[-5:-1])

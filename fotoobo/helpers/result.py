@@ -106,7 +106,6 @@ class Result(Generic[T]):
             only_host:  Only print the messages for host only_host. If None is given, print all
                         messages.
         """
-
         out_messages = []
 
         for host, _messages in self.messages.items():

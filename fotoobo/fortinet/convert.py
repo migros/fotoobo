@@ -192,6 +192,7 @@ class CheckpointConverter:
                         if net_object["uid"] == uid:
                             forti_members.append(net_object["name"])
                             found = True
+
                 if not found:
                     log.error("Object with uid '%s' not found", uid)
 

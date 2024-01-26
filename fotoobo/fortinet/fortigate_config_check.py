@@ -115,6 +115,7 @@ class FortiGateConfigCheck:
 
                     else:
                         config = self.config.get_configuration("vdom", "/root" + check["path"])
+
                     getattr(self, "_check_" + check["type"])(config, check)
 
                 elif self.config.info.vdom == "1":
@@ -178,6 +179,7 @@ class FortiGateConfigCheck:
         for key, value in chk["checks"].items():
             msg_key = f"[var]{key}[/]"
             msg_path = f"[var]{chk['path']}[/]"
+
             if key in config:
                 log.debug("Key '%s' in '%s' is '%s'", msg_key, msg_path, config[key])
                 if str(value) != config[key]:
@@ -201,11 +203,13 @@ class FortiGateConfigCheck:
         """
         inverse: bool = chk.get("inverse", False)
         msg_not = "" if inverse else "not "
+
         for key, val in chk["checks"].items():
             msg_key = f"[var]{key}[/]"
             msg_val = f"[var]{val}[/]"
             msg_path = f"[var]{chk['path']}[/]"
             exist = False
+
             for conf in config:
                 if key in conf and val == conf[key]:
                     exist = True

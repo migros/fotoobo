@@ -75,17 +75,21 @@ def backup(
     Backup one or more FortiGate(s).
     """
     inventory = Inventory(fotoobo_config.inventory_file)
+
     if not backup_dir:
         backup_dir = Path.cwd()
 
     create_dir(backup_dir)
     result = tools.fgt.backup(host)
+
     for name, data in result.all_results().items():
         config_file = backup_dir / Path(name).with_suffix(".conf")
+
         if config_file.is_file():
             os.remove(config_file)
 
         config_file.write_text(data, encoding="UTF-8")
+
         if not config_file.is_file():
             result.push_message(name, f"backup file for '{name}' does not exist")
             continue

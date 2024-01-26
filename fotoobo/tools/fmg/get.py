@@ -28,6 +28,7 @@ def adoms(host: str) -> Result[str]:
     log.debug("FortiManager get adoms ...")
     fmg.login()
     fmg_adoms = fmg.get_adoms()
+
     for adom in fmg_adoms:
         result.push_result(adom["name"], f"{adom['os_ver']}.{adom['mr']}")
 
@@ -64,6 +65,7 @@ def devices(host: str) -> Result[Dict[str, Union[str, List[str]]]]:
     response = fmg.api("post", payload=payload)
     fmg.logout()
     result = Result[Dict[str, Union[str, List[str]]]]()
+
     for device in response.json()["result"][0]["data"]:
         data = {
             "version": f"{device['os_ver']}.{device['mr']}.{device['patch']}",
@@ -127,6 +129,7 @@ def policy(
     }
     result = fmg.api("post", payload=payload, timeout=30)
     data = result.json()
+
     if data["result"][0]["status"]["code"] != 0:
         code = data["result"][0]["status"]["code"]
         message = data["result"][0]["status"]["message"]

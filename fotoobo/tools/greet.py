@@ -29,9 +29,11 @@ def greet(name: str, bye: bool, log_enabled: bool) -> None:
     greeting += f", {typer.style('☀Ciao☀', fg=typer.colors.BRIGHT_GREEN)}"
     greeting += f", {typer.style('🌟Konnichiwa🌟', fg=typer.colors.BRIGHT_YELLOW)}"
     greeting += f", {typer.style('🎉Howdy-doody🎉', fg=typer.colors.BRIGHT_BLUE)}!"
+
     if name:
         greeting = f"Hi {typer.style(name, bold=True)}, {greeting}"
 
     typer.echo(greeting)
+
     if bye:
         typer.echo(typer.style("Good Bye", fg=typer.colors.BLACK, bg=typer.colors.WHITE))

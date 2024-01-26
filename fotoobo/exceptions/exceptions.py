@@ -37,6 +37,7 @@ class APIError(GeneralException):
         # self.message = "general API Error"
         self.code = 999
         self.message = "unknown"
+
         if isinstance(err, HTTPError):
             self.code = err.response.status_code
             message = self.http_status_codes.get(self.code, "general API Error")

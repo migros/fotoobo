@@ -48,6 +48,7 @@ def hamaster(host: str) -> Result[str]:  # pylint: disable=too-many-locals
         response = fgt.api("get", "/monitor/system/ha-checksums")
         ha_checksums = response.json()
         status: str = "is not the expected master"
+
         for node in ha_checksums["results"]:
             if node["serial_no"] == ha_checksums["serial"]:
                 if node["is_root_master"] == 1:
@@ -73,6 +74,7 @@ def hamaster(host: str) -> Result[str]:  # pylint: disable=too-many-locals
     fmg.logout()
     result = Result[str]()
     fgts: Dict[str, FortiGate] = {}
+
     for device in response.json()["result"][0]["data"]:
         if device["ha_mode"] == 1:
             expected_master = ""

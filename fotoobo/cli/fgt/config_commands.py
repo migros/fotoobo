@@ -68,6 +68,7 @@ def info(
     Get the information from one or more FortiGate configuration files.
     """
     result = fgt.config.info(configuration)
+
     if as_list:
         info_dicts = []
         for _, _info in result.all_results().items():

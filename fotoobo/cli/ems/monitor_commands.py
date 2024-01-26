@@ -67,6 +67,7 @@ def connections(
     """
     result = monitor.connections(host)
     data = result.get_result(host)
+
     if output_file:
         log.debug("output_file is: '%s'", output_file)
 
@@ -130,6 +131,7 @@ def endpoint_management_status(
     """
     result = monitor.endpoint_management_status(host)
     data = result.get_result(host)
+
     if output_file:
         log.debug("output_file is: '%s'", output_file)
 
@@ -187,6 +189,7 @@ def endpoint_os_versions(
     """
     result = monitor.endpoint_os_versions(host)
     data = result.get_result(host)
+
     if output_file:
         log.debug("output_file is: '%s'", output_file)
 
@@ -249,6 +252,7 @@ def endpoint_outofsync(
     """
     result = monitor.endpoint_online_outofsync(host)
     data = result.get_result(host)
+
     if output_file:
         log.debug("output_file is: '%s'", output_file)
 
@@ -300,6 +304,7 @@ def license(  # pylint: disable=redefined-builtin
     """
     result = monitor.license(host)
     data = result.get_result(host)
+
     if output_file:
         log.debug("output_file is: '%s'", output_file)
 
@@ -347,6 +352,7 @@ def system(
     """
     result = monitor.system(host)
     data = result.get_result(host)
+
     if raw:
         result.print_raw()
 

@@ -68,6 +68,7 @@ def assign(
     """
     inventory = Inventory(fotoobo_config.inventory_file)
     result = fmg.assign(adoms=adoms, policy=policy, host=host, timeout=timeout)
+
     if smtp_server:
         if smtp_server in inventory.assets:
             result.send_messages_as_mail(inventory.assets[smtp_server], "error")
@@ -104,6 +105,7 @@ def post(
     """
     inventory = Inventory(fotoobo_config.inventory_file)
     result = fmg.post(file=file, adom=adom, host=host)
+
     if smtp_server:
         if smtp_server in inventory.assets:
             result.send_messages_as_mail(inventory.assets[smtp_server], "error", command=True)

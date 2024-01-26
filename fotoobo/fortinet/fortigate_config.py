@@ -57,6 +57,7 @@ class FortiGateConfig:
         # split the path by / and remove all empty parts
         path_list: List[str] = [p for p in path.strip("/").split("/") if p]
         config: Any = {}
+
         if scope == "global":
             config = self.global_config
 
@@ -112,14 +113,17 @@ class FortiGateConfig:
             The parsed FortiGate configuration object
         """
         log.debug("Start configuration parser with file '%s'", configuration_file)
+
         FortiGateConfig._config_path = []
         with configuration_file.open(encoding="UTF-8") as forti_file:
             parsed_config = FortiGateConfig._parse_to_dict(forti_file)
 
         global_config: Dict[str, Any] = {}
         vdom_config: Dict[str, Any] = {}
+
         if "info" not in parsed_config:
             raise GeneralWarning(f"There is no info in {configuration_file}")
+
         info = parsed_config["info"]
         parsed_config.pop("info")
 

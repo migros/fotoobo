@@ -83,6 +83,7 @@ def hamaster(
     inventory = Inventory(config.inventory_file)
     result = fgt.monitor.hamaster(host)
     data = {"fotoobo": result.all_results()}
+
     if smtp_server:
         if smtp_server in inventory.assets:
             result.send_messages_as_mail(
@@ -97,6 +98,7 @@ def hamaster(
 
     if output_file:
         log.debug("output_file is: '%s'", output_file)
+
         if template_file:
             log.debug("template_file is: '%s'", template_file)
             output: Result[Dict[str, Dict[str, str]]] = Result()

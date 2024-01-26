@@ -55,6 +55,7 @@ def version(host: Optional[str] = None) -> Result[str]:
     inventory = Inventory(config.inventory_file)
     fgts = inventory.get(host, "fortigate")
     result = Result[str]()
+
     with Progress() as progress:
         task = progress.add_task("getting FortiGate versions...", total=len(fgts))
         with concurrent.futures.ThreadPoolExecutor(max_workers=10) as executor:
