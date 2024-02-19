@@ -28,7 +28,7 @@ jobs:
       - name: Upload mypy report
         uses: actions/upload-artifact@v4
         with:
-          name: mypy report
+          name: mypy-report-${{ matrix.python-version }}
           path: mypy.xml
       - name: Check formatting with black
         run: |
