@@ -9,3 +9,4 @@
 ### Fixed
 
 - Better handling of EMS license expiry evaluation
+- Fix slicing on secrets output
