@@ -44,12 +44,13 @@ Core use cases
 Some of **fotoobo**'s main use cases are:
 
 - Backup configurations from FortiGate devices (and push them to an SFTP server)
-- Fill in gaps in the monitoring of different Fortinet products (e.g. SSLVPN pool usage when more
+- Fill in gaps in the monitoring of different Fortinet products (e.g. SSL-VPN pool usage when more
   than one IP subnet is available for client IPs).
 - Give an overview over your infrastructure in a nice way:
-   - Version of your Fortinet devices,
-   - Version distribution of the FortiClients managed by your FortiClient EMS
-   - Some summary information of your (backed up) FortiGate configurations
+
+  - Version of your Fortinet devices,
+  - Version distribution of the FortiClients managed by your FortiClient EMS
+  - Some summary information of your (backed up) FortiGate configurations
 - Check (the backed up) FortiGate configurations against a set of policy checks
 - Besides "usual" logging capabilities write an audit log to a syslog server
 
