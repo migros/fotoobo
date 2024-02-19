@@ -21,7 +21,7 @@ def test_cli_app_fgt_config_check_help() -> None:
     assert result.exit_code == 0
     arguments, options, commands = parse_help_output(result.stdout)
     assert set(arguments) == {"configuration", "bundles"}
-    assert options == {"-h", "--help"}
+    assert options == {"-h", "--help", "--smtp"}
     assert not commands
 
 

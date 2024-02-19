@@ -1,6 +1,7 @@
 ### Added
 
 - Option `--raw` for `fmg get devices`
+- Option `--smtp` for `fgt config check`
 
 ### Changed
 
