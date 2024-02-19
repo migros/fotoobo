@@ -47,9 +47,9 @@ Some of **fotoobo**'s main use cases are:
 - Fill in gaps in the monitoring of different Fortinet products (e.g. SSLVPN pool usage when more
   than one IP subnet is available for client IPs).
 - Give an overview over your infrastructure in a nice way:
-  - Version of your Fortinet devices,
-  - Version distribution of the FortiClients managed by your FortiClient EMS
-  - Some summary information of your (backed up) FortiGate configurations
+   - Version of your Fortinet devices,
+   - Version distribution of the FortiClients managed by your FortiClient EMS
+   - Some summary information of your (backed up) FortiGate configurations
 - Check (the backed up) FortiGate configurations against a set of policy checks
 - Besides "usual" logging capabilities write an audit log to a syslog server
 
@@ -58,7 +58,7 @@ fotoobo vs. Fortinet REST API
 -----------------------------
 
 There is a general purpose API for all of the supported devices. **fotoobo** uses them all to "talk"
-to the respective device, so basically its no "vs.". For you this means you are always free to
+to the respective device, so basically it's no "vs.". For you this means you are always free to
 implement your use cases in own scripts directly utilizing the REST API. What **fotoobo** can offer
 you is to remove the boiler plate code needed to get and push data to the respective APIs. See the
 :ref:`ModuleDocumentation` for further information on whether **fotoobo** is usable to you. If not,
