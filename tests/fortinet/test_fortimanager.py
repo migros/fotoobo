@@ -1,6 +1,7 @@
 """
 Test the FortiManager class
 """
+
 # pylint: disable=no-member
 from unittest.mock import MagicMock
 
@@ -54,8 +55,9 @@ class TestFortiManager:
                 ],
                 "session": "",
             },
-            verify=True,
+            params=None,
             timeout=3,
+            verify=True,
         )
 
     @staticmethod
@@ -85,8 +87,9 @@ class TestFortiManager:
                 ],
                 "session": "",
             },
-            verify=True,
+            params=None,
             timeout=3,
+            verify=True,
         )
 
     @staticmethod
@@ -130,8 +133,9 @@ class TestFortiManager:
                 ],
                 "session": "",
             },
-            verify=True,
+            params=None,
             timeout=3,
+            verify=True,
         )
 
     @staticmethod
@@ -150,8 +154,9 @@ class TestFortiManager:
             "https://host:443/jsonrpc",
             headers=None,
             json={"method": "get", "params": [{"url": "/dvmdb/adom"}], "session": ""},
-            verify=True,
+            params=None,
             timeout=3,
+            verify=True,
         )
 
     @staticmethod
@@ -188,8 +193,9 @@ class TestFortiManager:
             "https://host:443/jsonrpc",
             headers=None,
             json={"method": "get", "params": [{"url": "/sys/status"}], "session": ""},
-            verify=True,
+            params=None,
             timeout=3,
+            verify=True,
         )
 
     @staticmethod
@@ -219,8 +225,9 @@ class TestFortiManager:
                 "method": "exec",
                 "params": [{"data": {"passwd": "pass", "user": "user"}, "url": "/sys/login/user"}],
             },
-            verify=True,
+            params=None,
             timeout=3,
+            verify=True,
         )
 
     @staticmethod
@@ -256,8 +263,9 @@ class TestFortiManager:
                 "params": [{"url": "/sys/status"}],
                 "session": "dummy_session_key",
             },
-            verify=True,
+            params=None,
             timeout=3,
+            verify=True,
         )
 
     @staticmethod
@@ -294,8 +302,9 @@ class TestFortiManager:
                 "method": "exec",
                 "params": [{"data": {"passwd": "pass", "user": "user"}, "url": "/sys/login/user"}],
             },
-            verify=True,
+            params=None,
             timeout=3,
+            verify=True,
         )
 
     @staticmethod
@@ -332,8 +341,9 @@ class TestFortiManager:
                 "method": "exec",
                 "params": [{"data": {"passwd": "pass", "user": "user"}, "url": "/sys/login/user"}],
             },
-            verify=True,
+            params=None,
             timeout=3,
+            verify=True,
         )
 
     @staticmethod
@@ -362,8 +372,9 @@ class TestFortiManager:
                 "params": [{"url": "/sys/logout"}],
                 "session": "dummy_session_key",
             },
-            verify=True,
+            params=None,
             timeout=3,
+            verify=True,
         )
 
     @staticmethod
@@ -380,8 +391,9 @@ class TestFortiManager:
             "https://host:443/jsonrpc",
             headers=None,
             json={"params": [{"url": "adom/ADOM"}], "session": ""},
-            verify=True,
+            params=None,
             timeout=10,
+            verify=True,
         )
 
     @staticmethod
@@ -398,8 +410,9 @@ class TestFortiManager:
             "https://host:443/jsonrpc",
             headers=None,
             json={"params": [{"url": "adom/ADOM"}], "session": ""},
-            verify=True,
+            params=None,
             timeout=10,
+            verify=True,
         )
 
     @staticmethod
@@ -416,8 +429,9 @@ class TestFortiManager:
             "https://host:443/jsonrpc",
             headers=None,
             json={"params": [{"url": "global"}], "session": ""},
-            verify=True,
+            params=None,
             timeout=10,
+            verify=True,
         )
 
     @staticmethod
@@ -441,8 +455,9 @@ class TestFortiManager:
             "https://host:443/jsonrpc",
             headers=None,
             json={"params": [{"url": "adom/ADOM"}], "session": ""},
-            verify=True,
+            params=None,
             timeout=10,
+            verify=True,
         )
 
     @staticmethod
@@ -459,8 +474,9 @@ class TestFortiManager:
             "https://host:443/jsonrpc",
             headers=None,
             json={"params": [{"url": "adom/ADOM"}], "session": ""},
-            verify=True,
+            params=None,
             timeout=10,
+            verify=True,
         )
 
     @staticmethod
@@ -501,6 +517,7 @@ class TestFortiManager:
             "https://host:443/jsonrpc",
             headers=None,
             json={"method": "get", "params": [{"url": "/task/task/222/line"}], "session": ""},
-            verify=True,
+            params=None,
             timeout=3,
+            verify=True,
         )

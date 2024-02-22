@@ -2,6 +2,7 @@
 This is the Fortinet abstract base class (ABC) which is used to define some global and generic
 variables and methods.
 """
+
 import logging
 from abc import ABC, abstractmethod
 from time import time
@@ -21,6 +22,8 @@ class Fortinet(ABC):
     from this class. If there are methods which have to be defined in every subclass it has to be
     defined here with the abstractmethod decorator.
     """
+
+    ALLOWED_HTTP_METHODS = ["GET", "POST"]
 
     def __init__(self, hostname: str, **kwargs: Any) -> None:
         """
@@ -77,43 +80,49 @@ class Fortinet(ABC):
         API request to a Fortinet device.
 
         Args:
-            method:  Request method from [get, post]
-            url:     Rest API URL to request data from
-            headers: Dictionary with headers (if needed)
-            params:  Dictionary with parameters (if needed)
-            payload: JSON body for post requests (if needed)
-            timeout: The requests read timeout
+            method:     HTTP request method
+            url:        Rest API URL to request data from
+            headers:    Dictionary with headers (if needed)
+            params:     Dictionary with parameters (if needed)
+            payload:    JSON body for post requests (if needed)
+            timeout:    The requests read timeout
 
         Returns:
             Response from the request
         """
         full_url = f"{self.api_url}/{url.strip('/')}".strip("/")
-        params = params or {}
-        payload = payload or {}
         timeout = timeout or self.timeout
         start = time()
 
+        if method.upper() not in self.ALLOWED_HTTP_METHODS:
+            error = f"HTTP method '{method.lower()}' is not implemented"
+            log.error(error)
+            raise NotImplementedError(error)
+
         try:
-            if method.lower() == "get":
-                response = self.session.get(
-                    full_url,
-                    params=params,
-                    verify=self.ssl_verify,
-                    timeout=timeout,
-                )
+            response: requests.Response = getattr(self.session, method.lower())(
+                full_url,
+                headers=headers,
+                json=payload,
+                params=params,
+                timeout=timeout,
+                verify=self.ssl_verify,
+            )
 
-            elif method.lower() == "post":
-                response = self.session.post(
-                    full_url,
-                    headers=headers,
-                    json=payload,
-                    verify=self.ssl_verify,
-                    timeout=timeout,
-                )
+        except requests.exceptions.SSLError as err:
+            log.debug(err)
+            error = "Unknown SSL error"
+            try:
+                if (
+                    err.args[0].reason.args[0].verify_message
+                    == "unable to get local issuer certificate"
+                ):
+                    error = "Unable to get local issuer certificate"
 
-            else:
-                log.debug("Unknown API method")
-                raise GeneralError("Unknown API method")
+            except (AttributeError, IndexError):
+                pass
+
+            raise GeneralError(f"{error} ({self.hostname})") from err
 
         except requests.exceptions.ConnectTimeout as err:
             log.debug(err)
@@ -122,7 +131,6 @@ class Fortinet(ABC):
         except requests.exceptions.ConnectionError as err:
             log.debug(err)
             error = "Unknown connection error"
-
             try:
                 if "Name or service not known" in err.args[0].reason.args[0]:
                     error = "Name or service not known"
@@ -133,20 +141,11 @@ class Fortinet(ABC):
             except (IndexError, AttributeError, TypeError):
                 pass
 
-            try:
-                if (
-                    err.args[0].reason.args[0].verify_message
-                    == "unable to get local issuer certificate"
-                ):
-                    error = "Unable to get local issuer certificate"
-            except (IndexError, AttributeError, TypeError):
-                pass
-
             raise GeneralError(f"{error} ({self.hostname})") from err
 
         except requests.exceptions.ReadTimeout as err:
             log.error(err)
-            raise GeneralError(f"read timeout ({self.hostname})") from err
+            raise GeneralError(f"Read timeout ({self.hostname})") from err
 
         log.debug(
             'Request time: [bold green]%2dms[/] "%s %s"',

@@ -143,9 +143,11 @@ class TestFortiClientEMS:
         response = ems.get_version()
         requests.Session.get.assert_called_with(
             "https://host:443/api/v1/system/consts/get?system_update_time=1",
-            params={},
-            verify=True,
+            headers=None,
+            json=None,
+            params=None,
             timeout=3,
+            verify=True,
         )
         assert response == "1.2.3"
 
@@ -165,9 +167,11 @@ class TestFortiClientEMS:
         assert "Did not find any FortiClient EMS version number in response" in str(err.value)
         requests.Session.get.assert_called_with(
             "https://host:443/api/v1/system/consts/get?system_update_time=1",
-            params={},
-            verify=False,
+            headers=None,
+            json=None,
+            params=None,
             timeout=3,
+            verify=False,
         )
 
     @staticmethod
