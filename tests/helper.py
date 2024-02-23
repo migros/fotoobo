@@ -21,6 +21,7 @@ class ResponseMock:
             status (int, optional): http status code. Defaults to 444 (No Response)
         """
         self.text = kwargs.get("text", "")
+        self.headers = kwargs.get("headers", [])
         self.json = MagicMock(return_value=kwargs.get("json", None))
         self.status_code = kwargs.get("status", 444)
         self.ok = kwargs.get("ok", True)
