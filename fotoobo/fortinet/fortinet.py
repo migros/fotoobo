@@ -94,8 +94,8 @@ class Fortinet(ABC):
         timeout = timeout or self.timeout
         start = time()
 
-        if method.upper() not in self.ALLOWED_HTTP_METHODS:
-            error = f"HTTP method '{method.lower()}' is not implemented"
+        if method.upper() not in Fortinet.ALLOWED_HTTP_METHODS:
+            error = f"HTTP method '{method.upper()}' is not implemented"
             log.error(error)
             raise NotImplementedError(error)
 
@@ -112,6 +112,7 @@ class Fortinet(ABC):
         except requests.exceptions.SSLError as err:
             log.debug(err)
             error = "Unknown SSL error"
+
             try:
                 if (
                     err.args[0].reason.args[0].verify_message
@@ -131,6 +132,7 @@ class Fortinet(ABC):
         except requests.exceptions.ConnectionError as err:
             log.debug(err)
             error = "Unknown connection error"
+
             try:
                 if "Name or service not known" in err.args[0].reason.args[0]:
                     error = "Name or service not known"

@@ -109,7 +109,7 @@ class TestFortinet:
     @staticmethod
     def test_api_unknown_method() -> None:
         """Test api with unknown method"""
-        with pytest.raises(NotImplementedError, match=r"HTTP method 'dummy' is not implemented"):
+        with pytest.raises(NotImplementedError, match=r"HTTP method 'DUMMY' is not implemented"):
             FortinetTestClass("dummy").api("dummy", "url")
 
     @staticmethod
