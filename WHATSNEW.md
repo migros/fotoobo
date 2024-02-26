@@ -10,4 +10,5 @@
 ### Fixed
 
 - Better handling of EMS license expiry evaluation
+- Fix slicing on secrets output
 - Better syntax for lists in documentation (developer/architecture/1_introduction_goals.html)
