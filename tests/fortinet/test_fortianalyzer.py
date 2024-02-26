@@ -42,6 +42,7 @@ class TestFortiAnalyzer:
             "https://host:443/jsonrpc",
             headers=None,
             json={"method": "get", "params": [{"url": "/sys/status"}], "session": ""},
-            verify=True,
+            params=None,
             timeout=3,
+            verify=True,
         )

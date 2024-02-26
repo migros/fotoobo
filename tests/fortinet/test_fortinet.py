@@ -62,7 +62,9 @@ class TestFortinet:
         response = FortinetTestClass("dummy").api("get", "url")
         assert response.status_code == 200
         assert response.json() == {"version": "v1.1.1"}
-        requests.Session.get.assert_called_with("url", params={}, verify=True, timeout=3)
+        requests.Session.get.assert_called_with(
+            "url", headers=None, json=None, params=None, timeout=3, verify=True
+        )
 
     @staticmethod
     def test_api_post(monkeypatch: MonkeyPatch) -> None:
@@ -75,7 +77,7 @@ class TestFortinet:
         assert response.status_code == 200
         assert response.json() == {"version": "v1.1.1"}
         requests.Session.post.assert_called_with(
-            "url", headers=None, json={}, verify=True, timeout=3
+            "url", headers=None, json=None, params=None, timeout=3, verify=True
         )
 
     @staticmethod
@@ -88,9 +90,8 @@ class TestFortinet:
             f"fotoobo.fortinet.fortinet.requests.Session.{method}",
             MagicMock(side_effect=requests.exceptions.ConnectTimeout()),
         )
-        with pytest.raises(GeneralError) as err:
+        with pytest.raises(GeneralError, match=r"Connection timeout \(dummy\)"):
             FortinetTestClass("dummy").api(method, "url")
-        assert "Connection timeout" in str(err.value)
 
     @staticmethod
     @pytest.mark.parametrize(
@@ -102,19 +103,14 @@ class TestFortinet:
             f"fotoobo.fortinet.fortinet.requests.Session.{method}",
             MagicMock(side_effect=requests.exceptions.ReadTimeout()),
         )
-        with pytest.raises(GeneralError) as err:
+        with pytest.raises(GeneralError, match=r"Read timeout \(dummy\)"):
             FortinetTestClass("dummy").api(method, "url")
-        assert "read timeout" in str(err.value)
 
     @staticmethod
     def test_api_unknown_method() -> None:
         """Test api with unknown method"""
-        try:
+        with pytest.raises(NotImplementedError, match=r"HTTP method 'DUMMY' is not implemented"):
             FortinetTestClass("dummy").api("dummy", "url")
-            assert False
-        except GeneralError as err:
-            assert True
-            assert "Unknown API method" in err.message
 
     @staticmethod
     @pytest.mark.parametrize(
@@ -159,9 +155,7 @@ class TestFortinet:
             f"fotoobo.fortinet.fortinet.requests.Session.{method}",
             MagicMock(
                 side_effect=requests.exceptions.ConnectionError(
-                    MagicMock(
-                        reason=NewConnectionError(reason, message=""),
-                    ),
+                    MagicMock(reason=NewConnectionError(reason, message="")),
                 )
             ),
         )
@@ -173,28 +167,34 @@ class TestFortinet:
     @pytest.mark.parametrize(
         "method", (pytest.param("get", id="get"), pytest.param("post", id="post"))
     )
-    def test_api_connection_error_cert_check(method: str, monkeypatch: MonkeyPatch) -> None:
+    @pytest.mark.parametrize(
+        "ssl_error, expected",
+        (
+            pytest.param(
+                SSLError(MagicMock(verify_message="unable to get local issuer certificate")),
+                r"Unable to get local issuer certificate \(dummy\)",
+                id="unknown cert",
+            ),
+            pytest.param(
+                SSLError(MagicMock(spec=())),
+                r"Unknown SSL error \(dummy\)",
+                id="unknown error",
+            ),
+        ),
+    )
+    def test_api_ssl_error(
+        method: str, ssl_error: SSLError, expected: str, monkeypatch: MonkeyPatch
+    ) -> None:
         """Test api with connection errors when the cert is not valid
         We have to do this test especially for the cert_check because its message is not in
         err.args[0].reason.args[0] but in err.args[0].reason.args[0].verify_message
         """
         monkeypatch.setattr(
             f"fotoobo.fortinet.fortinet.requests.Session.{method}",
-            MagicMock(
-                side_effect=requests.exceptions.ConnectionError(
-                    MagicMock(
-                        reason=SSLError(
-                            MagicMock(
-                                verify_message="unable to get local issuer certificate",
-                            )
-                        )
-                    )
-                )
-            ),
+            MagicMock(side_effect=requests.exceptions.SSLError(MagicMock(reason=ssl_error))),
         )
-        with pytest.raises(GeneralError) as err:
+        with pytest.raises(GeneralError, match=expected):
             FortinetTestClass("dummy").api(method, "url")
-        assert "Unable to get local issuer certificate" in str(err.value)
 
     @staticmethod
     @pytest.mark.parametrize(

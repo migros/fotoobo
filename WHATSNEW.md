@@ -6,6 +6,8 @@
 ### Changed
 
 - `fmg get devices` also shows ha nodes if device is a cluster
+- Make `Fortinet.api()` more generic to support more methods
+- Improve error handling and tests for `Fortinet.api()`
 - Updated GitHub actions to latest major version due to Node.js 16 deprecation warning
 
 ### Fixed
