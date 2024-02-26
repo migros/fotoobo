@@ -73,8 +73,8 @@ class Client:  # pylint: disable=too-many-instance-attributes
         log.debug("vault_client_ssl_verify: '%s'", self.ssl_verify)
         log.debug("vault_client_namespace: '%s'", self.namespace)
         log.debug("vault_client_data_path: '%s'", self.data_path)
-        log.debug("vault_client_role_id: '%s...%s'", self.role_id[:4], self.role_id[-5:-1])
-        log.debug("vault_client_secret_id: '%s...%s'", self.secret_id[:4], self.secret_id[-5:-1])
+        log.debug("vault_client_role_id: '%s...%s'", self.role_id[:4], self.role_id[-4:])
+        log.debug("vault_client_secret_id: '%s...%s'", self.secret_id[:4], self.secret_id[-4:])
         log.debug("vault_client_token_ttl_limit: '%s'", self.token_ttl_limit)
 
         if token_file:
@@ -200,7 +200,7 @@ class Client:  # pylint: disable=too-many-instance-attributes
 
             if response.ok:
                 log.debug("Vault token is valid for '%s' seconds", response.json()["data"]["ttl"])
-                log.debug("vault_client_token: '%s...%s'", self.token[:8], self.token[-5:-1])
+                log.debug("vault_client_token: '%s...%s'", self.token[:8], self.token[-4:])
                 if response.json()["data"]["ttl"] < self.token_ttl_limit:
                     log.debug("Invalidate token due to ttl limit")
                     self.token = ""

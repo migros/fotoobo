@@ -6,6 +6,7 @@ more than a few subcommands.
 
 Caution: Use docstrings with care as they are used to print help texts on any command.
 """
+
 # pylint: disable=anomalous-backslash-in-string
 import logging
 import os
@@ -103,7 +104,7 @@ def callback(  # pylint: disable=too-many-arguments
         if attr in ["audit_logging", "logging", "vault"] and getattr(config, attr):
             for sub_attr, value in getattr(config, attr).items():
                 if attr == "vault" and sub_attr in ["role_id", "secret_id"]:
-                    value = f"{value[:4]}...{value[-5:-1]}"
+                    value = f"{value[:4]}...{value[-4:]}"
 
                 log.debug("Option '%s.%s' is '%s'", attr, sub_attr, value)
 
