@@ -1,7 +1,9 @@
 """
 The fotoobo Result class
 """
+
 import json
+import re
 import smtplib
 from pathlib import Path
 from typing import Any, Dict, Generic, List, Optional, TypeVar, Union
@@ -281,7 +283,8 @@ class Result(Generic[T]):
         for host, messages in self.messages.items():
             for message in messages:
                 if not levels or message["level"] in levels:
-                    out_messages.append(f"{host}: {message['message']}")
+                    msg = re.sub(r"\[.*?\]", "", message["message"])  # remove rich formatting
+                    out_messages.append(f"{host}: {msg}")
 
         if out_messages:
             body = "To:" + smtp_server.recipient + "\n"

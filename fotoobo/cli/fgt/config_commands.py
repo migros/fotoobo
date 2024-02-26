@@ -1,11 +1,14 @@
 """
 The FortiGate get commands
 """
+
 import logging
 from pathlib import Path
 
 import typer
 
+from fotoobo.helpers.config import config
+from fotoobo.inventory.inventory import Inventory
 from fotoobo.tools import fgt
 
 app = typer.Typer(no_args_is_help=True, rich_markup_mode="rich")
@@ -26,11 +29,31 @@ def check(
         metavar="[bundles]",
         show_default=False,
     ),
+    smtp_server: str = typer.Option(
+        None,
+        "--smtp",
+        help="The smtp configuration from the inventory.",
+        metavar="[server]",
+        show_default=False,
+    ),
 ) -> None:
     """
     Check one or more FortiGate configuration files.
     """
+    inventory = Inventory(config.inventory_file)
     result = fgt.config.check(configuration, bundles)
+
+    if smtp_server:
+        if smtp_server in inventory.assets:
+            result.send_messages_as_mail(
+                inventory.assets[smtp_server],
+                count=True,
+                command=True,
+            )
+
+        else:
+            log.warning("SMTP server '%s' not in found in inventory.", smtp_server)
+
     result.print_messages()
 
 
