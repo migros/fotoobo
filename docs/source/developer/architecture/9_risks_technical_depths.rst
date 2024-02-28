@@ -56,6 +56,5 @@ There are several things done to mitigate this risk:
   not the first suggestion in the documentation.
 - The risk of exposing the inventory and how to minimize this risk is clearly stated in the
   documentation at :ref:`usage_inventory`.
-
-*Note: There are ideas about supporting HashiCorp Vault as storage backend for the credentials. If
-you want to support us there, please reach out to us on GitHub.*
+- To make the handling of sensitive data a bit safer you may store such data in a Hashicorp Vault
+  service which is documented here: :ref:`vault_service`.
