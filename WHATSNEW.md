@@ -1,3 +1,6 @@
+
+## [2.1.0] - 2024-03-05
+
 ### Added
 
 - Option `--raw` for `fmg get devices`
