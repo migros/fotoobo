@@ -39,9 +39,6 @@ jobs:
       - name: Check code coverage
         run: |
           poetry run tox -e coverage
-      - name: Test create requirements file for readthedocs.io
-        run: |
-          poetry run tox -e requirements
-      - name: Test create docs
+      - name: Create documentation
         run: |
           poetry run tox -e docs

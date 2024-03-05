@@ -94,7 +94,7 @@ disallow_untyped_decorators=false
 legacy_tox_ini = """[tox]
 
 isolated_build = True
-envlist = pylint, mypy, black, pytest, coverage, requirements, docs, stats
+envlist = pylint, mypy, black, pytest, coverage, docs, stats
 testpaths = "tests"
 
 [testenv:pylint]
@@ -138,12 +138,6 @@ skip_install = true
 allowlist_externals = poetry, pytest
 commands_pre = poetry install
 commands = pytest --cov-report term-missing --cov-fail-under 90 --cov=fotoobo --cov-config=.coverage_unittests_rc --ignore=tests/cli tests/ {posargs}
-
-[testenv:requirements]
-description = Create a requirements.txt from the Poetry dependencies (used for readthedocs)
-skip_install = True
-allowlist_externals = poetry
-commands = poetry export --without-hashes --with dev --format=requirements.txt --output=docs/requirements.txt
 
 [testenv:docs]
 description = Create the documentation with sphinx

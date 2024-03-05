@@ -12,6 +12,7 @@
 - Improve error handling and tests for `Fortinet.api()`
 - Updated GitHub actions to latest major version due to Node.js 16 deprecation warning
 - Use new dependency groups for Poetry in pyproject.toml
+- Manage readthedocs dependencies with Poetry (instead of generated requirements.txt)
 
 ### Fixed
 
