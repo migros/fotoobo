@@ -1,7 +1,9 @@
 ### Added
 
 - Option `--raw` for `fmg get devices`
+- Support for HTTP `PATCH` and `DELETE` method in FortiClientEMS
 - Option `--smtp` for `fgt config check`
+
 
 ### Changed
 

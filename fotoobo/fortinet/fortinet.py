@@ -23,6 +23,9 @@ class Fortinet(ABC):
     defined here with the abstractmethod decorator.
     """
 
+    # Use the ALLOWED_HTTP_METHODS class constant to define the supported HTTP methods. By default
+    # we should support GET and POST but you may override this list of supported methods in every
+    # subclass. Treat this setting as a constant which must not be redefined during runtime.
     ALLOWED_HTTP_METHODS = ["GET", "POST"]
 
     def __init__(self, hostname: str, **kwargs: Any) -> None:
@@ -94,7 +97,7 @@ class Fortinet(ABC):
         timeout = timeout or self.timeout
         start = time()
 
-        if method.upper() not in Fortinet.ALLOWED_HTTP_METHODS:
+        if method.upper() not in self.ALLOWED_HTTP_METHODS:
             error = f"HTTP method '{method.upper()}' is not implemented"
             log.error(error)
             raise NotImplementedError(error)

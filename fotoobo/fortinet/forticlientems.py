@@ -1,8 +1,10 @@
 """
 FortiClient EMS Class
 """
+
 import logging
 import pickle
+import re
 from pathlib import Path
 from typing import Any, Dict, Optional
 
@@ -19,6 +21,8 @@ class FortiClientEMS(Fortinet):
     """
     Represents one FortiClient EMS (digital twin)
     """
+
+    ALLOWED_HTTP_METHODS = ["DELETE", "GET", "PATCH", "POST"]
 
     def __init__(
         self,
@@ -41,9 +45,9 @@ class FortiClientEMS(Fortinet):
         super().__init__(hostname, **kwargs)
         self.api_url = f"https://{self.hostname}:{self.https_port}/api/v1"
         self.cookie_path = cookie_path
-        self.password = password
-        self.username = username
-        self.type = "forticlientems"
+        self.password: str = password
+        self.username: str = username
+        self.type: str = "forticlientems"
 
     def api(  # pylint: disable=too-many-arguments
         self,
@@ -68,6 +72,9 @@ class FortiClientEMS(Fortinet):
         Returns:
             Response from the request
         """
+        if not headers:
+            headers = self.session.headers  # type: ignore
+
         return super().api(
             method, url, payload=payload, params=params, timeout=timeout, headers=headers
         )
@@ -109,14 +116,18 @@ class FortiClientEMS(Fortinet):
         """
         status = 401
         cookie = Path(self.cookie_path).expanduser() / f"{self.hostname}.cookie"
+        csrf = Path(self.cookie_path).expanduser() / f"{self.hostname}.csrf"
 
         if self.cookie_path:
-            log.debug("Searching cookie in '%s'", cookie)
+            log.debug("Searching cookie and csrf token in '%s'", cookie.parents[0])
 
-            if cookie.is_file():
-                log.debug("Cookie exists. Skipping login")
+            if cookie.is_file() and csrf.is_file():
+                log.debug("Cookie and csrf token both exist")
                 with cookie.open("rb") as cookie_file:
                     self.session.cookies.update(pickle.load(cookie_file))  # type: ignore
+
+                self.session.headers["Referer"] = f"https://{self.hostname}"
+                self.session.headers["X-CSRFToken"] = csrf.read_text()
 
                 try:
                     response = self.api("get", "/system/serial_number")
@@ -135,22 +146,36 @@ class FortiClientEMS(Fortinet):
                     status = err.code
 
             else:
-                log.debug("No cookie found for '%s'", self.hostname)
+                log.debug("No cookie or csrf token found for '%s'", self.hostname)
 
         if status == 401:
             log.debug("Login to '%s'", self.hostname)
             payload = {"name": self.username, "password": self.password}
             response = self.api("post", "/auth/signin", payload=payload)
 
-            if response.status_code == 200 and self.cookie_path:
-                log.debug("Saving cookie for '%s'", self.hostname)
+            if response.status_code == 200:
+                self.session.headers["Referer"] = f"https://{self.hostname}"
+                if match := re.match(r"csrftoken=(\S+);", response.headers["Set-Cookie"]):
+                    csrf_token = match.group(1)
+                    self.session.headers["X-CSRFToken"] = csrf_token
 
-                try:
-                    with cookie.open("wb") as cookie_file:
-                        pickle.dump(self.session.cookies, cookie_file)
+                if self.cookie_path:
+                    log.debug("Saving cookie for '%s'", self.hostname)
+                    try:
+                        with cookie.open("wb") as cookie_file:
+                            pickle.dump(self.session.cookies, cookie_file)
 
-                except FileNotFoundError:
-                    log.warning("Unable to save cookie file '%s'", str(cookie.resolve()))
+                    except FileNotFoundError as exc:
+                        log.debug(exc)
+                        log.warning("Unable to save cookie file '%s'", str(cookie.resolve()))
+
+                    log.debug("Saving csrf token for '%s'", self.hostname)
+                    try:
+                        csrf.write_text(csrf_token)
+
+                    except NameError as exc:
+                        log.debug(exc)
+                        log.warning("Unable to save csrf token file '%s'", str(csrf.resolve()))
 
             status = response.status_code
 
