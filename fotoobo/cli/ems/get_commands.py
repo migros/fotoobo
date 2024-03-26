@@ -1,6 +1,7 @@
 """
 The FortiClient EMS get commands
 """
+
 import logging
 
 import typer

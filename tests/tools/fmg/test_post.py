@@ -1,6 +1,5 @@
 """Test fmg tools post"""
 
-
 from pathlib import Path
 from unittest.mock import MagicMock
 

@@ -1,6 +1,7 @@
 """
 Testing the cli app
 """
+
 from unittest.mock import MagicMock
 
 import pytest

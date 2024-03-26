@@ -1,6 +1,7 @@
 """
 A module for defining a generic device
 """
+
 from typing import Union
 
 

@@ -1,6 +1,7 @@
 """
 The FortiManager commands
 """
+
 import logging
 from pathlib import Path
 

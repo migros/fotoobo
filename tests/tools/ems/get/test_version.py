@@ -1,6 +1,5 @@
 """Test ems tools get version"""
 
-
 from pathlib import Path
 from unittest.mock import MagicMock
 

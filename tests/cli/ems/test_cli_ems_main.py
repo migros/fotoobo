@@ -1,6 +1,7 @@
 """
 Testing the ems cli app
 """
+
 from typer.testing import CliRunner
 
 from fotoobo.cli.main import app

@@ -1,6 +1,7 @@
 """
 Testing the cli app
 """
+
 from pathlib import Path
 from unittest.mock import MagicMock
 

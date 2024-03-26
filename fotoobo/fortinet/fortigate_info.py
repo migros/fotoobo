@@ -1,6 +1,7 @@
 """
 The FortiGateInfo class
 """
+
 from dataclasses import dataclass
 
 

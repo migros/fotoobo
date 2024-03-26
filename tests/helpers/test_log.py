@@ -1,6 +1,7 @@
 """
 Test the logging helper class
 """
+
 import logging
 from dataclasses import dataclass
 from datetime import datetime
