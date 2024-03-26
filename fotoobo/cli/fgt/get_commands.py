@@ -1,6 +1,7 @@
 """
 The FortiGate get commands
 """
+
 # pylint: disable=anomalous-backslash-in-string
 import logging
 

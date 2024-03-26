@@ -1,6 +1,5 @@
 """Test fmg tools assign"""
 
-
 from pathlib import Path
 from unittest.mock import MagicMock
 

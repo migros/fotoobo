@@ -1,6 +1,7 @@
 """
 The FortiGate configuration class represents the whole or parts of a FortiGate configuration
 """
+
 import logging
 from pathlib import Path
 from typing import IO, Any, Dict, List, Optional

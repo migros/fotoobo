@@ -1,6 +1,7 @@
 """
 Testing the cli fgt get
 """
+
 from unittest.mock import MagicMock
 
 from _pytest.monkeypatch import MonkeyPatch

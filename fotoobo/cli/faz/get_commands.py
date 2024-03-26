@@ -1,6 +1,7 @@
 """
 The FortiAnalyzer get commands
 """
+
 import logging
 
 import typer

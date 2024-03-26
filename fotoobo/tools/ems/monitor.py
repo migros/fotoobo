@@ -1,6 +1,7 @@
 """
 FortiClient EMS monitor module
 """
+
 import logging
 from datetime import datetime
 from typing import Any, Dict

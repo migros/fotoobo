@@ -1,6 +1,7 @@
 """
 The fotoobo get commands
 """
+
 import logging
 
 import typer

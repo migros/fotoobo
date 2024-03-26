@@ -6,6 +6,7 @@ going to be converted into a Fortinet asset.
 The Fortinet assets are referenced by their names. Even if we set an uuid we cannot use the uuid to
 access the asset. The uuid is only supported for network assets and not for service assets.
 """
+
 import copy
 import logging
 from pathlib import Path

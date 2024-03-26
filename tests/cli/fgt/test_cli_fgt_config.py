@@ -2,7 +2,6 @@
 Test the cli fgt config
 """
 
-
 from typer.testing import CliRunner
 
 from fotoobo.cli.main import app

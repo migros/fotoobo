@@ -1,6 +1,7 @@
 """
 This is the fotoobo exception module.
 """
+
 from typing import Any
 
 from requests.exceptions import HTTPError

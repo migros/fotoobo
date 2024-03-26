@@ -1,6 +1,7 @@
 """
 FortiManager assign utility
 """
+
 import logging
 from pathlib import Path
 

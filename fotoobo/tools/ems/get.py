@@ -1,6 +1,7 @@
 """
 FortiClient EMS get module
 """
+
 import logging
 from typing import Dict, List
 

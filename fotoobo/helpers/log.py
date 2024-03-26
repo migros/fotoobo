@@ -3,6 +3,7 @@ The logging helper class is used if you want to write logs to the screen or a fi
 to do pretty printing screen output with rich and writing "normal" text to a logfile.
 Basic logging options can be configured in the main configuration file. See config_helper.py
 """
+
 import logging
 import logging.config
 import os
@@ -219,9 +220,11 @@ class Log:
                                     config.logging["log_syslog"]["host"],
                                     int(config.logging["log_syslog"]["port"]),
                                 ),
-                                socktype=socket.SOCK_STREAM
-                                if config.logging["log_syslog"]["protocol"] == "TCP"
-                                else socket.SOCK_DGRAM,
+                                socktype=(
+                                    socket.SOCK_STREAM
+                                    if config.logging["log_syslog"]["protocol"] == "TCP"
+                                    else socket.SOCK_DGRAM
+                                ),
                             )
 
                         except (OSError, socket.gaierror) as error:
@@ -256,9 +259,11 @@ class Log:
                                     int(config.audit_logging["log_syslog"]["port"]),
                                 ),
                                 facility=LOG_AUTH,
-                                socktype=socket.SOCK_STREAM
-                                if config.audit_logging["log_syslog"]["protocol"] == "TCP"
-                                else socket.SOCK_DGRAM,
+                                socktype=(
+                                    socket.SOCK_STREAM
+                                    if config.audit_logging["log_syslog"]["protocol"] == "TCP"
+                                    else socket.SOCK_DGRAM
+                                ),
                             )
 
                         except (OSError, socket.gaierror) as error:

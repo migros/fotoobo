@@ -1,6 +1,7 @@
 """
 FortiManager Class
 """
+
 import logging
 import re
 from pathlib import Path

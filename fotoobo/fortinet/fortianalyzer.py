@@ -1,6 +1,7 @@
 """
 FortiAnalyzer Class
 """
+
 import logging
 from typing import Any
 

@@ -1,6 +1,7 @@
 """
 FortiGate check hamaster utility
 """
+
 import concurrent.futures
 import logging
 from typing import Dict, Tuple

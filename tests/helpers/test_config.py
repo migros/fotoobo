@@ -1,6 +1,7 @@
 """
 Test the config helper
 """
+
 import os
 from pathlib import Path
 from typing import Callable, Optional, Union

@@ -1,6 +1,7 @@
 """
 The fotoobo converter utility
 """
+
 import logging
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Union

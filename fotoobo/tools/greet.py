@@ -4,6 +4,7 @@ The fotoobo greeting utility
 This function is a hidden fotoobo command which is meant for testing purposes. It has no functional
 effect. Use and modify it whenever you want. But be sure to also write the tests for it.
 """
+
 import logging
 
 import typer

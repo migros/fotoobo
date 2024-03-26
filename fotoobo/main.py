@@ -10,6 +10,7 @@ purposes.
 The exceptions in the main functions cannot be tested because the test-method for typer always
 exits with its own exit codes (1 or 2) when an exception rises.
 """
+
 import sys
 import traceback
 

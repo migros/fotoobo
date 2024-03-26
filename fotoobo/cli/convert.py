@@ -1,6 +1,7 @@
 """
 The fotoobo convert commands
 """
+
 import logging
 from pathlib import Path
 

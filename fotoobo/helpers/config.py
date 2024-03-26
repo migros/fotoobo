@@ -6,6 +6,7 @@ the cli help system.
 If there are configuration options available in the global configuration file and also as a command
 line option, the command line option takes precedence over the global configuration file option.
 """
+
 import os
 from dataclasses import dataclass, field
 from pathlib import Path

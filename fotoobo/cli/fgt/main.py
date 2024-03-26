@@ -1,6 +1,7 @@
 """
 The FortiGate commands
 """
+
 import logging
 import os
 from datetime import datetime
