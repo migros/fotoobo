@@ -2,7 +2,6 @@
 Testing the cli fgt config info
 """
 
-
 import pytest
 from typer.testing import CliRunner
 

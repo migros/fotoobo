@@ -1,10 +1,11 @@
 """
 Testing the cli convert app
 """
+
 import shutil
+from pathlib import Path
 from typing import Any, Dict
 from unittest.mock import MagicMock
-from pathlib import Path
 
 import pytest
 from _pytest.monkeypatch import MonkeyPatch

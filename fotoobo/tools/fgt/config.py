@@ -1,6 +1,7 @@
 """
 FortiGate configuration check utility
 """
+
 import logging
 from pathlib import Path
 from typing import Any, List

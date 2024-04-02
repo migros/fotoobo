@@ -1,6 +1,7 @@
 """
 Test the FortiGate config check class
 """
+
 from pathlib import Path
 from typing import Any, Dict, List
 

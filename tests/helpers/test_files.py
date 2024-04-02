@@ -1,6 +1,7 @@
 """
 test_file_helper
 """
+
 # pylint: disable=redefined-outer-name
 
 import os

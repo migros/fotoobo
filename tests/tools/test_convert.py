@@ -1,4 +1,5 @@
 """Test fotoobo convert tools"""
+
 import shutil
 from pathlib import Path
 from typing import Any, Dict

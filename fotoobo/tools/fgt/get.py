@@ -1,6 +1,7 @@
 """
 FortiGate get version utility
 """
+
 import concurrent.futures
 import logging
 from typing import Optional, Tuple

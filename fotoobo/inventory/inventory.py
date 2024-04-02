@@ -1,6 +1,7 @@
 """
 Devices class for storing device information
 """
+
 import logging
 import re
 from pathlib import Path

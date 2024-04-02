@@ -1,6 +1,7 @@
 """
 FortiGate Class
 """
+
 import logging
 from typing import Any, Dict, Optional
 

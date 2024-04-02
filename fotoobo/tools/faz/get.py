@@ -1,6 +1,7 @@
 """
 FortiAnalyzer get version utility
 """
+
 import logging
 
 from fotoobo.helpers.config import config

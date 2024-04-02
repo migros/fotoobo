@@ -1,6 +1,7 @@
 """
 Testing the cli app
 """
+
 # pylint: disable=redefined-outer-name
 from typing import Generator, List
 from unittest.mock import MagicMock

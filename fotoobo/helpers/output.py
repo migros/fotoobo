@@ -1,6 +1,7 @@
 """
 The beautiful output helper
 """
+
 import os
 from datetime import datetime
 from pathlib import Path

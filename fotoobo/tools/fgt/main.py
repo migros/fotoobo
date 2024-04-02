@@ -1,6 +1,7 @@
 """
 FortiGate backup utility
 """
+
 import concurrent.futures
 import json
 import logging

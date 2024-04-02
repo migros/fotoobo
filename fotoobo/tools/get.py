@@ -1,6 +1,7 @@
 """
 The fotoobo get utility
 """
+
 import importlib.metadata
 import logging
 from typing import Dict, List
