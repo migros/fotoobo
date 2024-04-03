@@ -2,6 +2,9 @@
 """
 Test the Fortinet class
 """
+
+# pylint: disable=no-member
+
 from unittest.mock import MagicMock
 
 import pytest
@@ -57,7 +60,7 @@ class TestFortinet:
         """Test api get"""
         monkeypatch.setattr(
             "fotoobo.fortinet.fortinet.requests.Session.get",
-            MagicMock(return_value=ResponseMock(json={"version": "v1.1.1"}, status=200)),
+            MagicMock(return_value=ResponseMock(json={"version": "v1.1.1"}, status_code=200)),
         )
         response = FortinetTestClass("dummy").api("get", "url")
         assert response.status_code == 200
@@ -71,7 +74,7 @@ class TestFortinet:
         """Test api post"""
         monkeypatch.setattr(
             "fotoobo.fortinet.fortinet.requests.Session.post",
-            MagicMock(return_value=ResponseMock(json={"version": "v1.1.1"}, status=200)),
+            MagicMock(return_value=ResponseMock(json={"version": "v1.1.1"}, status_code=200)),
         )
         response = FortinetTestClass("dummy").api("post", "url")
         assert response.status_code == 200
@@ -223,7 +226,7 @@ class TestFortinet:
         """
         monkeypatch.setattr(
             f"fotoobo.fortinet.fortinet.requests.Session.{method}",
-            MagicMock(return_value=ResponseMock(json={"dummy": "dummy"}, status=status_code)),
+            MagicMock(return_value=ResponseMock(json={"dummy": "dummy"}, status_code=status_code)),
         )
         with pytest.raises(APIError) as err:
             FortinetTestClass("dummy").api(method, "url")

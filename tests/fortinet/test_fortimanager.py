@@ -33,7 +33,7 @@ class TestFortiManager:
                             }
                         ]
                     },
-                    status=200,
+                    status_code=200,
                 )
             ),
         )
@@ -65,7 +65,7 @@ class TestFortiManager:
         """Test assign_all_objects with http error 404"""
         monkeypatch.setattr(
             "fotoobo.fortinet.fortinet.requests.Session.post",
-            MagicMock(return_value=ResponseMock(json={}, status=404)),
+            MagicMock(return_value=ResponseMock(json={}, status_code=404)),
         )
         with pytest.raises(APIError) as err:
             FortiManager("host", "", "").assign_all_objects("dummy_adom", "dummy_policy")
@@ -108,7 +108,7 @@ class TestFortiManager:
                             }
                         ]
                     },
-                    status=200,
+                    status_code=200,
                 )
             ),
         )
@@ -145,7 +145,7 @@ class TestFortiManager:
             "fotoobo.fortinet.fortinet.requests.Session.post",
             MagicMock(
                 return_value=ResponseMock(
-                    json={"result": [{"data": [{"name": "dummy"}]}]}, status=200
+                    json={"result": [{"data": [{"name": "dummy"}]}]}, status_code=200
                 )
             ),
         )
@@ -164,7 +164,7 @@ class TestFortiManager:
         """Test fmg get adoms with a status != 200"""
         monkeypatch.setattr(
             "fotoobo.fortinet.fortinet.requests.Session.post",
-            MagicMock(return_value=ResponseMock(json={}, status=400)),
+            MagicMock(return_value=ResponseMock(json={}, status_code=400)),
         )
         with pytest.raises(APIError) as err:
             FortiManager("", "", "").get_adoms()
@@ -186,7 +186,7 @@ class TestFortiManager:
         """Test FortiManager get version"""
         monkeypatch.setattr(
             "fotoobo.fortinet.fortinet.requests.Session.post",
-            MagicMock(return_value=ResponseMock(json=response, status=200)),
+            MagicMock(return_value=ResponseMock(json=response, status_code=200)),
         )
         assert FortiManager("host", "", "").get_version() == expected
         requests.Session.post.assert_called_with(  # type: ignore
@@ -212,7 +212,7 @@ class TestFortiManager:
                         ],
                         "session": "dummy_session_key",
                     },
-                    status=200,
+                    status_code=200,
                 )
             ),
         )
@@ -247,7 +247,7 @@ class TestFortiManager:
                         ],
                         "session": "dummy_session_key",
                     },
-                    status=200,
+                    status_code=200,
                 )
             ),
         )
@@ -287,7 +287,7 @@ class TestFortiManager:
                         ],
                         "session": "dummy_session_key",
                     },
-                    status=200,
+                    status_code=200,
                 )
             ),
         )
@@ -326,7 +326,7 @@ class TestFortiManager:
                         ],
                         "session": "dummy_session_key",
                     },
-                    status=200,
+                    status_code=200,
                 )
             ),
         )
@@ -358,7 +358,7 @@ class TestFortiManager:
                         "params": [{"url": "/sys/logout"}],
                         "session": "dummy_session_key",
                     },
-                    status=200,
+                    status_code=200,
                 )
             ),
         )
@@ -383,7 +383,9 @@ class TestFortiManager:
         monkeypatch.setattr(
             "fotoobo.fortinet.fortinet.requests.Session.post",
             MagicMock(
-                return_value=ResponseMock(json={"result": [{"status": {"code": 0}}]}, status=200)
+                return_value=ResponseMock(
+                    json={"result": [{"status": {"code": 0}}]}, status_code=200
+                )
             ),
         )
         assert not FortiManager("host", "", "").post("ADOM", {"params": [{"url": "{adom}"}]})
@@ -402,7 +404,9 @@ class TestFortiManager:
         monkeypatch.setattr(
             "fotoobo.fortinet.fortinet.requests.Session.post",
             MagicMock(
-                return_value=ResponseMock(json={"result": [{"status": {"code": 0}}]}, status=200)
+                return_value=ResponseMock(
+                    json={"result": [{"status": {"code": 0}}]}, status_code=200
+                )
             ),
         )
         assert not FortiManager("host", "", "").post("ADOM", [{"params": [{"url": "{adom}"}]}])
@@ -421,7 +425,9 @@ class TestFortiManager:
         monkeypatch.setattr(
             "fotoobo.fortinet.fortinet.requests.Session.post",
             MagicMock(
-                return_value=ResponseMock(json={"result": [{"status": {"code": 0}}]}, status=200)
+                return_value=ResponseMock(
+                    json={"result": [{"status": {"code": 0}}]}, status_code=200
+                )
             ),
         )
         assert not FortiManager("host", "", "").post("global", {"params": [{"url": "{adom}"}]})
@@ -444,7 +450,7 @@ class TestFortiManager:
                     json={
                         "result": [{"status": {"code": 444, "message": "dummy"}, "url": "dummy"}]
                     },
-                    status=200,
+                    status_code=200,
                 )
             ),
         )
@@ -465,7 +471,7 @@ class TestFortiManager:
         """Test fmg post with an error in the response"""
         monkeypatch.setattr(
             "fotoobo.fortinet.fortinet.requests.Session.post",
-            MagicMock(return_value=ResponseMock(json={}, status=444)),
+            MagicMock(return_value=ResponseMock(json={}, status_code=444)),
         )
         with pytest.raises(APIError) as err:
             FortiManager("host", "", "").post("ADOM", [{"params": [{"url": "{adom}"}]}])
@@ -506,7 +512,7 @@ class TestFortiManager:
                             }
                         ]
                     },
-                    status=200,
+                    status_code=200,
                 )
             ),
         )

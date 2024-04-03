@@ -24,7 +24,7 @@ class TestFortiGate:
         """Test the FortiGate init when not specifying a hostname"""
         monkeypatch.setattr(
             "fotoobo.fortinet.fortinet.Fortinet.api",
-            MagicMock(return_value=ResponseMock(json={"key": "value"}, status=200)),
+            MagicMock(return_value=ResponseMock(json={"key": "value"}, status_code=200)),
         )
         with pytest.raises(GeneralWarning) as err:
             FortiGate("", "token")
@@ -35,7 +35,7 @@ class TestFortiGate:
         """Test the FortiGate api method"""
         monkeypatch.setattr(
             "fotoobo.fortinet.fortinet.Fortinet.api",
-            MagicMock(return_value=ResponseMock(json={"key": "value"}, status=200)),
+            MagicMock(return_value=ResponseMock(json={"key": "value"}, status_code=200)),
         )
         fortigate = FortiGate("dummy_hostname", "token")
         assert fortigate.api("get", "dummy").json() == {"key": "value"}
@@ -49,7 +49,7 @@ class TestFortiGate:
         """Test the FortiGate backup method"""
         monkeypatch.setattr(
             "fotoobo.fortinet.fortigate.FortiGate.api",
-            MagicMock(return_value=ResponseMock(text="Dummy Backup Data", status=200)),
+            MagicMock(return_value=ResponseMock(text="Dummy Backup Data", status_code=200)),
         )
         assert FortiGate("dummy_hostname", "").backup(timeout=66) == "Dummy Backup Data"
         FortiGate.api.assert_called_with(
@@ -70,7 +70,7 @@ class TestFortiGate:
         """Test get version"""
         monkeypatch.setattr(
             "fotoobo.fortinet.fortigate.FortiGate.api",
-            MagicMock(return_value=ResponseMock(json=response, status=200)),
+            MagicMock(return_value=ResponseMock(json=response, status_code=200)),
         )
         assert FortiGate("dummy_hostname", "").get_version() == expected
         FortiGate.api.assert_called_with("get", "monitor/system/status")
@@ -80,7 +80,7 @@ class TestFortiGate:
         """Test get version with http error"""
         monkeypatch.setattr(
             "fotoobo.fortinet.fortinet.requests.Session.get",
-            MagicMock(return_value=ResponseMock(json={"dummy": "dummy"}, status=404)),
+            MagicMock(return_value=ResponseMock(json={"dummy": "dummy"}, status_code=404)),
         )
         with pytest.raises(GeneralWarning) as err:
             FortiGate("dummy_hostname", "").get_version()

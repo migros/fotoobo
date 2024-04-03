@@ -29,7 +29,7 @@ class TestFortiClientEMS:
                 return_value=ResponseMock(
                     headers={"Set-Cookie": "csrftoken=dummy_csrf_token;"},
                     json={"result": {"retval": 1, "message": "Login successful."}},
-                    status=200,
+                    status_code=200,
                 )
             ),
         )
@@ -46,7 +46,7 @@ class TestFortiClientEMS:
             "fotoobo.fortinet.forticlientems.requests.Session.get",
             MagicMock(
                 return_value=ResponseMock(
-                    json={"result": {"retval": 1, "message": "Login successful."}}, status=200
+                    json={"result": {"retval": 1, "message": "Login successful."}}, status_code=200
                 )
             ),
         )
@@ -71,7 +71,7 @@ class TestFortiClientEMS:
                             "message": "Session has expired or does not exist.",
                         },
                     },
-                    status=401,
+                    status_code=401,
                 )
             ),
         )
@@ -83,7 +83,7 @@ class TestFortiClientEMS:
                     json={
                         "result": {"retval": 1, "message": "Login successful."},
                     },
-                    status=200,
+                    status_code=200,
                 ),
             ),
         )
@@ -113,7 +113,7 @@ class TestFortiClientEMS:
                     json={
                         "result": {"retval": 1, "message": "Login successful."},
                     },
-                    status=200,
+                    status_code=200,
                 ),
             ),
         )
@@ -151,7 +151,7 @@ class TestFortiClientEMS:
         """Test the login to a FortiClient EMS with a session cookie but invalid session"""
         monkeypatch.setattr(
             "fotoobo.fortinet.forticlientems.requests.Session.get",
-            MagicMock(return_value=ResponseMock(status=401)),
+            MagicMock(return_value=ResponseMock(status_code=401)),
         )
         monkeypatch.setattr(
             "fotoobo.fortinet.forticlientems.requests.Session.post",
@@ -161,7 +161,7 @@ class TestFortiClientEMS:
                     json={
                         "result": {"retval": 1, "message": "Login successful."},
                     },
-                    status=200,
+                    status_code=200,
                 ),
             ),
         )
@@ -218,7 +218,7 @@ class TestFortiClientEMS:
                     json={
                         "result": {"retval": 1, "message": "Login successful."},
                     },
-                    status=200,
+                    status_code=200,
                 )
             ),
         )
@@ -237,7 +237,7 @@ class TestFortiClientEMS:
                     json={
                         "result": {"retval": 1, "message": "Login successful."},
                     },
-                    status=200,
+                    status_code=200,
                 )
             ),
         )
@@ -253,7 +253,7 @@ class TestFortiClientEMS:
         )
         monkeypatch.setattr(
             "fotoobo.fortinet.fortinet.requests.Session.get",
-            MagicMock(return_value=ResponseMock(json={}, status=200)),
+            MagicMock(return_value=ResponseMock(json={}, status_code=200)),
         )
         ems = FortiClientEMS("host", "dummy_user", "dummy_pass", ssl_verify=False)
         response = ems.logout()
@@ -267,7 +267,7 @@ class TestFortiClientEMS:
         )
         monkeypatch.setattr(
             "fotoobo.fortinet.fortinet.requests.Session.get",
-            MagicMock(return_value=ResponseMock(json={}, status=401)),
+            MagicMock(return_value=ResponseMock(json={}, status_code=401)),
         )
         with pytest.raises(APIError) as err:
             FortiClientEMS("host", "dummy_user", "dummy_pass", ssl_verify=False).logout()
@@ -284,7 +284,7 @@ class TestFortiClientEMS:
             MagicMock(
                 return_value=ResponseMock(
                     json={"data": {"System": {"VERSION": "1.2.3"}}},
-                    status=200,
+                    status_code=200,
                 )
             ),
         )
@@ -308,7 +308,7 @@ class TestFortiClientEMS:
         )
         monkeypatch.setattr(
             "fotoobo.fortinet.fortinet.requests.Session.get",
-            MagicMock(return_value=ResponseMock(json={"data": {"System": {}}}, status=200)),
+            MagicMock(return_value=ResponseMock(json={"data": {"System": {}}}, status_code=200)),
         )
         ems = FortiClientEMS("host", "dummy_user", "dummy_pass", ssl_verify=False)
         with pytest.raises(GeneralWarning) as err:

@@ -58,7 +58,7 @@ def test_cli_app_ems_get_workgroups(monkeypatch: MonkeyPatch) -> None:
                         {"name": "Test-grp2", "id": 54321, "total_devices": 321},
                     ]
                 },
-                status=200,
+                status_code=200,
             )
         ),
     )
@@ -78,7 +78,9 @@ def test_cli_app_ems_get_version(monkeypatch: MonkeyPatch) -> None:
     monkeypatch.setattr(
         "fotoobo.fortinet.fortinet.requests.Session.get",
         MagicMock(
-            return_value=ResponseMock(json={"data": {"System": {"VERSION": "1.2.3"}}}, status=200)
+            return_value=ResponseMock(
+                json={"data": {"System": {"VERSION": "1.2.3"}}}, status_code=200
+            )
         ),
     )
     result = runner.invoke(app, ["-c", "tests/fotoobo.yaml", "ems", "get", "version", "test_ems"])
