@@ -2,6 +2,8 @@
 Test the FortiAnalyzer class
 """
 
+# pylint: disable=no-member
+
 from unittest.mock import MagicMock
 
 import pytest
