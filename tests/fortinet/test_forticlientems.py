@@ -2,6 +2,9 @@
 """
 Test the FortiClient EMS class
 """
+
+# pylint: disable=no-member
+
 from pathlib import Path
 from unittest.mock import ANY, MagicMock
 
@@ -57,7 +60,7 @@ class TestFortiClientEMS:
 
     @staticmethod
     def test_login_with_invalid_cookie(monkeypatch: MonkeyPatch, temp_dir: Path) -> None:
-        """Test the login to a FortiClient EMS with no session cookie given"""
+        """Test the login to a FortiClient EMS with invalid session cookie given"""
         monkeypatch.setattr(
             "fotoobo.fortinet.forticlientems.requests.Session.get",
             MagicMock(
@@ -84,15 +87,125 @@ class TestFortiClientEMS:
                 ),
             ),
         )
+        # Copy cookie and token file to the temp folder
         source = Path("tests/data/ems_dummy.cookie")
         destination = Path(temp_dir / "ems_dummy.cookie")
         destination.write_bytes(source.read_bytes())
         source = Path("tests/data/ems_dummy.csrf")
         destination = Path(temp_dir / "ems_dummy.csrf")
         destination.write_bytes(source.read_bytes())
-        ems = FortiClientEMS("host", "dummy_user", "dummy_pass", temp_dir, ssl_verify=False)
-        assert ems.api_url == "https://host:443/api/v1"
+
+        ems = FortiClientEMS("ems_dummy", "dummy_user", "dummy_pass", temp_dir, ssl_verify=False)
+        assert ems.api_url == "https://ems_dummy:443/api/v1"
         assert ems.login() == 200
+
+    @staticmethod
+    def test_login_with_cookie_but_unable_to_save_it(
+        monkeypatch: MonkeyPatch, temp_dir: Path
+    ) -> None:
+        """Test the login to a FortiClient EMS with no session cookie when cookie enabled which
+        cannot be saved."""
+        monkeypatch.setattr(
+            "fotoobo.fortinet.forticlientems.requests.Session.post",
+            MagicMock(
+                return_value=ResponseMock(
+                    headers={"Set-Cookie": "csrftoken=dummy_csrf_token;"},
+                    json={
+                        "result": {"retval": 1, "message": "Login successful."},
+                    },
+                    status=200,
+                ),
+            ),
+        )
+        monkeypatch.setattr(
+            "fotoobo.fortinet.forticlientems.pickle.dump",
+            MagicMock(side_effect=FileNotFoundError()),
+        )
+        # Remove the cookie and token file (if they exist)
+        Path(temp_dir / "ems_dummy.cookie").unlink(missing_ok=True)
+        Path(temp_dir / "ems_dummy.csrf").unlink(missing_ok=True)
+
+        ems = FortiClientEMS("ems_dummy", "dummy_user", "dummy_pass", temp_dir, ssl_verify=False)
+        assert ems.api_url == "https://ems_dummy:443/api/v1"
+        assert ems.login() == 200
+        requests.Session.post.assert_called_with(
+            "https://ems_dummy:443/api/v1/auth/signin",
+            headers={
+                "User-Agent": "python-requests/2.31.0",
+                "Accept-Encoding": "gzip, deflate",
+                "Accept": "*/*",
+                "Connection": "keep-alive",
+                "Referer": "https://ems_dummy",
+                "X-CSRFToken": "dummy_csrf_token",
+            },
+            json={"name": "dummy_user", "password": "dummy_pass"},
+            params=None,
+            timeout=3,
+            verify=False,
+        )
+
+    @staticmethod
+    def test_login_with_cookie_and_invalid_session(
+        monkeypatch: MonkeyPatch, temp_dir: Path
+    ) -> None:
+        """Test the login to a FortiClient EMS with a session cookie but invalid session"""
+        monkeypatch.setattr(
+            "fotoobo.fortinet.forticlientems.requests.Session.get",
+            MagicMock(return_value=ResponseMock(status=401)),
+        )
+        monkeypatch.setattr(
+            "fotoobo.fortinet.forticlientems.requests.Session.post",
+            MagicMock(
+                return_value=ResponseMock(
+                    headers={"Set-Cookie": "csrftoken=dummy_csrf_token;"},
+                    json={
+                        "result": {"retval": 1, "message": "Login successful."},
+                    },
+                    status=200,
+                ),
+            ),
+        )
+        # Copy cookie and token file to the temp folder
+        source = Path("tests/data/ems_dummy.cookie")
+        destination = Path(temp_dir / "ems_dummy.cookie")
+        destination.write_bytes(source.read_bytes())
+        source = Path("tests/data/ems_dummy.csrf")
+        destination = Path(temp_dir / "ems_dummy.csrf")
+        destination.write_bytes(source.read_bytes())
+
+        ems = FortiClientEMS("ems_dummy", "dummy_user", "dummy_pass", temp_dir, ssl_verify=False)
+        assert ems.api_url == "https://ems_dummy:443/api/v1"
+        assert ems.login() == 200
+        requests.Session.get.assert_called_with(
+            "https://ems_dummy:443/api/v1/system/serial_number",
+            headers={
+                "User-Agent": "python-requests/2.31.0",
+                "Accept-Encoding": "gzip, deflate",
+                "Accept": "*/*",
+                "Connection": "keep-alive",
+                "Referer": "https://ems_dummy",
+                "X-CSRFToken": "dummy_csrf_token",
+            },
+            json=None,
+            params=None,
+            timeout=3,
+            verify=False,
+        )
+        requests.Session.post.assert_called_with(
+            "https://ems_dummy:443/api/v1/auth/signin",
+            headers={
+                "User-Agent": "python-requests/2.31.0",
+                "Accept-Encoding": "gzip, deflate",
+                "Accept": "*/*",
+                "Connection": "keep-alive",
+                "Referer": "https://ems_dummy",
+                "X-CSRFToken": "dummy_csrf_token",
+            },
+            json={"name": "dummy_user", "password": "dummy_pass"},
+            params=None,
+            timeout=3,
+            verify=False,
+        )
 
     @staticmethod
     def test_login_with_invalid_cookie_path(temp_dir: Path, monkeypatch: MonkeyPatch) -> None:
