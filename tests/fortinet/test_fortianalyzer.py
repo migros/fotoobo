@@ -2,6 +2,8 @@
 Test the FortiAnalyzer class
 """
 
+# pylint: disable=no-member
+
 from unittest.mock import MagicMock
 
 import pytest
@@ -35,7 +37,7 @@ class TestFortiAnalyzer:
         """Test FortiAnalyzer get version"""
         monkeypatch.setattr(
             "fotoobo.fortinet.fortinet.requests.Session.post",
-            MagicMock(return_value=ResponseMock(json=response, status=200)),
+            MagicMock(return_value=ResponseMock(json=response, status_code=200)),
         )
         assert FortiAnalyzer("host", "", "").get_version() == expected
         requests.Session.post.assert_called_with(  # type: ignore

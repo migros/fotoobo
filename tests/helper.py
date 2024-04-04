@@ -8,26 +8,30 @@ from unittest.mock import MagicMock
 from requests.exceptions import HTTPError
 
 
-class ResponseMock:
+class ResponseMock:  # pylint: disable=too-many-instance-attributes
     """This class mocks a http response object."""
 
     def __init__(self, **kwargs: Any) -> None:
         """
-        Give the mock the response you except.
+        Give the mock the response you expect.
 
-        Args:
-            text (str, optional): text response. Defaults to "".
-            json (Any, optional): json response. Defaults to "".
-            status (int, optional): http status code. Defaults to 444 (No Response)
+        **kwargs:
+            content: (Any, optional): Content of the response
+            headers: (List, optional): List of headers
+            json (Any, optional): JSON response. Defaults to ""
+            ok (bool, optional):  The OK flag. Defaults to True
+            reason(str, optional): The response reason. Defaults to ""
+            status_code (int, optional): HTTP status code. Defaults to 444 (No Response)
+            text (str, optional): Text response. Defaults to ""
         """
-        self.text = kwargs.get("text", "")
+        self.content = kwargs.get("content", "")
         self.headers = kwargs.get("headers", [])
         self.json = MagicMock(return_value=kwargs.get("json", None))
-        self.status_code = kwargs.get("status", 444)
         self.ok = kwargs.get("ok", True)
-        self.content = kwargs.get("content", "")
-        self.reason = kwargs.get("reason", "")
         self.raise_for_status = MagicMock()
+        self.reason = kwargs.get("reason", "")
+        self.status_code = kwargs.get("status_code", 444)
+        self.text = kwargs.get("text", "")
 
         if self.status_code >= 300:
             self.raise_for_status = MagicMock(
@@ -39,14 +43,13 @@ def parse_help_output(  # pylint: disable=too-many-branches
     output: str,
 ) -> Tuple[Dict[str, str], Set[str], Dict[str, str]]:
     """
-    Parse the output of the cli help and returns the available options and commands
+    Parse the output of the cli help and return the available arguments, options and commands
 
     Args:
-        output (str): the help output from the cli
+        output: the help output from the cli
 
     Returns:
-        Tuple[Dict, Set, Dict]:    Dicts and Sets of strings containing arguments,
-                                    options and commands
+        Dicts and Sets of strings containing arguments, options and commands
     """
     arguments = {}
     options = set()

@@ -39,7 +39,8 @@ def test_cli_app_faz_get_version(monkeypatch: MonkeyPatch) -> None:
         "fotoobo.fortinet.fortinet.requests.Session.post",
         MagicMock(
             return_value=ResponseMock(
-                json={"result": [{"data": {"Version": "v1.1.1-build1111 111111 (GA)"}}]}, status=200
+                json={"result": [{"data": {"Version": "v1.1.1-build1111 111111 (GA)"}}]},
+                status_code=200,
             )
         ),
     )
@@ -59,7 +60,9 @@ def test_cli_app_faz_get_version_none(monkeypatch: MonkeyPatch) -> None:
     monkeypatch.setattr(
         "fotoobo.fortinet.fortinet.requests.Session.post",
         MagicMock(
-            return_value=ResponseMock(json={"result": [{"data": {"Version": "dummy"}}]}, status=200)
+            return_value=ResponseMock(
+                json={"result": [{"data": {"Version": "dummy"}}]}, status_code=200
+            )
         ),
     )
     result = runner.invoke(

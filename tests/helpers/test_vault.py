@@ -52,7 +52,7 @@ class TestClient:
         "token_file, expect",
         (
             pytest.param("tests/data/vault_token.key", "dummy_vault_token", id="valid file"),
-            pytest.param("tests/data/invault_token_file", "", id="invalid file"),
+            pytest.param("tests/data/invalid_vault_token_file.key", "", id="invalid file"),
         ),
     )
     def test_load_token(token_file: str, expect: str, monkeypatch: MonkeyPatch) -> None:
@@ -237,7 +237,7 @@ class TestClient:
             pytest.param(
                 ResponseMock(
                     ok=False,
-                    status=404,
+                    status_code=404,
                     reason="Not Found",
                     content=b'{"errors":[]}\n',
                 ),
@@ -253,7 +253,7 @@ class TestClient:
             pytest.param(
                 ResponseMock(
                     ok=False,
-                    status=403,
+                    status_code=403,
                     reason="Forbidden",
                     content=b'{"errors":["1 error occurred:\\n\\t* permission denied\\n\\n"]}\n',
                 ),
@@ -286,7 +286,7 @@ class TestClient:
 
     @staticmethod
     def test_get_data_no_token(monkeypatch: MonkeyPatch) -> None:
-        """Test the Client get_data when no token could be retreived"""
+        """Test the Client get_data when no token could be retrieved"""
         monkeypatch.setattr("fotoobo.helpers.vault.Client.get_token", MagicMock(return_value=False))
         monkeypatch.setattr(
             "fotoobo.helpers.vault.requests.get", MagicMock(return_value=ResponseMock(ok=True))

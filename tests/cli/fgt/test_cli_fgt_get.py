@@ -37,7 +37,7 @@ def test_cli_app_fgt_get_version(monkeypatch: MonkeyPatch) -> None:
     """Test cli options and commands for fgt get version"""
     monkeypatch.setattr(
         "fotoobo.fortinet.fortinet.requests.Session.get",
-        MagicMock(return_value=ResponseMock(json={"version": "v1.1.1"}, status=200)),
+        MagicMock(return_value=ResponseMock(json={"version": "v1.1.1"}, status_code=200)),
     )
     result = runner.invoke(app, ["-c", "tests/fotoobo.yaml", "fgt", "get", "version", "test_fgt_1"])
     assert result.exit_code == 0
@@ -54,7 +54,7 @@ def test_cli_app_fgt_get_version_all(monkeypatch: MonkeyPatch) -> None:
     """Test cli options and commands for fgt get version without specifying a host"""
     monkeypatch.setattr(
         "fotoobo.fortinet.fortinet.requests.Session.get",
-        MagicMock(return_value=ResponseMock(json={"version": "v1.1.1"}, status=200)),
+        MagicMock(return_value=ResponseMock(json={"version": "v1.1.1"}, status_code=200)),
     )
     result = runner.invoke(app, ["-c", "tests/fotoobo.yaml", "fgt", "get", "version"])
     assert result.exit_code == 0
@@ -66,7 +66,7 @@ def test_cli_app_fgt_get_version_401(monkeypatch: MonkeyPatch) -> None:
     monkeypatch.setattr(
         "fotoobo.fortinet.fortinet.requests.Session.get",
         MagicMock(
-            return_value=ResponseMock(json={"dummy": "dummy"}, status=401),
+            return_value=ResponseMock(json={"dummy": "dummy"}, status_code=401),
         ),
     )
     result = runner.invoke(app, ["-c", "tests/fotoobo.yaml", "fgt", "get", "version", "test_fgt_1"])
