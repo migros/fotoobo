@@ -21,7 +21,7 @@ class ResponseMock:  # pylint: disable=too-many-instance-attributes
             json (Any, optional): JSON response. Defaults to ""
             ok (bool, optional):  The OK flag. Defaults to True
             reason(str, optional): The response reason. Defaults to ""
-            status (int, optional): HTTP status code. Defaults to 444 (No Response)
+            status_code (int, optional): HTTP status code. Defaults to 444 (No Response)
             text (str, optional): Text response. Defaults to ""
         """
         self.content = kwargs.get("content", "")
