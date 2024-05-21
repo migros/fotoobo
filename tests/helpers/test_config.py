@@ -4,7 +4,7 @@ Test the config helper
 
 import os
 from pathlib import Path
-from typing import Callable, Optional, Union
+from typing import Any, Callable, Dict, Optional, Union
 from unittest.mock import MagicMock
 
 import pytest
@@ -76,6 +76,52 @@ class TestConfig:
 
     @staticmethod
     @pytest.mark.parametrize(
+        "logging_type",
+        (
+            pytest.param("logging", id="logging"),
+            (pytest.param("audit_logging", id="audit_logging")),
+        ),
+    )
+    @pytest.mark.parametrize(
+        "logging,expected",
+        (
+            pytest.param(
+                None, r"Setting (audit_)?logging has to be a dictionary", id="*logging is None"
+            ),
+            pytest.param(
+                {"log_file": None},
+                r"Setting (audit_)?logging.log_file has to be a dictionary",
+                id="Log_file is None",
+            ),
+            pytest.param(
+                {"log_file": {"name": None}},
+                r"Missing (audit_)?logging.log_file configuration: name",
+                id="Empty log_file.name",
+            ),
+            pytest.param(
+                {"log_file": {"dummy": None}},
+                r"Missing (audit_)?logging.log_file configuration: name",
+                id="Missing log_file.name",
+            ),
+            # pytest.param(False, False, "from_yaml", id="env and yaml not set"),
+        ),
+    )
+    def test_config_logging(
+        logging_type: str,
+        logging: Optional[Dict[str, Any]],
+        expected: str,
+        monkeypatch: MonkeyPatch,
+    ) -> None:
+        """test load logging or audit_logging configuration with errors"""
+        test_config = Config()
+        monkeypatch.setattr(
+            "fotoobo.helpers.config.load_yaml_file", MagicMock(return_value={logging_type: logging})
+        )
+        with pytest.raises(GeneralError, match=expected):
+            test_config.load_configuration(Path("tests/fotoobo.yaml"))
+
+    @staticmethod
+    @pytest.mark.parametrize(
         "env,yaml,expected",
         (
             pytest.param(True, True, "from_env", id="env and yaml set"),
@@ -114,5 +160,5 @@ class TestConfig:
             assert test_config.vault["role_id"].endswith(expected)
 
         else:
-            with pytest.raises(GeneralError, match=r"Missing vault configuration data:.*"):
+            with pytest.raises(GeneralError, match=r"Missing vault configuration:.*"):
                 test_config.load_configuration(Path("tests/fotoobo.yaml"))

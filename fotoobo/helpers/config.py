@@ -32,7 +32,9 @@ class Config:
     cli_info: Dict[str, Any] = field(default_factory=dict)
     vault: Dict[str, str] = field(default_factory=dict)
 
-    def load_configuration(self, config_file: Optional[Path] = None) -> None:
+    def load_configuration(  # pylint: disable=too-many-branches
+        self, config_file: Optional[Path] = None
+    ) -> None:
         """
         Load the global fotoobo configuration file. If the configuration file is not present it just
         will be ignored and all the options remain as they are.
@@ -75,7 +77,23 @@ class Config:
                     self.inventory_file = config_file.parent / self.inventory_file
 
                 self.logging = loaded_config.get("logging", {})
+                if not isinstance(self.logging, dict):
+                    raise GeneralError("Setting logging has to be a dictionary")
+                if self.logging and "log_file" in self.logging:
+                    if not isinstance(self.logging["log_file"], dict):
+                        raise GeneralError("Setting logging.log_file has to be a dictionary")
+                    if not self.logging["log_file"].get("name", ""):
+                        raise GeneralError("Missing logging.log_file configuration: name")
+
                 self.audit_logging = loaded_config.get("audit_logging", {})
+                if not isinstance(self.audit_logging, dict):
+                    raise GeneralError("Setting audit_logging has to be a dictionary")
+                if self.audit_logging and "log_file" in self.audit_logging:
+                    if not isinstance(self.audit_logging["log_file"], dict):
+                        raise GeneralError("Setting audit_logging.log_file has to be a dictionary")
+                    if not self.audit_logging["log_file"].get("name", ""):
+                        raise GeneralError("Missing audit_logging.log_file configuration: name")
+
                 self.no_logo = loaded_config.get("no_logo", self.no_logo)
 
                 self.vault = loaded_config.get("vault", {})
@@ -100,7 +118,7 @@ class Config:
                         ]
                         - self.vault.keys()
                     ):
-                        raise GeneralError(f"Missing vault configuration data: {missing}")
+                        raise GeneralError(f"Missing vault configuration: {missing}")
 
 
 config = Config()

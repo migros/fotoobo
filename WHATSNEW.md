@@ -6,3 +6,7 @@
 
 ### Removed
 
+### Fixed
+
+- Fix crash when logging or audit_logging in configuration is not a dictionary
+- Fix crash when log_file in configuration is missing or empty
