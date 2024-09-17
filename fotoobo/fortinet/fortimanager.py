@@ -15,10 +15,15 @@ from .fortinet import Fortinet
 log = logging.getLogger("fotoobo")
 
 
-class FortiManager(Fortinet):
+class FortiManager(Fortinet):  # pylint: disable=too-many-public-methods
     """
     Represents one FortiManager (digital twin)
     """
+
+    def __del__(self) -> None:
+        """The destructor"""
+        if self.session_key and not self.session_path:
+            self.logout()
 
     def __init__(self, hostname: str, username: str, password: str, **kwargs: Any) -> None:
         """
@@ -62,11 +67,6 @@ class FortiManager(Fortinet):
             "root",
             "rootp",
         ]
-
-    def __del__(self) -> None:
-        """The destructor"""
-        if self.session_key and not self.session_path:
-            self.logout()
 
     def api(  # pylint: disable=too-many-arguments
         self,
@@ -155,7 +155,371 @@ class FortiManager(Fortinet):
 
         return task_id
 
-    def get_adoms(self, ignored_adoms: Optional[List[str]] = None) -> List[Any]:
+    def delete_adom_address(self, adom: str, address: str) -> bool:
+        """
+        Delete an address from an ADOM in FortiManager
+
+        Args:
+            adom:    The ADOM to delete the address from
+            address: The address to delete
+
+        Returns:
+            True if deletion was successful or object does not exist
+        """
+        result = False
+        url = f"/pm/config/adom/{adom}/obj/firewall/address/{address}"
+        payload = {
+            "method": "delete",
+            "params": [{"url": url}],
+        }
+        response = self.api("post", payload=payload).json()["result"][0]
+        if response["status"]["code"] in [-3, 0]:
+            # FortiManager response status codes:
+            # -3: Object does not exist
+            #  0: OK
+            result = True
+
+        return result
+
+    def delete_adom_address_group(self, adom: str, group: str) -> bool:
+        """
+        Delete an address group from an ADOM in FortiManager
+
+        Args:
+            adom:  The ADOM to delete the address group from
+            group: The address group to delete
+
+        Returns:
+            True if deletion was successful or object does not exist
+        """
+        result = False
+        url = f"/pm/config/adom/{adom}/obj/firewall/addrgrp/{group}"
+        payload = {
+            "method": "delete",
+            "params": [{"url": url}],
+        }
+        response = self.api("post", payload=payload).json()["result"][0]
+        if response["status"]["code"] in [-3, 0]:
+            # FortiManager response status codes:
+            # -3: Object does not exist
+            #  0: OK
+            result = True
+
+        return result
+
+    def delete_adom_service(self, adom: str, service: str) -> bool:
+        """
+        Delete a service from an ADOM in FortiManager
+
+        Args:
+            adom:    The ADOM to delete the address from
+            service: The service to delete
+
+        Returns:
+            True if deletion was successful or object does not exist
+        """
+        result = False
+        url = f"/pm/config/adom/{adom}/obj/firewall/service/custom/{service}"
+        payload = {
+            "method": "delete",
+            "params": [{"url": url}],
+        }
+        response = self.api("post", payload=payload).json()["result"][0]
+        if response["status"]["code"] in [-3, 0]:
+            # FortiManager response status codes:
+            # -3: Object does not exist
+            #  0: OK
+            result = True
+
+        return result
+
+    def delete_adom_service_group(self, adom: str, group: str) -> bool:
+        """
+        Delete a service group from an ADOM in FortiManager
+
+        Args:
+            adom:  The ADOM to delete the address group from
+            group: The address group to delete
+
+        Returns:
+            True if deletion was successful or object does not exist
+        """
+        result = False
+        url = f"/pm/config/adom/{adom}/obj/firewall/service/group/{group}"
+        payload = {
+            "method": "delete",
+            "params": [{"url": url}],
+        }
+        response = self.api("post", payload=payload).json()["result"][0]
+        if response["status"]["code"] in [-3, 0]:
+            # FortiManager response status codes:
+            # -3: Object does not exist
+            #  0: OK
+            result = True
+
+        return result
+
+    def delete_global_address(self, address: str) -> bool:
+        """
+        Delete a global address from FortiManager
+
+        To be sure to not delete used objects we configure the FortiManager as follows:
+
+            config system admin setting
+                set objects-force-deletion disable
+
+        Before deleting a global address object we have to check if it's in use in any ADOM. Only
+        after we found that no ADOM uses the object we can safely delete it.
+
+        Fortinet documentation links:
+        https://docs.fortinet.com/document/fortimanager/7.0.12/administration-guide/322714
+        https://docs.fortinet.com/document/fortimanager/7.2.7/administration-guide/322714
+        https://docs.fortinet.com/document/fortimanager/7.4.3/administration-guide/322714
+        https://docs.fortinet.com/document/fortimanager/7.6.0/administration-guide/322714
+
+        Args:
+            address: The global address to delete
+
+        Returns:
+            True if deletion was successful or object does not exist
+        """
+        result = False
+
+        # Get the address object with 'scope member' information
+        if address_object := self.get_global_address(address, scope_member=True):
+
+            # Generate a list of ADOMs where the object is used. Therefore we get the address object
+            # from FortiManager with the 'scope member' option. If the object is used in any ADOM it
+            # is listed in the key 'scope member'. If the object is not used in any ADOM the
+            # 'scope member' key is not present.
+            if "scope member" in address_object:
+                used_adoms = [_["name"] for _ in address_object["scope member"]]
+                log.debug("'%s' is used in ADOM '%s'", address, ",".join(used_adoms))
+
+            else:
+                used_adoms = []
+
+            # Try to delete the address group  object in every ADOM
+            blocked_adoms = []
+            for adom in used_adoms:
+                if not self.delete_adom_address(adom, address):
+                    blocked_adoms.append(adom)
+
+            if blocked_adoms:
+                log.warning("'%s' blocked by ADOM '%s'", address, ",".join(blocked_adoms))
+
+            # Try to delete the global address object
+            if not blocked_adoms:
+                url = f"/pm/config/global/obj/firewall/address/{address}"
+                payload = {
+                    "method": "delete",
+                    "params": [{"url": url}],
+                }
+                response = self.api("post", payload=payload).json()["result"][0]
+                if response["status"]["code"] == 0:
+                    result = True
+
+        else:
+            log.warning("Address '%s' not found in FortiManager", address)
+
+        return result
+
+    def delete_global_address_group(self, group: str) -> bool:
+        """
+        Delete a global address group from FortiManager
+
+        To be sure to not delete used objects we configure the FortiManager as follows:
+
+            config system admin setting
+                set objects-force-deletion disable
+
+        Before deleting a global address group object we have to check if it's in use in any ADOM.
+        Only after we found that no ADOM uses the object we can safely delete it.
+
+        Fortinet documentation links:
+        https://docs.fortinet.com/document/fortimanager/7.0.12/administration-guide/322714
+        https://docs.fortinet.com/document/fortimanager/7.2.7/administration-guide/322714
+        https://docs.fortinet.com/document/fortimanager/7.4.3/administration-guide/322714
+        https://docs.fortinet.com/document/fortimanager/7.6.0/administration-guide/322714
+
+        Args:
+            group: The global address group to delete
+
+        Returns:
+            True if deletion was successful or object does not exist
+        """
+        result = False
+
+        # Get the address group object with 'scope member' information
+        if address_group_object := self.get_global_address_group(group, scope_member=True):
+
+            # Generate a list of ADOMs where the object is used. Therefore we get the address group
+            # object from FortiManager with the 'scope member' option. If the object is used in any
+            # ADOM it is listed in the key 'scope member'. If the object is not used in any ADOM the
+            # 'scope member' key is not present.
+            if "scope member" in address_group_object:
+                used_adoms = [_["name"] for _ in address_group_object["scope member"]]
+                log.debug("'%s' is used in ADOM '%s'", group, ",".join(used_adoms))
+
+            else:
+                used_adoms = []
+
+            # Try to delete the address group object in every ADOM
+            blocked_adoms = []
+            for adom in used_adoms:
+                if not self.delete_adom_address_group(adom, group):
+                    blocked_adoms.append(adom)
+
+            if blocked_adoms:
+                log.warning("'%s' blocked by ADOM '%s'", group, ",".join(blocked_adoms))
+
+            # Try to delete the global address group object
+            if not blocked_adoms:
+                url = f"/pm/config/global/obj/firewall/addrgrp/{group}"
+                payload = {
+                    "method": "delete",
+                    "params": [{"url": url}],
+                }
+                response = self.api("post", payload=payload).json()["result"][0]
+                if response["status"]["code"] == 0:
+                    result = True
+
+        else:
+            log.warning("Address group '%s' not found in FortiManager", group)
+
+        return result
+
+    def delete_global_service(self, service: str) -> bool:
+        """
+        Delete a global service from FortiManager
+
+        To be sure to not delete used objects we configure the FortiManager as follows:
+
+            config system admin setting
+                set objects-force-deletion disable
+
+        Before deleting a global service object we have to check if it's in use in any ADOM. Only
+        after we found that no ADOM uses the object we can safely delete it.
+
+        Fortinet documentation links:
+        https://docs.fortinet.com/document/fortimanager/7.0.12/administration-guide/322714
+        https://docs.fortinet.com/document/fortimanager/7.2.7/administration-guide/322714
+        https://docs.fortinet.com/document/fortimanager/7.4.3/administration-guide/322714
+        https://docs.fortinet.com/document/fortimanager/7.6.0/administration-guide/322714
+
+        Args:
+            service: The global service to delete
+
+        Returns:
+            True if deletion was successful or object does not exist
+        """
+        result = False
+
+        # Get the service object with 'scope member' information
+        if service_object := self.get_global_service(service, scope_member=True):
+
+            # Generate a list of ADOMs where the object is used. Therefore we get the service object
+            # from FortiManager with the 'scope member' option. If the object is used in any ADOM it
+            # is listed in the key 'scope member'. If the object is not used in any ADOM the
+            # 'scope member' key is not present.
+            if "scope member" in service_object:
+                used_adoms = [_["name"] for _ in service_object["scope member"]]
+                log.debug("'%s' is used in ADOM '%s'", service, ",".join(used_adoms))
+
+            else:
+                used_adoms = []
+
+            # Try to delete the address group  object in every ADOM
+            blocked_adoms = []
+            for adom in used_adoms:
+                if not self.delete_adom_service(adom, service):
+                    blocked_adoms.append(adom)
+
+            if blocked_adoms:
+                log.warning("'%s' blocked by ADOM '%s'", service, ",".join(blocked_adoms))
+
+            # Try to delete the global service object
+            if not blocked_adoms:
+                url = f"/pm/config/global/obj/firewall/service/custom/{service}"
+                payload = {
+                    "method": "delete",
+                    "params": [{"url": url}],
+                }
+                response = self.api("post", payload=payload).json()["result"][0]
+                if response["status"]["code"] == 0:
+                    result = True
+
+        else:
+            log.warning("Service '%s' not found in FortiManager", service)
+
+        return result
+
+    def delete_global_service_group(self, group: str) -> bool:
+        """
+        Delete a global service group from FortiManager
+
+        To be sure to not delete used objects we configure the FortiManager as follows:
+
+            config system admin setting
+                set objects-force-deletion disable
+
+        Before deleting a global service group object we have to check if it's in use in any ADOM.
+        Only after we found that no ADOM uses the object we can safely delete it.
+
+        Fortinet documentation links:
+        https://docs.fortinet.com/document/fortimanager/7.0.12/administration-guide/322714
+        https://docs.fortinet.com/document/fortimanager/7.2.7/administration-guide/322714
+        https://docs.fortinet.com/document/fortimanager/7.4.3/administration-guide/322714
+        https://docs.fortinet.com/document/fortimanager/7.6.0/administration-guide/322714
+
+        Args:
+            group: The global service group to delete
+
+        Returns:
+            True if deletion was successful or object does not exist
+        """
+        result = False
+
+        # Get the service group object with 'scope member' information
+        if service_group_object := self.get_global_service_group(group, scope_member=True):
+
+            # Generate a list of ADOMs where the object is used. Therefore we get the service group
+            # object from FortiManager with the 'scope member' option. If the object is used in any
+            # ADOM it is listed in the key 'scope member'. If the object is not used in any ADOM the
+            # 'scope member' key is not present.
+            if "scope member" in service_group_object:
+                used_adoms = [_["name"] for _ in service_group_object["scope member"]]
+                log.debug("'%s' is used in ADOM '%s'", group, ",".join(used_adoms))
+
+            else:
+                used_adoms = []
+
+            # Try to delete the service group object in every ADOM
+            blocked_adoms = []
+            for adom in used_adoms:
+                if not self.delete_adom_service_group(adom, group):
+                    blocked_adoms.append(adom)
+
+            if blocked_adoms:
+                log.warning("'%s' blocked by ADOM '%s'", group, ",".join(blocked_adoms))
+
+            # Try to delete the global service group object
+            if not blocked_adoms:
+                url = f"/pm/config/global/obj/firewall/service/group/{group}"
+                payload = {
+                    "method": "delete",
+                    "params": [{"url": url}],
+                }
+                response = self.api("post", payload=payload).json()["result"][0]
+                if response["status"]["code"] == 0:
+                    result = True
+
+        else:
+            log.warning("Service group '%s' not found in FortiManager", group)
+
+        return result
+
+    def get_adoms(self, ignored_adoms: Optional[List[str]] = None) -> list[Any]:
         """
         Get FortiManager ADOM list
 
@@ -176,6 +540,210 @@ class FortiManager(Fortinet):
                 fmg_adoms.append(adom)
 
         return fmg_adoms
+
+    def get_global_address(self, address: str, scope_member: bool = False) -> dict[str, Any]:
+        """
+        Get an address object from global ADOM
+
+        Args:
+            address:      The address to get
+            scope_member: Whether the scope member attribute should be included in the response
+
+        Returns:
+            The global object from FortiManager
+        """
+        result = {}
+        url = f"/pm/config/global/obj/firewall/address/{address}"
+        payload = {
+            "method": "get",
+            "params": [{"url": url}],
+        }
+        if scope_member:
+            payload["params"][0]["option"] = ["scope member"]  # type: ignore
+
+        response = self.api("post", payload=payload).json()["result"][0]
+        if response["status"]["code"] == 0:
+            result = response["data"]
+
+        return result
+
+    def get_global_addresses(self) -> list[dict[str, Any]]:
+        """
+        Get the global address database
+
+        Returns:
+            List of global address objects
+        """
+        addresses: list[dict[str, Any]] = []
+        payload = {
+            "method": "get",
+            "params": [
+                {
+                    "url": "/pm/config/global/obj/firewall/address",
+                    # "fields": ["name", "uuid"],
+                    # "range": [0, 10],
+                }
+            ],
+        }
+        response = self.api("post", payload=payload, timeout=10)
+        addresses = response.json()["result"][0]["data"]
+
+        return addresses
+
+    def get_global_address_group(self, group: str, scope_member: bool = False) -> dict[str, Any]:
+        """
+        Get an address group object from the global ADOM
+
+        Args:
+            group:        The address group to get
+            scope_member: Whether the scope member attribute should be included in the response
+
+        Returns:
+            The global object from FortiManager
+        """
+        result = {}
+        url = f"/pm/config/global/obj/firewall/addrgrp/{group}"
+        payload = {
+            "method": "get",
+            "params": [
+                {
+                    "url": url,
+                }
+            ],
+        }
+        if scope_member:
+            payload["params"][0]["option"] = ["scope member"]  # type: ignore
+
+        response = self.api("post", payload=payload).json()["result"][0]
+        if response["status"]["code"] == 0:
+            result = response["data"]
+
+        return result
+
+    def get_global_address_groups(self) -> list[dict[str, Any]]:
+        """
+        Get the global address group database
+
+        Returns:
+            List of global address group objects
+        """
+        address_groups: list[dict[str, Any]] = []
+        payload = {
+            "method": "get",
+            "params": [
+                {
+                    "url": "/pm/config/global/obj/firewall/addrgrp",
+                    # "fields": ["name", "uuid"],
+                    # "range": [0, 10],
+                }
+            ],
+        }
+        response = self.api("post", payload=payload, timeout=10)
+        address_groups = response.json()["result"][0]["data"]
+
+        return address_groups
+
+    def get_global_service(self, service: str, scope_member: bool = False) -> dict[str, Any]:
+        """
+        Get a service object from global ADOM
+
+        Args:
+            service:      The service to get
+            scope_member: Whether the scope member attribute should be included in the response
+
+        Returns:
+            The global object from FortiManager
+        """
+        result = {}
+        url = f"/pm/config/global/obj/firewall/service/custom/{service}"
+        payload = {
+            "method": "get",
+            "params": [{"url": url}],
+        }
+        if scope_member:
+            payload["params"][0]["option"] = ["scope member"]  # type: ignore
+
+        response = self.api("post", payload=payload).json()["result"][0]
+        if response["status"]["code"] == 0:
+            result = response["data"]
+
+        return result
+
+    def get_global_services(self) -> list[dict[str, Any]]:
+        """
+        Get the global services database
+
+        Returns:
+            List of global service objects
+        """
+        addresses: list[dict[str, Any]] = []
+        payload = {
+            "method": "get",
+            "params": [
+                {
+                    "url": "/pm/config/global/obj/firewall/service/custom",
+                    # "fields": ["name", "uuid"],
+                    # "range": [0, 10],
+                }
+            ],
+        }
+        response = self.api("post", payload=payload, timeout=10)
+        addresses = response.json()["result"][0]["data"]
+
+        return addresses
+
+    def get_global_service_group(self, group: str, scope_member: bool = False) -> dict[str, Any]:
+        """
+        Get a service group object from the global ADOM
+
+        Args:
+            group:        The address group to get
+            scope_member: Whether the scope member attribute should be included in the response
+
+        Returns:
+            The global object from FortiManager or empty if not present
+        """
+        result = {}
+        url = f"/pm/config/global/obj/firewall/service/group/{group}"
+        payload = {
+            "method": "get",
+            "params": [
+                {
+                    "url": url,
+                }
+            ],
+        }
+        if scope_member:
+            payload["params"][0]["option"] = ["scope member"]  # type: ignore
+
+        response = self.api("post", payload=payload).json()["result"][0]
+        if response["status"]["code"] == 0:
+            result = response["data"]
+
+        return result
+
+    def get_global_service_groups(self) -> list[dict[str, Any]]:
+        """
+        Get the global network service group database
+
+        Returns:
+            List of global network service group objects
+        """
+        service_groups: list[dict[str, Any]] = []
+        payload = {
+            "method": "get",
+            "params": [
+                {
+                    "url": "/pm/config/global/obj/firewall/service/group",
+                    # "fields": ["name", "uuid"],
+                    # "range": [0, 10],
+                }
+            ],
+        }
+        response = self.api("post", payload=payload, timeout=10)
+        service_groups = response.json()["result"][0]["data"]
+
+        return service_groups
 
     def get_version(self) -> str:
         """
