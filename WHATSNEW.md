@@ -1,5 +1,7 @@
 ### Added
 
+- FortiManager Methods for handling addresses and services (get and delete)
+
 ### Changed
 
 - Upgrade requests to >=2.32 due to dependabot warning
