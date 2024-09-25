@@ -68,6 +68,44 @@ class FortiManager(Fortinet):  # pylint: disable=too-many-public-methods
             "rootp",
         ]
 
+    def api_delete(self, url: str) -> requests.models.Response:
+        """DELETE method for API requests
+
+        Args:
+            url: API endpoint to access
+
+        Result:
+            FortiManager result item
+        """
+        payload = {
+            "method": "delete",
+            "params": [{"url": f"{url}"}],
+        }
+        return self.api("post", payload=payload)
+
+    def api_get(
+        self, url: str, params: Optional[dict[str, Any]] = None, timeout: Optional[float] = None
+    ) -> requests.models.Response:
+        """GET method for API requests
+
+        Args:
+            url:     API endpoint to access
+            params:  Additional query parameters if needed
+            timeout: The requests read timeout in seconds
+
+        Result:
+            FortiManager result item
+        """
+        _params = {"url": f"{url}"}
+        if params:
+            _params = {**_params, **params}
+
+        payload = {
+            "method": "get",
+            "params": [_params],
+        }
+        return self.api("post", payload=payload, timeout=timeout)
+
     def api(  # pylint: disable=too-many-arguments
         self,
         method: str,
@@ -166,12 +204,8 @@ class FortiManager(Fortinet):  # pylint: disable=too-many-public-methods
         Returns:
             FortiManager result item
         """
-        result: dict[str, Any] = {}
-        payload = {
-            "method": "delete",
-            "params": [{"url": f"/pm/config/adom/{adom}/obj/firewall/address/{address}"}],
-        }
-        result = self.api("post", payload=payload).json()["result"][0]
+        url: str = f"/pm/config/adom/{adom}/obj/firewall/address/{address}"
+        result: dict[str, Any] = self.api_delete(url).json()["result"][0]
 
         return result
 
@@ -186,12 +220,8 @@ class FortiManager(Fortinet):  # pylint: disable=too-many-public-methods
         Returns:
             FortiManager result item
         """
-        result: dict[str, Any] = {}
-        payload = {
-            "method": "delete",
-            "params": [{"url": f"/pm/config/adom/{adom}/obj/firewall/addrgrp/{group}"}],
-        }
-        result = self.api("post", payload=payload).json()["result"][0]
+        url: str = f"/pm/config/adom/{adom}/obj/firewall/addrgrp/{group}"
+        result: dict[str, Any] = self.api_delete(url).json()["result"][0]
 
         return result
 
@@ -206,12 +236,8 @@ class FortiManager(Fortinet):  # pylint: disable=too-many-public-methods
         Returns:
             FortiManager result item
         """
-        result: dict[str, Any] = {}
-        payload = {
-            "method": "delete",
-            "params": [{"url": f"/pm/config/adom/{adom}/obj/firewall/service/custom/{service}"}],
-        }
-        result = self.api("post", payload=payload).json()["result"][0]
+        url: str = f"/pm/config/adom/{adom}/obj/firewall/service/custom/{service}"
+        result: dict[str, Any] = self.api_delete(url).json()["result"][0]
 
         return result
 
@@ -226,12 +252,8 @@ class FortiManager(Fortinet):  # pylint: disable=too-many-public-methods
         Returns:
             FortiManager result item
         """
-        result: dict[str, Any] = {}
-        payload = {
-            "method": "delete",
-            "params": [{"url": f"/pm/config/adom/{adom}/obj/firewall/service/group/{group}"}],
-        }
-        result = self.api("post", payload=payload).json()["result"][0]
+        url: str = f"/pm/config/adom/{adom}/obj/firewall/service/group/{group}"
+        result: dict[str, Any] = self.api_delete(url).json()["result"][0]
 
         return result
 
@@ -285,11 +307,8 @@ class FortiManager(Fortinet):  # pylint: disable=too-many-public-methods
                 log.warning("'%s' blocked by ADOM '%s'", address, ",".join(blocked_adoms))
 
             # Try to delete the global address object
-            payload = {
-                "method": "delete",
-                "params": [{"url": f"/pm/config/global/obj/firewall/address/{address}"}],
-            }
-            result = self.api("post", payload=payload).json()["result"][0]
+            url: str = f"/pm/config/global/obj/firewall/address/{address}"
+            result = self.api_delete(url).json()["result"][0]
 
         else:
             result = address_object
@@ -347,11 +366,8 @@ class FortiManager(Fortinet):  # pylint: disable=too-many-public-methods
                 log.warning("'%s' blocked by ADOM '%s'", group, ",".join(blocked_adoms))
 
             # Try to delete the global address group object
-            payload = {
-                "method": "delete",
-                "params": [{"url": f"/pm/config/global/obj/firewall/addrgrp/{group}"}],
-            }
-            result = self.api("post", payload=payload).json()["result"][0]
+            url: str = f"/pm/config/global/obj/firewall/addrgrp/{group}"
+            result = self.api_delete(url).json()["result"][0]
 
         else:
             result = address_group_object
@@ -409,11 +425,8 @@ class FortiManager(Fortinet):  # pylint: disable=too-many-public-methods
                 log.warning("'%s' blocked by ADOM '%s'", service, ",".join(blocked_adoms))
 
             # Try to delete the global service object
-            payload = {
-                "method": "delete",
-                "params": [{"url": f"/pm/config/global/obj/firewall/service/custom/{service}"}],
-            }
-            result = self.api("post", payload=payload).json()["result"][0]
+            url: str = f"/pm/config/global/obj/firewall/service/custom/{service}"
+            result = self.api_delete(url).json()["result"][0]
 
         else:
             result = service_object
@@ -471,11 +484,8 @@ class FortiManager(Fortinet):  # pylint: disable=too-many-public-methods
                 log.warning("'%s' blocked by ADOM '%s'", group, ",".join(blocked_adoms))
 
             # Try to delete the global service group object
-            payload = {
-                "method": "delete",
-                "params": [{"url": f"/pm/config/global/obj/firewall/service/group/{group}"}],
-            }
-            result = self.api("post", payload=payload).json()["result"][0]
+            url: str = f"/pm/config/global/obj/firewall/service/group/{group}"
+            result = self.api_delete(url).json()["result"][0]
 
         else:
             result = service_group_object
@@ -516,14 +526,16 @@ class FortiManager(Fortinet):  # pylint: disable=too-many-public-methods
             FortiManager result item
         """
         result: dict[str, Any] = {}
-        payload = {
-            "method": "get",
-            "params": [{"url": f"/pm/config/global/obj/firewall/address/{address}"}],
-        }
-        if scope_member:
-            payload["params"][0]["option"] = ["scope member"]  # type: ignore
+        url: str = f"/pm/config/global/obj/firewall/address/{address}"
 
-        result = self.api("post", payload=payload).json()["result"][0]
+        if scope_member:
+            params = {"option": ["scope member"]}
+            response = self.api_get(url, params)
+
+        else:
+            response = self.api_get(url)
+
+        result = response.json()["result"][0]
 
         return result
 
@@ -534,12 +546,10 @@ class FortiManager(Fortinet):  # pylint: disable=too-many-public-methods
         Returns:
             FortiManager result item
         """
-        result: dict[str, Any] = {}
-        payload = {
-            "method": "get",
-            "params": [{"url": "/pm/config/global/obj/firewall/address"}],
-        }
-        result = self.api("post", payload=payload, timeout=10).json()["result"][0]
+        result: dict[str, Any] = self.api_get(
+            "/pm/config/global/obj/firewall/address",
+            timeout=10,
+        ).json()["result"][0]
 
         return result
 
@@ -555,14 +565,16 @@ class FortiManager(Fortinet):  # pylint: disable=too-many-public-methods
             FortiManager result item
         """
         result: dict[str, Any] = {}
-        payload = {
-            "method": "get",
-            "params": [{"url": f"/pm/config/global/obj/firewall/addrgrp/{group}"}],
-        }
-        if scope_member:
-            payload["params"][0]["option"] = ["scope member"]  # type: ignore
+        url: str = f"/pm/config/global/obj/firewall/addrgrp/{group}"
 
-        result = self.api("post", payload=payload).json()["result"][0]
+        if scope_member:
+            params = {"option": ["scope member"]}
+            response = self.api_get(url, params)
+
+        else:
+            response = self.api_get(url)
+
+        result = response.json()["result"][0]
 
         return result
 
@@ -573,12 +585,10 @@ class FortiManager(Fortinet):  # pylint: disable=too-many-public-methods
         Returns:
             FortiManager result item
         """
-        result: dict[str, Any] = {}
-        payload = {
-            "method": "get",
-            "params": [{"url": "/pm/config/global/obj/firewall/addrgrp"}],
-        }
-        result = self.api("post", payload=payload, timeout=10).json()["result"][0]
+        result: dict[str, Any] = self.api_get(
+            "/pm/config/global/obj/firewall/addrgrp",
+            timeout=10,
+        ).json()["result"][0]
 
         return result
 
@@ -594,14 +604,16 @@ class FortiManager(Fortinet):  # pylint: disable=too-many-public-methods
             FortiManager result item
         """
         result: dict[str, Any] = {}
-        payload = {
-            "method": "get",
-            "params": [{"url": f"/pm/config/global/obj/firewall/service/custom/{service}"}],
-        }
-        if scope_member:
-            payload["params"][0]["option"] = ["scope member"]  # type: ignore
+        url: str = f"/pm/config/global/obj/firewall/service/custom/{service}"
 
-        result = self.api("post", payload=payload).json()["result"][0]
+        if scope_member:
+            params = {"option": ["scope member"]}
+            response = self.api_get(url, params)
+
+        else:
+            response = self.api_get(url)
+
+        result = response.json()["result"][0]
 
         return result
 
@@ -612,12 +624,10 @@ class FortiManager(Fortinet):  # pylint: disable=too-many-public-methods
         Returns:
             FortiManager result item
         """
-        result: dict[str, Any] = {}
-        payload = {
-            "method": "get",
-            "params": [{"url": "/pm/config/global/obj/firewall/service/custom"}],
-        }
-        result = self.api("post", payload=payload, timeout=10).json()["result"][0]
+        result: dict[str, Any] = self.api_get(
+            "/pm/config/global/obj/firewall/service/custom",
+            timeout=10,
+        ).json()["result"][0]
 
         return result
 
@@ -633,14 +643,16 @@ class FortiManager(Fortinet):  # pylint: disable=too-many-public-methods
             FortiManager result item
         """
         result: dict[str, Any] = {}
-        payload = {
-            "method": "get",
-            "params": [{"url": f"/pm/config/global/obj/firewall/service/group/{group}"}],
-        }
-        if scope_member:
-            payload["params"][0]["option"] = ["scope member"]  # type: ignore
+        url: str = f"/pm/config/global/obj/firewall/service/group/{group}"
 
-        result = self.api("post", payload=payload).json()["result"][0]
+        if scope_member:
+            params = {"option": ["scope member"]}
+            response = self.api_get(url, params)
+
+        else:
+            response = self.api_get(url)
+
+        result = response.json()["result"][0]
 
         return result
 
@@ -651,12 +663,10 @@ class FortiManager(Fortinet):  # pylint: disable=too-many-public-methods
         Returns:
             FortiManager result item
         """
-        result: dict[str, Any] = {}
-        payload = {
-            "method": "get",
-            "params": [{"url": "/pm/config/global/obj/firewall/service/group"}],
-        }
-        result = self.api("post", payload=payload, timeout=10).json()["result"][0]
+        result: dict[str, Any] = self.api_get(
+            "/pm/config/global/obj/firewall/service/group",
+            timeout=10,
+        ).json()["result"][0]
 
         return result
 
