@@ -334,10 +334,16 @@ class FortiManager(Fortinet):  # pylint: disable=too-many-public-methods
 
                 if blocked_adoms:
                     log.warning("'%s' blocked by ADOM '%s'", address, ",".join(blocked_adoms))
+                    result = address_object
+                    result["status"] = {
+                        "code": 601,
+                        "message": f"Used in ADOM {','.join(blocked_adoms)}",
+                    }
 
-                # Try to delete the global address object
-                url: str = f"/pm/config/global/obj/firewall/address/{address}"
-                result = self.api_delete(url).json()["result"][0]
+                else:
+                    # Try to delete the global address object
+                    url: str = f"/pm/config/global/obj/firewall/address/{address}"
+                    result = self.api_delete(url).json()["result"][0]
 
             else:
                 log.info("DRY-RUN: Would remove global address '%s'", address)
@@ -398,10 +404,16 @@ class FortiManager(Fortinet):  # pylint: disable=too-many-public-methods
 
                 if blocked_adoms:
                     log.warning("'%s' blocked by ADOM '%s'", group, ",".join(blocked_adoms))
+                    result = address_group_object
+                    result["status"] = {
+                        "code": 601,
+                        "message": f"Used in ADOM {','.join(blocked_adoms)}",
+                    }
 
-                # Try to delete the global address group object
-                url: str = f"/pm/config/global/obj/firewall/addrgrp/{group}"
-                result = self.api_delete(url).json()["result"][0]
+                else:
+                    # Try to delete the global address group object
+                    url: str = f"/pm/config/global/obj/firewall/addrgrp/{group}"
+                    result = self.api_delete(url).json()["result"][0]
 
             else:
                 log.info("DRY-RUN: Would remove global address group '%s'", group)
@@ -462,10 +474,16 @@ class FortiManager(Fortinet):  # pylint: disable=too-many-public-methods
 
                 if blocked_adoms:
                     log.warning("'%s' blocked by ADOM '%s'", service, ",".join(blocked_adoms))
+                    result = service_object
+                    result["status"] = {
+                        "code": 601,
+                        "message": f"Used in ADOM {','.join(blocked_adoms)}",
+                    }
 
-                # Try to delete the global service object
-                url: str = f"/pm/config/global/obj/firewall/service/custom/{service}"
-                result = self.api_delete(url).json()["result"][0]
+                else:
+                    # Try to delete the global service object
+                    url: str = f"/pm/config/global/obj/firewall/service/custom/{service}"
+                    result = self.api_delete(url).json()["result"][0]
 
             else:
                 log.info("DRY-RUN: Would remove global service '%s'", service)
@@ -526,10 +544,16 @@ class FortiManager(Fortinet):  # pylint: disable=too-many-public-methods
 
                 if blocked_adoms:
                     log.warning("'%s' blocked by ADOM '%s'", group, ",".join(blocked_adoms))
+                    result = service_group_object
+                    result["status"] = {
+                        "code": 601,
+                        "message": f"Used in ADOM {','.join(blocked_adoms)}",
+                    }
 
-                # Try to delete the global service group object
-                url: str = f"/pm/config/global/obj/firewall/service/group/{group}"
-                result = self.api_delete(url).json()["result"][0]
+                else:
+                    # Try to delete the global service group object
+                    url: str = f"/pm/config/global/obj/firewall/service/group/{group}"
+                    result = self.api_delete(url).json()["result"][0]
 
             else:
                 log.info("DRY-RUN: Would remove global service group '%s'", group)

@@ -382,7 +382,7 @@ class TestFortiManager:  # pylint: disable=too-many-public-methods
             MagicMock(return_value={"status": delete_adom_address_status}),
         )
         fmg = FortiManager("host", "", "")
-        assert fmg.delete_global_address("dummy")["status"]["code"] in [0, 7]
+        assert fmg.delete_global_address("dummy")["status"]["code"] in [0, 7, 601]
 
     @staticmethod
     @pytest.mark.usefixtures("api_get_ok", "api_delete_ok")
@@ -436,7 +436,7 @@ class TestFortiManager:  # pylint: disable=too-many-public-methods
             MagicMock(return_value={"status": delete_adom_address_group_status}),
         )
         fmg = FortiManager("host", "", "")
-        assert fmg.delete_global_address_group("dummy")["status"]["code"] in [0, 7]
+        assert fmg.delete_global_address_group("dummy")["status"]["code"] in [0, 7, 601]
 
     @staticmethod
     @pytest.mark.usefixtures("api_get_ok", "api_delete_ok")
@@ -490,7 +490,7 @@ class TestFortiManager:  # pylint: disable=too-many-public-methods
             MagicMock(return_value={"status": delete_adom_service_status}),
         )
         fmg = FortiManager("host", "", "")
-        assert fmg.delete_global_service("dummy")["status"]["code"] in [0, 7]
+        assert fmg.delete_global_service("dummy")["status"]["code"] in [0, 7, 601]
 
     @staticmethod
     @pytest.mark.usefixtures("api_get_ok", "api_delete_ok")
@@ -544,7 +544,7 @@ class TestFortiManager:  # pylint: disable=too-many-public-methods
             MagicMock(return_value={"status": delete_adom_service_group_status}),
         )
         fmg = FortiManager("host", "", "")
-        assert fmg.delete_global_service_group("dummy")["status"]["code"] in [0, 7]
+        assert fmg.delete_global_service_group("dummy")["status"]["code"] in [0, 7, 601]
 
     @staticmethod
     @pytest.mark.usefixtures("api_get_ok", "api_delete_ok")
