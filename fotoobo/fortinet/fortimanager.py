@@ -193,71 +193,95 @@ class FortiManager(Fortinet):  # pylint: disable=too-many-public-methods
 
         return task_id
 
-    def delete_adom_address(self, adom: str, address: str) -> dict[str, Any]:
+    def delete_adom_address(self, adom: str, address: str, dry: bool = False) -> dict[str, Any]:
         """
         Delete an address from an ADOM in FortiManager
 
         Args:
             adom:    The ADOM to delete the address from
             address: The address to delete
+            dry:     Set to True to enable dry-run (no changes on FortiManager)
 
         Returns:
             FortiManager result item
         """
-        url: str = f"/pm/config/adom/{adom}/obj/firewall/address/{address}"
-        result: dict[str, Any] = self.api_delete(url).json()["result"][0]
+        result: dict[str, Any] = {}
+        if not dry:
+            url: str = f"/pm/config/adom/{adom}/obj/firewall/address/{address}"
+            result = self.api_delete(url).json()["result"][0]
+
+        else:
+            log.info("DRY-RUN: Would remove address '%s' in ADOM '%s'", address, adom)
 
         return result
 
-    def delete_adom_address_group(self, adom: str, group: str) -> dict[str, Any]:
+    def delete_adom_address_group(self, adom: str, group: str, dry: bool = False) -> dict[str, Any]:
         """
         Delete an address group from an ADOM in FortiManager
 
         Args:
             adom:  The ADOM to delete the address group from
             group: The address group to delete
+            dry:   Set to True to enable dry-run (no changes on FortiManager)
 
         Returns:
             FortiManager result item
         """
-        url: str = f"/pm/config/adom/{adom}/obj/firewall/addrgrp/{group}"
-        result: dict[str, Any] = self.api_delete(url).json()["result"][0]
+        result: dict[str, Any] = {}
+        if not dry:
+            url: str = f"/pm/config/adom/{adom}/obj/firewall/addrgrp/{group}"
+            result = self.api_delete(url).json()["result"][0]
+
+        else:
+            log.info("DRY-RUN: Would remove address group '%s' in ADOM '%s'", group, adom)
 
         return result
 
-    def delete_adom_service(self, adom: str, service: str) -> dict[str, Any]:
+    def delete_adom_service(self, adom: str, service: str, dry: bool = False) -> dict[str, Any]:
         """
         Delete a service from an ADOM in FortiManager
 
         Args:
             adom:    The ADOM to delete the address from
             service: The service to delete
+            dry:     Set to True to enable dry-run (no changes on FortiManager)
 
         Returns:
             FortiManager result item
         """
-        url: str = f"/pm/config/adom/{adom}/obj/firewall/service/custom/{service}"
-        result: dict[str, Any] = self.api_delete(url).json()["result"][0]
+        result: dict[str, Any] = {}
+        if not dry:
+            url: str = f"/pm/config/adom/{adom}/obj/firewall/service/custom/{service}"
+            result = self.api_delete(url).json()["result"][0]
+
+        else:
+            log.info("DRY-RUN: Would remove service '%s' in ADOM '%s'", service, adom)
 
         return result
 
-    def delete_adom_service_group(self, adom: str, group: str) -> dict[str, Any]:
+    def delete_adom_service_group(self, adom: str, group: str, dry: bool = False) -> dict[str, Any]:
         """
         Delete a service group from an ADOM in FortiManager
 
         Args:
             adom:  The ADOM to delete the address group from
             group: The address group to delete
+            dry:   Set to True to enable dry-run (no changes on FortiManager)
 
         Returns:
             FortiManager result item
         """
-        url: str = f"/pm/config/adom/{adom}/obj/firewall/service/group/{group}"
-        result: dict[str, Any] = self.api_delete(url).json()["result"][0]
+        result: dict[str, Any] = {}
+        if not dry:
+            url: str = f"/pm/config/adom/{adom}/obj/firewall/service/group/{group}"
+            result = self.api_delete(url).json()["result"][0]
+
+        else:
+            log.info("DRY-RUN: Would remove service group '%s' in ADOM '%s'", group, adom)
 
         return result
 
-    def delete_global_address(self, address: str) -> dict[str, Any]:
+    def delete_global_address(self, address: str, dry: bool = False) -> dict[str, Any]:
         """
         Delete a global address from FortiManager
 
@@ -277,6 +301,7 @@ class FortiManager(Fortinet):  # pylint: disable=too-many-public-methods
 
         Args:
             address: The global address to delete
+            dry:     Set to True to enable dry-run (no changes on FortiManager)
 
         Returns:
             FortiManager result item
@@ -297,25 +322,32 @@ class FortiManager(Fortinet):  # pylint: disable=too-many-public-methods
             else:
                 used_adoms = []
 
-            # Try to delete the address group object in every ADOM
-            blocked_adoms = []
-            for adom in used_adoms:
-                if self.delete_adom_address(adom, address)["status"]["code"] not in [-3, 0]:
-                    blocked_adoms.append(adom)
+            if not dry:
+                # Try to delete the address group object in every ADOM
+                blocked_adoms = []
+                for adom in used_adoms:
+                    if self.delete_adom_address(adom, address)["status"]["code"] not in [
+                        -3,
+                        0,
+                    ]:
+                        blocked_adoms.append(adom)
 
-            if blocked_adoms:
-                log.warning("'%s' blocked by ADOM '%s'", address, ",".join(blocked_adoms))
+                if blocked_adoms:
+                    log.warning("'%s' blocked by ADOM '%s'", address, ",".join(blocked_adoms))
 
-            # Try to delete the global address object
-            url: str = f"/pm/config/global/obj/firewall/address/{address}"
-            result = self.api_delete(url).json()["result"][0]
+                # Try to delete the global address object
+                url: str = f"/pm/config/global/obj/firewall/address/{address}"
+                result = self.api_delete(url).json()["result"][0]
+
+            else:
+                log.info("DRY-RUN: Would remove global address '%s'", address)
 
         else:
             result = address_object
 
         return result
 
-    def delete_global_address_group(self, group: str) -> dict[str, Any]:
+    def delete_global_address_group(self, group: str, dry: bool = False) -> dict[str, Any]:
         """
         Delete a global address group from FortiManager
 
@@ -335,6 +367,7 @@ class FortiManager(Fortinet):  # pylint: disable=too-many-public-methods
 
         Args:
             group: The global address group to delete
+            dry:   Set to True to enable dry-run (no changes on FortiManager)
 
         Returns:
             FortiManager result item
@@ -356,25 +389,29 @@ class FortiManager(Fortinet):  # pylint: disable=too-many-public-methods
             else:
                 used_adoms = []
 
-            # Try to delete the address group object in every ADOM
-            blocked_adoms = []
-            for adom in used_adoms:
-                if not self.delete_adom_address_group(adom, group)["status"]["code"] in [-3, 0]:
-                    blocked_adoms.append(adom)
+            if not dry:
+                # Try to delete the address group object in every ADOM
+                blocked_adoms = []
+                for adom in used_adoms:
+                    if not self.delete_adom_address_group(adom, group)["status"]["code"] in [-3, 0]:
+                        blocked_adoms.append(adom)
 
-            if blocked_adoms:
-                log.warning("'%s' blocked by ADOM '%s'", group, ",".join(blocked_adoms))
+                if blocked_adoms:
+                    log.warning("'%s' blocked by ADOM '%s'", group, ",".join(blocked_adoms))
 
-            # Try to delete the global address group object
-            url: str = f"/pm/config/global/obj/firewall/addrgrp/{group}"
-            result = self.api_delete(url).json()["result"][0]
+                # Try to delete the global address group object
+                url: str = f"/pm/config/global/obj/firewall/addrgrp/{group}"
+                result = self.api_delete(url).json()["result"][0]
+
+            else:
+                log.info("DRY-RUN: Would remove global address group '%s'", group)
 
         else:
             result = address_group_object
 
         return result
 
-    def delete_global_service(self, service: str) -> dict[str, Any]:
+    def delete_global_service(self, service: str, dry: bool = False) -> dict[str, Any]:
         """
         Delete a global service from FortiManager
 
@@ -394,6 +431,7 @@ class FortiManager(Fortinet):  # pylint: disable=too-many-public-methods
 
         Args:
             service: The global service to delete
+            dry:     Set to True to enable dry-run (no changes on FortiManager)
 
         Returns:
             FortiManager result item
@@ -415,25 +453,29 @@ class FortiManager(Fortinet):  # pylint: disable=too-many-public-methods
             else:
                 used_adoms = []
 
-            # Try to delete the address group  object in every ADOM
-            blocked_adoms = []
-            for adom in used_adoms:
-                if not self.delete_adom_service(adom, service)["status"]["code"] in [-3, 0]:
-                    blocked_adoms.append(adom)
+            if not dry:
+                # Try to delete the address group  object in every ADOM
+                blocked_adoms = []
+                for adom in used_adoms:
+                    if not self.delete_adom_service(adom, service)["status"]["code"] in [-3, 0]:
+                        blocked_adoms.append(adom)
 
-            if blocked_adoms:
-                log.warning("'%s' blocked by ADOM '%s'", service, ",".join(blocked_adoms))
+                if blocked_adoms:
+                    log.warning("'%s' blocked by ADOM '%s'", service, ",".join(blocked_adoms))
 
-            # Try to delete the global service object
-            url: str = f"/pm/config/global/obj/firewall/service/custom/{service}"
-            result = self.api_delete(url).json()["result"][0]
+                # Try to delete the global service object
+                url: str = f"/pm/config/global/obj/firewall/service/custom/{service}"
+                result = self.api_delete(url).json()["result"][0]
+
+            else:
+                log.info("DRY-RUN: Would remove global service '%s'", service)
 
         else:
             result = service_object
 
         return result
 
-    def delete_global_service_group(self, group: str) -> dict[str, Any]:
+    def delete_global_service_group(self, group: str, dry: bool = False) -> dict[str, Any]:
         """
         Delete a global service group from FortiManager
 
@@ -453,6 +495,7 @@ class FortiManager(Fortinet):  # pylint: disable=too-many-public-methods
 
         Args:
             group: The global service group to delete
+            dry:   Set to True to enable dry-run (no changes on FortiManager)
 
         Returns:
             FortiManager result item
@@ -474,18 +517,22 @@ class FortiManager(Fortinet):  # pylint: disable=too-many-public-methods
             else:
                 used_adoms = []
 
-            # Try to delete the service group object in every ADOM
-            blocked_adoms = []
-            for adom in used_adoms:
-                if not self.delete_adom_service_group(adom, group)["status"]["code"] in [-3, 0]:
-                    blocked_adoms.append(adom)
+            if not dry:
+                # Try to delete the service group object in every ADOM
+                blocked_adoms = []
+                for adom in used_adoms:
+                    if not self.delete_adom_service_group(adom, group)["status"]["code"] in [-3, 0]:
+                        blocked_adoms.append(adom)
 
-            if blocked_adoms:
-                log.warning("'%s' blocked by ADOM '%s'", group, ",".join(blocked_adoms))
+                if blocked_adoms:
+                    log.warning("'%s' blocked by ADOM '%s'", group, ",".join(blocked_adoms))
 
-            # Try to delete the global service group object
-            url: str = f"/pm/config/global/obj/firewall/service/group/{group}"
-            result = self.api_delete(url).json()["result"][0]
+                # Try to delete the global service group object
+                url: str = f"/pm/config/global/obj/firewall/service/group/{group}"
+                result = self.api_delete(url).json()["result"][0]
+
+            else:
+                log.info("DRY-RUN: Would remove global service group '%s'", group)
 
         else:
             result = service_group_object

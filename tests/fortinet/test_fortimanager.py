@@ -2,7 +2,7 @@
 Test the FortiManager class
 """
 
-# pylint: disable=no-member
+# pylint: disable=no-member, too-many-lines
 # mypy: disable-error-code=attr-defined
 from typing import Any
 from unittest.mock import MagicMock
@@ -25,7 +25,7 @@ class TestFortiManager:  # pylint: disable=too-many-public-methods
         """Fixture to return a mocked response for API ok"""
         return MagicMock(
             return_value=ResponseMock(
-                json={"result": [{"status": {"code": 0, "message": "OK"}}]},
+                json={"result": [{"data": {}, "status": {"code": 0, "message": "OK"}}]},
                 status_code=200,
             )
         )
@@ -66,7 +66,6 @@ class TestFortiManager:  # pylint: disable=too-many-public-methods
                 )
             ),
         )
-
         fmg = FortiManager("host", "", "")
         assert fmg.api_delete(url).json()["result"][0]["status"]["code"] == 0
         requests.Session.post.assert_called_with(
@@ -111,7 +110,6 @@ class TestFortiManager:  # pylint: disable=too-many-public-methods
             ),
         )
         fmg = FortiManager("host", "", "")
-
         expected_call = (
             ["https://host:443/jsonrpc"],
             {
@@ -143,10 +141,7 @@ class TestFortiManager:  # pylint: disable=too-many-public-methods
 
         else:
             assert fmg.api_get(url).json()["result"][0]["status"]["code"] == 0
-            requests.Session.post.assert_called_with(
-                *expected_call[0],
-                **expected_call[1],
-            )
+            requests.Session.post.assert_called_with(*expected_call[0], **expected_call[1])
 
     @staticmethod
     def test_assign_all_objects(monkeypatch: MonkeyPatch) -> None:
@@ -200,6 +195,7 @@ class TestFortiManager:  # pylint: disable=too-many-public-methods
         )
         with pytest.raises(APIError) as err:
             FortiManager("host", "", "").assign_all_objects("dummy_adom", "dummy_policy")
+
         assert "HTTP/404 Resource Not Found" in str(err.value)
         requests.Session.post.assert_called_with(
             "https://host:443/jsonrpc",
@@ -281,6 +277,14 @@ class TestFortiManager:  # pylint: disable=too-many-public-methods
 
     @staticmethod
     @pytest.mark.usefixtures("api_delete_ok")
+    def test_delete_adom_address_dry() -> None:
+        """Test fmg delete_adom_address with dry-run"""
+        fmg = FortiManager("host", "", "")
+        assert fmg.delete_adom_address("dummy", "dummy", dry=True) == {}
+        FortiManager.api_delete.assert_not_called()
+
+    @staticmethod
+    @pytest.mark.usefixtures("api_delete_ok")
     def test_delete_adom_address_group() -> None:
         """Test fmg delete_adom_address_group"""
         fmg = FortiManager("host", "", "")
@@ -288,6 +292,14 @@ class TestFortiManager:  # pylint: disable=too-many-public-methods
         FortiManager.api_delete.assert_called_with(
             "/pm/config/adom/dummy/obj/firewall/addrgrp/dummy"
         )
+
+    @staticmethod
+    @pytest.mark.usefixtures("api_delete_ok")
+    def test_delete_adom_address_group_dry() -> None:
+        """Test fmg delete_adom_address_group with dry-run"""
+        fmg = FortiManager("host", "", "")
+        assert fmg.delete_adom_address_group("dummy", "dummy", dry=True) == {}
+        FortiManager.api_delete.assert_not_called()
 
     @staticmethod
     @pytest.mark.usefixtures("api_delete_ok")
@@ -301,6 +313,14 @@ class TestFortiManager:  # pylint: disable=too-many-public-methods
 
     @staticmethod
     @pytest.mark.usefixtures("api_delete_ok")
+    def test_delete_adom_service_dry() -> None:
+        """Test fmg delete_adom_service with dry-run"""
+        fmg = FortiManager("host", "", "")
+        assert fmg.delete_adom_service("dummy", "dummy", dry=True) == {}
+        FortiManager.api_delete.assert_not_called()
+
+    @staticmethod
+    @pytest.mark.usefixtures("api_delete_ok")
     def test_delete_adom_service_group() -> None:
         """Test fmg delete_adom_service_group"""
         fmg = FortiManager("host", "", "")
@@ -308,6 +328,14 @@ class TestFortiManager:  # pylint: disable=too-many-public-methods
         FortiManager.api_delete.assert_called_with(
             "/pm/config/adom/dummy/obj/firewall/service/group/dummy"
         )
+
+    @staticmethod
+    @pytest.mark.usefixtures("api_delete_ok")
+    def test_delete_adom_service_group_dry() -> None:
+        """Test fmg delete_adom_service_group with dry-run"""
+        fmg = FortiManager("host", "", "")
+        assert fmg.delete_adom_service_group("dummy", "dummy", dry=True) == {}
+        FortiManager.api_delete.assert_not_called()
 
     @staticmethod
     @pytest.mark.usefixtures("api_delete_ok")
@@ -356,6 +384,14 @@ class TestFortiManager:  # pylint: disable=too-many-public-methods
         assert fmg.delete_global_address("dummy")["status"]["code"] in [0, 7]
 
     @staticmethod
+    @pytest.mark.usefixtures("api_get_ok", "api_delete_ok")
+    def test_delete_global_address_dry() -> None:
+        """Test fmg delete_global_address with dry-run"""
+        fmg = FortiManager("host", "", "")
+        assert fmg.delete_global_address("dummy", dry=True) == {}
+        # FortiManager.api_delete.assert_not_called()
+
+    @staticmethod
     @pytest.mark.usefixtures("api_delete_ok")
     @pytest.mark.parametrize(
         "get_global_address_group_data",
@@ -400,6 +436,14 @@ class TestFortiManager:  # pylint: disable=too-many-public-methods
         )
         fmg = FortiManager("host", "", "")
         assert fmg.delete_global_address_group("dummy")["status"]["code"] in [0, 7]
+
+    @staticmethod
+    @pytest.mark.usefixtures("api_get_ok", "api_delete_ok")
+    def test_delete_global_address_group_dry() -> None:
+        """Test fmg delete_global_address_group with dry-run"""
+        fmg = FortiManager("host", "", "")
+        assert fmg.delete_global_address_group("dummy", dry=True) == {}
+        # FortiManager.api_delete.assert_not_called()
 
     @staticmethod
     @pytest.mark.usefixtures("api_delete_ok")
@@ -448,25 +492,12 @@ class TestFortiManager:  # pylint: disable=too-many-public-methods
         assert fmg.delete_global_service("dummy")["status"]["code"] in [0, 7]
 
     @staticmethod
-    def test_get_adoms(monkeypatch: MonkeyPatch) -> None:
-        """Test fmg get adoms"""
-        monkeypatch.setattr(
-            "fotoobo.fortinet.fortinet.requests.Session.post",
-            MagicMock(
-                return_value=ResponseMock(
-                    json={"result": [{"data": [{"name": "dummy"}]}]}, status_code=200
-                )
-            ),
-        )
-        assert FortiManager("host", "", "").get_adoms() == [{"name": "dummy"}]
-        requests.Session.post.assert_called_with(
-            "https://host:443/jsonrpc",
-            headers=None,
-            json={"method": "get", "params": [{"url": "/dvmdb/adom"}], "session": ""},
-            params=None,
-            timeout=3,
-            verify=True,
-        )
+    @pytest.mark.usefixtures("api_get_ok", "api_delete_ok")
+    def test_delete_global_service_dry() -> None:
+        """Test fmg delete_global_service with dry-run"""
+        fmg = FortiManager("host", "", "")
+        assert fmg.delete_global_service("dummy", dry=True) == {}
+        # FortiManager.api_delete.assert_not_called()
 
     @staticmethod
     @pytest.mark.usefixtures("api_delete_ok")
@@ -513,6 +544,35 @@ class TestFortiManager:  # pylint: disable=too-many-public-methods
         )
         fmg = FortiManager("host", "", "")
         assert fmg.delete_global_service_group("dummy")["status"]["code"] in [0, 7]
+
+    @staticmethod
+    @pytest.mark.usefixtures("api_get_ok", "api_delete_ok")
+    def test_delete_global_service_group_dry() -> None:
+        """Test fmg delete_global_service_group with dry-run"""
+        fmg = FortiManager("host", "", "")
+        assert fmg.delete_global_service_group("dummy", dry=True) == {}
+        # FortiManager.api_delete.assert_not_called()
+
+    @staticmethod
+    def test_get_adoms(monkeypatch: MonkeyPatch) -> None:
+        """Test fmg get adoms"""
+        monkeypatch.setattr(
+            "fotoobo.fortinet.fortinet.requests.Session.post",
+            MagicMock(
+                return_value=ResponseMock(
+                    json={"result": [{"data": [{"name": "dummy"}]}]}, status_code=200
+                )
+            ),
+        )
+        assert FortiManager("host", "", "").get_adoms() == [{"name": "dummy"}]
+        requests.Session.post.assert_called_with(
+            "https://host:443/jsonrpc",
+            headers=None,
+            json={"method": "get", "params": [{"url": "/dvmdb/adom"}], "session": ""},
+            params=None,
+            timeout=3,
+            verify=True,
+        )
 
     @staticmethod
     def test_get_adoms_http_error(monkeypatch: MonkeyPatch) -> None:
