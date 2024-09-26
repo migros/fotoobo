@@ -20,8 +20,7 @@ class TestFortiManager:  # pylint: disable=too-many-public-methods
     """Test the FortiManager class"""
 
     @staticmethod
-    @pytest.fixture
-    def response_mock_api_ok() -> MagicMock:
+    def _response_mock_api_ok() -> MagicMock:
         """Fixture to return a mocked response for API ok"""
         return MagicMock(
             return_value=ResponseMock(
@@ -32,18 +31,20 @@ class TestFortiManager:  # pylint: disable=too-many-public-methods
 
     @staticmethod
     @pytest.fixture
-    def api_delete_ok(response_mock_api_ok: MagicMock, monkeypatch: MonkeyPatch) -> None:
+    def api_delete_ok(monkeypatch: MonkeyPatch) -> None:
         """Fixture to patch the FortiManager.api_delete() method"""
         monkeypatch.setattr(
-            "fotoobo.fortinet.fortimanager.FortiManager.api_delete", response_mock_api_ok
+            "fotoobo.fortinet.fortimanager.FortiManager.api_delete",
+            TestFortiManager._response_mock_api_ok(),
         )
 
     @staticmethod
     @pytest.fixture
-    def api_get_ok(response_mock_api_ok: MagicMock, monkeypatch: MonkeyPatch) -> None:
+    def api_get_ok(monkeypatch: MonkeyPatch) -> None:
         """Fixture to patch the FortiManager.api_get() method"""
         monkeypatch.setattr(
-            "fotoobo.fortinet.fortimanager.FortiManager.api_get", response_mock_api_ok
+            "fotoobo.fortinet.fortimanager.FortiManager.api_get",
+            TestFortiManager._response_mock_api_ok(),
         )
 
     @staticmethod
@@ -389,7 +390,7 @@ class TestFortiManager:  # pylint: disable=too-many-public-methods
         """Test fmg delete_global_address with dry-run"""
         fmg = FortiManager("host", "", "")
         assert fmg.delete_global_address("dummy", dry=True) == {}
-        # FortiManager.api_delete.assert_not_called()
+        FortiManager.api_delete.assert_not_called()
 
     @staticmethod
     @pytest.mark.usefixtures("api_delete_ok")
@@ -443,7 +444,7 @@ class TestFortiManager:  # pylint: disable=too-many-public-methods
         """Test fmg delete_global_address_group with dry-run"""
         fmg = FortiManager("host", "", "")
         assert fmg.delete_global_address_group("dummy", dry=True) == {}
-        # FortiManager.api_delete.assert_not_called()
+        FortiManager.api_delete.assert_not_called()
 
     @staticmethod
     @pytest.mark.usefixtures("api_delete_ok")
@@ -497,7 +498,7 @@ class TestFortiManager:  # pylint: disable=too-many-public-methods
         """Test fmg delete_global_service with dry-run"""
         fmg = FortiManager("host", "", "")
         assert fmg.delete_global_service("dummy", dry=True) == {}
-        # FortiManager.api_delete.assert_not_called()
+        FortiManager.api_delete.assert_not_called()
 
     @staticmethod
     @pytest.mark.usefixtures("api_delete_ok")
@@ -551,7 +552,7 @@ class TestFortiManager:  # pylint: disable=too-many-public-methods
         """Test fmg delete_global_service_group with dry-run"""
         fmg = FortiManager("host", "", "")
         assert fmg.delete_global_service_group("dummy", dry=True) == {}
-        # FortiManager.api_delete.assert_not_called()
+        FortiManager.api_delete.assert_not_called()
 
     @staticmethod
     def test_get_adoms(monkeypatch: MonkeyPatch) -> None:
