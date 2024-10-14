@@ -1,3 +1,6 @@
+
+## [2.2.0] - 2024-10-14
+
 ### Added
 
 - FortiManager Methods for handling addresses and services (get and delete)
