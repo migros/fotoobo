@@ -101,7 +101,7 @@ def post(
     ),
 ) -> None:
     """
-    POST any valid JSON request to the FortiManager.
+    Post any valid JSON request to the FortiManager.
 
     Configure the FortiManager with any valid API call(s) given within the JSON file.
     """
