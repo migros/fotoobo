@@ -20,7 +20,16 @@ def test_cli_app_fgt_get_help() -> None:
     arguments, options, commands = parse_help_output(result.stdout)
     assert not arguments
     assert options == {"-h", "--help"}
-    assert set(commands) == {"version"}
+    assert set(commands) == {"cmdb", "version"}
+
+
+def test_cli_app_fgt_get_no_args() -> None:
+    """Test fgt get with no arguments"""
+    result = runner.invoke(app, ["-c", "tests/fotoobo.yaml", "fgt", "get"])
+    assert result.exit_code == 0
+    assert "Usage: callback fgt get [OPTIONS] COMMAND" in result.stdout
+    assert "--help" in result.stdout
+    assert "FortiGate get cmdb commands." in result.stdout
 
 
 def test_cli_app_fgt_get_version_help() -> None:

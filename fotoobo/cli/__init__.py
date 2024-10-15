@@ -4,3 +4,7 @@ This is the main init file for the cli module
 Do not add too much logic into the cli commands. Just add the tools module and add the
 logic there. Therefore, we can segregate the duties.
 """
+
+from . import convert, get
+
+__all__ = ["convert", "get"]

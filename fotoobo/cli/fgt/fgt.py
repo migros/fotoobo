@@ -10,17 +10,23 @@ from pathlib import Path
 import typer
 
 from fotoobo import tools
-from fotoobo.cli.fgt import config_commands as config
-from fotoobo.cli.fgt import get_commands as get
-from fotoobo.cli.fgt import monitor_commands as monitor
 from fotoobo.exceptions import GeneralWarning
 from fotoobo.helpers import cli_path
 from fotoobo.helpers.config import config as fotoobo_config
 from fotoobo.helpers.files import create_dir, file_to_ftp, file_to_zip
 from fotoobo.inventory import Inventory
 
+from . import config, monitor
+from .get import get
+
 app = typer.Typer(no_args_is_help=True, rich_markup_mode="rich")
 log = logging.getLogger("fotoobo")
+
+
+# app.add_typer(get_commands.app, name="get", help="FortiGate get commands.")
+app.add_typer(config.app, name="config", help="FortiGate config file commands.")
+app.add_typer(get.app, name="get", help="FortiGate get commands.")
+app.add_typer(monitor.app, name="monitor", help="FortiGate monitor commands.")
 
 
 @app.callback()
@@ -33,11 +39,6 @@ def callback(context: typer.Context) -> None:
     """
     cli_path.append(str(context.invoked_subcommand))
     log.debug("About to execute command: '%s'", context.invoked_subcommand)
-
-
-app.add_typer(get.app, name="get", help="FortiGate get commands.")
-app.add_typer(monitor.app, name="monitor", help="FortiGate monitor commands.")
-app.add_typer(config.app, name="config", help="FortiGate config file commands.")
 
 
 @app.command()

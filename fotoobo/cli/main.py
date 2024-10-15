@@ -17,15 +17,16 @@ from typing import Optional
 import typer
 
 from fotoobo import tools
-from fotoobo.cli import convert, get
-from fotoobo.cli.ems import main as ems
-from fotoobo.cli.faz import main as faz
-from fotoobo.cli.fgt import main as fgt
-from fotoobo.cli.fmg import main as fmg
 from fotoobo.helpers import cli_path
 from fotoobo.helpers.config import config
 from fotoobo.helpers.log import Log
 from fotoobo.helpers.output import print_logo
+
+from . import convert, get
+from .ems import ems
+from .faz import faz
+from .fgt import fgt
+from .fmg import fmg
 
 app = typer.Typer(
     context_settings={"help_option_names": ["-h", "--help"]},

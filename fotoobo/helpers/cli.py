@@ -31,7 +31,7 @@ def walk_cli_info(
 
         text = Text(overflow="ellipsis", no_wrap=True)
         text.append(commands[command]["name"], style="bold cyan")
-        text.append(" " * max((20 - len(command_path) * 4 - len(command)), 2))
+        text.append(" " * max((25 - len(command_path) * 4 - len(command)), 2))
         text.append(commands[command]["help"].split("\n")[0], style="grey53")
         branch = tree.add(text)
 
