@@ -14,7 +14,7 @@ For unreleased changes see [WHATSNEW.md](WHATSNEW.md)
 
 ### Added
 
-- FortiManager Methods for handling addresses and services (get and delete)
+- FortiManager methods for handling addresses and services (get and delete)
 
 ### Changed
 
