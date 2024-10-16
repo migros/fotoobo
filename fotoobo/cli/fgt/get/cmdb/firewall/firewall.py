@@ -34,7 +34,7 @@ def callback(context: typer.Context) -> None:
 
 
 @app.command()
-def address(
+def address(  # pylint: disable=too-many-branches
     host: str = typer.Argument(
         "",
         help="The FortiGate hostname to access (must be defined in the inventory). "
@@ -121,11 +121,25 @@ def address(
 
 @app.command()
 def addrgrp(
+    host: str = typer.Argument(
+        "",
+        help="The FortiGate hostname to access (must be defined in the inventory). "
+        "\[default: <all>]",
+        show_default=False,
+        metavar="[host]",
+    ),
     name: str = typer.Argument(
         "",
         help="The firewall address group object to get \[default: <all>]",
         show_default=False,
         metavar="[name]",
+    ),
+    vdom: str = typer.Option(
+        "*",
+        "--vdom",
+        help="The vdom to query ('vdom1' or 'vdom1,vdom2') \[default: <all>]",
+        show_default=False,
+        metavar="[vdom]",
     ),
     output_file: str = typer.Option(
         None,
@@ -141,5 +155,34 @@ def addrgrp(
 
     The FortiGate api endpoint is: /cmdb/firewall/addrgrp
     """
-    # TODO: Here to add the address group cli code
-    print("ADDRGRP")
+    if name and ("*" in vdom or "," in vdom):
+        raise GeneralError("With name argument you have to specify one single VDOM (with --vdom)")
+
+    result = api(host=host, vdom=vdom, url=f"/cmdb/firewall/addrgrp/{name}")
+
+    if output_file:
+        result.save_raw(file=Path(output_file), key=host)
+
+    else:
+        assets = []
+        if result.get_result(host):
+            for vd in result.get_result(host):
+                for asset in vd["results"]:
+                    # print(asset)
+                    data: dict[str, str] = {
+                        "name": asset["name"],
+                        "vdom": vd["vdom"],
+                        "content": "\n".join(_["name"] for _ in asset["member"]),
+                    }
+
+                    assets.append(data)
+
+        result.push_result(host, assets)
+
+        if result.results[host]:
+            result.print_table_raw(
+                result.results[host], headers=["name", "vdom", "content"], title=host
+            )
+
+        else:
+            print("No data found")
