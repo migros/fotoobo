@@ -4,7 +4,7 @@ FortiGate get version utility
 
 import concurrent.futures
 import logging
-from typing import Any, Optional, Tuple, Union
+from typing import Any, Optional, Tuple
 
 from rich.progress import Progress
 
