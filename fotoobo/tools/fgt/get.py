@@ -4,7 +4,7 @@ FortiGate get version utility
 
 import concurrent.futures
 import logging
-from typing import Optional, Tuple
+from typing import Any, Optional, Tuple, Union
 
 from rich.progress import Progress
 
@@ -15,6 +15,33 @@ from fotoobo.helpers.result import Result
 from fotoobo.inventory import Inventory
 
 log = logging.getLogger("fotoobo")
+
+
+def api(
+    host: str, url: str = "", vdom: str = "*", timeout: Optional[float] = None
+) -> Result[list[Any]]:
+    """Native GET request to a FortiGate.
+
+    This gets the response from a single API request to a FortiGate and returns it as a fotoobo
+    Results object.
+
+    Args:
+        host: The host from the inventory to send the GET requests to
+        url:  The API endpoint to access
+        vdom: The VDOM to access ("vdom1" or "vdom1,vdom2" or "*")
+
+    Returns:
+        The Result object with all the results as list (even if only one result is returned)
+    """
+    inventory = Inventory(config.inventory_file)
+    fgt: FortiGate = inventory.get_item(host, "fortigate")
+    result = Result[list[Any]]()
+    params = {"vdom": vdom}
+    response = fgt.api(method="get", url=url, params=params, timeout=timeout)
+    data = [response.json()] if isinstance(response.json(), dict) else response.json()
+    result.push_result(host, data=data)
+
+    return result
 
 
 def version(host: Optional[str] = None) -> Result[str]:
