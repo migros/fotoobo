@@ -38,7 +38,7 @@ def api(
     result = Result[list[Any]]()
     params = {"vdom": vdom}
     response = fgt.api(method="get", url=url, params=params, timeout=timeout)
-    data = [response.json()] if isinstance(response.json(), dict) else response.json()
+    data = [response.json()] if isinstance(response.json(), dict) else response.json()  # listify
     result.push_result(host, data=data)
 
     return result
