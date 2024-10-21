@@ -41,8 +41,8 @@ def test_cli_app_fgt_get_cmdb_firewall_service_custom_help() -> None:
     )
     assert result.exit_code == 0
     arguments, options, commands = parse_help_output(result.stdout)
-    assert set(arguments) == {"name"}
-    assert options == {"-h", "--help", "-o", "--output"}
+    assert set(arguments) == {"host", "name"}
+    assert options == {"-h", "--help", "-o", "--output", "--vdom"}
     assert not commands
 
 
@@ -54,6 +54,6 @@ def test_cli_app_fgt_get_cmdb_firewall_service_group_help() -> None:
     )
     assert result.exit_code == 0
     arguments, options, commands = parse_help_output(result.stdout)
-    assert set(arguments) == {"name"}
-    assert options == {"-h", "--help", "-o", "--output"}
+    assert set(arguments) == {"host", "name"}
+    assert options == {"-h", "--help", "-o", "--output", "--vdom"}
     assert not commands

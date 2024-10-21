@@ -4,13 +4,13 @@ The FortiGate commands
 
 # pylint: disable=anomalous-backslash-in-string
 import logging
-from pathlib import Path
 
 import typer
 
 from fotoobo.exceptions import GeneralError
 from fotoobo.helpers import cli_path
-from fotoobo.tools.fgt.get import api
+from fotoobo.tools.fgt.cmdb.firewall.address import get_firewall_address
+from fotoobo.tools.fgt.cmdb.firewall.addrgrp import get_firewall_addrgrp
 
 from .service import service
 
@@ -34,7 +34,7 @@ def callback(context: typer.Context) -> None:
 
 
 @app.command()
-def address(  # pylint: disable=too-many-branches
+def address(
     host: str = typer.Argument(
         "",
         help="The FortiGate hostname to access (must be defined in the inventory). "
@@ -64,59 +64,13 @@ def address(  # pylint: disable=too-many-branches
         show_default=False,
     ),
 ) -> None:
-    """
-    Get FortiGate cmdb firewall address.
-
-    The FortiGate api endpoint is: /cmdb/firewall/address
-    """
+    """Get FortiGate cmdb firewall address."""
     if name and ("*" in vdom or "," in vdom):
         raise GeneralError("With name argument you have to specify one single VDOM (with --vdom)")
 
-    result = api(host=host, vdom=vdom, url=f"/cmdb/firewall/address/{name}")
-
-    if output_file:
-        result.save_raw(file=Path(output_file), key=host)
-
-    else:
-        assets = []
-        if result.get_result(host):
-            for vd in result.get_result(host):
-                for asset in vd["results"]:
-
-                    data: dict[str, str] = {
-                        "name": asset["name"],
-                        "vdom": vd["vdom"],
-                        "type": asset["type"],
-                    }
-
-                    if asset["type"] == "fqdn":
-                        data["content"] = asset["fqdn"]
-
-                    elif asset["type"] == "geography":
-                        data["content"] = asset["country"]
-
-                    elif asset["type"] == "ipmask":
-                        data["content"] = "/".join(
-                            [asset["subnet"].split(" ")[0], asset["subnet"].split(" ")[1]]
-                        )
-
-                    elif asset["type"] == "iprange":
-                        data["content"] = " - ".join([asset["start-ip"], asset["end-ip"]])
-
-                    else:
-                        data["content"] = ""
-
-                    assets.append(data)
-
-        result.push_result(host, assets)
-
-        if result.results[host]:
-            result.print_table_raw(
-                result.results[host], headers=["name", "vdom", "type", "content"], title=host
-            )
-
-        else:
-            print("No data found")
+    result = get_firewall_address(host, name, vdom, output_file)
+    if not output_file:
+        result.print_table_raw(result.results[host], auto_header=True, title=host)
 
 
 @app.command()
@@ -150,39 +104,10 @@ def addrgrp(
         show_default=False,
     ),
 ) -> None:
-    """
-    Get FortiGate cmdb firewall address group.
-
-    The FortiGate api endpoint is: /cmdb/firewall/addrgrp
-    """
+    """Get FortiGate cmdb firewall address group."""
     if name and ("*" in vdom or "," in vdom):
         raise GeneralError("With name argument you have to specify one single VDOM (with --vdom)")
 
-    result = api(host=host, vdom=vdom, url=f"/cmdb/firewall/addrgrp/{name}")
-
-    if output_file:
-        result.save_raw(file=Path(output_file), key=host)
-
-    else:
-        assets = []
-        if result.get_result(host):
-            for vd in result.get_result(host):
-                for asset in vd["results"]:
-                    # print(asset)
-                    data: dict[str, str] = {
-                        "name": asset["name"],
-                        "vdom": vd["vdom"],
-                        "content": "\n".join(_["name"] for _ in asset["member"]),
-                    }
-
-                    assets.append(data)
-
-        result.push_result(host, assets)
-
-        if result.results[host]:
-            result.print_table_raw(
-                result.results[host], headers=["name", "vdom", "content"], title=host
-            )
-
-        else:
-            print("No data found")
+    result = get_firewall_addrgrp(host, name, vdom, output_file)
+    if not output_file:
+        result.print_table_raw(result.results[host], auto_header=True, title=host)

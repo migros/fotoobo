@@ -7,7 +7,10 @@ import logging
 
 import typer
 
+from fotoobo.exceptions import GeneralError
 from fotoobo.helpers import cli_path
+from fotoobo.tools.fgt.cmdb.firewall.service_custom import get_firewall_service_custom
+from fotoobo.tools.fgt.cmdb.firewall.service_group import get_firewall_service_group
 
 app = typer.Typer(no_args_is_help=True, rich_markup_mode="rich")
 log = logging.getLogger("fotoobo")
@@ -27,11 +30,25 @@ def callback(context: typer.Context) -> None:
 
 @app.command()
 def custom(
+    host: str = typer.Argument(
+        "",
+        help="The FortiGate hostname to access (must be defined in the inventory). "
+        "\[default: <all>]",
+        show_default=False,
+        metavar="[host]",
+    ),
     name: str = typer.Argument(
         "",
-        help="The firewall address object to get \[default: <all>]",
+        help="The firewall service object to get \[default: <all>]",
         show_default=False,
         metavar="[name]",
+    ),
+    vdom: str = typer.Option(
+        "*",
+        "--vdom",
+        help="The vdom to query ('vdom1' or 'vdom1,vdom2') \[default: <all>]",
+        show_default=False,
+        metavar="[vdom]",
     ),
     output_file: str = typer.Option(
         None,
@@ -42,22 +59,36 @@ def custom(
         show_default=False,
     ),
 ) -> None:
-    """
-    Get FortiGate cmdb firewall service custom.
+    """Get FortiGate cmdb firewall service custom."""
+    if name and ("*" in vdom or "," in vdom):
+        raise GeneralError("With name argument you have to specify one single VDOM (with --vdom)")
 
-    The FortiGate api endpoint is: /cmdb/firewall.service/custom
-    """
-    # TODO: Here to add the service custom cli code
-    print("SERVICE CUSTOM")
+    result = get_firewall_service_custom(host, name, vdom, output_file)
+    if not output_file:
+        result.print_table_raw(result.results[host], auto_header=True, title=host)
 
 
 @app.command()
 def group(
+    host: str = typer.Argument(
+        "",
+        help="The FortiGate hostname to access (must be defined in the inventory). "
+        "\[default: <all>]",
+        show_default=False,
+        metavar="[host]",
+    ),
     name: str = typer.Argument(
         "",
-        help="The firewall address object to get \[default: <all>]",
+        help="The firewall service group to get \[default: <all>]",
         show_default=False,
         metavar="[name]",
+    ),
+    vdom: str = typer.Option(
+        "*",
+        "--vdom",
+        help="The vdom to query ('vdom1' or 'vdom1,vdom2') \[default: <all>]",
+        show_default=False,
+        metavar="[vdom]",
     ),
     output_file: str = typer.Option(
         None,
@@ -68,10 +99,10 @@ def group(
         show_default=False,
     ),
 ) -> None:
-    """
-    Get FortiGate cmdb firewall service group.
+    """Get FortiGate cmdb firewall service group."""
+    if name and ("*" in vdom or "," in vdom):
+        raise GeneralError("With name argument you have to specify one single VDOM (with --vdom)")
 
-    The FortiGate api endpoint is: /cmdb/firewall.service/group
-    """
-    # TODO: Here to add the service group cli code
-    print("SERVICE GROUP")
+    result = get_firewall_service_group(host, name, vdom, output_file)
+    if not output_file:
+        result.print_table_raw(result.results[host], auto_header=True, title=host)
