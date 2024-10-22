@@ -7,7 +7,7 @@ from fotoobo.helpers.result import Result
 from fotoobo.tools.fgt.get import api
 
 
-def get_firewall_service_custom(
+def get_cmdb_firewall_service_custom(
     host: str, name: str, vdom: str, output_file: str
 ) -> Result[list[Any]]:
     """Get the firewall service custom object(s)
