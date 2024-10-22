@@ -277,6 +277,29 @@ class TestResults:
         assert expect in out
 
     @staticmethod
+    @pytest.mark.parametrize(
+        "file_name, key",
+        (
+            pytest.param("test_save_raw.json", None, id="json all"),
+            pytest.param("test_save_raw.json", "dummy", id="json single"),
+            pytest.param("test_save_raw.txt", None, id="txt all"),
+            pytest.param("test_save_raw.txt", "dummy", id="txt single"),
+            pytest.param("test_save_raw.dummy", None, id="unknown all"),
+            pytest.param("test_save_raw.dummy", "dummy", id="unknown single"),
+        ),
+    )
+    def test_save_raw(temp_dir: Path, file_name: str, key: str) -> None:
+        """Test save_raw() method"""
+        result = Result[Any]()
+        result.push_result("dummy", [1, 2, 3])
+        output_file = temp_dir / file_name
+        assert not output_file.is_file()
+        result.save_raw(output_file, key)
+        assert output_file.is_file()
+        output_file.unlink()
+        assert not output_file.is_file()
+
+    @staticmethod
     def test_save_with_template(temp_dir: Path) -> None:
         """Test save_with_template"""
         result = Result[Dict[str, Dict[str, int]]]()
