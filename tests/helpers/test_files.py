@@ -20,6 +20,7 @@ from fotoobo.helpers.files import (
     load_json_file,
     load_yaml_file,
     save_json_file,
+    save_txt_file,
     save_yaml_file,
 )
 from fotoobo.inventory.generic import GenericDevice
@@ -44,6 +45,12 @@ def test_data_list() -> List[Any]:
 def json_test_file(temp_dir: Path) -> Path:
     """Returns the filename of a json test file"""
     return temp_dir / "test_file.json"
+
+
+@pytest.fixture
+def txt_test_file(temp_dir: Path) -> Path:
+    """Returns the filename of a txt test file"""
+    return temp_dir / "test_file.txt"
 
 
 @pytest.fixture
@@ -287,6 +294,28 @@ def test_load_yaml_file_non_exist(yaml_test_file: Path) -> None:
     """Test the load_yaml_file function with not existing file"""
     assert not yaml_test_file.is_file()
     assert not load_yaml_file(yaml_test_file)
+
+
+# Start testing the txt file_helper functions
+
+
+@pytest.mark.parametrize(
+    "content",
+    (
+        pytest.param("LINE_1", id="file with one line"),
+        pytest.param("", id="empty file"),
+        pytest.param("LINE_1\nLINE_2\nLINE_3", id="file with multiple lines"),
+    ),
+)
+def test_save_txt_file(txt_test_file: Path, content: str) -> None:
+    """Test the save_json_file function"""
+    assert not txt_test_file.is_file()
+    save_txt_file(txt_test_file, content)
+    assert txt_test_file.is_file()
+    new_content = txt_test_file.read_text(encoding="UTF-8")
+    assert new_content == content
+    txt_test_file.unlink()
+    assert not txt_test_file.is_file()
 
 
 # Start testing the create_dir function
