@@ -24,7 +24,6 @@ def get_cmdb_firewall_service_group(
     if result_raw.get_result(host):
         for vd in result_raw.get_result(host):
             for asset in vd["results"]:
-                print(asset)
                 data: dict[str, str] = {
                     "name": asset["name"],
                     "vdom": vd["vdom"],
