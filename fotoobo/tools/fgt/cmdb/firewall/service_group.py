@@ -4,7 +4,7 @@ from pathlib import Path
 from typing import Any
 
 from fotoobo.helpers.result import Result
-from fotoobo.tools.fgt.get import api
+from fotoobo.tools.fgt.get import api_get
 
 
 def get_cmdb_firewall_service_group(
@@ -14,7 +14,7 @@ def get_cmdb_firewall_service_group(
 
     The FortiGate api endpoint is: /cmdb/firewall.service/group
     """
-    result_raw = api(host=host, vdom=vdom, url=f"/cmdb/firewall/addrgrp/{name}")
+    result_raw = api_get(host=host, vdom=vdom, url=f"/cmdb/firewall/addrgrp/{name}")
 
     if output_file:
         result_raw.save_raw(file=Path(output_file), key=host)

@@ -17,7 +17,7 @@ from fotoobo.inventory import Inventory
 log = logging.getLogger("fotoobo")
 
 
-def api(
+def api_get(
     host: str, url: str = "", vdom: str = "*", timeout: Optional[float] = None
 ) -> Result[list[Any]]:
     """Native GET request to a FortiGate.
