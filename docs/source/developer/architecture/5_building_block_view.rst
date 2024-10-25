@@ -26,8 +26,9 @@ The Interface Layer
 ^^^^^^^^^^^^^^^^^^^
 
 This is the main entry point for interaction with **fotoobo** when you installed it as an
-application on your system. It acts as a frontend for users and automated tools. At the Moment only
-the CLI part is implemented. In future version an API may be available if there is a need for it.
+application on your system. It acts as a frontend for users and automation tools. At the Moment only
+the CLI part is implemented. In future version a REST API may be available if there is a need for
+it.
 
 Call **fotoobo** with its command(s) directly from the command line or from any automation engine
 like cron jobs, Rundeck or others.
@@ -48,10 +49,10 @@ The Infrastructure Layer
 In this lowest level of **fotoobo** we directly interact with the infrastructure, meaning we handle 
 the authentication and API calls to the devices like FortiGate, FortiManger and others. The 
 interface layer should not directly access this infrastructure layer. Instead there should always 
-be a **tool** at the business logic layer which connects these two. No other layer than the 
+be a **tool** in the business logic layer which connects these two. No other layer than the 
 infrastructure layer should directly access any fortinet device.
 
-As a module in you own code you may also directly use the infrastructure layer.
+As a module in your own code you may also directly use the infrastructure layer.
 
 
 Package structure
