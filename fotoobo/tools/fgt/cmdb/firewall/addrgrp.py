@@ -3,8 +3,10 @@
 from pathlib import Path
 from typing import Any
 
+from fotoobo.fortinet.fortigate import FortiGate
+from fotoobo.helpers.config import config
 from fotoobo.helpers.result import Result
-from fotoobo.tools.fgt.get import api_get
+from fotoobo.inventory import Inventory
 
 
 def get_cmdb_firewall_addrgrp(
@@ -14,15 +16,19 @@ def get_cmdb_firewall_addrgrp(
 
     The FortiGate api endpoint is: /cmdb/firewall/addrgrp
     """
-    result_raw = api_get(host=host, vdom=vdom, url=f"/cmdb/firewall/addrgrp/{name}")
+    inventory = Inventory(config.inventory_file)
+    fgt: FortiGate = inventory.get_item(host, "fortigate")
+    result = Result[list[Any]]()
+
+    addrgrp_list = fgt.api_get(url=f"/cmdb/firewall/addrgrp/{name}", vdom=vdom)
 
     if output_file:
-        result_raw.save_raw(file=Path(output_file), key=host)
+        result.push_result(key=host, data=addrgrp_list)
+        result.save_raw(file=Path(output_file), key=host)
 
-    result = Result[list[Any]]()
     assets = []
-    if result_raw.get_result(host):
-        for vd in result_raw.get_result(host):
+    if addrgrp_list:
+        for vd in addrgrp_list:
             for asset in vd["results"]:
                 # print(asset)
                 data: dict[str, str] = {

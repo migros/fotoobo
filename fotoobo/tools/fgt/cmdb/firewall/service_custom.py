@@ -3,8 +3,10 @@
 from pathlib import Path
 from typing import Any
 
+from fotoobo.fortinet.fortigate import FortiGate
+from fotoobo.helpers.config import config
 from fotoobo.helpers.result import Result
-from fotoobo.tools.fgt.get import api_get
+from fotoobo.inventory import Inventory
 
 
 def get_cmdb_firewall_service_custom(
@@ -14,15 +16,19 @@ def get_cmdb_firewall_service_custom(
 
     The FortiGate api endpoint is: /cmdb/firewall.service/custom
     """
-    result_raw = api_get(host=host, vdom=vdom, url=f"/cmdb/firewall.service/custom/{name}")
+    inventory = Inventory(config.inventory_file)
+    fgt: FortiGate = inventory.get_item(host, "fortigate")
+    result = Result[list[Any]]()
+
+    service_custom_list = fgt.api_get(url=f"/cmdb/firewall.service/custom/{name}", vdom=vdom)
 
     if output_file:
-        result_raw.save_raw(file=Path(output_file), key=host)
+        result.push_result(key=host, data=service_custom_list)
+        result.save_raw(file=Path(output_file), key=host)
 
-    result = Result[list[Any]]()
     assets = []
-    if result_raw.get_result(host):
-        for vd in result_raw.get_result(host):
+    if service_custom_list:
+        for vd in service_custom_list:
             for asset in vd["results"]:
 
                 data: dict[str, str] = {
