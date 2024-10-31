@@ -5,6 +5,8 @@
 - Add CLI command fgt get cmdb firewall addrgrp
 - Add CLI command fgt get cmdb firewall service-custom
 - Add CLI command fgt get cmdb firewall service-group
+- Add the layers of fotoobo into the architecture documentation
+
 
 ### Changed
 
