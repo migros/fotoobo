@@ -1,5 +1,5 @@
 """
-The FortiGate get commands
+The FortiGate commands
 """
 
 # pylint: disable=anomalous-backslash-in-string
@@ -10,8 +10,13 @@ import typer
 from fotoobo.helpers import cli_path
 from fotoobo.tools import fgt
 
+from .cmdb import cmdb
+
 app = typer.Typer(no_args_is_help=True, rich_markup_mode="rich")
 log = logging.getLogger("fotoobo")
+
+
+app.add_typer(cmdb.app, name="cmdb", help="FortiGate get cmdb commands.")
 
 
 @app.callback()

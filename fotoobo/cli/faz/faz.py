@@ -6,8 +6,9 @@ import logging
 
 import typer
 
-from fotoobo.cli.faz import get_commands as get
 from fotoobo.helpers import cli_path
+
+from . import get
 
 app = typer.Typer(no_args_is_help=True, rich_markup_mode="rich")
 log = logging.getLogger("fotoobo")

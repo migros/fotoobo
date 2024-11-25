@@ -44,6 +44,19 @@ class TestFortiGate:
             "get", "dummy", payload=None, params=None, timeout=None, headers=None
         )
 
+    def test_api_get(self, monkeypatch: MonkeyPatch) -> None:
+        """Test the FortiGate api_get method"""
+        response_mock = ResponseMock(json=[{"http_method": "GET", "results": []}], status_code=200)
+        monkeypatch.setattr(
+            "fotoobo.fortinet.fortigate.FortiGate.api", MagicMock(return_value=response_mock)
+        )
+        fortigate = FortiGate("dummy_hostname", "token")
+        result = fortigate.api_get("/test/dummy/fake")
+        assert result == [{"http_method": "GET", "results": []}]
+        FortiGate.api.assert_called_with(
+            method="get", url="/test/dummy/fake", params={"vdom": "*"}, timeout=None
+        )
+
     @staticmethod
     def test_backup(monkeypatch: MonkeyPatch) -> None:
         """Test the FortiGate backup method"""

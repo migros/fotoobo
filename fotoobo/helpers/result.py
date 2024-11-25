@@ -3,6 +3,7 @@ The fotoobo Result class
 """
 
 import json
+import logging
 import re
 import smtplib
 from pathlib import Path
@@ -16,7 +17,9 @@ from rich.theme import Theme
 
 from fotoobo.exceptions import GeneralWarning
 from fotoobo.helpers import cli_path
+from fotoobo.helpers.files import save_json_file, save_txt_file
 
+log = logging.getLogger("fotoobo")
 ftb_theme = Theme({"var": "white", "ftb": "#FF33BB bold", "chk": "green"})
 
 T = TypeVar("T")
@@ -29,6 +32,8 @@ class Result(Generic[T]):
     This dataset is meant to be the generic result structure for any tool inside fotoobo.
     It can then be rendered to some command line output (CLI) or JSON response (REST API).
     """
+
+    OUTPUT_FORMAT_MAPPING = {".json": "json", ".txt": "text"}
 
     def __init__(self) -> None:
         """
@@ -62,6 +67,7 @@ class Result(Generic[T]):
             successful: Whether the call has been successful or not [default: True]
         """
         self.results[key] = data
+
         if successful:
             self.successful.append(key)
 
@@ -240,6 +246,35 @@ class Result(Generic[T]):
                 data[host] = self.results[host]
 
         pprint(data, expand_all=True)
+
+    def save_raw(self, file: Path, key: Optional[str] = None) -> None:
+        """
+        Save the raw data in defined format.
+
+        Args:
+            key: Print only the result for the host given
+                 (default: print all results)
+        """
+        output_format = Result.OUTPUT_FORMAT_MAPPING.get(file.suffix, None)
+
+        data: Any = None
+        if key:
+            data = self.get_result(key)
+
+        else:
+            data = {}
+            for host in self.all_results():
+                data[host] = self.results[host]
+
+        if output_format == "json":
+            save_json_file(json_file=Path(file), data=data)
+
+        elif output_format == "text":
+            save_txt_file(file=Path(file), data=str(data))
+
+        else:
+            log.warning("No output format defined for this file extension. Saving as text")
+            save_txt_file(file=Path(file), data=str(data))
 
     def save_with_template(self, host: str, template_file: Path, output_file: Path) -> None:
         """
