@@ -55,7 +55,7 @@ pytest-cov = "~4.0.0"
 types-requests = "~2.27.11"
 isort = "~5.10.1"
 types-PyYAML = "~6.0.5"
-pygount = "~1.5.0"
+pygount = "~1.8.0"
 
 [tool.poetry.group.docs.dependencies]
 Sphinx = "~6.2.0"
