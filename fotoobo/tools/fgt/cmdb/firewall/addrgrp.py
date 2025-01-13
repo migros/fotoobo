@@ -1,7 +1,7 @@
 """FortiGate CMDB firewall addrgrp module"""
 
 from pathlib import Path
-from typing import Any
+from typing import Any, Dict, List
 
 from fotoobo.fortinet.fortigate import FortiGate
 from fotoobo.helpers.config import config
@@ -11,14 +11,14 @@ from fotoobo.inventory import Inventory
 
 def get_cmdb_firewall_addrgrp(
     host: str, name: str, vdom: str, output_file: str
-) -> Result[list[Any]]:
+) -> Result[List[Any]]:
     """Get the firewall address group object(s)
 
     The FortiGate api endpoint is: /cmdb/firewall/addrgrp
     """
     inventory = Inventory(config.inventory_file)
     fgt: FortiGate = inventory.get_item(host, "fortigate")
-    result = Result[list[Any]]()
+    result = Result[List[Any]]()
 
     addrgrp_list = fgt.api_get(url=f"/cmdb/firewall/addrgrp/{name}", vdom=vdom)
 
@@ -31,7 +31,7 @@ def get_cmdb_firewall_addrgrp(
         for vd in addrgrp_list:
             for asset in vd["results"]:
                 # print(asset)
-                data: dict[str, str] = {
+                data: Dict[str, str] = {
                     "name": asset["name"],
                     "vdom": vd["vdom"],
                     "content": "\n".join(_["name"] for _ in asset["member"]),
