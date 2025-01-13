@@ -11,6 +11,7 @@
 ### Changed
 
 - Optimize imports in CLI module
+- Upgrade requests, jinja and pygount due to security issues and bugs
 
 ### Removed
 

@@ -42,8 +42,8 @@ python = ">=3.8.0, <3.13"
 typer = "~0.6.0"
 rich = "~12.5.1"
 PyYAML = "~6.0.0"
-requests = ">=2.32"
-Jinja2 = "~3.1.4"
+requests = ">=2.32.3"
+Jinja2 = "~3.1.5"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "~7.2.0"
@@ -55,7 +55,7 @@ pytest-cov = "~4.0.0"
 types-requests = "~2.27.11"
 isort = "~5.10.1"
 types-PyYAML = "~6.0.5"
-pygount = "~1.5.0"
+pygount = "~1.8.0"
 
 [tool.poetry.group.docs.dependencies]
 Sphinx = "~6.2.0"
