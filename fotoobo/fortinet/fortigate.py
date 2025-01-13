@@ -3,7 +3,7 @@ FortiGate Class
 """
 
 import logging
-from typing import Any, Dict, Optional
+from typing import Any, Dict, List, Optional
 
 import requests
 
@@ -70,7 +70,7 @@ class FortiGate(Fortinet):
             method, url, payload=payload, params=params, timeout=timeout, headers=headers
         )
 
-    def api_get(self, url: str, vdom: str = "*", timeout: Optional[float] = None) -> list[Any]:
+    def api_get(self, url: str, vdom: str = "*", timeout: Optional[float] = None) -> List[Any]:
         """Low level GET request to a FortiGate.
 
         This gets the response from a single API request to a FortiGate and returns it as a fotoobo
@@ -86,7 +86,7 @@ class FortiGate(Fortinet):
         """
         params = {"vdom": vdom}
         response = self.api(method="get", url=url, params=params, timeout=timeout)
-        data: list[Any] = (
+        data: List[Any] = (
             [response.json()] if isinstance(response.json(), dict) else response.json()
         )  # this is to listify the data from the response
 
