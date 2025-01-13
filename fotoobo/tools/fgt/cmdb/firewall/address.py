@@ -1,7 +1,7 @@
 """FortiGate CMDB firewall address module"""
 
 from pathlib import Path
-from typing import Any
+from typing import Any, Dict, List
 
 from fotoobo.fortinet.fortigate import FortiGate
 from fotoobo.helpers.config import config
@@ -11,14 +11,14 @@ from fotoobo.inventory import Inventory
 
 def get_cmdb_firewall_address(
     host: str, name: str, vdom: str, output_file: str
-) -> Result[list[Any]]:
+) -> Result[List[Any]]:
     """Get the firewall address object(s)
 
     The FortiGate api endpoint is: /cmdb/firewall/address
     """
     inventory = Inventory(config.inventory_file)
     fgt: FortiGate = inventory.get_item(host, "fortigate")
-    result = Result[list[Any]]()
+    result = Result[List[Any]]()
 
     address_list = fgt.api_get(url=f"/cmdb/firewall/address/{name}", vdom=vdom)
     result.push_result(key=host, data=address_list)
@@ -32,7 +32,7 @@ def get_cmdb_firewall_address(
         for vd in address_list:
             for asset in vd["results"]:
 
-                data: dict[str, str] = {
+                data: Dict[str, str] = {
                     "name": asset["name"],
                     "vdom": vd["vdom"],
                     "type": asset["type"],

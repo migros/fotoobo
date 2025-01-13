@@ -10,7 +10,9 @@
 
 ### Changed
 
+- Fix some typing issues for Python3.8
 - Optimize imports in CLI module
+- Upgrade requests, jinja and pygount due to security issues and bugs
 
 ### Removed
 

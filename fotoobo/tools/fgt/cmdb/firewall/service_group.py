@@ -1,7 +1,7 @@
 """FortiGate CMDB firewall service group module"""
 
 from pathlib import Path
-from typing import Any
+from typing import Any, Dict, List
 
 from fotoobo.fortinet.fortigate import FortiGate
 from fotoobo.helpers.config import config
@@ -11,14 +11,14 @@ from fotoobo.inventory import Inventory
 
 def get_cmdb_firewall_service_group(
     host: str, name: str, vdom: str, output_file: str
-) -> Result[list[Any]]:
+) -> Result[List[Any]]:
     """Get the firewall service group object(s)
 
     The FortiGate api endpoint is: /cmdb/firewall.service/group
     """
     inventory = Inventory(config.inventory_file)
     fgt: FortiGate = inventory.get_item(host, "fortigate")
-    result = Result[list[Any]]()
+    result = Result[List[Any]]()
 
     service_group_list = fgt.api_get(url=f"/cmdb/firewall/addrgrp/{name}", vdom=vdom)
 
@@ -30,7 +30,7 @@ def get_cmdb_firewall_service_group(
     if service_group_list:
         for vd in service_group_list:
             for asset in vd["results"]:
-                data: dict[str, str] = {
+                data: Dict[str, str] = {
                     "name": asset["name"],
                     "vdom": vd["vdom"],
                     "content": "\n".join(_["name"] for _ in asset["member"]),
