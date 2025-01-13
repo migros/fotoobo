@@ -50,8 +50,8 @@ class FortiGate(Fortinet):
         payload: Optional[Dict[str, Any]] = None,
         timeout: Optional[float] = None,
     ) -> requests.models.Response:
-        """
-        API request to a FortiGate device.
+        """Native API request to a FortiGate.
+
         It uses the super.api method but it has to enrich the payload in post requests with the
         needed session key.
 
@@ -69,6 +69,28 @@ class FortiGate(Fortinet):
         return super().api(
             method, url, payload=payload, params=params, timeout=timeout, headers=headers
         )
+
+    def api_get(self, url: str, vdom: str = "*", timeout: Optional[float] = None) -> list[Any]:
+        """Low level GET request to a FortiGate.
+
+        This gets the response from a single API request to a FortiGate and returns it as a fotoobo
+        Results object.
+
+        Args:
+            url:     The API endpoint to access
+            vdom:    The VDOM to access ("vdom1" or "vdom1,vdom2" or "*")
+            timeout: The time to wait for a response from the FortiGate
+
+        Returns:
+            The Result object with all the results as list (even if only one result is returned)
+        """
+        params = {"vdom": vdom}
+        response = self.api(method="get", url=url, params=params, timeout=timeout)
+        data: list[Any] = (
+            [response.json()] if isinstance(response.json(), dict) else response.json()
+        )  # this is to listify the data from the response
+
+        return data
 
     def backup(self, timeout: int = 10) -> str:
         """

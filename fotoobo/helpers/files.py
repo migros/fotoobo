@@ -158,7 +158,7 @@ def save_json_file(json_file: Path, data: Union[List[Any], Dict[Any, Any]]) -> b
         json_file: The file to write the data into
         data:      The data to save
 
-        Returns:
+    Returns:
         True if data was valid
     """
     status = True
@@ -168,6 +168,24 @@ def save_json_file(json_file: Path, data: Union[List[Any], Dict[Any, Any]]) -> b
 
     else:
         status = False
+
+    return status
+
+
+def save_txt_file(file: Path, data: str) -> bool:
+    """
+    Saves the content of any data object to a text file.
+
+    Args:
+        file: The file to write the data into
+        data: The data to save
+
+    Returns:
+        True if data was valid
+    """
+    status = True
+    with file.open("w", encoding="UTF-8") as out_file:
+        out_file.write(data)
 
     return status
 
