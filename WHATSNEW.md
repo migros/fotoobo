@@ -7,12 +7,11 @@
 - Add CLI command fgt get cmdb firewall service-group
 - Add the layers of fotoobo into the architecture documentation
 
-
 ### Changed
 
 - Fix some typing issues for Python3.8
 - Optimize imports in CLI module
-- Upgrade requests, jinja and pygount due to security issues and bugs
+- Upgrade requests, jinja, pygount and virtualenv due to security issues and bugs
 
 ### Removed
 
