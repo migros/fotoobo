@@ -124,7 +124,7 @@ class FortiClientEMS(Fortinet):
             if cookie.is_file() and csrf.is_file():
                 log.debug("Cookie and csrf token both exist")
                 with cookie.open("rb") as cookie_file:
-                    self.session.cookies.update(pickle.load(cookie_file))  # type: ignore
+                    self.session.cookies.update(pickle.load(cookie_file))
 
                 self.session.headers["Referer"] = f"https://{self.hostname}"
                 self.session.headers["X-CSRFToken"] = csrf.read_text()
