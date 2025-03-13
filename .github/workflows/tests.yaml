@@ -24,7 +24,7 @@ jobs:
           poetry run tox -e pylint
       - name: Type checking with mypy
         run: |
-          poetry run tox -e mypy -- -- --junit-xml mypy.xml
+          poetry run tox -- -e mypy -- --junit-xml mypy.xml
       - name: Upload mypy report
         uses: actions/upload-artifact@v4
         with:
