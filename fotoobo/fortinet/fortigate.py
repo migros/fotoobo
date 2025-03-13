@@ -41,7 +41,7 @@ class FortiGate(Fortinet):
         self.token = token
         self.type = "fortigate"
 
-    def api(  # pylint: disable=too-many-arguments
+    def api(  # pylint: disable=too-many-arguments, too-many-positional-arguments
         self,
         method: str,
         url: str = "",

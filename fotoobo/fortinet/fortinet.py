@@ -70,7 +70,7 @@ class Fortinet(ABC):
         self.timeout = kwargs.get("timeout", 3)
         self.type: str = ""
 
-    def api(  # pylint: disable=too-many-arguments
+    def api(  # pylint: disable=too-many-arguments, too-many-positional-arguments
         self,
         method: str,
         url: str = "",

@@ -49,7 +49,7 @@ class FortiClientEMS(Fortinet):
         self.username: str = username
         self.type: str = "forticlientems"
 
-    def api(  # pylint: disable=too-many-arguments
+    def api(  # pylint: disable=too-many-arguments, too-many-positional-arguments
         self,
         method: str,
         url: str = "",
