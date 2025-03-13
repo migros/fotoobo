@@ -2,7 +2,6 @@
 The FortiGate commands
 """
 
-# pylint: disable=anomalous-backslash-in-string
 import logging
 
 import typer
@@ -36,7 +35,7 @@ def version(
     host: str = typer.Argument(
         "",
         help="The FortiGate hostname to access (must be defined in the inventory). "
-        "\[default: <all>]",
+        "\\[default: <all>]",
         show_default=False,
         metavar="[host]",
     )
@@ -44,8 +43,9 @@ def version(
     """
     Get the FortiGate(s) version(s).
 
-    The optional argument [host] makes this command somewhat magic. If you omit \[host] it searches
-    for all devices of type 'fortigate' in the inventory and tries to get their FortiOS version.
+    The optional argument \\[host] makes this command somewhat magic. If you omit \\[host] it
+    searches for all devices of type 'fortigate' in the inventory and tries to get their FortiOS
+    version.
     """
     result = fgt.get.version(host)
     result.print_result_as_table(title="FortiGate Versions", headers=["FortiGate", "Version"])
