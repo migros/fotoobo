@@ -53,7 +53,7 @@ tox = "~4.24.2"
 pylint = "~3.3.5"
 pytest-cov = "~6.0.0"
 types-requests = "~2.32.0"
-isort = "~5.10.1"
+isort = "~6.0.1"
 types-PyYAML = "~6.0.5"
 pygount = "~1.8.0"
 
