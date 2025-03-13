@@ -24,6 +24,6 @@ def test_cli_app_fgt_get_cmdb_no_args() -> None:
     """Test fgt get cmdb with no arguments"""
     result = runner.invoke(app, ["-c", "tests/fotoobo.yaml", "fgt", "get", "cmdb"])
     assert result.exit_code == 0
-    assert "Usage: callback fgt get cmdb [OPTIONS] COMMAND" in result.stdout
+    assert "Usage: root fgt get cmdb [OPTIONS] COMMAND" in result.stdout
     assert "--help" in result.stdout
     assert "FortiGate get cmdb firewall commands." in result.stdout

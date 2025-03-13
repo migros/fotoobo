@@ -22,7 +22,7 @@ def test_cli_convert_no_args() -> None:
     """Test convert cli without issuing any arguments"""
     result = runner.invoke(app, ["-c", "tests/fotoobo.yaml", "convert"])
     assert result.exit_code == 0
-    assert "Usage: callback convert [OPTIONS] COMMAND [ARGS]..." in result.stdout
+    assert "Usage: root convert [OPTIONS] COMMAND [ARGS]..." in result.stdout
     assert "--help" in result.stdout
     assert "Convert commands for fotoobo" in result.stdout
 

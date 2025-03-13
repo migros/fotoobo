@@ -26,7 +26,7 @@ def test_cli_app_fgt_config_get_no_args() -> None:
     """Test fgt config get with no arguments"""
     result = runner.invoke(app, ["-c", "tests/fotoobo.yaml", "fgt", "config", "get"])
     assert result.exit_code == 0
-    assert "Usage: callback fgt config get [OPTIONS]" in result.stdout
+    assert "Usage: root fgt config get [OPTIONS]" in result.stdout
     assert "--help" in result.stdout
     assert "Get configuration or parts of it" in result.stdout
 
