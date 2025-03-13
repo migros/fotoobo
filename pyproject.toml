@@ -46,7 +46,7 @@ requests = ">=2.32.3"
 Jinja2 = "~3.1.5"
 
 [tool.poetry.group.dev.dependencies]
-pytest = "~7.2.0"
+pytest = "~8.3.0"
 black = "~24.03.0"
 mypy = "~1.15"
 tox = "~4.4.0"
