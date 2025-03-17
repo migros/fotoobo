@@ -106,7 +106,7 @@ class FortiManager(Fortinet):  # pylint: disable=too-many-public-methods
         }
         return self.api("post", payload=payload, timeout=timeout)
 
-    def api(  # pylint: disable=too-many-arguments
+    def api(  # pylint: disable=too-many-arguments, too-many-positional-arguments
         self,
         method: str,
         url: str = "",

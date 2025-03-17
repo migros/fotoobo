@@ -47,7 +47,7 @@ def version_callback(value: bool) -> None:
 
 
 @app.callback()
-def callback(  # pylint: disable=too-many-arguments
+def callback(  # pylint: disable=too-many-arguments, too-many-positional-arguments
     context: typer.Context,
     config_file: Optional[Path] = typer.Option(
         None,

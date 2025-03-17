@@ -30,6 +30,7 @@ classifiers = [
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
     "Topic :: Security",
     "Topic :: System :: Networking",
     "Topic :: System :: Networking :: Firewalls",
@@ -38,24 +39,24 @@ classifiers = [
 ]
 
 [tool.poetry.dependencies]
-python = ">=3.8.0, <3.13"
-typer = "~0.6.0"
-rich = "~12.5.1"
+python = ">=3.9.0, <4"
+typer = "~0.15.2"
+rich = "~13.9.0"
 PyYAML = "~6.0.0"
 requests = ">=2.32.3"
-Jinja2 = "~3.1.5"
+Jinja2 = "~3.1.6"
 
 [tool.poetry.group.dev.dependencies]
-pytest = "~7.2.0"
+pytest = "~8.3.0"
 black = "~24.03.0"
-mypy = ">0.9, <1.0"
-tox = "~4.4.0"
-pylint = "~3.1.0"
-pytest-cov = "~4.0.0"
-types-requests = "~2.27.11"
-isort = "~5.10.1"
-types-PyYAML = "~6.0.5"
-pygount = "~1.8.0"
+mypy = "~1.15"
+tox = "~4.24.2"
+pylint = "~3.3.5"
+pytest-cov = "~6.0.0"
+types-requests = "~2.32.0"
+isort = "~6.0.1"
+types-PyYAML = "~6.0.12"
+pygount = ">=2.0.0"
 
 [tool.poetry.group.docs.dependencies]
 Sphinx = "~6.2.0"

@@ -35,7 +35,7 @@ class ResponseMock:  # pylint: disable=too-many-instance-attributes
 
         if self.status_code >= 300:
             self.raise_for_status = MagicMock(
-                side_effect=HTTPError("mocked HTTPError", response=self)
+                side_effect=HTTPError("mocked HTTPError", response=self)  # type: ignore
             )
 
 

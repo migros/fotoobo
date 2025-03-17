@@ -39,7 +39,7 @@ def test_cli_app_no_args() -> None:
     """Test main cli without issuing any arguments"""
     result = runner.invoke(app, [])
     assert result.exit_code == 0
-    assert "Usage: callback [OPTIONS] COMMAND [ARGS]..." in result.stdout
+    assert "Usage: root [OPTIONS] COMMAND [ARGS]..." in result.stdout
     assert "--help" in result.stdout
     assert "The Fortinet Toolbox (fotoobo)" in result.stdout
 

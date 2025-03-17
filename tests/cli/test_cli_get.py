@@ -14,7 +14,7 @@ def test_cli_get_no_args() -> None:
     """Test get cli without issuing any arguments"""
     result = runner.invoke(app, ["-c", "tests/fotoobo.yaml", "get"])
     assert result.exit_code == 0
-    assert "Usage: callback get [OPTIONS] COMMAND [ARGS]..." in result.stdout
+    assert "Usage: root get [OPTIONS] COMMAND [ARGS]..." in result.stdout
     assert "--help" in result.stdout
     assert "Get information about fotoobo" in result.stdout
 
@@ -45,7 +45,6 @@ def test_get_commands() -> None:
 
     out = result.stdout
     assert "─ cli commands structure ─╮" in out
-    assert "│ callback" in out
     assert "─ get" in out
     assert "─ greet" not in out
     assert "Print the fotoobo commands" in out
