@@ -26,7 +26,7 @@ any Windows machine. Not yet. If you want to use Windows then run **fotoobo** in
 
 .. code-block:: bash
 
-  pip install fotoobo
+  pipx install fotoobo
 
 
 Execution
