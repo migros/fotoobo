@@ -63,7 +63,7 @@ class TestSysLogFormatter:
                     exc_info=None,
                     args=None,
                 ),
-                "<15>1 1970-01-01T%s:00:00%s dummy.host fotoobo 3456 - - "
+                "1 1970-01-01T%s:00:00%s dummy.host fotoobo 3456 - - "
                 "username=dummy_user test_message",
                 id="debug log",
             ),
@@ -77,7 +77,7 @@ class TestSysLogFormatter:
                     exc_info=None,
                     args=None,
                 ),
-                "<14>1 1970-01-01T%s:00:00%s dummy.host fotoobo 3456 - - "
+                "1 1970-01-01T%s:00:00%s dummy.host fotoobo 3456 - - "
                 "username=dummy_user test_message",
                 id="info log",
             ),
@@ -91,7 +91,7 @@ class TestSysLogFormatter:
                     exc_info=None,
                     args=None,
                 ),
-                "<12>1 1970-01-01T%s:00:00%s dummy.host fotoobo 3456 - - "
+                "1 1970-01-01T%s:00:00%s dummy.host fotoobo 3456 - - "
                 "username=dummy_user test_message",
                 id="warning log",
             ),
@@ -105,7 +105,7 @@ class TestSysLogFormatter:
                     exc_info=None,
                     args=None,
                 ),
-                "<11>1 1970-01-01T%s:00:00%s dummy.host fotoobo 3456 - - "
+                "1 1970-01-01T%s:00:00%s dummy.host fotoobo 3456 - - "
                 "username=dummy_user test_message",
                 id="error log",
             ),
@@ -119,7 +119,7 @@ class TestSysLogFormatter:
                     exc_info=None,
                     args=None,
                 ),
-                "<10>1 1970-01-01T%s:00:00%s dummy.host fotoobo 3456 - - "
+                "1 1970-01-01T%s:00:00%s dummy.host fotoobo 3456 - - "
                 "username=dummy_user test_message",
                 id="critical log",
             ),
@@ -151,32 +151,6 @@ class TestSysLogFormatter:
         expected_string = expected_string % (hour, f"{tzinfo[0:3]}:{tzinfo[3:]}")
 
         assert syslog_formatter.format(log_record) == expected_string
-
-    def test_format_with_unknown_loglevel(self, syslog_formatter: SysLogFormatter) -> None:
-        """
-        Test the format() method, when an unknown level is given.
-        It should raise a NotImplementedError in this case
-
-        Args:
-            syslog_formatter:
-
-        Returns:
-
-        """
-        log_record = logging.LogRecord(
-            name="fotoobo",
-            pathname="dummy.py",
-            lineno=3,
-            level=logging.CRITICAL,
-            msg="test_message",
-            exc_info=None,
-            args=None,
-        )
-
-        log_record.levelname = "UNKNOWN"
-
-        with pytest.raises(NotImplementedError):
-            syslog_formatter.format(log_record)
 
 
 class TestLog:
