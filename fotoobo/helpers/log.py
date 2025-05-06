@@ -11,8 +11,8 @@ import pwd
 import socket
 from datetime import datetime
 from logging.handlers import RotatingFileHandler, SysLogHandler
-from syslog import LOG_AUTH, LOG_USER
-from typing import Optional
+from syslog import LOG_USER
+from typing import Final, Optional
 
 from rich.logging import RichHandler
 
@@ -22,6 +22,7 @@ from fotoobo.helpers.files import load_yaml_file
 
 logger = logging.getLogger("fotoobo")
 audit_logger = logging.getLogger("audit")
+LOG_AUDIT: Final = 13
 
 
 class SysLogFormatter(logging.Formatter):
@@ -54,7 +55,7 @@ class SysLogFormatter(logging.Formatter):
         Returns:
             A string
         """
-        msg_id = "AUDIT" if self.facility == LOG_AUTH else "-"
+        msg_id = "AUDIT" if self.facility == LOG_AUDIT else "-"
 
         timestamp = datetime.fromtimestamp(record.created).astimezone().isoformat()
         return (
@@ -244,7 +245,7 @@ class Log:
                                 f"Cannot configure SysLog logging: {str(error)}"
                             ) from error
 
-                        audit_syslog_handler.setFormatter(SysLogFormatter(LOG_AUTH))
+                        audit_syslog_handler.setFormatter(SysLogFormatter(LOG_AUDIT))
                         audit_logger.addHandler(audit_syslog_handler)
 
                 else:
