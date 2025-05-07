@@ -1,3 +1,6 @@
+
+## [2.3.0] - 2025-05-07
+
 ### Added
 
 - Add generic api_get() method in tools/fgt/get
@@ -17,4 +20,3 @@
 - Upgrade all dependencies to be up to date
 
 ### Removed
-
