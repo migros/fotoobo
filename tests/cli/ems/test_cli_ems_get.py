@@ -66,8 +66,8 @@ def test_cli_app_ems_get_workgroups(monkeypatch: MonkeyPatch) -> None:
         app, ["-c", "tests/fotoobo.yaml", "ems", "get", "workgroups", "test_ems"]
     )
     assert result.exit_code == 0
-    assert "Test-grp1 │ 123" in result.stdout
-    assert "Test-grp2 │ 321" in result.stdout
+    assert "Test-grp1 │ 12345 │ 123" in result.stdout
+    assert "Test-grp2 │ 54321 │ 321" in result.stdout
 
 
 def test_cli_app_ems_get_version(monkeypatch: MonkeyPatch) -> None:
