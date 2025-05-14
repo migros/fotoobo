@@ -38,7 +38,7 @@ fotoobo Inventory Basics
 The entry for each device begins with its name which can be used in the **fotoobo** cli to access
 it.
 
-Beneath the simple device information it may also contain global configuration fer every type of
+Beneath the simple device information it may also contain global configuration for every type of
 device. The section which holds the global configuration is named ``globals`` so make sure you
 haven't any device with the same name.
 

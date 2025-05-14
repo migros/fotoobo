@@ -35,8 +35,8 @@ class FortiManager(Fortinet):  # pylint: disable=too-many-public-methods
             password: The password
 
         Keyword Args:
-            session_dir: The path where to load/save the FortiManager session key
-            **kwargs:    See Fortinet class for more available arguments
+            session_path: The path where to load/save the FortiManager session key
+            **kwargs:     See Fortinet class for more available arguments
         """
         super().__init__(hostname, **kwargs)
         self.api_url = f"https://{self.hostname}:{self.https_port}/jsonrpc"
@@ -802,7 +802,7 @@ class FortiManager(Fortinet):  # pylint: disable=too-many-public-methods
                         self.session_key = ""
 
             else:
-                log.debug("Session file '%s' does ot exist", session_file)
+                log.debug("Session file '%s' does not exist", session_file)
 
         if not self.session_key and self.username and self.password:
             log.debug("Login to '%s'", self.hostname)
@@ -818,7 +818,7 @@ class FortiManager(Fortinet):  # pylint: disable=too-many-public-methods
             response = super().api("post", payload=payload)
             if response.status_code == 200:
                 if "session" in response.json():
-                    log.debug("store session key")
+                    log.debug("Storing session key")
                     self.session_key = response.json()["session"]
 
                     if self.session_path:
