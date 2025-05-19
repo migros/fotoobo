@@ -255,6 +255,52 @@ FortiClient EMS Devices
     cookie_path: data
     type: forticlientems
 
+
+The FortiCloud
+--------------
+
+Access to the FortiCloud API is as it was a simple device. The only speciality is that you have to 
+define the host as *forticloud* with the type of *forticloud*. You do not need to specify a 
+*hostname* or *https_port* as it is hardcoded in the module.
+
+**token_path** *string* (optional)
+
+  Use this option to specify a directory where the *access_token* should be stored. The filename of 
+  the token file will be *support.fortinet.com.token*. During login to the FortiCloud this token is 
+  used if it exists. This will make requests much faster.
+  If you omit this option the token store feature is disabled and every login to FortiCloud is done
+  with username and password.
+
+**password** *string* (required)
+
+  The password used to login to the FortiClient EMS.
+
+**ssl_verify** *bool | string* (optional, default: true)
+
+  Check host SSL certificate (true) or not (false). You can also provide a path to a custom
+  CA certificate or CA bundle. Please be aware that disabling SSL certificate
+  verification is a security risk and should not be used in a production environment.
+
+**username** *string* (required)
+
+  The username used to login to the FortiClient EMS.
+
+**type** *string* (required)
+
+  Specifies the type of device. Use 'forticloud' for FortiCloud.
+
+**example**
+
+.. code-block:: yaml
+
+  forticloud:
+    username: myusername
+    password: mysupersecurepassword
+    token_path: data
+    ssl_verify: false
+    type: forticloud
+
+
 Generic Devices
 ---------------
 
