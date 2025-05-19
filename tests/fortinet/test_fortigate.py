@@ -1,10 +1,11 @@
-# type: ignore
 """
 Test the FortiGate class
 """
-from typing import Dict
 
 # pylint: disable=no-member
+# mypy: disable-error-code=attr-defined
+
+from typing import Dict
 from unittest.mock import MagicMock
 
 import pytest
