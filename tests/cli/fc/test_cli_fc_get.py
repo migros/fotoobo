@@ -8,7 +8,7 @@ from _pytest.monkeypatch import MonkeyPatch
 from typer.testing import CliRunner
 
 from fotoobo.cli.main import app
-from tests.helper import ResponseMock, parse_help_output
+from tests.helper import parse_help_output
 
 runner = CliRunner()
 

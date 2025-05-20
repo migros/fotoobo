@@ -1,6 +1,6 @@
 ### Added
 
-- Add FortiCloud Module for cloud asset management
+- Add FortiCloud module for cloud asset management
 
 ### Changed
 
