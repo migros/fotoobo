@@ -1,9 +1,9 @@
-# type: ignore
 """
 Test the FortiClient EMS class
 """
 
 # pylint: disable=no-member
+# mypy: disable-error-code=attr-defined
 
 from pathlib import Path
 from unittest.mock import ANY, MagicMock
@@ -95,7 +95,9 @@ class TestFortiClientEMS:
         destination = Path(temp_dir / "ems_dummy.csrf")
         destination.write_bytes(source.read_bytes())
 
-        ems = FortiClientEMS("ems_dummy", "dummy_user", "dummy_pass", temp_dir, ssl_verify=False)
+        ems = FortiClientEMS(
+            "ems_dummy", "dummy_user", "dummy_pass", str(temp_dir), ssl_verify=False
+        )
         assert ems.api_url == "https://ems_dummy:443/api/v1"
         assert ems.login() == 200
 
@@ -125,7 +127,9 @@ class TestFortiClientEMS:
         Path(temp_dir / "ems_dummy.cookie").unlink(missing_ok=True)
         Path(temp_dir / "ems_dummy.csrf").unlink(missing_ok=True)
 
-        ems = FortiClientEMS("ems_dummy", "dummy_user", "dummy_pass", temp_dir, ssl_verify=False)
+        ems = FortiClientEMS(
+            "ems_dummy", "dummy_user", "dummy_pass", str(temp_dir), ssl_verify=False
+        )
         assert ems.api_url == "https://ems_dummy:443/api/v1"
         assert ems.login() == 200
         requests.Session.post.assert_called_with(
@@ -173,7 +177,9 @@ class TestFortiClientEMS:
         destination = Path(temp_dir / "ems_dummy.csrf")
         destination.write_bytes(source.read_bytes())
 
-        ems = FortiClientEMS("ems_dummy", "dummy_user", "dummy_pass", temp_dir, ssl_verify=False)
+        ems = FortiClientEMS(
+            "ems_dummy", "dummy_user", "dummy_pass", str(temp_dir), ssl_verify=False
+        )
         assert ems.api_url == "https://ems_dummy:443/api/v1"
         assert ems.login() == 200
         requests.Session.get.assert_called_with(
@@ -222,7 +228,7 @@ class TestFortiClientEMS:
                 )
             ),
         )
-        ems = FortiClientEMS("host_1", "dummy_user", "dummy_pass", temp_dir, ssl_verify=False)
+        ems = FortiClientEMS("host_1", "dummy_user", "dummy_pass", str(temp_dir), ssl_verify=False)
         assert ems.api_url == "https://host_1:443/api/v1"
         assert ems.login() == 200
 
@@ -241,7 +247,7 @@ class TestFortiClientEMS:
                 )
             ),
         )
-        ems = FortiClientEMS("host_2", "dummy_user", "dummy_pass", temp_dir, ssl_verify=False)
+        ems = FortiClientEMS("host_2", "dummy_user", "dummy_pass", str(temp_dir), ssl_verify=False)
         assert ems.api_url == "https://host_2:443/api/v1"
         assert ems.login() == 200
 

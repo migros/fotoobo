@@ -4,6 +4,7 @@ Test the FortiManager class
 
 # pylint: disable=no-member, too-many-lines
 # mypy: disable-error-code=attr-defined
+
 from typing import Any, Dict, List
 from unittest.mock import MagicMock
 

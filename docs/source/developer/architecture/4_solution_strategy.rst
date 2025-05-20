@@ -19,8 +19,9 @@ Core building blocks
 
 To honor these design goals, **fotoobo** consists of the following parts:
 
-- The **Fortinet-Library** which allows to interact with the respective Fortinet devices. This
-  means basically handling authentication and making REST calls (folder :code:`fotoobo/fortinet`).
+- The **Fortinet-Library** which allows to interact with the respective Fortinet devices and 
+  servies. This means basically handling authentication and making REST calls (folder
+  :code:`fotoobo/fortinet`).
 - The **Inventory** provides a way to conveniently store information about the devices in YAML-
   files (folder :code:`fotoobo/inventory`).
 - **Tools** are the base building blocks that wrap a functionality of **fotoobo**, like getting the

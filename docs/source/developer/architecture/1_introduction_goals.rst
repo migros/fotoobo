@@ -32,10 +32,11 @@ Supported Fortinet products
 
 At the moment **fotoobo** supports the following Fortinet products:
 
-- FortiGate (tested with FortiOS 6.4, 7.0 and partially with 7.2)
+- FortiGate (tested with FortiOS 6.4, 7.0 and 7.2)
 - FortiManager
 - FortiClient EMS
 - FortiAnalyzer
+- FortiCloud Portal (support.fortinet.com)
 
 
 Core use cases

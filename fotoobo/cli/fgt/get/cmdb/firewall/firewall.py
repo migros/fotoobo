@@ -2,7 +2,6 @@
 The FortiGate commands
 """
 
-# pylint: disable=anomalous-backslash-in-string
 import logging
 
 import typer
@@ -30,30 +29,26 @@ def callback(context: typer.Context) -> None:
 @app.command()
 def address(
     host: str = typer.Argument(
-        "",
-        help="The FortiGate hostname to access (must be defined in the inventory). "
-        "\[default: <all>]",
-        show_default=False,
+        ...,
+        help="The FortiGate hostname to access (must be defined in the inventory).",
         metavar="[host]",
     ),
     name: str = typer.Argument(
         "",
-        help="The firewall address object to get \[default: <all>]",
-        show_default=False,
+        help="The firewall address object to get.",
         metavar="[name]",
     ),
     vdom: str = typer.Option(
         "*",
         "--vdom",
-        help="The vdom to query ('vdom1' or 'vdom1,vdom2') \[default: <all>]",
-        show_default=False,
+        help="The vdom to query ('vdom1' or 'vdom1,vdom2').",
         metavar="[vdom]",
     ),
     output_file: str = typer.Option(
         None,
         "--output",
         "-o",
-        help="Output file (format is specified by extension)",
+        help="Output file (format is specified by extension).",
         metavar="[file]",
         show_default=False,
     ),
@@ -70,30 +65,26 @@ def address(
 @app.command()
 def addrgrp(
     host: str = typer.Argument(
-        "",
-        help="The FortiGate hostname to access (must be defined in the inventory). "
-        "\[default: <all>]",
-        show_default=False,
+        ...,
+        help="The FortiGate hostname to access (must be defined in the inventory).",
         metavar="[host]",
     ),
     name: str = typer.Argument(
         "",
-        help="The firewall address group object to get \[default: <all>]",
-        show_default=False,
+        help="The firewall address group object to get.",
         metavar="[name]",
     ),
     vdom: str = typer.Option(
         "*",
         "--vdom",
-        help="The vdom to query ('vdom1' or 'vdom1,vdom2') \[default: <all>]",
-        show_default=False,
+        help="The vdom to query ('vdom1' or 'vdom1,vdom2').",
         metavar="[vdom]",
     ),
     output_file: str = typer.Option(
         None,
         "--output",
         "-o",
-        help="Output file (format is specified by extension)",
+        help="Output file (format is specified by extension).",
         metavar="[file]",
         show_default=False,
     ),
@@ -110,30 +101,26 @@ def addrgrp(
 @app.command()
 def service_custom(
     host: str = typer.Argument(
-        "",
-        help="The FortiGate hostname to access (must be defined in the inventory). "
-        "\[default: <all>]",
-        show_default=False,
+        ...,
+        help="The FortiGate hostname to access (must be defined in the inventory).",
         metavar="[host]",
     ),
     name: str = typer.Argument(
         "",
-        help="The firewall service object to get \[default: <all>]",
-        show_default=False,
+        help="The firewall service object to get.",
         metavar="[name]",
     ),
     vdom: str = typer.Option(
         "*",
         "--vdom",
-        help="The vdom to query ('vdom1' or 'vdom1,vdom2') \[default: <all>]",
-        show_default=False,
+        help="The vdom to query ('vdom1' or 'vdom1,vdom2').",
         metavar="[vdom]",
     ),
     output_file: str = typer.Option(
         None,
         "--output",
         "-o",
-        help="Output file (format is specified by extension)",
+        help="Output file (format is specified by extension).",
         metavar="[file]",
         show_default=False,
     ),
@@ -150,30 +137,26 @@ def service_custom(
 @app.command()
 def service_group(
     host: str = typer.Argument(
-        "",
-        help="The FortiGate hostname to access (must be defined in the inventory). "
-        "\[default: <all>]",
-        show_default=False,
+        ...,
+        help="The FortiGate hostname to access (must be defined in the inventory).",
         metavar="[host]",
     ),
     name: str = typer.Argument(
         "",
-        help="The firewall service group to get \[default: <all>]",
-        show_default=False,
+        help="The firewall service group to get.",
         metavar="[name]",
     ),
     vdom: str = typer.Option(
         "*",
         "--vdom",
-        help="The vdom to query ('vdom1' or 'vdom1,vdom2') \[default: <all>]",
-        show_default=False,
+        help="The vdom to query ('vdom1' or 'vdom1,vdom2').",
         metavar="[vdom]",
     ),
     output_file: str = typer.Option(
         None,
         "--output",
         "-o",
-        help="Output file (format is specified by extension)",
+        help="Output file (format is specified by extension).",
         metavar="[file]",
         show_default=False,
     ),

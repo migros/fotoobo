@@ -47,10 +47,10 @@ The Infrastructure Layer
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
 In this lowest level of **fotoobo** we directly interact with the infrastructure, meaning we handle 
-the authentication and API calls to the devices like FortiGate, FortiManger and others. The 
-interface layer should not directly access this infrastructure layer. Instead there should always 
-be a **tool** in the business logic layer which connects these two. No other layer than the 
-infrastructure layer should directly access any fortinet device.
+the authentication and API calls to the devices and services like FortiGate, FortiManger and 
+others. The interface layer should not directly access this infrastructure layer. Instead there 
+should always be a **tool** in the business logic layer which connects these two. No other layer 
+than the infrastructure layer should directly access any fortinet device.
 
 As a module in your own code you may also directly use the infrastructure layer.
 

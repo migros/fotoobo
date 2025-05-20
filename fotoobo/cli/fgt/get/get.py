@@ -33,10 +33,8 @@ def callback(context: typer.Context) -> None:
 @app.command()
 def version(
     host: str = typer.Argument(
-        "",
-        help="The FortiGate hostname to access (must be defined in the inventory). "
-        "\\[default: <all>]",
-        show_default=False,
+        None,
+        help="The FortiGate hostname to access (must be defined in the inventory). ",
         metavar="[host]",
     )
 ) -> None:
