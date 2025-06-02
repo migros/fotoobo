@@ -7,7 +7,7 @@ infrastructure. This module is meant to be held very generic.
 
 from .fortianalyzer import FortiAnalyzer
 from .forticlientems import FortiClientEMS
-from .forticloud import FortiCloudAsset
+from .forticloudasset import FortiCloudAsset
 from .fortigate import FortiGate
 from .fortimanager import FortiManager
 

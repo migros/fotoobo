@@ -64,7 +64,7 @@ def test_cli_app_help() -> None:
         "-V",
         "--version",
     }
-    assert set(commands) == {"convert", "ems", "faz", "fc", "fgt", "fmg", "get"}
+    assert set(commands) == {"convert", "ems", "faz", "fcasset", "fgt", "fmg", "get"}
 
 
 def test_cli_app_get_help() -> None:

@@ -24,7 +24,7 @@ from fotoobo.helpers.output import print_logo
 from . import convert, get
 from .ems import ems
 from .faz import faz
-from .fc import fc
+from .fcasset import fcasset
 from .fgt import fgt
 from .fmg import fmg
 
@@ -148,6 +148,6 @@ app.add_typer(get.app, name="get", help="Get information about fotoobo or your c
 # commands for the Fortinet products
 app.add_typer(ems.app, name="ems", help="Commands for FortiClient EMS.")
 app.add_typer(faz.app, name="faz", help="Commands for FortiAnalyzer.")
-app.add_typer(fc.app, name="fc", help="Commands for FortiCloud.")
+app.add_typer(fcasset.app, name="fcasset", help="Commands for FortiCloud Asset Management.")
 app.add_typer(fgt.app, name="fgt", help="Commands for FortiGate.")
 app.add_typer(fmg.app, name="fmg", help="Commands for FortiManager.")

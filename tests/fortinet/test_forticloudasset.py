@@ -1,5 +1,5 @@
 """
-Test the FortiCloud class
+Test the FortiCloudAsset class
 """
 
 # pylint: disable=no-member
@@ -14,7 +14,7 @@ import requests
 from _pytest.monkeypatch import MonkeyPatch
 
 from fotoobo.exceptions.exceptions import GeneralWarning
-from fotoobo.fortinet.forticloud import FortiCloudAsset
+from fotoobo.fortinet.forticloudasset import FortiCloudAsset
 from tests.helper import ResponseMock
 
 
@@ -35,7 +35,7 @@ class TestFortiCloud:
         assert cloud.access_token == ""
         assert cloud.ssl_verify is True
         assert cloud.token_path == ""
-        assert cloud.type == "forticloud"
+        assert cloud.type == "forticloudasset"
         assert cloud.ALLOWED_HTTP_METHODS == ["POST"]
 
     @staticmethod
@@ -46,7 +46,7 @@ class TestFortiCloud:
             MagicMock(return_value=ResponseMock(json={"key": "value"}, status_code=200)),
         )
         monkeypatch.setattr(
-            "fotoobo.fortinet.forticloud.FortiCloudAsset.login", MagicMock(return_value=200)
+            "fotoobo.fortinet.forticloudasset.FortiCloudAsset.login", MagicMock(return_value=200)
         )
         forticloud = FortiCloudAsset("dummy_username", "dummy_password")
         # forticloud.access_token = "dummy_token"
@@ -72,7 +72,7 @@ class TestFortiCloud:
     def test_get_version(response: Dict[str, str], expected: str, monkeypatch: MonkeyPatch) -> None:
         """Test get version"""
         monkeypatch.setattr(
-            "fotoobo.fortinet.forticloud.FortiCloudAsset.post",
+            "fotoobo.fortinet.forticloudasset.FortiCloudAsset.post",
             MagicMock(return_value=response),
         )
         assert FortiCloudAsset("dummy_username", "dummy_password").get_version() == expected
@@ -86,7 +86,7 @@ class TestFortiCloud:
             MagicMock(return_value=ResponseMock(json={"version": "dummy"}, status_code=401)),
         )
         monkeypatch.setattr(
-            "fotoobo.fortinet.forticloud.FortiCloudAsset.login", MagicMock(return_value=200)
+            "fotoobo.fortinet.forticloudasset.FortiCloudAsset.login", MagicMock(return_value=200)
         )
         with pytest.raises(GeneralWarning, match=r"HTTP/401") as err:
             FortiCloudAsset("dummy_username", "dummy_password").get_version()
@@ -178,7 +178,7 @@ class TestFortiCloud:
             ),
         )
         monkeypatch.setattr(
-            "fotoobo.fortinet.forticloud.FortiCloudAsset.login", MagicMock(return_value=200)
+            "fotoobo.fortinet.forticloudasset.FortiCloudAsset.login", MagicMock(return_value=200)
         )
         forticloud = FortiCloudAsset("dummy_username", "dummy_password")
         response = forticloud.post("/dummy_url")

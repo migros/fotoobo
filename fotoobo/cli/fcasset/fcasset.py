@@ -26,4 +26,4 @@ def callback(context: typer.Context) -> None:
     log.debug("About to execute command: '%s'", context.invoked_subcommand)
 
 
-app.add_typer(get.app, name="get", help="FortiCloud get commands.")
+app.add_typer(get.app, name="get", help="FortiCloud Asset Management get commands.")

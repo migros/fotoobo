@@ -58,7 +58,7 @@ class TestInventory:
             pytest.param("test_*_1", None, 1, id="wildcard name 2, no type"),
             pytest.param("test_fgt_*", None, 3, id="wildcard name 3, no type"),
             pytest.param(None, "fortigate", 3, id="no name, type"),
-            pytest.param("forticloud", None, 1, id="forticloud"),
+            pytest.param("forticloudasset", None, 1, id="forticloudasset"),
         ),
     )
     def test_get(test_name: Optional[str], test_type: Optional[str], expected_len: int) -> None:

@@ -30,7 +30,7 @@ Fortinet Classes
 .. autoclass:: fotoobo.fortinet.forticlientems.FortiClientEMS
   :members:
 
-.. autoclass:: fotoobo.fortinet.forticloud.FortiCloudAsset
+.. autoclass:: fotoobo.fortinet.forticloudasset.FortiCloudAsset
   :members:
 
 .. autoclass:: fotoobo.fortinet.fortigate.FortiGate

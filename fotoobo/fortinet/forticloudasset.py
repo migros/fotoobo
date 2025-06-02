@@ -44,7 +44,7 @@ class FortiCloudAsset(Fortinet):
         self.username = username
         self.access_token: str = ""
         self.token_path: str = kwargs.get("token_path", "")
-        self.type = "forticloud"
+        self.type = "forticloudasset"
 
     def api(  # pylint: disable=too-many-arguments, too-many-positional-arguments
         self,

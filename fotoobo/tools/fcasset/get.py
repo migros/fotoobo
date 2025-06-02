@@ -5,7 +5,7 @@ FortiCloud get utility
 import logging
 from typing import Any, Dict, List
 
-from fotoobo.fortinet.forticloud import FortiCloudAsset
+from fotoobo.fortinet.forticloudasset import FortiCloudAsset
 from fotoobo.helpers.config import config
 from fotoobo.helpers.result import Result
 from fotoobo.inventory import Inventory
@@ -28,7 +28,7 @@ def products(host: str) -> Result[List[Dict[str, Any]]]:
     """
     result = Result[List[Dict[str, Any]]]()
     inventory = Inventory(config.inventory_file)
-    fc: FortiCloudAsset = inventory.get_item(host, "forticloud")
+    fc: FortiCloudAsset = inventory.get_item(host, "forticloudasset")
     log.debug("FortiCloud get assets ...")
     response = fc.post("/products/list", payload={"serialNumber": "%"})
     if response["error"]:
@@ -52,8 +52,8 @@ def version(host: str) -> Result[str]:
     """
     result = Result[str]()
     inventory = Inventory(config.inventory_file)
-    fc: FortiCloudAsset = inventory.get_item(host, "forticloud")
-    log.debug("FortiCloud get version ...")
-    result.push_result(host, fc.get_version())
+    fcasset: FortiCloudAsset = inventory.get_item(host, "forticloudasset")
+    log.debug("FortiCloud Asset Management get version ...")
+    result.push_result(host, fcasset.get_version())
 
     return result

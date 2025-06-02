@@ -1,4 +1,4 @@
-"""Test fc tools get version"""
+"""Test fcasset tools get version"""
 
 from pathlib import Path
 from unittest.mock import MagicMock
@@ -6,7 +6,7 @@ from unittest.mock import MagicMock
 import pytest
 from _pytest.monkeypatch import MonkeyPatch
 
-from fotoobo.tools.fc.get import products
+from fotoobo.tools.fcasset.get import products
 
 
 @pytest.fixture(autouse=True)
@@ -21,7 +21,7 @@ def inventory_file(monkeypatch: MonkeyPatch) -> None:
 def fc_login(monkeypatch: MonkeyPatch) -> None:
     """Mock the FortiCloud login to always return 200 without to really login"""
     monkeypatch.setattr(
-        "fotoobo.fortinet.forticloud.FortiCloudAsset.login",
+        "fotoobo.fortinet.forticloudasset.FortiCloudAsset.login",
         MagicMock(return_value=200),
     )
 
@@ -29,7 +29,7 @@ def fc_login(monkeypatch: MonkeyPatch) -> None:
 def test_products(monkeypatch: MonkeyPatch) -> None:
     """Test get products"""
     monkeypatch.setattr(
-        "fotoobo.fortinet.forticloud.FortiCloudAsset.post",
+        "fotoobo.fortinet.forticloudasset.FortiCloudAsset.post",
         MagicMock(
             return_value={
                 "build": "1.0.0",
@@ -61,15 +61,15 @@ def test_products(monkeypatch: MonkeyPatch) -> None:
             }
         ),
     )
-    result = products("forticloud")
-    data = result.get_result("forticloud")
+    result = products("forticloudasset")
+    data = result.get_result("forticloudasset")
     assert data[0]["description"] == "dummy_fortigate"
 
 
 def test_products_empty(monkeypatch: MonkeyPatch) -> None:
     """Test get products when there are no products in list"""
     monkeypatch.setattr(
-        "fotoobo.fortinet.forticloud.FortiCloudAsset.post",
+        "fotoobo.fortinet.forticloudasset.FortiCloudAsset.post",
         MagicMock(
             return_value={
                 "build": "1.0.0",
@@ -87,6 +87,6 @@ def test_products_empty(monkeypatch: MonkeyPatch) -> None:
             }
         ),
     )
-    result = products("forticloud")
-    msg = result.get_messages("forticloud")
+    result = products("forticloudasset")
+    msg = result.get_messages("forticloudasset")
     assert msg[0]["message"] == "No product found"

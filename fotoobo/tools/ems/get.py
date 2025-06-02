@@ -3,7 +3,6 @@ FortiClient EMS get module
 """
 
 import logging
-from typing import Dict
 
 from fotoobo.fortinet.forticlientems import FortiClientEMS
 from fotoobo.helpers.config import config
@@ -21,7 +20,7 @@ def version(host: str) -> Result[str]:
         host: Host defined in inventory
 
     Returns:
-        Version data in a dict with keys: host, version
+        Version data in a Result object
     """
     result = Result[str]()
     inventory = Inventory(config.inventory_file)
@@ -30,6 +29,7 @@ def version(host: str) -> Result[str]:
     ems.login()
     ems_version = ems.get_version()
     result.push_result(host, f"v{ems_version}")
+
     return result
 
 
@@ -42,15 +42,15 @@ def workgroups(host: str, custom: bool = False) -> Result[dict[str, str]]:
         custom: If true it only returns custom groups
 
     Returns:
-        Workgroups data in a list of dict with keys: name, id, total_devices
+        Workgroups data in a Results object with keys: id, total_devices
     """
-    result = Result[Dict[str, str]]()
+    result = Result[dict[str, str]]()
     inventory = Inventory(config.inventory_file)
     ems: FortiClientEMS = inventory.get_item(host, "forticlientems")
     log.debug("FortiClient EMS get workgroups ...")
     ems.login()
     raw_data = ems.api("get", f"/workgroups/index?custom={custom}").json()["data"]
     for entry in raw_data:
-        result.push_result(entry["name"], {"namd": entry["id"], "count": entry["total_devices"]})
+        result.push_result(entry["name"], {"id": entry["id"], "count": entry["total_devices"]})
 
     return result

@@ -65,10 +65,11 @@ def test_get_inventory() -> None:
     result = runner.invoke(app, ["-c", "tests/fotoobo.yaml", "get", "inventory"])
     assert result.exit_code == 0
     assert "fotoobo inventory" in result.stdout
-    assert "test_fgt_1 │ dummy" in result.stdout
-    assert "test_ems   │ dummy" in result.stdout
+    assert "test_fgt_1 " in result.stdout
+    assert "test_ems " in result.stdout
     # Will be shortened in some testing scenarios (especially on GitHub)
-    assert "forticlie" in result.stdout
+    assert "forticlientems" in result.stdout
+    assert "forticloudasset" in result.stdout
 
 
 def test_cli_get_version_help() -> None:

@@ -1,5 +1,5 @@
 """
-The FortiCloud get commands
+The FortiCloudAsset get commands
 """
 
 import logging
@@ -12,7 +12,7 @@ from fotoobo.exceptions.exceptions import GeneralError
 from fotoobo.helpers import cli_path
 from fotoobo.helpers.files import save_json_file
 from fotoobo.helpers.result import Result
-from fotoobo.tools import fc
+from fotoobo.tools import fcasset
 
 app = typer.Typer(no_args_is_help=True, rich_markup_mode="rich")
 log = logging.getLogger("fotoobo")
@@ -24,7 +24,7 @@ HELP_TEXT_OPTION_OUTPUT_FILE = "The file to write the output to."
 @app.callback()
 def callback(context: typer.Context) -> None:
     """
-    The fc get subcommand callback
+    The fcasset get subcommand callback
 
     Args:
         context: The context object of the typer app
@@ -47,8 +47,8 @@ def products(
     """
     Get the FortiCloud products from asset management.
     """
-    result = fc.get.products("forticloud")
-    messages = result.get_messages("forticloud")
+    result = fcasset.get.products("forticloudasset")
+    messages = result.get_messages("forticloudasset")
     if messages:
         for message in messages:
             if message["level"] == "error":
@@ -61,7 +61,7 @@ def products(
 
     if output_file:
         log.debug("output_file is: '%s'", output_file)
-        save_json_file(output_file, result.get_result("forticloud"))
+        save_json_file(output_file, result.get_result("forticloudasset"))
 
     else:
         if raw:
@@ -69,7 +69,7 @@ def products(
 
         else:
             data = Result[Any]()
-            for asset in result.get_result("forticloud"):
+            for asset in result.get_result("forticloudasset"):
                 asset.pop("entitlements")
                 asset.pop("contracts")
                 asset.pop("productModelEoR")
@@ -87,8 +87,8 @@ def version() -> None:
     """
     Get the FortiCloud API version.
     """
-    result = fc.get.version("forticloud")
+    result = fcasset.get.version("forticloudasset")
     result.print_result_as_table(
-        title="FortiCloud API Version",
-        headers=["FortiCloud", "Version"],
+        title="FortiCloud Asset Management API Version",
+        headers=["FortiCloud Asset Management", "Version"],
     )

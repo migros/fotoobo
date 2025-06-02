@@ -64,7 +64,7 @@ haven't any device with the same name.
     hostname: myfortimanager.local
     username: the_fortimanager_username
     password: the_fortimanager_password
-    session_path: the_path_to_the_session_file
+    session_path: "path/to/session/file"
     type: fortimanager
 
 
@@ -92,7 +92,7 @@ These options may be overwritten on any particular device.
     fortigate:
       https_port: 4443
     fortimanager:
-      ssl_verify: "/path/to/my/custonm/ca.pem"
+      ssl_verify: "/path/to/custonm/ca.pem"
 
 
 FortiGate Devices
@@ -197,7 +197,7 @@ FortiManager / FortiAnalyzer Devices
     https_port: 4443
     username: myusername
     password: mysupersecurepassword
-    session_path: ~/.cache
+    session_path: "~/.cache"
     type: fortimanager
 
 
@@ -252,16 +252,16 @@ FortiClient EMS Devices
     https_port: 4443
     username: myusername
     password: mysupersecurepassword
-    cookie_path: data
+    cookie_path: "/path/to/cookie/dir"
     type: forticlientems
 
 
-The FortiCloud
---------------
+The FortiCloud Asset Management
+-------------------------------
 
-Access to the FortiCloud API is as it was a simple device. The only speciality is that you have to 
-define the host as *forticloud* with the type of *forticloud*. You do not need to specify a 
-*hostname* or *https_port* as it is hardcoded in the module.
+Access to the FortiCloud Asset Management API is very similar to a simple device. The only 
+speciality is that you have to define the host as *forticloud* with the type of *forticloud*. You 
+do not need to specify a *hostname* or *https_port* as it is hardcoded in the module.
 
 **token_path** *string* (optional)
 
@@ -287,7 +287,7 @@ define the host as *forticloud* with the type of *forticloud*. You do not need t
 
 **type** *string* (required)
 
-  Specifies the type of device. Use 'forticloud' for FortiCloud.
+  Specifies the type of device. Use 'forticloudasset' for FortiCloud Asset management.
 
 **example**
 
@@ -296,9 +296,9 @@ define the host as *forticloud* with the type of *forticloud*. You do not need t
   forticloud:
     username: myusername
     password: mysupersecurepassword
-    token_path: data
+    token_path: "/path/to/token/dir"
     ssl_verify: false
-    type: forticloud
+    type: forticloudasset
 
 
 Generic Devices
@@ -345,7 +345,7 @@ An ftp server may be used to upload configuration backups.
   myftp:
     hostname: ftp.local
     protocol: sftp
-    directory: dir1/dir2/
+    directory: "path/to/files/dir"
     username: username
     password: password
     type: ftp
