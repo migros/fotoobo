@@ -256,12 +256,13 @@ FortiClient EMS Devices
     type: forticlientems
 
 
-The FortiCloud Asset Management
--------------------------------
+FortiCloud Asset Management
+---------------------------
 
 Access to the FortiCloud Asset Management API is very similar to a simple device. The only 
-speciality is that you have to define the host as *forticloud* with the type of *forticloud*. You 
-do not need to specify a *hostname* or *https_port* as it is hardcoded in the module.
+speciality is that you have to define the host as *forticloudasset* with the type of 
+*forticloudasset*. 
+You do not need to specify a *hostname* or *https_port* as it is hardcoded in the module.
 
 **token_path** *string* (optional)
 
@@ -273,7 +274,7 @@ do not need to specify a *hostname* or *https_port* as it is hardcoded in the mo
 
 **password** *string* (required)
 
-  The password used to login to the FortiClient EMS.
+  The password used to login to the FortiCloud Asset Management.
 
 **ssl_verify** *bool | string* (optional, default: true)
 
@@ -283,17 +284,17 @@ do not need to specify a *hostname* or *https_port* as it is hardcoded in the mo
 
 **username** *string* (required)
 
-  The username used to login to the FortiClient EMS.
+  The username used to login to the FortiCloud Asset Management.
 
 **type** *string* (required)
 
-  Specifies the type of device. Use 'forticloudasset' for FortiCloud Asset management.
+  Specifies the type of device. Use 'forticloudasset' for FortiCloud Asset Management.
 
 **example**
 
 .. code-block:: yaml
 
-  forticloud:
+  forticloudasset:
     username: myusername
     password: mysupersecurepassword
     token_path: "/path/to/token/dir"

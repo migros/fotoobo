@@ -23,7 +23,6 @@ app = typer.Typer(no_args_is_help=True, rich_markup_mode="rich")
 log = logging.getLogger("fotoobo")
 
 
-# app.add_typer(get_commands.app, name="get", help="FortiGate get commands.")
 app.add_typer(config.app, name="config", help="FortiGate config file commands.")
 app.add_typer(get.app, name="get", help="FortiGate get commands.")
 app.add_typer(monitor.app, name="monitor", help="FortiGate monitor commands.")

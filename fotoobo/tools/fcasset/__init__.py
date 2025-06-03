@@ -2,6 +2,6 @@
 fcasset tools
 """
 
-from . import get
+from ..cloud.asset import get
 
 __all__ = ["get"]
