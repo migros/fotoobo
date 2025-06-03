@@ -10,18 +10,12 @@ from tests.helper import parse_help_output
 runner = CliRunner()
 
 
-def test_cli_get_no_args() -> None:
-    """Test get cli without issuing any arguments"""
-    result = runner.invoke(app, ["-c", "tests/fotoobo.yaml", "get"])
-    assert result.exit_code == 0
-    assert "Usage: root get [OPTIONS] COMMAND [ARGS]..." in result.stdout
-    assert "--help" in result.stdout
-    assert "Get information about fotoobo" in result.stdout
-
-
-def test_cli_get_help() -> None:
+def test_cli_get_help(help_args_with_none: str) -> None:
     """Test cli help for get"""
-    result = runner.invoke(app, ["-c", "tests/fotoobo.yaml", "get", "-h"])
+    args = ["-c", "tests/fotoobo.yaml", "get"]
+    args.append(help_args_with_none)
+    args = list(filter(None, args))
+    result = runner.invoke(app, args)
     assert result.exit_code == 0
     arguments, options, commands = parse_help_output(result.stdout)
     assert not arguments
@@ -29,9 +23,11 @@ def test_cli_get_help() -> None:
     assert set(commands) == {"commands", "inventory", "version"}
 
 
-def test_cli_get_commands_help() -> None:
+def test_cli_get_commands_help(help_args: str) -> None:
     """Test cli help for get commands"""
-    result = runner.invoke(app, ["-c", "tests/fotoobo.yaml", "get", "commands", "-h"])
+    args = ["-c", "tests/fotoobo.yaml", "get", "commands"]
+    args.append(help_args)
+    result = runner.invoke(app, args)
     assert result.exit_code == 0
     arguments, options, commands = parse_help_output(result.stdout)
     assert not arguments
@@ -50,9 +46,11 @@ def test_get_commands() -> None:
     assert "Print the fotoobo commands" in out
 
 
-def test_cli_get_inventory_help() -> None:
+def test_cli_get_inventory_help(help_args: str) -> None:
     """Test cli help for get inventory"""
-    result = runner.invoke(app, ["-c", "tests/fotoobo.yaml", "get", "inventory", "-h"])
+    args = ["-c", "tests/fotoobo.yaml", "get", "inventory"]
+    args.append(help_args)
+    result = runner.invoke(app, args)
     assert result.exit_code == 0
     arguments, options, commands = parse_help_output(result.stdout)
     assert not arguments
@@ -65,15 +63,18 @@ def test_get_inventory() -> None:
     result = runner.invoke(app, ["-c", "tests/fotoobo.yaml", "get", "inventory"])
     assert result.exit_code == 0
     assert "fotoobo inventory" in result.stdout
-    assert "test_fgt_1 │ dummy" in result.stdout
-    assert "test_ems   │ dummy" in result.stdout
+    assert "test_fgt_1 " in result.stdout
+    assert "test_ems " in result.stdout
     # Will be shortened in some testing scenarios (especially on GitHub)
-    assert "forticlie" in result.stdout
+    assert "forticlientems" in result.stdout
+    assert "forticloudasset" in result.stdout
 
 
-def test_cli_get_version_help() -> None:
+def test_cli_get_version_help(help_args: str) -> None:
     """Test cli help for get version"""
-    result = runner.invoke(app, ["-c", "tests/fotoobo.yaml", "get", "version", "-h"])
+    args = ["-c", "tests/fotoobo.yaml", "get", "version"]
+    args.append(help_args)
+    result = runner.invoke(app, args)
     assert result.exit_code == 0
     arguments, options, commands = parse_help_output(result.stdout)
     assert not arguments

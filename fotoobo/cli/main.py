@@ -7,7 +7,6 @@ more than a few subcommands.
 Caution: Use docstrings with care as they are used to print help texts on any command.
 """
 
-# pylint: disable=anomalous-backslash-in-string
 import logging
 import os
 import sys
@@ -23,6 +22,7 @@ from fotoobo.helpers.log import Log
 from fotoobo.helpers.output import print_logo
 
 from . import convert, get
+from .cloud import cloud
 from .ems import ems
 from .faz import faz
 from .fgt import fgt
@@ -53,7 +53,7 @@ def callback(  # pylint: disable=too-many-arguments, too-many-positional-argumen
         None,
         "--config",
         "-c",
-        help="Set the fotoobo configuration file. \[default: fotoobo.yaml]",
+        help="Set the fotoobo configuration file.",
         show_default=False,
         metavar="[file]",
     ),
@@ -66,7 +66,7 @@ def callback(  # pylint: disable=too-many-arguments, too-many-positional-argumen
     ),
     nologo: bool = typer.Option(None, "--nologo", help="Do not print the beautiful fotoobo logo."),
     log_quiet: bool = typer.Option(
-        None, "--quiet", "-q", help="Disable console logging. \[default: not quiet]"
+        None, "--quiet", "-q", help="Disable console logging.", show_default=False
     ),
     version: Optional[bool] = typer.Option(  # pylint: disable=unused-argument
         None, "--version", "-V", help="Print the fotoobo version.", callback=version_callback
@@ -148,5 +148,6 @@ app.add_typer(get.app, name="get", help="Get information about fotoobo or your c
 # commands for the Fortinet products
 app.add_typer(ems.app, name="ems", help="Commands for FortiClient EMS.")
 app.add_typer(faz.app, name="faz", help="Commands for FortiAnalyzer.")
+app.add_typer(cloud.app, name="cloud", help="Commands for FortiCloud applications.")
 app.add_typer(fgt.app, name="fgt", help="Commands for FortiGate.")
 app.add_typer(fmg.app, name="fmg", help="Commands for FortiManager.")

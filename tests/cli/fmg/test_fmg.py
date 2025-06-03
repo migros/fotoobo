@@ -10,9 +10,12 @@ from tests.helper import parse_help_output
 runner = CliRunner()
 
 
-def test_cli_app_fmg_help() -> None:
+def test_cli_app_fmg_help(help_args_with_none: str) -> None:
     """Test cli help for fmg"""
-    result = runner.invoke(app, ["-c", "tests/fotoobo.yaml", "fmg", "-h"])
+    args = ["-c", "tests/fotoobo.yaml", "fmg"]
+    args.append(help_args_with_none)
+    args = list(filter(None, args))
+    result = runner.invoke(app, args)
     assert result.exit_code == 0
     arguments, options, commands = parse_help_output(result.stdout)
     assert not arguments
@@ -20,9 +23,11 @@ def test_cli_app_fmg_help() -> None:
     assert set(commands) == {"assign", "get", "post"}
 
 
-def test_cli_app_fmg_assign_help() -> None:
+def test_cli_app_fmg_assign_help(help_args: str) -> None:
     """Test cli help for fmg assign"""
-    result = runner.invoke(app, ["-c", "tests/fotoobo.yaml", "fmg", "assign", "-h"])
+    args = ["-c", "tests/fotoobo.yaml", "fmg", "assign"]
+    args.append(help_args)
+    result = runner.invoke(app, args)
     assert result.exit_code == 0
     arguments, options, commands = parse_help_output(result.stdout)
     assert set(arguments) == {"adoms", "host", "policy"}
@@ -30,9 +35,11 @@ def test_cli_app_fmg_assign_help() -> None:
     assert not commands
 
 
-def test_cli_app_fmg_post_help() -> None:
+def test_cli_app_fmg_post_help(help_args: str) -> None:
     """Test cli help for fmg post"""
-    result = runner.invoke(app, ["-c", "tests/fotoobo.yaml", "fmg", "post", "-h"])
+    args = ["-c", "tests/fotoobo.yaml", "fmg", "post"]
+    args.append(help_args)
+    result = runner.invoke(app, args)
     assert result.exit_code == 0
     arguments, options, commands = parse_help_output(result.stdout)
     assert set(arguments) == {"file", "adom", "host"}

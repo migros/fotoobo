@@ -10,6 +10,7 @@ from typing import Any, Dict, Optional
 from fotoobo.exceptions import GeneralWarning
 from fotoobo.fortinet.fortianalyzer import FortiAnalyzer
 from fotoobo.fortinet.forticlientems import FortiClientEMS
+from fotoobo.fortinet.forticloudasset import FortiCloudAsset
 from fotoobo.fortinet.fortigate import FortiGate
 from fotoobo.fortinet.fortimanager import FortiManager
 from fotoobo.helpers.config import config
@@ -168,6 +169,9 @@ class Inventory:
 
             elif asset.get("type", "") == "forticlientems":
                 self.assets[name] = FortiClientEMS(**asset)
+
+            elif asset.get("type", "") == "forticloudasset":
+                self.assets[name] = FortiCloudAsset(**asset)
 
             elif asset.get("type", "") == "fortianalyzer":
                 self.assets[name] = FortiAnalyzer(**asset)

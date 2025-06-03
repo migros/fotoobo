@@ -12,23 +12,18 @@ from tests.helper import parse_help_output
 runner = CliRunner()
 
 
-def test_cli_app_fgt_config_get_help() -> None:
+def test_cli_app_fgt_config_get_help(help_args_with_none: str) -> None:
     """Test cli help for fgt config get help"""
-    result = runner.invoke(app, ["-c", "tests/fotoobo.yaml", "fgt", "config", "get", "-h"])
+    args = ["-c", "tests/fotoobo.yaml", "fgt", "config", "get"]
+    args.append(help_args_with_none)
+    args = list(filter(None, args))
+    result = runner.invoke(app, args)
     assert result.exit_code == 0
+    assert "Usage: root fgt config get" in result.stdout
     arguments, options, commands = parse_help_output(result.stdout)
     assert set(arguments) == {"configuration", "scope", "path"}
     assert options == {"-h", "--help"}
     assert not commands
-
-
-def test_cli_app_fgt_config_get_no_args() -> None:
-    """Test fgt config get with no arguments"""
-    result = runner.invoke(app, ["-c", "tests/fotoobo.yaml", "fgt", "config", "get"])
-    assert result.exit_code == 0
-    assert "Usage: root fgt config get [OPTIONS]" in result.stdout
-    assert "--help" in result.stdout
-    assert "Get configuration or parts of it" in result.stdout
 
 
 @pytest.mark.parametrize(

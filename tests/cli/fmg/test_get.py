@@ -15,9 +15,12 @@ from tests.helper import ResponseMock, parse_help_output
 runner = CliRunner()
 
 
-def test_cli_app_fmg_get_help() -> None:
+def test_cli_app_fmg_get_help(help_args_with_none: str) -> None:
     """Test cli help for fmg get"""
-    result = runner.invoke(app, ["-c", "tests/fotoobo.yaml", "fmg", "get", "-h"])
+    args = ["-c", "tests/fotoobo.yaml", "fmg", "get"]
+    args.append(help_args_with_none)
+    args = list(filter(None, args))
+    result = runner.invoke(app, args)
     assert result.exit_code == 0
     arguments, options, commands = parse_help_output(result.stdout)
     assert not arguments
@@ -25,9 +28,11 @@ def test_cli_app_fmg_get_help() -> None:
     assert set(commands) == {"adoms", "devices", "policy", "version"}
 
 
-def test_cli_app_fmg_get_adoms_help() -> None:
+def test_cli_app_fmg_get_adoms_help(help_args: str) -> None:
     """Test cli help for fmg get adoms"""
-    result = runner.invoke(app, ["-c", "tests/fotoobo.yaml", "fmg", "get", "adoms", "-h"])
+    args = ["-c", "tests/fotoobo.yaml", "fmg", "get", "adoms"]
+    args.append(help_args)
+    result = runner.invoke(app, args)
     assert result.exit_code == 0
     arguments, options, commands = parse_help_output(result.stdout)
     assert set(arguments) == {"host"}
@@ -35,9 +40,11 @@ def test_cli_app_fmg_get_adoms_help() -> None:
     assert not commands
 
 
-def test_cli_app_fmg_get_devices_help() -> None:
+def test_cli_app_fmg_get_devices_help(help_args: str) -> None:
     """Test cli help for fmg get devices"""
-    result = runner.invoke(app, ["-c", "tests/fotoobo.yaml", "fmg", "get", "devices", "-h"])
+    args = ["-c", "tests/fotoobo.yaml", "fmg", "get", "devices"]
+    args.append(help_args)
+    result = runner.invoke(app, args)
     assert result.exit_code == 0
     arguments, options, commands = parse_help_output(result.stdout)
     assert set(arguments) == {"host"}
@@ -45,9 +52,12 @@ def test_cli_app_fmg_get_devices_help() -> None:
     assert not commands
 
 
-def test_cli_app_fmg_get_policy_help() -> None:
+def test_cli_app_fmg_get_policy_help(help_args_with_none: str) -> None:
     """Test cli help for fmg get policy"""
-    result = runner.invoke(app, ["-c", "tests/fotoobo.yaml", "fmg", "get", "policy", "-h"])
+    args = ["-c", "tests/fotoobo.yaml", "fmg", "get", "policy"]
+    args.append(help_args_with_none)
+    args = list(filter(None, args))
+    result = runner.invoke(app, args)
     assert result.exit_code == 0
     arguments, options, commands = parse_help_output(result.stdout)
     assert set(arguments) == {"host", "adom", "policy_name", "filename"}
@@ -55,9 +65,11 @@ def test_cli_app_fmg_get_policy_help() -> None:
     assert not commands
 
 
-def test_cli_app_fmg_get_version_help() -> None:
+def test_cli_app_fmg_get_version_help(help_args: str) -> None:
     """Test cli help for fmg get version"""
-    result = runner.invoke(app, ["-c", "tests/fotoobo.yaml", "fmg", "get", "version", "-h"])
+    args = ["-c", "tests/fotoobo.yaml", "fmg", "get", "version"]
+    args.append(help_args)
+    result = runner.invoke(app, args)
     assert result.exit_code == 0
     arguments, options, commands = parse_help_output(result.stdout)
     assert set(arguments) == {"host"}

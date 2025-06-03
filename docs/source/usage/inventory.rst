@@ -38,7 +38,7 @@ fotoobo Inventory Basics
 The entry for each device begins with its name which can be used in the **fotoobo** cli to access
 it.
 
-Beneath the simple device information it may also contain global configuration fer every type of
+Beneath the simple device information it may also contain global configuration for every type of
 device. The section which holds the global configuration is named ``globals`` so make sure you
 haven't any device with the same name.
 
@@ -64,7 +64,7 @@ haven't any device with the same name.
     hostname: myfortimanager.local
     username: the_fortimanager_username
     password: the_fortimanager_password
-    session_path: the_path_to_the_session_file
+    session_path: "path/to/session/file"
     type: fortimanager
 
 
@@ -92,7 +92,7 @@ These options may be overwritten on any particular device.
     fortigate:
       https_port: 4443
     fortimanager:
-      ssl_verify: "/path/to/my/custonm/ca.pem"
+      ssl_verify: "/path/to/custonm/ca.pem"
 
 
 FortiGate Devices
@@ -197,7 +197,7 @@ FortiManager / FortiAnalyzer Devices
     https_port: 4443
     username: myusername
     password: mysupersecurepassword
-    session_path: ~/.cache
+    session_path: "~/.cache"
     type: fortimanager
 
 
@@ -252,8 +252,55 @@ FortiClient EMS Devices
     https_port: 4443
     username: myusername
     password: mysupersecurepassword
-    cookie_path: data
+    cookie_path: "/path/to/cookie/dir"
     type: forticlientems
+
+
+FortiCloud Asset Management
+---------------------------
+
+Access to the FortiCloud Asset Management API is very similar to a simple device. The only 
+speciality is that you have to define the host as *forticloudasset* with the type of 
+*forticloudasset*. 
+You do not need to specify a *hostname* or *https_port* as it is hardcoded in the module.
+
+**token_path** *string* (optional)
+
+  Use this option to specify a directory where the *access_token* should be stored. The filename of 
+  the token file will be *support.fortinet.com.token*. During login to the FortiCloud this token is 
+  used if it exists. This will make requests much faster.
+  If you omit this option the token store feature is disabled and every login to FortiCloud is done
+  with username and password.
+
+**password** *string* (required)
+
+  The password used to login to the FortiCloud Asset Management.
+
+**ssl_verify** *bool | string* (optional, default: true)
+
+  Check host SSL certificate (true) or not (false). You can also provide a path to a custom
+  CA certificate or CA bundle. Please be aware that disabling SSL certificate
+  verification is a security risk and should not be used in a production environment.
+
+**username** *string* (required)
+
+  The username used to login to the FortiCloud Asset Management.
+
+**type** *string* (required)
+
+  Specifies the type of device. Use 'forticloudasset' for FortiCloud Asset Management.
+
+**example**
+
+.. code-block:: yaml
+
+  forticloudasset:
+    username: myusername
+    password: mysupersecurepassword
+    token_path: "/path/to/token/dir"
+    ssl_verify: false
+    type: forticloudasset
+
 
 Generic Devices
 ---------------
@@ -299,7 +346,7 @@ An ftp server may be used to upload configuration backups.
   myftp:
     hostname: ftp.local
     protocol: sftp
-    directory: dir1/dir2/
+    directory: "path/to/files/dir"
     username: username
     password: password
     type: ftp

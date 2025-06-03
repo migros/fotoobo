@@ -2,6 +2,11 @@ globals:
   fortigate:
     https_port: 222
 
+forticloudasset:
+  username: dummy_username
+  password: dummy_password
+  type: forticloudasset
+
 test_fgt_1:
   hostname: dummy
   ssl_verify: false

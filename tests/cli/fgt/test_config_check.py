@@ -15,23 +15,18 @@ from tests.helper import parse_help_output
 runner = CliRunner()
 
 
-def test_cli_app_fgt_config_check_help() -> None:
+def test_cli_app_fgt_config_check_help(help_args_with_none: str) -> None:
     """Test cli help for fgt config check help"""
-    result = runner.invoke(app, ["-c", "tests/fotoobo.yaml", "fgt", "config", "check", "-h"])
+    args = ["-c", "tests/fotoobo.yaml", "fgt", "config", "check"]
+    args.append(help_args_with_none)
+    args = list(filter(None, args))
+    result = runner.invoke(app, args)
     assert result.exit_code == 0
+    assert "Usage: root fgt config check" in result.stdout
     arguments, options, commands = parse_help_output(result.stdout)
     assert set(arguments) == {"configuration", "bundles"}
     assert options == {"-h", "--help", "--smtp"}
     assert not commands
-
-
-def test_cli_app_fgt_config_check_no_args() -> None:
-    """Test fgt config check with no arguments"""
-    result = runner.invoke(app, ["-c", "tests/fotoobo.yaml", "fgt", "config", "check"])
-    assert result.exit_code == 0
-    assert "Usage: root fgt config check [OPTIONS] [config]" in result.stdout
-    assert "--help" in result.stdout
-    assert "Check one or more FortiGate" in result.stdout
 
 
 def test_cli_app_fgt_config_check() -> None:

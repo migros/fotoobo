@@ -13,9 +13,12 @@ from tests.helper import ResponseMock, parse_help_output
 runner = CliRunner()
 
 
-def test_cli_app_faz_get_help() -> None:
+def test_cli_app_faz_get_help(help_args_with_none: str) -> None:
     """Test cli help for faz get"""
-    result = runner.invoke(app, ["-c", "tests/fotoobo.yaml", "faz", "get", "-h"])
+    args = ["-c", "tests/fotoobo.yaml", "faz", "get"]
+    args.append(help_args_with_none)
+    args = list(filter(None, args))
+    result = runner.invoke(app, args)
     assert result.exit_code == 0
     arguments, options, commands = parse_help_output(result.stdout)
     assert not arguments
@@ -23,9 +26,11 @@ def test_cli_app_faz_get_help() -> None:
     assert set(commands) == {"version"}
 
 
-def test_cli_app_faz_get_version_help() -> None:
+def test_cli_app_faz_get_version_help(help_args: str) -> None:
     """Test cli help for faz get version"""
-    result = runner.invoke(app, ["-c", "tests/fotoobo.yaml", "faz", "get", "version", "-h"])
+    args = ["-c", "tests/fotoobo.yaml", "faz", "get", "version"]
+    args.append(help_args)
+    result = runner.invoke(app, args)
     assert result.exit_code == 0
     arguments, options, commands = parse_help_output(result.stdout)
     assert set(arguments) == {"host"}

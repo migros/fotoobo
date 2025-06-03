@@ -13,9 +13,12 @@ from tests.helper import ResponseMock, parse_help_output
 runner = CliRunner()
 
 
-def test_cli_app_ems_monitor_help() -> None:
+def test_cli_app_ems_monitor_help(help_args_with_none: str) -> None:
     """Test cli help for ems monitor"""
-    result = runner.invoke(app, ["-c", "tests/fotoobo.yaml", "ems", "monitor", "-h"])
+    args = ["-c", "tests/fotoobo.yaml", "ems", "monitor"]
+    args.append(help_args_with_none)
+    args = list(filter(None, args))
+    result = runner.invoke(app, args)
     assert result.exit_code == 0
     arguments, options, commands = parse_help_output(result.stdout)
     assert not arguments
@@ -30,9 +33,11 @@ def test_cli_app_ems_monitor_help() -> None:
     }
 
 
-def test_cli_app_ems_monitor_connections_help() -> None:
+def test_cli_app_ems_monitor_connections_help(help_args: str) -> None:
     """Test cli help for ems monitor connections"""
-    result = runner.invoke(app, ["-c", "tests/fotoobo.yaml", "ems", "monitor", "connections", "-h"])
+    args = ["-c", "tests/fotoobo.yaml", "ems", "monitor", "connections"]
+    args.append(help_args)
+    result = runner.invoke(app, args)
     assert result.exit_code == 0
     arguments, options, commands = parse_help_output(result.stdout)
     assert set(arguments) == {"host"}
@@ -66,11 +71,11 @@ def test_cli_app_ems_monitor_connections(monkeypatch: MonkeyPatch) -> None:
     assert "unmanaged │ 99    │ Unmanaged" in result.stdout
 
 
-def test_cli_app_ems_monitor_endpoint_management_status_help() -> None:
+def test_cli_app_ems_monitor_endpoint_management_status_help(help_args: str) -> None:
     """Test cli help for ems monitor endpoint-management-status"""
-    result = runner.invoke(
-        app, ["-c", "tests/fotoobo.yaml", "ems", "monitor", "endpoint-management-status", "-h"]
-    )
+    args = ["-c", "tests/fotoobo.yaml", "ems", "monitor", "endpoint-management-status"]
+    args.append(help_args)
+    result = runner.invoke(app, args)
     assert result.exit_code == 0
     arguments, options, commands = parse_help_output(result.stdout)
     assert set(arguments) == {"host"}
@@ -105,11 +110,11 @@ def test_cli_app_ems_monitor_endpoint_management_status(monkeypatch: MonkeyPatch
     assert "Unmanaged │ 99" in result.stdout
 
 
-def test_cli_app_ems_monitor_endpoint_os_versions_help() -> None:
+def test_cli_app_ems_monitor_endpoint_os_versions_help(help_args: str) -> None:
     """Test cli help for ems monitor endpoint-os-versions"""
-    result = runner.invoke(
-        app, ["-c", "tests/fotoobo.yaml", "ems", "monitor", "endpoint-os-versions", "-h"]
-    )
+    args = ["-c", "tests/fotoobo.yaml", "ems", "monitor", "endpoint-os-versions"]
+    args.append(help_args)
+    result = runner.invoke(app, args)
     assert result.exit_code == 0
     arguments, options, commands = parse_help_output(result.stdout)
     assert set(arguments) == {"host"}
@@ -147,11 +152,11 @@ def test_cli_app_ems_monitor_endpoint_os_versions(monkeypatch: MonkeyPatch) -> N
     assert "linux   │ 777" in result.stdout
 
 
-def test_cli_app_ems_monitor_endpoint_outofsync_help() -> None:
+def test_cli_app_ems_monitor_endpoint_outofsync_help(help_args: str) -> None:
     """Test cli help for ems monitor endpoint-outofsync"""
-    result = runner.invoke(
-        app, ["-c", "tests/fotoobo.yaml", "ems", "monitor", "endpoint-outofsync", "-h"]
-    )
+    args = ["-c", "tests/fotoobo.yaml", "ems", "monitor", "endpoint-outofsync"]
+    args.append(help_args)
+    result = runner.invoke(app, args)
     assert result.exit_code == 0
     arguments, options, commands = parse_help_output(result.stdout)
     assert set(arguments) == {"host"}
@@ -184,9 +189,11 @@ def test_cli_app_ems_monitor_endpoint_outofsync(monkeypatch: MonkeyPatch) -> Non
     assert "out of sync │ 999" in result.stdout
 
 
-def test_cli_app_ems_monitor_license_help() -> None:
+def test_cli_app_ems_monitor_license_help(help_args: str) -> None:
     """Test cli help for ems monitor license"""
-    result = runner.invoke(app, ["-c", "tests/fotoobo.yaml", "ems", "monitor", "license", "-h"])
+    args = ["-c", "tests/fotoobo.yaml", "ems", "monitor", "license"]
+    args.append(help_args)
+    result = runner.invoke(app, args)
     assert result.exit_code == 0
     arguments, options, commands = parse_help_output(result.stdout)
     assert set(arguments) == {"host"}
@@ -241,9 +248,11 @@ def test_cli_app_ems_monitor_license(monkeypatch: MonkeyPatch) -> None:
     assert "sandbox_cloud_usage │ 20" in result.stdout
 
 
-def test_cli_app_ems_monitor_system_help() -> None:
+def test_cli_app_ems_monitor_system_help(help_args: str) -> None:
     """Test cli help for ems monitor system"""
-    result = runner.invoke(app, ["-c", "tests/fotoobo.yaml", "ems", "monitor", "system", "-h"])
+    args = ["-c", "tests/fotoobo.yaml", "ems", "monitor", "system"]
+    args.append(help_args)
+    result = runner.invoke(app, args)
     assert result.exit_code == 0
     arguments, options, commands = parse_help_output(result.stdout)
     assert set(arguments) == {"host"}

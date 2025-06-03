@@ -13,9 +13,12 @@ from tests.helper import ResponseMock, parse_help_output
 runner = CliRunner()
 
 
-def test_cli_app_ems_get_help() -> None:
+def test_cli_app_ems_get_help(help_args_with_none: str) -> None:
     """Test cli help for ems get"""
-    result = runner.invoke(app, ["-c", "tests/fotoobo.yaml", "ems", "get", "-h"])
+    args = ["-c", "tests/fotoobo.yaml", "ems", "get"]
+    args.append(help_args_with_none)
+    args = list(filter(None, args))
+    result = runner.invoke(app, args)
     assert result.exit_code == 0
     arguments, options, commands = parse_help_output(result.stdout)
     assert not arguments
@@ -23,9 +26,11 @@ def test_cli_app_ems_get_help() -> None:
     assert set(commands) == {"version", "workgroups"}
 
 
-def test_cli_app_ems_get_version_help() -> None:
+def test_cli_app_ems_get_version_help(help_args: str) -> None:
     """Test cli help for ems get version"""
-    result = runner.invoke(app, ["-c", "tests/fotoobo.yaml", "ems", "get", "version", "-h"])
+    args = ["-c", "tests/fotoobo.yaml", "ems", "get", "version"]
+    args.append(help_args)
+    result = runner.invoke(app, args)
     assert result.exit_code == 0
     arguments, options, commands = parse_help_output(result.stdout)
     assert set(arguments) == {"host"}
@@ -33,9 +38,11 @@ def test_cli_app_ems_get_version_help() -> None:
     assert not commands
 
 
-def test_cli_app_ems_get_workgroups_help() -> None:
+def test_cli_app_ems_get_workgroups_help(help_args: str) -> None:
     """Test cli help for ems get workgroups"""
-    result = runner.invoke(app, ["-c", "tests/fotoobo.yaml", "ems", "get", "workgroups", "-h"])
+    args = ["-c", "tests/fotoobo.yaml", "ems", "get", "workgroups"]
+    args.append(help_args)
+    result = runner.invoke(app, args)
     assert result.exit_code == 0
     arguments, options, commands = parse_help_output(result.stdout)
     assert set(arguments) == {"host"}
@@ -66,8 +73,8 @@ def test_cli_app_ems_get_workgroups(monkeypatch: MonkeyPatch) -> None:
         app, ["-c", "tests/fotoobo.yaml", "ems", "get", "workgroups", "test_ems"]
     )
     assert result.exit_code == 0
-    assert "Test-grp1 │ 123" in result.stdout
-    assert "Test-grp2 │ 321" in result.stdout
+    assert "Test-grp1 │ 12345 │ 123" in result.stdout
+    assert "Test-grp2 │ 54321 │ 321" in result.stdout
 
 
 def test_cli_app_ems_get_version(monkeypatch: MonkeyPatch) -> None:

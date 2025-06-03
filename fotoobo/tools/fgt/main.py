@@ -74,7 +74,7 @@ def backup(
         return name, data
 
     with Progress() as progress:
-        task = progress.add_task("Getting FortiGate versions...", total=len(fgts))
+        task = progress.add_task("Download FortiGate backups...", total=len(fgts))
         with concurrent.futures.ThreadPoolExecutor(max_workers=10) as executor:
             futures = []
             for name, fgt in fgts.items():

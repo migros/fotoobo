@@ -10,11 +10,12 @@ from tests.helper import parse_help_output
 runner = CliRunner()
 
 
-def test_cli_app_fgt_get_cmdb_firewall_help() -> None:
+def test_cli_app_fgt_get_cmdb_firewall_help(help_args_with_none: str) -> None:
     """Test cli help for fgt get cmdb firewall"""
-    result = runner.invoke(
-        app, ["-c", "tests/fotoobo.yaml", "fgt", "get", "cmdb", "firewall", "-h"]
-    )
+    args = ["-c", "tests/fotoobo.yaml", "fgt", "get", "cmdb", "firewall"]
+    args.append(help_args_with_none)
+    args = list(filter(None, args))
+    result = runner.invoke(app, args)
     assert result.exit_code == 0
     arguments, options, commands = parse_help_output(result.stdout)
     assert not arguments
@@ -22,20 +23,11 @@ def test_cli_app_fgt_get_cmdb_firewall_help() -> None:
     assert set(commands) == {"address", "addrgrp", "service-custom", "service-group"}
 
 
-def test_cli_app_fgt_get_cmdb_firewall_no_args() -> None:
-    """Test fgt get cmdb firewall with no arguments"""
-    result = runner.invoke(app, ["-c", "tests/fotoobo.yaml", "fgt", "get", "cmdb", "firewall"])
-    assert result.exit_code == 0
-    assert "Usage: root fgt get cmdb firewall [OPTIONS] COMMAND" in result.stdout
-    assert "--help" in result.stdout
-    assert "Get FortiGate cmdb firewall address." in result.stdout
-
-
-def test_cli_app_fgt_get_cmdb_firewall_address_help() -> None:
+def test_cli_app_fgt_get_cmdb_firewall_address_help(help_args: str) -> None:
     """Test cli help for fgt get cmdb firewall address"""
-    result = runner.invoke(
-        app, ["-c", "tests/fotoobo.yaml", "fgt", "get", "cmdb", "firewall", "address", "-h"]
-    )
+    args = ["-c", "tests/fotoobo.yaml", "fgt", "get", "cmdb", "firewall", "address"]
+    args.append(help_args)
+    result = runner.invoke(app, args)
     assert result.exit_code == 0
     arguments, options, commands = parse_help_output(result.stdout)
     assert set(arguments) == {"host", "name"}
@@ -43,11 +35,11 @@ def test_cli_app_fgt_get_cmdb_firewall_address_help() -> None:
     assert not commands
 
 
-def test_cli_app_fgt_get_cmdb_firewall_addrgrp_help() -> None:
+def test_cli_app_fgt_get_cmdb_firewall_addrgrp_help(help_args: str) -> None:
     """Test cli help for fgt get cmdb firewall address group"""
-    result = runner.invoke(
-        app, ["-c", "tests/fotoobo.yaml", "fgt", "get", "cmdb", "firewall", "addrgrp", "-h"]
-    )
+    args = ["-c", "tests/fotoobo.yaml", "fgt", "get", "cmdb", "firewall", "addrgrp"]
+    args.append(help_args)
+    result = runner.invoke(app, args)
     assert result.exit_code == 0
     arguments, options, commands = parse_help_output(result.stdout)
     assert set(arguments) == {"host", "name"}
@@ -55,12 +47,11 @@ def test_cli_app_fgt_get_cmdb_firewall_addrgrp_help() -> None:
     assert not commands
 
 
-def test_cli_app_fgt_get_cmdb_firewall_service_custom_help() -> None:
+def test_cli_app_fgt_get_cmdb_firewall_service_custom_help(help_args: str) -> None:
     """Test cli help for fgt get cmdb firewall service-custom"""
-    result = runner.invoke(
-        app,
-        ["-c", "tests/fotoobo.yaml", "fgt", "get", "cmdb", "firewall", "service-custom", "-h"],
-    )
+    args = ["-c", "tests/fotoobo.yaml", "fgt", "get", "cmdb", "firewall", "service-custom"]
+    args.append(help_args)
+    result = runner.invoke(app, args)
     assert result.exit_code == 0
     arguments, options, commands = parse_help_output(result.stdout)
     assert set(arguments) == {"host", "name"}
@@ -68,12 +59,11 @@ def test_cli_app_fgt_get_cmdb_firewall_service_custom_help() -> None:
     assert not commands
 
 
-def test_cli_app_fgt_get_cmdb_firewall_service_group_help() -> None:
+def test_cli_app_fgt_get_cmdb_firewall_service_group_help(help_args: str) -> None:
     """Test cli help for fgt get cmdb firewall service-group"""
-    result = runner.invoke(
-        app,
-        ["-c", "tests/fotoobo.yaml", "fgt", "get", "cmdb", "firewall", "service-group", "-h"],
-    )
+    args = ["-c", "tests/fotoobo.yaml", "fgt", "get", "cmdb", "firewall", "service-group"]
+    args.append(help_args)
+    result = runner.invoke(app, args)
     assert result.exit_code == 0
     arguments, options, commands = parse_help_output(result.stdout)
     assert set(arguments) == {"host", "name"}

@@ -44,9 +44,11 @@ def test_cli_app_no_args() -> None:
     assert "The Fortinet Toolbox (fotoobo)" in result.stdout
 
 
-def test_cli_app_help() -> None:
+def test_cli_app_help(help_args: str) -> None:
     """Test main cli help"""
-    result = runner.invoke(app, ["-c", "tests/fotoobo.yaml", "-h"])
+    args = ["-c", "tests/fotoobo.yaml"]
+    args.append(help_args)
+    result = runner.invoke(app, args)
     assert result.exit_code == 0
     arguments, options, commands = parse_help_output(result.stdout)
     assert not arguments
@@ -64,17 +66,7 @@ def test_cli_app_help() -> None:
         "-V",
         "--version",
     }
-    assert set(commands) == {"convert", "ems", "faz", "fgt", "fmg", "get"}
-
-
-def test_cli_app_get_help() -> None:
-    """Test cli help for get"""
-    result = runner.invoke(app, ["-c", "tests/fotoobo.yaml", "get", "-h"])
-    assert result.exit_code == 0
-    arguments, options, commands = parse_help_output(result.stdout)
-    assert not arguments
-    assert options == {"-h", "--help"}
-    assert set(commands) == {"commands", "inventory", "version"}
+    assert set(commands) == {"convert", "ems", "faz", "cloud", "fgt", "fmg", "get"}
 
 
 @pytest.mark.parametrize(
@@ -126,9 +118,11 @@ def test_cli_app_greet_with_bye(greet_string: str) -> None:
     assert "Good Bye" in result.stdout
 
 
-def test_cli_app_greet_help() -> None:
+def test_cli_app_greet_help(help_args: str) -> None:
     """Test cli help for greet"""
-    result = runner.invoke(app, ["-c", "tests/fotoobo.yaml", "greet", "-h"])
+    args = ["-c", "tests/fotoobo.yaml", "greet"]
+    args.append(help_args)
+    result = runner.invoke(app, args)
     assert result.exit_code == 0
     arguments, options, commands = parse_help_output(result.stdout)
     assert set(arguments) == {"name"}

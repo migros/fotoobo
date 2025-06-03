@@ -13,29 +13,27 @@ from tests.helper import ResponseMock, parse_help_output
 runner = CliRunner()
 
 
-def test_cli_app_fgt_get_help() -> None:
+def test_cli_app_fgt_get_help(help_args_with_none: str) -> None:
     """Test cli help for fgt get"""
-    result = runner.invoke(app, ["-c", "tests/fotoobo.yaml", "fgt", "get", "-h"])
+    args = ["-c", "tests/fotoobo.yaml", "fgt", "get"]
+    args.append(help_args_with_none)
+    args = list(filter(None, args))
+    result = runner.invoke(app, args)
     assert result.exit_code == 0
+    assert "Usage: root fgt get" in result.stdout
     arguments, options, commands = parse_help_output(result.stdout)
     assert not arguments
     assert options == {"-h", "--help"}
     assert set(commands) == {"cmdb", "version"}
 
 
-def test_cli_app_fgt_get_no_args() -> None:
-    """Test fgt get with no arguments"""
-    result = runner.invoke(app, ["-c", "tests/fotoobo.yaml", "fgt", "get"])
-    assert result.exit_code == 0
-    assert "Usage: root fgt get [OPTIONS] COMMAND" in result.stdout
-    assert "--help" in result.stdout
-    assert "FortiGate get cmdb commands." in result.stdout
-
-
-def test_cli_app_fgt_get_version_help() -> None:
+def test_cli_app_fgt_get_version_help(help_args: str) -> None:
     """Test cli help for fgt get version"""
-    result = runner.invoke(app, ["-c", "tests/fotoobo.yaml", "fgt", "get", "version", "-h"])
+    args = ["-c", "tests/fotoobo.yaml", "fgt", "get", "version"]
+    args.append(help_args)
+    result = runner.invoke(app, args)
     assert result.exit_code == 0
+    assert "Usage: root fgt get version" in result.stdout
     arguments, options, commands = parse_help_output(result.stdout)
     assert set(arguments) == {"host"}
     assert options == {"-h", "--help"}

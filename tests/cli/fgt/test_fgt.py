@@ -14,9 +14,12 @@ from tests.helper import parse_help_output
 runner = CliRunner()
 
 
-def test_cli_app_fgt_help() -> None:
+def test_cli_app_fgt_help(help_args_with_none: str) -> None:
     """Test cli help for fgt"""
-    result = runner.invoke(app, ["-c", "tests/fotoobo.yaml", "fgt", "-h"])
+    args = ["-c", "tests/fotoobo.yaml", "fgt"]
+    args.append(help_args_with_none)
+    args = list(filter(None, args))
+    result = runner.invoke(app, args)
     assert result.exit_code == 0
     arguments, options, commands = parse_help_output(result.stdout)
     assert not arguments
@@ -24,9 +27,11 @@ def test_cli_app_fgt_help() -> None:
     assert set(commands) == {"backup", "monitor", "get", "config"}
 
 
-def test_cli_app_fgt_backup_help() -> None:
+def test_cli_app_fgt_backup_help(help_args: str) -> None:
     """Test cli help for fgt backup"""
-    result = runner.invoke(app, ["-c", "tests/fotoobo.yaml", "fgt", "backup", "-h"])
+    args = ["-c", "tests/fotoobo.yaml", "fgt", "backup"]
+    args.append(help_args)
+    result = runner.invoke(app, args)
     assert result.exit_code == 0
     arguments, options, commands = parse_help_output(result.stdout)
     assert set(arguments) == {"host"}
