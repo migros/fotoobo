@@ -1,7 +1,7 @@
 """FortiGate CMDB firewall service custom module"""
 
 from pathlib import Path
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
 
 from fotoobo.fortinet.fortigate import FortiGate
 from fotoobo.helpers.config import config
@@ -10,7 +10,7 @@ from fotoobo.inventory import Inventory
 
 
 def get_cmdb_firewall_service_custom(
-    host: str, name: str, vdom: str, output_file: str
+    host: str, name: str, vdom: str, output_file: Optional[str]
 ) -> Result[List[Any]]:
     """Get the firewall service custom object(s)
 

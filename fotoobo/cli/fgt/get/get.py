@@ -3,8 +3,10 @@ The FortiGate commands
 """
 
 import logging
+from typing import Optional
 
 import typer
+from typing_extensions import Annotated
 
 from fotoobo.helpers import cli_path
 from fotoobo.tools import fgt
@@ -32,11 +34,13 @@ def callback(context: typer.Context) -> None:
 
 @app.command()
 def version(
-    host: str = typer.Argument(
-        None,
-        help="The FortiGate hostname to access (must be defined in the inventory). ",
-        metavar="[host]",
-    )
+    host: Annotated[
+        Optional[str],
+        typer.Argument(
+            help="The FortiGate hostname to access (must be defined in the inventory). ",
+            metavar="[host]",
+        ),
+    ] = None,
 ) -> None:
     """
     Get the FortiGate(s) version(s).

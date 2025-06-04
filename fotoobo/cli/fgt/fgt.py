@@ -6,8 +6,10 @@ import logging
 import os
 from datetime import datetime
 from pathlib import Path
+from typing import Optional
 
 import typer
+from typing_extensions import Annotated
 
 from fotoobo import tools
 from fotoobo.exceptions import GeneralWarning
@@ -42,35 +44,43 @@ def callback(context: typer.Context) -> None:
 
 @app.command()
 def backup(
-    host: str = typer.Argument(
-        "",
-        help="The FortiGate to backup (must be defined in the inventory). "
-        "Backups all if left empty.",
-        show_default=False,
-        metavar="[host]",
-    ),
-    backup_dir: Path = typer.Option(
-        None,
-        "--backup-dir",
-        "-b",
-        help="The directory to save the backup(s) to. Default is the current working directory.",
-        show_default=False,
-        metavar="backup_dir",
-    ),
-    ftp_server: str = typer.Option(
-        None,
-        "--ftp",
-        "-f",
-        help="The ftp configuration from the inventory to send the backup to.",
-        metavar="server",
-    ),
-    smtp_server: str = typer.Option(
-        None,
-        "--smtp",
-        "-s",
-        help="The smtp configuration from the inventory to send potential errors to.",
-        metavar="server",
-    ),
+    host: Annotated[
+        str,
+        typer.Argument(
+            help="The FortiGate to backup (must be defined in the inventory). "
+            "Backups all if left empty.",
+            show_default=False,
+            metavar="[host]",
+        ),
+    ] = "",
+    backup_dir: Annotated[
+        Optional[Path],
+        typer.Option(
+            "--backup-dir",
+            "-b",
+            help="Directory to save the backup(s) to. Default is the current working directory.",
+            show_default=False,
+            metavar="backup_dir",
+        ),
+    ] = None,
+    ftp_server: Annotated[
+        Optional[str],
+        typer.Option(
+            "--ftp",
+            "-f",
+            help="The ftp configuration from the inventory to send the backup to.",
+            metavar="server",
+        ),
+    ] = None,
+    smtp_server: Annotated[
+        Optional[str],
+        typer.Option(
+            "--smtp",
+            "-s",
+            help="The smtp configuration from the inventory to send potential errors to.",
+            metavar="server",
+        ),
+    ] = None,
 ) -> None:
     """
     Backup one or more FortiGate(s).

@@ -5,6 +5,7 @@ The FortiClient EMS get commands
 import logging
 
 import typer
+from typing_extensions import Annotated
 
 from fotoobo.helpers import cli_path
 from fotoobo.tools import ems
@@ -27,11 +28,13 @@ def callback(context: typer.Context) -> None:
 
 @app.command()
 def version(
-    host: str = typer.Argument(
-        "ems",
-        help="The FortiClientEMS hostname to access (must be defined in the inventory).",
-        metavar="[host]",
-    )
+    host: Annotated[
+        str,
+        typer.Argument(
+            help="The FortiClientEMS hostname to access (must be defined in the inventory).",
+            metavar="[host]",
+        ),
+    ] = "ems",
 ) -> None:
     """
     Get the FortiClient EMS version.
@@ -45,12 +48,14 @@ def version(
 
 @app.command()
 def workgroups(
-    host: str = typer.Argument(
-        "ems",
-        help="The FortiClientEMS hostname to access (must be defined in the inventory).",
-        metavar="[host]",
-    ),
-    custom: bool = typer.Option(False, "--custom", "-c", help="Only show custom groups"),
+    host: Annotated[
+        str,
+        typer.Argument(
+            help="The FortiClientEMS hostname to access (must be defined in the inventory).",
+            metavar="[host]",
+        ),
+    ] = "ems",
+    custom: Annotated[bool, typer.Option("--custom", "-c", help="Only show custom groups")] = False,
 ) -> None:
     """
     Get the FortiClient EMS workgroups.

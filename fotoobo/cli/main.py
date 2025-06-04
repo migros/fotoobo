@@ -14,6 +14,7 @@ from pathlib import Path
 from typing import Optional
 
 import typer
+from typing_extensions import Annotated
 
 from fotoobo import tools
 from fotoobo.helpers import cli_path
@@ -49,28 +50,37 @@ def version_callback(value: bool) -> None:
 @app.callback()
 def callback(  # pylint: disable=too-many-arguments, too-many-positional-arguments
     context: typer.Context,
-    config_file: Optional[Path] = typer.Option(
-        None,
-        "--config",
-        "-c",
-        help="Set the fotoobo configuration file.",
-        show_default=False,
-        metavar="[file]",
-    ),
-    log_level: str = typer.Option(
-        None,
-        "--loglevel",
-        help="Set the log level. Choose from CRITICAL, ERROR, WARNING, INFO, DEBUG.",
-        metavar="[level]",
-        show_default=False,
-    ),
-    nologo: bool = typer.Option(None, "--nologo", help="Do not print the beautiful fotoobo logo."),
-    log_quiet: bool = typer.Option(
-        None, "--quiet", "-q", help="Disable console logging.", show_default=False
-    ),
-    version: Optional[bool] = typer.Option(  # pylint: disable=unused-argument
-        None, "--version", "-V", help="Print the fotoobo version.", callback=version_callback
-    ),
+    config_file: Annotated[
+        Optional[Path],
+        typer.Option(
+            "--config",
+            "-c",
+            help="Set the fotoobo configuration file.",
+            show_default=False,
+            metavar="[file]",
+        ),
+    ] = None,
+    log_level: Annotated[
+        Optional[str],
+        typer.Option(
+            "--loglevel",
+            help="Set the log level. Choose from CRITICAL, ERROR, WARNING, INFO, DEBUG.",
+            metavar="[level]",
+            show_default=False,
+        ),
+    ] = None,
+    nologo: Annotated[
+        Optional[bool], typer.Option("--nologo", help="Do not print the beautiful fotoobo logo.")
+    ] = None,
+    log_quiet: Annotated[
+        bool, typer.Option("--quiet", "-q", help="Disable console logging.", show_default=False)
+    ] = False,
+    version: Annotated[  # pylint: disable=unused-argument
+        Optional[bool],
+        typer.Option(
+            "--version", "-V", help="Print the fotoobo version.", callback=version_callback
+        ),
+    ] = None,
 ) -> None:
     """
     The Fortinet Toolbox (fotoobo) - make IT easy
@@ -121,11 +131,14 @@ def callback(  # pylint: disable=too-many-arguments, too-many-positional-argumen
 
 @app.command(hidden=True)
 def greet(
-    name: Optional[str] = typer.Argument(
-        None, help="The name of the person to greet.", show_default=False, metavar="[name]"
-    ),
-    bye: bool = typer.Option(False, "--bye", "-b", help='Also write "bye" at the end.'),
-    log_enabled: bool = typer.Option(False, "--log", "-l", help="Enable logging."),
+    name: Annotated[
+        Optional[str],
+        typer.Argument(
+            help="The name of the person to greet.", show_default=False, metavar="[name]"
+        ),
+    ] = None,
+    bye: Annotated[bool, typer.Option("--bye", "-b", help='Also write "bye" at the end.')] = False,
+    log_enabled: Annotated[bool, typer.Option("--log", "-l", help="Enable logging.")] = False,
 ) -> None:
     """
     This is the hidden greeting function.
