@@ -1,6 +1,7 @@
 ### Added
 
 - Add FortiCloud module for FortiCloud Asset Management
+- Add pylint checks for tests directory
 
 ### Changed
 

@@ -141,7 +141,7 @@ class TestInventory:
             "secret_id": "dummy_secret_id",
         }
         assert inventory.vault_data == {}
-        inventory._load_data_from_vault(vault_dict)
+        inventory._load_data_from_vault(vault_dict)  # pylint: disable=protected-access
         assert inventory.vault_data == expected
 
     @staticmethod
@@ -152,6 +152,6 @@ class TestInventory:
         inventory.assets["test_fgt_1"].token = "VAULT"
         inventory.assets["test_fgt_1"].dummy = "VAULT"
         inventory.vault_data = {"test_fgt_1": {"token": "secret_token"}}
-        inventory._replace_with_vault_data()
+        inventory._replace_with_vault_data()  # pylint: disable=protected-access
         assert inventory.assets["test_fgt_1"].token == "secret_token"
         assert inventory.assets["test_fgt_1"].dummy == "VAULT"  # because key not in vault_data

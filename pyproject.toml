@@ -103,7 +103,7 @@ description = Code analysis with pylint
 skip_install = true
 allowlist_externals = poetry, pylint
 commands_pre = poetry install
-commands = pylint {posargs} fotoobo 
+commands = pylint {posargs} fotoobo tests
 
 [testenv:mypy]
 description = Check typing with mypy
