@@ -4,7 +4,7 @@ FortiClient EMS monitor module
 
 import logging
 from datetime import datetime
-from typing import Any, Dict
+from typing import Any
 
 from fotoobo.fortinet.forticlientems import FortiClientEMS
 from fotoobo.helpers.config import config
@@ -14,7 +14,7 @@ from fotoobo.inventory import Inventory
 log = logging.getLogger("fotoobo")
 
 
-def connections(host: str) -> Result[Dict[str, Any]]:
+def connections(host: str) -> Result[dict[str, Any]]:
     """
     Get connections information from FortiClient EMS.
 
@@ -28,12 +28,12 @@ def connections(host: str) -> Result[Dict[str, Any]]:
     Returns:
         Result
     """
-    result = Result[Dict[str, Any]]()
+    result = Result[dict[str, Any]]()
     inventory = Inventory(config.inventory_file)
     ems: FortiClientEMS = inventory.get_item(host, "forticlientems")
     ems.login()
     response = ems.api("get", "/endpoints/connection/donut")
-    data: Dict[str, Any] = {"data": list(response.json()["data"]), "fotoobo": {}}
+    data: dict[str, Any] = {"data": list(response.json()["data"]), "fotoobo": {}}
 
     for item in data["data"]:
         data["fotoobo"][item["token"]] = item["value"]
@@ -42,7 +42,7 @@ def connections(host: str) -> Result[Dict[str, Any]]:
     return result
 
 
-def endpoint_management_status(host: str) -> Result[Dict[str, Any]]:
+def endpoint_management_status(host: str) -> Result[dict[str, Any]]:
     """
     Get management information about endpoints registered in FortiClient EMS.
 
@@ -59,7 +59,7 @@ def endpoint_management_status(host: str) -> Result[Dict[str, Any]]:
     Returns:
         Result
     """
-    result = Result[Dict[str, Any]]()
+    result = Result[dict[str, Any]]()
     inventory = Inventory(config.inventory_file)
     ems: FortiClientEMS = inventory.get_item(host, "forticlientems")
     ems.login()
@@ -81,7 +81,7 @@ def endpoint_management_status(host: str) -> Result[Dict[str, Any]]:
     return result
 
 
-def endpoint_online_outofsync(host: str) -> Result[Dict[str, Any]]:
+def endpoint_online_outofsync(host: str) -> Result[dict[str, Any]]:
     """
     Get amount of FortiClient EMS devices which are online but policy not in sync.
 
@@ -97,7 +97,7 @@ def endpoint_online_outofsync(host: str) -> Result[Dict[str, Any]]:
     Returns:
         Result
     """
-    result = Result[Dict[str, Any]]()
+    result = Result[dict[str, Any]]()
     inventory = Inventory(config.inventory_file)
     ems: FortiClientEMS = inventory.get_item(host, "forticlientems")
     ems.login()
@@ -110,7 +110,7 @@ def endpoint_online_outofsync(host: str) -> Result[Dict[str, Any]]:
     return result
 
 
-def endpoint_os_versions(host: str) -> Result[Dict[str, Dict[str, Any]]]:
+def endpoint_os_versions(host: str) -> Result[dict[str, dict[str, Any]]]:
     """
     Get management information about endpoints registered in FortiClient EMS.
 
@@ -128,11 +128,11 @@ def endpoint_os_versions(host: str) -> Result[Dict[str, Dict[str, Any]]]:
     Returns:
         Result
     """
-    result = Result[Dict[str, Dict[str, Any]]]()
+    result = Result[dict[str, dict[str, Any]]]()
     inventory = Inventory(config.inventory_file)
     ems: FortiClientEMS = inventory.get_item(host, "forticlientems")
     ems.login()
-    data: Dict[str, Any] = {"data": {}, "fotoobo": {}}
+    data: dict[str, Any] = {"data": {}, "fotoobo": {}}
 
     for fctversion_os in ["fctversionwindows", "fctversionmac", "fctversionlinux"]:
         response = ems.api("get", f"/endpoints/{fctversion_os}/donut")
@@ -144,7 +144,7 @@ def endpoint_os_versions(host: str) -> Result[Dict[str, Dict[str, Any]]]:
     return result
 
 
-def system(host: str) -> Result[Dict[str, Any]]:
+def system(host: str) -> Result[dict[str, Any]]:
     """
     Get system information from FortiClient EMS.
 
@@ -154,7 +154,7 @@ def system(host: str) -> Result[Dict[str, Any]]:
     Returns:
         Result
     """
-    result = Result[Dict[str, Any]]()
+    result = Result[dict[str, Any]]()
     inventory = Inventory(config.inventory_file)
     ems: FortiClientEMS = inventory.get_item(host, "forticlientems")
     ems.login()
@@ -170,7 +170,7 @@ def system(host: str) -> Result[Dict[str, Any]]:
     return result
 
 
-def license(host: str) -> Result[Dict[str, Any]]:  # pylint: disable=redefined-builtin
+def license(host: str) -> Result[dict[str, Any]]:  # pylint: disable=redefined-builtin
     """
     Get license information from FortiClient EMS.
 
@@ -200,7 +200,7 @@ def license(host: str) -> Result[Dict[str, Any]]:  # pylint: disable=redefined-b
     Returns:
         Result
     """
-    result = Result[Dict[str, Any]]()
+    result = Result[dict[str, Any]]()
     inventory = Inventory(config.inventory_file)
     ems: FortiClientEMS = inventory.get_item(host, "forticlientems")
     ems.login()

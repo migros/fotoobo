@@ -4,7 +4,6 @@ FortiGate check hamaster utility
 
 import concurrent.futures
 import logging
-from typing import Dict, Tuple
 
 from rich.progress import Progress
 
@@ -32,7 +31,7 @@ def hamaster(host: str) -> Result[str]:  # pylint: disable=too-many-locals
         The Result object with all the results
     """
 
-    def _get_single_status(name: str, fgt: FortiGate) -> Tuple[str, str]:
+    def _get_single_status(name: str, fgt: FortiGate) -> tuple[str, str]:
         """Get the HA master status from a FortiGate.
 
         This private method is used for multithreading. It only queries one single FortiGate for its
@@ -74,7 +73,7 @@ def hamaster(host: str) -> Result[str]:  # pylint: disable=too-many-locals
     response = fmg.api("post", payload=payload)
     fmg.logout()
     result = Result[str]()
-    fgts: Dict[str, FortiGate] = {}
+    fgts: dict[str, FortiGate] = {}
 
     for device in response.json()["result"][0]["data"]:
         if device["ha_mode"] == 1:

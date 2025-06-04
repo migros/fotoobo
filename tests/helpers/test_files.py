@@ -6,7 +6,7 @@ test_file_helper
 
 import os
 from pathlib import Path
-from typing import Any, Dict, List
+from typing import Any
 from unittest.mock import MagicMock
 
 import pytest
@@ -27,7 +27,7 @@ from fotoobo.inventory.generic import GenericDevice
 
 
 @pytest.fixture
-def test_data_dict() -> Dict[str, Any]:
+def test_data_dict() -> dict[str, Any]:
     """Return a FortiGate config dict"""
     return {
         "key1": "value1",
@@ -36,7 +36,7 @@ def test_data_dict() -> Dict[str, Any]:
 
 
 @pytest.fixture
-def test_data_list() -> List[Any]:
+def test_data_list() -> list[Any]:
     """Return a FortiGate config dict"""
     return ["value1", "value2", 3, 4]
 
@@ -117,7 +117,7 @@ def test_file_to_zip_invalid_level(zip_level: int) -> None:
 # Start testing the json file_helper functions
 
 
-def test_save_json_file_dict(json_test_file: Path, test_data_dict: Dict[str, Any]) -> None:
+def test_save_json_file_dict(json_test_file: Path, test_data_dict: dict[str, Any]) -> None:
     """Test the save_json_file function"""
     save_json_file(json_test_file, test_data_dict)
     assert json_test_file.is_file()
@@ -133,14 +133,14 @@ def test_save_json_file_dict(json_test_file: Path, test_data_dict: Dict[str, Any
     assert content == expect
 
 
-def test_load_json_file_dict(json_test_file: Path, test_data_dict: Dict[str, Any]) -> None:
+def test_load_json_file_dict(json_test_file: Path, test_data_dict: dict[str, Any]) -> None:
     """Test the load_json_file function"""
     assert json_test_file.is_file()
     content = load_json_file(json_test_file)
     assert content == test_data_dict
 
 
-def test_save_json_file_list(json_test_file: Path, test_data_list: List[str]) -> None:
+def test_save_json_file_list(json_test_file: Path, test_data_list: list[str]) -> None:
     """Test the save_json_file function"""
     save_json_file(json_test_file, test_data_list)
     assert json_test_file.is_file()
@@ -150,7 +150,7 @@ def test_save_json_file_list(json_test_file: Path, test_data_list: List[str]) ->
     assert content == expect
 
 
-def test_load_json_file_list(json_test_file: Path, test_data_list: List[str]) -> None:
+def test_load_json_file_list(json_test_file: Path, test_data_list: list[str]) -> None:
     """Test the load_json_file function"""
     assert json_test_file.is_file()
     content = load_json_file(json_test_file)
@@ -212,7 +212,7 @@ def test_load_json_file_non_exist(json_test_file: Path) -> None:
 # Start testing the yaml file_helper functions
 
 
-def test_save_yaml_file_dict(yaml_test_file: Path, test_data_dict: Dict[str, Any]) -> None:
+def test_save_yaml_file_dict(yaml_test_file: Path, test_data_dict: dict[str, Any]) -> None:
     """Test the save_yaml_file function"""
     save_yaml_file(yaml_test_file, test_data_dict)
     assert yaml_test_file.is_file()
@@ -221,14 +221,14 @@ def test_save_yaml_file_dict(yaml_test_file: Path, test_data_dict: Dict[str, Any
     assert content == expect
 
 
-def test_load_yaml_file_dict(yaml_test_file: Path, test_data_dict: Dict[str, Any]) -> None:
+def test_load_yaml_file_dict(yaml_test_file: Path, test_data_dict: dict[str, Any]) -> None:
     """Test the load_yaml_file function"""
     assert yaml_test_file.is_file()
     content = load_yaml_file(yaml_test_file)
     assert content == test_data_dict
 
 
-def test_save_yaml_file_list(yaml_test_file: Path, test_data_list: List[str]) -> None:
+def test_save_yaml_file_list(yaml_test_file: Path, test_data_list: list[str]) -> None:
     """Test the save_yaml_file function"""
     save_yaml_file(yaml_test_file, test_data_list)
     assert yaml_test_file.is_file()
@@ -238,7 +238,7 @@ def test_save_yaml_file_list(yaml_test_file: Path, test_data_list: List[str]) ->
     assert content == expect
 
 
-def test_load_yaml_file_list(yaml_test_file: Path, test_data_list: List[str]) -> None:
+def test_load_yaml_file_list(yaml_test_file: Path, test_data_list: list[str]) -> None:
     """Test the load_yaml_file function"""
     assert yaml_test_file.is_file()
     content = load_yaml_file(yaml_test_file)

@@ -4,7 +4,7 @@ FortiGate get version utility
 
 import concurrent.futures
 import logging
-from typing import Optional, Tuple
+from typing import Optional
 
 from rich.progress import Progress
 
@@ -58,7 +58,7 @@ def version(host: Optional[str] = None) -> Result[str]:
         The Result object with all the results
     """
 
-    def _get_single_version(name: str, fgt: FortiGate) -> Tuple[str, str]:
+    def _get_single_version(name: str, fgt: FortiGate) -> tuple[str, str]:
         """Get the version from a FortiGate.
 
         This private method is used for multithreading. It only queries one single FortiGate for its
