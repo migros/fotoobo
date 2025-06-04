@@ -13,3 +13,6 @@
 - Fixed some typos
 
 ### Removed
+
+- Remove support for Python3.8
+- Remove upper version bounds for external dependencies
