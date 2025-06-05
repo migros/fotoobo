@@ -76,7 +76,7 @@ To build **fotoobo** we use the following frameworks.
 Runtime Requirements
 ^^^^^^^^^^^^^^^^^^^^
 
-- `Python <https://www.python.org/>`_ 3.8+ (all stable versions from this on will be checked in the
+- `Python <https://www.python.org/>`_ 3.9+ (all stable versions from this on will be checked in the
   integration pipeline on GitHub).
 
    - *NOTE: The supported Python versions are based on the Python versions shipped with some of the
