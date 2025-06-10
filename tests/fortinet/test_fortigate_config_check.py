@@ -2,6 +2,8 @@
 Test the FortiGate config check class
 """
 
+# pylint: disable=redefined-outer-name
+
 from pathlib import Path
 from typing import Any
 

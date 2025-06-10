@@ -2,7 +2,6 @@
 Test fgt tools api_get
 """
 
-# pylint: disable=no-member
 # mypy: disable-error-code=attr-defined
 from pathlib import Path
 
