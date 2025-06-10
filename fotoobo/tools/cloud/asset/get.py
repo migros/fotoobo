@@ -3,7 +3,7 @@ FortiCloud cloud asset get utility
 """
 
 import logging
-from typing import Any, Dict, List
+from typing import Any
 
 from fotoobo.fortinet.forticloudasset import FortiCloudAsset
 from fotoobo.helpers.config import config
@@ -13,7 +13,7 @@ from fotoobo.inventory import Inventory
 log = logging.getLogger("fotoobo")
 
 
-def products(host: str) -> Result[List[Dict[str, Any]]]:
+def products(host: str) -> Result[list[dict[str, Any]]]:
     """
     FortiCloud API get products from Asset Management
 
@@ -26,7 +26,7 @@ def products(host: str) -> Result[List[Dict[str, Any]]]:
     Returns:
         The asset list as a result object
     """
-    result = Result[List[Dict[str, Any]]]()
+    result = Result[list[dict[str, Any]]]()
     inventory = Inventory(config.inventory_file)
     fc: FortiCloudAsset = inventory.get_item(host, "forticloudasset")
     log.debug("FortiCloud get assets ...")

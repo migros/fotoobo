@@ -3,7 +3,7 @@ FortiGate configuration checker
 """
 
 import logging
-from typing import Any, Dict, List
+from typing import Any
 
 from fotoobo.exceptions import GeneralError
 from fotoobo.fortinet.fortigate_config import FortiGateConfig
@@ -23,12 +23,12 @@ class FortiGateConfigCheck:
             config: The FortiGate configuration
             checks: The checks to do against the FortiGate configuration
         """
-        self.allowed_checks: List[str] = ["count", "exist", "value", "value_in_list"]
+        self.allowed_checks: list[str] = ["count", "exist", "value", "value_in_list"]
         self.config = config
         self.checks = checks
         self.result = result
 
-    def add_message(self, chk: Dict[str, Any], msg: str) -> None:
+    def add_message(self, chk: dict[str, Any], msg: str) -> None:
         """
         Generates a styled message and appends it to the results.
 
@@ -128,7 +128,7 @@ class FortiGateConfigCheck:
 
         return self.result
 
-    def _check_count(self, config: Any, chk: Dict[str, Any]) -> None:
+    def _check_count(self, config: Any, chk: dict[str, Any]) -> None:
         """
         Check the configuration list count.
 
@@ -153,7 +153,7 @@ class FortiGateConfigCheck:
         else:
             log.warning("'%s' is not a configuration list", chk["path"])
 
-    def _check_exist(self, config: Any, chk: Dict[str, Any]) -> None:
+    def _check_exist(self, config: Any, chk: dict[str, Any]) -> None:
         """
         Check if a configuration option is present (or not) regardless of its value.
 
@@ -168,7 +168,7 @@ class FortiGateConfigCheck:
                     f"key [var]{key}[/] in [var]{chk['path']}[/] is not [var]{value}[/]",
                 )
 
-    def _check_value(self, config: Any, chk: Dict[str, Any]) -> None:
+    def _check_value(self, config: Any, chk: dict[str, Any]) -> None:
         """
         Do the checks for a configuration value. It checks if the configuration option is present
         and if the value is set as given in the check bundle.
@@ -193,7 +193,7 @@ class FortiGateConfigCheck:
                 if not chk.get("ignore_missing", False):
                     self.add_message(chk, f"key {msg_key} does not exist in config")
 
-    def _check_value_in_list(self, config: Any, chk: Dict[str, Any]) -> None:
+    def _check_value_in_list(self, config: Any, chk: dict[str, Any]) -> None:
         """
         Do the checks for set configuration. It checks if the configuration option is present in a
         and configuration list and if the value is set as given in the check bundle.

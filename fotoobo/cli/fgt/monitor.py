@@ -4,7 +4,7 @@ The FortiGate check commands
 
 import logging
 from pathlib import Path
-from typing import Dict, Optional
+from typing import Optional
 
 import typer
 from rich.pretty import pprint
@@ -102,7 +102,7 @@ def hamaster(
 
         if template_file:
             log.debug("template_file is: '%s'", template_file)
-            output: Result[Dict[str, Dict[str, str]]] = Result()
+            output: Result[dict[str, dict[str, str]]] = Result()
             output.push_result("_hamaster", data)
             output.save_with_template("_hamaster", template_file, output_file)
 

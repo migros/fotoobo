@@ -4,7 +4,7 @@ The FortiGate configuration class represents the whole or parts of a FortiGate c
 
 import logging
 from pathlib import Path
-from typing import IO, Any, Dict, List, Optional
+from typing import IO, Any, Optional
 
 from fotoobo.exceptions import GeneralWarning
 from fotoobo.helpers.files import load_json_file, save_json_file
@@ -19,13 +19,13 @@ class FortiGateConfig:
     The FortiGateConfig class represents a FortiGate configuration (or parts of it)
     """
 
-    _config_path: List[str] = []
+    _config_path: list[str] = []
 
     def __init__(
         self,
-        global_config: Optional[Dict[str, Any]] = None,
-        vdom_config: Optional[Dict[str, Any]] = None,
-        info: Optional[Dict[str, str]] = None,
+        global_config: Optional[dict[str, Any]] = None,
+        vdom_config: Optional[dict[str, Any]] = None,
+        info: Optional[dict[str, str]] = None,
     ) -> None:
         self.global_config = global_config or {}
         self.vdom_config = vdom_config or {}
@@ -56,7 +56,7 @@ class FortiGateConfig:
         log.debug("Getting configuration from scope: '%s'", scope)
         log.debug("Getting configuration from path: '%s'", path)
         # split the path by / and remove all empty parts
-        path_list: List[str] = [p for p in path.strip("/").split("/") if p]
+        path_list: list[str] = [p for p in path.strip("/").split("/") if p]
         config: Any = {}
 
         if scope == "global":
@@ -76,7 +76,7 @@ class FortiGateConfig:
 
         return config
 
-    def get_vdoms(self) -> List[str]:
+    def get_vdoms(self) -> list[str]:
         """
         Get the list of configured VDOMs.
         If it is a single vdom configuration an empty list will be returned.
@@ -84,7 +84,7 @@ class FortiGateConfig:
         Returns:
             List of VDOMs
         """
-        vdoms: List[str] = []
+        vdoms: list[str] = []
         if self.info.vdom == "1":
             vdoms = list(self.vdom_config.keys())
 
@@ -119,8 +119,8 @@ class FortiGateConfig:
         with configuration_file.open(encoding="UTF-8") as forti_file:
             parsed_config = FortiGateConfig._parse_to_dict(forti_file)
 
-        global_config: Dict[str, Any] = {}
-        vdom_config: Dict[str, Any] = {}
+        global_config: dict[str, Any] = {}
+        vdom_config: dict[str, Any] = {}
 
         if "info" not in parsed_config:
             raise GeneralWarning(f"There is no info in {configuration_file}")
@@ -156,7 +156,7 @@ class FortiGateConfig:
         return FortiGateConfig(data["global"], data["vdom"], data["info"])  # type: ignore
 
     @staticmethod
-    def _config_convert_dict_to_list(config: Dict[str, Any]) -> List[Any]:
+    def _config_convert_dict_to_list(config: dict[str, Any]) -> list[Any]:
         """
         Convert a FortiGate configuration list like part to a configuration list.
 
@@ -166,7 +166,7 @@ class FortiGateConfig:
         Returns:
             Configuration list as list
         """
-        configs: List[str] = []
+        configs: list[str] = []
         for key, value in config.items():
             new_config = value
             new_config["id"] = int(key)
@@ -175,7 +175,7 @@ class FortiGateConfig:
         return configs
 
     @staticmethod
-    def _config_is_list(config: Dict[str, Any]) -> bool:
+    def _config_is_list(config: dict[str, Any]) -> bool:
         """
         Check if a FortiGate configuration part contains a list of elements.
 
@@ -196,7 +196,7 @@ class FortiGateConfig:
         return is_list
 
     @staticmethod
-    def _get_nested_dict(configs: List[str], new_data: Any) -> Dict[str, Any]:
+    def _get_nested_dict(configs: list[str], new_data: Any) -> dict[str, Any]:
         """
         Create a nested configuration dict from a list of strings and add new data to the last key.
 
@@ -218,7 +218,7 @@ class FortiGateConfig:
         return dict(out_dict)
 
     @staticmethod
-    def _parse_config_comment(info: Dict[str, Any], line: str) -> Dict[str, str]:
+    def _parse_config_comment(info: dict[str, Any], line: str) -> dict[str, str]:
         """
         Parses a comment line in a FortiGate configuration and extracts interesting values.
         The values are then written to an info dict as meta-information.
@@ -245,7 +245,7 @@ class FortiGateConfig:
     @staticmethod
     # pylint: disable=too-many-branches
     def _parse_to_dict(config_file: IO[str]) -> Any:
-        # should be Union[Dict[str, Any], List[Any]]
+        # should be Union[dict[str, Any], list[Any]]
         """
         Fabric function to create a FortiGateConfig object from a backup configuration file
         This recursive method parses a FortiGate configuration from a file line by line
@@ -257,7 +257,7 @@ class FortiGateConfig:
             A dict which contains the parsed FortiGate configuration
         """
         config: Any = {}
-        info: Dict[str, str] = {}
+        info: dict[str, str] = {}
         multiline: str = ""
         multiline_key: str = ""
 

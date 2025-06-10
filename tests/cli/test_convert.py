@@ -4,7 +4,7 @@ Testing the cli convert app
 
 import shutil
 from pathlib import Path
-from typing import Any, Dict
+from typing import Any
 from unittest.mock import MagicMock
 
 import pytest
@@ -63,7 +63,7 @@ def test_cli_convert_checkpoint_unsupported(monkeypatch: MonkeyPatch) -> None:
 )
 def test_cli_convert(asset_type: str, monkeypatch: MonkeyPatch, temp_dir: Path) -> None:
     """Test convert"""
-    return_value: Dict[str, Any] = {
+    return_value: dict[str, Any] = {
         "hosts": [
             {
                 "uid": "aaaa-aaaa-aaaa-aaaa",
@@ -141,7 +141,7 @@ def test_cli_convert(asset_type: str, monkeypatch: MonkeyPatch, temp_dir: Path) 
 )
 def test_cli_convert_with_cache(asset_type: str, monkeypatch: MonkeyPatch, temp_dir: Path) -> None:
     """Test convert with cache"""
-    return_value: Dict[str, Any] = {
+    return_value: dict[str, Any] = {
         "hosts": [
             {
                 "uid": "aaaa-aaaa-aaaa-aaaa",

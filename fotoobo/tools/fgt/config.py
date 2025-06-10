@@ -4,7 +4,7 @@ FortiGate configuration check utility
 
 import logging
 from pathlib import Path
-from typing import Any, List
+from typing import Any
 
 import typer
 
@@ -19,7 +19,7 @@ app = typer.Typer(no_args_is_help=True, rich_markup_mode="rich")
 log = logging.getLogger("fotoobo")
 
 
-def check(config: Path, bundles: Path) -> Result[List[str]]:
+def check(config: Path, bundles: Path) -> Result[list[str]]:
     """
     The FortiGate configuration check
 
@@ -32,7 +32,7 @@ def check(config: Path, bundles: Path) -> Result[List[str]]:
         GeneralWarning: GeneralWarning
         GeneralError:   GeneralError
     """
-    files: List[Path] = []
+    files: list[Path] = []
     config = Path(config)
 
     if config.is_file():
@@ -58,7 +58,7 @@ def check(config: Path, bundles: Path) -> Result[List[str]]:
         raise GeneralError("No valid bundle file")
 
     total_results: int = 0
-    result = Result[List[str]]()
+    result = Result[list[str]]()
 
     for file in files:
         try:
@@ -97,7 +97,7 @@ def get(config: Path, scope: str = "", path: str = "") -> Result[FortiGateInfo]:
     Raises:
         GeneralWarning: GeneralWarning
     """
-    files: List[Path] = []
+    files: list[Path] = []
     if config.is_file():
         files.append(config)
 
@@ -133,7 +133,7 @@ def info(config: Path) -> Result[FortiGateInfo]:
     Raises:
         GeneralWarning: GeneralWarning
     """
-    files: List[Path] = []
+    files: list[Path] = []
     if config.is_file():
         files.append(config)
 

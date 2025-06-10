@@ -7,7 +7,7 @@ from dataclasses import dataclass
 from datetime import datetime
 from logging.handlers import RotatingFileHandler, SysLogHandler
 from syslog import LOG_USER
-from typing import List, Type
+from typing import Type
 from unittest.mock import MagicMock
 
 import pytest
@@ -27,7 +27,7 @@ class LoggerConfig:
 
     disabled: bool
     log_level: int
-    handlers: List[Type[logging.Handler]]
+    handlers: list[Type[logging.Handler]]
 
 
 @pytest.fixture(name="syslog_formatter")
@@ -212,7 +212,7 @@ class TestLog:
             ),
         ),
     )
-    # pylint: disable=too-many-arguments
+    # pylint: disable=too-many-arguments, too-many-positional-arguments
     def test_configure_logging(
         self,
         config: Config,

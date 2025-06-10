@@ -3,7 +3,7 @@ Testing the cli app
 """
 
 # pylint: disable=redefined-outer-name
-from typing import Generator, List
+from typing import Generator
 from unittest.mock import MagicMock
 
 import pytest
@@ -77,7 +77,7 @@ def test_cli_app_help(help_args: str) -> None:
         pytest.param(["-c", "tests/fotoobo.yaml", "--version"], id="option --version"),
     ),
 )
-def test_cli_app_get_version(cli_call: List[str]) -> None:
+def test_cli_app_get_version(cli_call: list[str]) -> None:
     """Test main cli command: get version"""
     result = runner.invoke(app, cli_call)
     assert result.exit_code == 0

@@ -6,7 +6,6 @@ Test the FortiCloudAsset class
 # mypy: disable-error-code=attr-defined
 
 from pathlib import Path
-from typing import Dict
 from unittest.mock import MagicMock
 
 import pytest
@@ -69,7 +68,7 @@ class TestFortiCloud:
             pytest.param({"version": ""}, "", id="empty"),
         ),
     )
-    def test_get_version(response: Dict[str, str], expected: str, monkeypatch: MonkeyPatch) -> None:
+    def test_get_version(response: dict[str, str], expected: str, monkeypatch: MonkeyPatch) -> None:
         """Test get version"""
         monkeypatch.setattr(
             "fotoobo.fortinet.forticloudasset.FortiCloudAsset.post",
