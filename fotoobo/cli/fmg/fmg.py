@@ -4,8 +4,10 @@ The FortiManager commands
 
 import logging
 from pathlib import Path
+from typing import Optional
 
 import typer
+from typing_extensions import Annotated
 
 from fotoobo.helpers import cli_path
 from fotoobo.helpers.config import config as fotoobo_config
@@ -32,38 +34,48 @@ def callback(context: typer.Context) -> None:
 
 @app.command(no_args_is_help=True)
 def assign(
-    adoms: str = typer.Argument(
-        ...,
-        help="The ADOMs to assign the global policy/objects to. Use 'fotoobo fmg get adoms' to "
-        "get a list of available ADOMs. Separate multiple ADOMs by comma (no spaces).",
-        metavar="[adoms]",
-        show_default=False,
-    ),
-    policy: str = typer.Argument(
-        ...,
-        help="The global policy to assign",
-        metavar="[policy]",
-        show_default=False,
-    ),
-    host: str = typer.Argument(
-        "fmg",
-        help="The FortiManager to access (must be defined in the inventory).",
-        metavar="[host]",
-    ),
-    smtp_server: str = typer.Option(
-        None,
-        "--smtp",
-        "-s",
-        help="The smtp configuration from the inventory to send potential errors to.",
-        metavar="[server]",
-    ),
-    timeout: int = typer.Option(
-        60,
-        "--timeout",
-        "-t",
-        help="The timeout to wait for the FortiManager task to finish.",
-        metavar="[timeout]",
-    ),
+    adoms: Annotated[
+        str,
+        typer.Argument(
+            help="The ADOMs to assign the global policy/objects to. Use 'fotoobo fmg get adoms' to "
+            "get a list of available ADOMs. Separate multiple ADOMs by comma (no spaces).",
+            metavar="[adoms]",
+            show_default=False,
+        ),
+    ],
+    policy: Annotated[
+        str,
+        typer.Argument(
+            help="The global policy to assign",
+            metavar="[policy]",
+            show_default=False,
+        ),
+    ],
+    host: Annotated[
+        str,
+        typer.Argument(
+            help="The FortiManager to access (must be defined in the inventory).",
+            metavar="[host]",
+        ),
+    ] = "fmg",
+    smtp_server: Annotated[
+        Optional[str],
+        typer.Option(
+            "--smtp",
+            "-s",
+            help="The smtp configuration from the inventory to send potential errors to.",
+            metavar="[server]",
+        ),
+    ] = None,
+    timeout: Annotated[
+        int,
+        typer.Option(
+            "--timeout",
+            "-t",
+            help="The timeout to wait for the FortiManager task to finish.",
+            metavar="[timeout]",
+        ),
+    ] = 60,
 ) -> None:
     """
     Assign a global policy to a specified ADOM or to a list of ADOMs.
@@ -81,24 +93,32 @@ def assign(
 
 @app.command(no_args_is_help=True)
 def post(
-    file: Path = typer.Argument(
-        ..., help="JSON file with payload(s).", show_default=False, metavar="[file]"
-    ),
-    adom: str = typer.Argument(
-        ..., help="The ADOM to issue the set command(s).", metavar="[adom]", show_default=False
-    ),
-    host: str = typer.Argument(
-        "fmg",
-        help="The FortiManager to access (must be defined in the inventory).",
-        metavar="[host]",
-    ),
-    smtp_server: str = typer.Option(
-        None,
-        "--smtp",
-        "-s",
-        help="The smtp configuration from the inventory to send potential errors to.",
-        metavar="[server]",
-    ),
+    file: Annotated[
+        Path,
+        typer.Argument(help="JSON file with payload(s).", show_default=False, metavar="[file]"),
+    ],
+    adom: Annotated[
+        str,
+        typer.Argument(
+            help="The ADOM to issue the set command(s).", metavar="[adom]", show_default=False
+        ),
+    ],
+    host: Annotated[
+        str,
+        typer.Argument(
+            help="The FortiManager to access (must be defined in the inventory).",
+            metavar="[host]",
+        ),
+    ] = "fmg",
+    smtp_server: Annotated[
+        Optional[str],
+        typer.Option(
+            "--smtp",
+            "-s",
+            help="The smtp configuration from the inventory to send potential errors to.",
+            metavar="[server]",
+        ),
+    ] = None,
 ) -> None:
     """
     Post any valid JSON request to the FortiManager.

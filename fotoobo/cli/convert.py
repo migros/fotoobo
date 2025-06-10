@@ -4,8 +4,10 @@ The fotoobo convert commands
 
 import logging
 from pathlib import Path
+from typing import Optional
 
 import typer
+from typing_extensions import Annotated
 
 from fotoobo.helpers import cli_path
 from fotoobo.helpers.files import load_json_file, save_json_file
@@ -29,30 +31,38 @@ def callback(context: typer.Context) -> None:
 
 @app.command(no_args_is_help=True)
 def checkpoint(
-    infile: Path = typer.Argument(
-        ...,
-        help="The json file to read the Checkpoint objects from.",
-        show_default=False,
-        metavar="[infile]",
-    ),
-    outfile: Path = typer.Argument(
-        ...,
-        help="The json file to write the converted objects to.",
-        show_default=False,
-        metavar="[outfile]",
-    ),
-    obj_type: str = typer.Argument(
-        ...,
-        help="The type of objects to convert.",
-        show_default=False,
-        metavar="[type]",
-    ),
-    cache_dir: Path = typer.Argument(
-        None,
-        help="The cache directory to use.",
-        show_default=False,
-        metavar="[cache_dir]",
-    ),
+    infile: Annotated[
+        Path,
+        typer.Argument(
+            help="The json file to read the Checkpoint objects from.",
+            show_default=False,
+            metavar="[infile]",
+        ),
+    ],
+    outfile: Annotated[
+        Path,
+        typer.Argument(
+            help="The json file to write the converted objects to.",
+            show_default=False,
+            metavar="[outfile]",
+        ),
+    ],
+    obj_type: Annotated[
+        str,
+        typer.Argument(
+            help="The type of objects to convert.",
+            show_default=False,
+            metavar="[type]",
+        ),
+    ],
+    cache_dir: Annotated[
+        Optional[Path],
+        typer.Argument(
+            help="The cache directory to use.",
+            show_default=False,
+            metavar="[cache_dir]",
+        ),
+    ] = None,
 ) -> None:
     """
     Convert Checkpoint assets into Fortinet objects.

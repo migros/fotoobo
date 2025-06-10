@@ -4,9 +4,10 @@ The FortiClient EMS monitor commands
 
 import logging
 from pathlib import Path
-from typing import Optional, Union
+from typing import Optional
 
 import typer
+from typing_extensions import Annotated
 
 from fotoobo.helpers import cli_path
 from fotoobo.helpers.files import save_json_file
@@ -42,26 +43,32 @@ def callback(context: typer.Context) -> None:
 
 @app.command(help="Monitor the FortiClient EMS connections.\n\n" + HELP_TEXT_TEMPLATE)
 def connections(
-    host: str = typer.Argument(
-        "ems",
-        help=HELP_TEXT_ARGUMENT_EMS,
-        metavar="[host]",
-    ),
-    output_file: Union[None, Path] = typer.Option(
-        None,
-        "--output",
-        "-o",
-        help=HELP_TEXT_OPTION_OUTPUT_FILE,
-        metavar="[output]",
-    ),
-    raw: bool = typer.Option(False, "-r", "--raw", help="Output raw data."),
-    template_file: Optional[Path] = typer.Option(
-        None,
-        "--template",
-        "-t",
-        help=HELP_TEXT_OPTION_TEMPLATE,
-        metavar="[template]",
-    ),
+    host: Annotated[
+        str,
+        typer.Argument(
+            help=HELP_TEXT_ARGUMENT_EMS,
+            metavar="[host]",
+        ),
+    ] = "ems",
+    output_file: Annotated[
+        Optional[Path],
+        typer.Option(
+            "--output",
+            "-o",
+            help=HELP_TEXT_OPTION_OUTPUT_FILE,
+            metavar="[output]",
+        ),
+    ] = None,
+    raw: Annotated[bool, typer.Option("-r", "--raw", help="Output raw data.")] = False,
+    template_file: Annotated[
+        Optional[Path],
+        typer.Option(
+            "--template",
+            "-t",
+            help=HELP_TEXT_OPTION_TEMPLATE,
+            metavar="[template]",
+        ),
+    ] = None,
 ) -> None:
     """
     Monitor the FortiClient EMS connections.
@@ -106,26 +113,32 @@ def connections(
     help="Monitor the endpoint management status in FortiClient EMS.\n\n" + HELP_TEXT_TEMPLATE
 )
 def endpoint_management_status(
-    host: str = typer.Argument(
-        "ems",
-        help=HELP_TEXT_ARGUMENT_EMS,
-        metavar="[host]",
-    ),
-    output_file: Union[None, Path] = typer.Option(
-        None,
-        "--output",
-        "-o",
-        help=HELP_TEXT_OPTION_OUTPUT_FILE,
-        metavar="[output]",
-    ),
-    raw: bool = typer.Option(False, "-r", "--raw", help="Output raw data."),
-    template_file: Optional[Path] = typer.Option(
-        None,
-        "--template",
-        "-t",
-        help=HELP_TEXT_OPTION_TEMPLATE,
-        metavar="[template]",
-    ),
+    host: Annotated[
+        str,
+        typer.Argument(
+            help=HELP_TEXT_ARGUMENT_EMS,
+            metavar="[host]",
+        ),
+    ] = "ems",
+    output_file: Annotated[
+        Optional[Path],
+        typer.Option(
+            "--output",
+            "-o",
+            help=HELP_TEXT_OPTION_OUTPUT_FILE,
+            metavar="[output]",
+        ),
+    ] = None,
+    raw: Annotated[bool, typer.Option("-r", "--raw", help="Output raw data.")] = False,
+    template_file: Annotated[
+        Optional[Path],
+        typer.Option(
+            "--template",
+            "-t",
+            help=HELP_TEXT_OPTION_TEMPLATE,
+            metavar="[template]",
+        ),
+    ] = None,
 ) -> None:
     """
     Monitor the endpoint management status in FortiClient EMS.
@@ -164,26 +177,32 @@ def endpoint_management_status(
 
 @app.command(help="Monitor the endpoint OS versions in FortiClient EMS.\n\n" + HELP_TEXT_TEMPLATE)
 def endpoint_os_versions(
-    host: str = typer.Argument(
-        "ems",
-        help=HELP_TEXT_ARGUMENT_EMS,
-        metavar="[host]",
-    ),
-    output_file: Union[None, Path] = typer.Option(
-        None,
-        "--output",
-        "-o",
-        help=HELP_TEXT_OPTION_OUTPUT_FILE,
-        metavar="[output]",
-    ),
-    raw: bool = typer.Option(False, "-r", "--raw", help="Output raw data."),
-    template_file: Optional[Path] = typer.Option(
-        None,
-        "--template",
-        "-t",
-        help=HELP_TEXT_OPTION_TEMPLATE,
-        metavar="[template]",
-    ),
+    host: Annotated[
+        str,
+        typer.Argument(
+            help=HELP_TEXT_ARGUMENT_EMS,
+            metavar="[host]",
+        ),
+    ] = "ems",
+    output_file: Annotated[
+        Optional[Path],
+        typer.Option(
+            "--output",
+            "-o",
+            help=HELP_TEXT_OPTION_OUTPUT_FILE,
+            metavar="[output]",
+        ),
+    ] = None,
+    raw: Annotated[bool, typer.Option("-r", "--raw", help="Output raw data.")] = False,
+    template_file: Annotated[
+        Optional[Path],
+        typer.Option(
+            "--template",
+            "-t",
+            help=HELP_TEXT_OPTION_TEMPLATE,
+            metavar="[template]",
+        ),
+    ] = None,
 ) -> None:
     """
     Monitor the endpoint os versions in FortiClient EMS.
@@ -227,26 +246,32 @@ def endpoint_os_versions(
     + HELP_TEXT_TEMPLATE
 )
 def endpoint_outofsync(
-    host: str = typer.Argument(
-        "ems",
-        help=HELP_TEXT_ARGUMENT_EMS,
-        metavar="[host]",
-    ),
-    output_file: Union[None, Path] = typer.Option(
-        None,
-        "--output",
-        "-o",
-        help=HELP_TEXT_OPTION_OUTPUT_FILE,
-        metavar="[output]",
-    ),
-    raw: bool = typer.Option(False, "-r", "--raw", help="Output raw data."),
-    template_file: Optional[Path] = typer.Option(
-        None,
-        "--template",
-        "-t",
-        help=HELP_TEXT_OPTION_TEMPLATE,
-        metavar="[template]",
-    ),
+    host: Annotated[
+        str,
+        typer.Argument(
+            help=HELP_TEXT_ARGUMENT_EMS,
+            metavar="[host]",
+        ),
+    ] = "ems",
+    output_file: Annotated[
+        Optional[Path],
+        typer.Option(
+            "--output",
+            "-o",
+            help=HELP_TEXT_OPTION_OUTPUT_FILE,
+            metavar="[output]",
+        ),
+    ] = None,
+    raw: Annotated[bool, typer.Option("-r", "--raw", help="Output raw data.")] = False,
+    template_file: Annotated[
+        Optional[Path],
+        typer.Option(
+            "--template",
+            "-t",
+            help=HELP_TEXT_OPTION_TEMPLATE,
+            metavar="[template]",
+        ),
+    ] = None,
 ) -> None:
     """
     Get amount of FortiClient EMS devices which are online but policy not in sync.
@@ -279,26 +304,32 @@ def endpoint_outofsync(
 
 @app.command(help="Monitor the FortiClient EMS license.\n\n" + HELP_TEXT_TEMPLATE)
 def license(  # pylint: disable=redefined-builtin
-    host: str = typer.Argument(
-        "ems",
-        help=HELP_TEXT_ARGUMENT_EMS,
-        metavar="[host]",
-    ),
-    output_file: Union[None, Path] = typer.Option(
-        None,
-        "--output",
-        "-o",
-        help=HELP_TEXT_OPTION_OUTPUT_FILE,
-        metavar="[output]",
-    ),
-    raw: bool = typer.Option(False, "-r", "--raw", help="Output raw data."),
-    template_file: Optional[Path] = typer.Option(
-        None,
-        "--template",
-        "-t",
-        help=HELP_TEXT_OPTION_TEMPLATE,
-        metavar="[template]",
-    ),
+    host: Annotated[
+        str,
+        typer.Argument(
+            help=HELP_TEXT_ARGUMENT_EMS,
+            metavar="[host]",
+        ),
+    ] = "ems",
+    output_file: Annotated[
+        Optional[Path],
+        typer.Option(
+            "--output",
+            "-o",
+            help=HELP_TEXT_OPTION_OUTPUT_FILE,
+            metavar="[output]",
+        ),
+    ] = None,
+    raw: Annotated[bool, typer.Option("-r", "--raw", help="Output raw data.")] = False,
+    template_file: Annotated[
+        Optional[Path],
+        typer.Option(
+            "--template",
+            "-t",
+            help=HELP_TEXT_OPTION_TEMPLATE,
+            metavar="[template]",
+        ),
+    ] = None,
 ) -> None:
     """
     Monitor the FortiClient EMS license.
@@ -341,12 +372,14 @@ def license(  # pylint: disable=redefined-builtin
 
 @app.command()
 def system(
-    host: str = typer.Argument(
-        "ems",
-        help=HELP_TEXT_ARGUMENT_EMS,
-        metavar="[host]",
-    ),
-    raw: bool = typer.Option(False, "-r", "--raw", help="Output raw data."),
+    host: Annotated[
+        str,
+        typer.Argument(
+            help=HELP_TEXT_ARGUMENT_EMS,
+            metavar="[host]",
+        ),
+    ] = "ems",
+    raw: Annotated[bool, typer.Option("-r", "--raw", help="Output raw data.")] = False,
 ) -> None:
     """
     Monitor the FortiClient EMS system information.
