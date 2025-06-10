@@ -135,7 +135,7 @@ class TestFortiClientEMS:
         requests.Session.post.assert_called_with(
             "https://ems_dummy:443/api/v1/auth/signin",
             headers={
-                "User-Agent": "python-requests/2.32.3",
+                "User-Agent": "python-requests/2.32.4",
                 "Accept-Encoding": "gzip, deflate",
                 "Accept": "*/*",
                 "Connection": "keep-alive",
@@ -185,7 +185,7 @@ class TestFortiClientEMS:
         requests.Session.get.assert_called_with(
             "https://ems_dummy:443/api/v1/system/serial_number",
             headers={
-                "User-Agent": "python-requests/2.32.3",
+                "User-Agent": "python-requests/2.32.4",
                 "Accept-Encoding": "gzip, deflate",
                 "Accept": "*/*",
                 "Connection": "keep-alive",
@@ -200,7 +200,7 @@ class TestFortiClientEMS:
         requests.Session.post.assert_called_with(
             "https://ems_dummy:443/api/v1/auth/signin",
             headers={
-                "User-Agent": "python-requests/2.32.3",
+                "User-Agent": "python-requests/2.32.4",
                 "Accept-Encoding": "gzip, deflate",
                 "Accept": "*/*",
                 "Connection": "keep-alive",
