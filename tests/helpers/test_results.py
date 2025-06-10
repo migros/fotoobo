@@ -3,7 +3,7 @@ Test the results helper class
 """
 
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any, Optional, Union
 from unittest.mock import MagicMock
 
 import pytest
@@ -40,9 +40,9 @@ class TestResults:
         ),
     )
     def test_push_result(
-        inputs: Union[str, List[str]],
+        inputs: Union[str, list[str]],
         successful: Optional[bool],
-        expected_result: Dict[str, Any],
+        expected_result: dict[str, Any],
     ) -> None:
         """Test the push_result() method"""
         result = Result[Any]()
@@ -127,9 +127,9 @@ class TestResults:
         ),
     )
     def test_print_messages(
-        messages: List[Tuple[str]],
+        messages: list[tuple[str]],
         only_host: Union[str, None],
-        expected_outputs: List[str],
+        expected_outputs: list[str],
         capsys: Any,
     ) -> None:
         """Test print_messages() method"""
@@ -192,7 +192,7 @@ class TestResults:
     @staticmethod
     def test_print_result_as_table_auto_header(capsys: Any) -> None:
         """Test print_result_as_table() method with auto_header=True"""
-        result = Result[Dict[str, str]]()
+        result = Result[dict[str, str]]()
         result.push_result("test_host", {"key1": "val1", "key2": "val2"})
 
         result.print_result_as_table("test_host", auto_header=True)
@@ -204,7 +204,7 @@ class TestResults:
     @staticmethod
     def test_print_result_as_table_with_headers(capsys: Any) -> None:
         """Test print_result_as_table() method with headers given"""
-        result = Result[Dict[str, str]]()
+        result = Result[dict[str, str]]()
         result.push_result("test_host", {"key1": "val1", "key2": "val2"})
 
         result.print_result_as_table("test_host", headers=["keys", "values"])
@@ -217,7 +217,7 @@ class TestResults:
     @staticmethod
     def test_print_result_as_table_with_title(capsys: Any) -> None:
         """Test print_result_as_table() method with title given"""
-        result = Result[Dict[str, str]]()
+        result = Result[dict[str, str]]()
         result.push_result("test_host", {"key1": "val1", "key2": "val2"})
 
         result.print_result_as_table(title="title")
@@ -302,7 +302,7 @@ class TestResults:
     @staticmethod
     def test_save_with_template(temp_dir: Path) -> None:
         """Test save_with_template"""
-        result = Result[Dict[str, Dict[str, int]]]()
+        result = Result[dict[str, dict[str, int]]]()
         result.push_result("dummy_ems", {"fotoobo": {"dummy_var": 42}})
         output_file = temp_dir / "output.txt"
         result.save_with_template("dummy_ems", Path("tests/data/dummy.j2"), output_file)

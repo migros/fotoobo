@@ -4,7 +4,7 @@ The fotoobo converter utility
 
 import logging
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Union
+from typing import Any, Optional, Union
 
 from fotoobo.fortinet.convert import CheckpointConverter
 from fotoobo.helpers.files import create_dir
@@ -14,11 +14,11 @@ log = logging.getLogger("fotoobo")
 
 
 def checkpoint(
-    checkpoint_assets: Union[List[Any], Dict[str, Any], None],
+    checkpoint_assets: Union[list[Any], dict[str, Any], None],
     obj_type: str,
     conversion_id: str,
     cache_dir: Optional[Path] = None,
-) -> Result[List[Any]]:
+) -> Result[list[Any]]:
     """
     This function lets you convert Checkpoint assets into Fortinet syntax.
 
@@ -29,7 +29,7 @@ def checkpoint(
         cache_dir:         The cache directory to use. Defaults to None.
     """
     log.info("Start converting checkpoint assets of type '%s'", obj_type)
-    result = Result[List[Any]]()
+    result = Result[list[Any]]()
 
     if cache_dir:
         create_dir(cache_dir)

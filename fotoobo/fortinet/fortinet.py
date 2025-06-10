@@ -6,7 +6,7 @@ variables and methods.
 import logging
 from abc import ABC, abstractmethod
 from time import time
-from typing import Any, Dict, Optional, Union
+from typing import Any, Optional, Union
 
 import requests
 import urllib3
@@ -58,7 +58,7 @@ class Fortinet(ABC):
         self.https_port: int = kwargs.get("https_port", 443)
         self.session = requests.Session()
         self.session.trust_env = False
-        self.session.proxies: Dict[str, Any] = {"http": None, "https": None}  # type: ignore
+        self.session.proxies: dict[str, Any] = {"http": None, "https": None}  # type: ignore
 
         if proxy := kwargs.get("proxy", ""):
             self.session.proxies = {"http": f"{proxy}", "https": f"{proxy}"}
@@ -74,9 +74,9 @@ class Fortinet(ABC):
         self,
         method: str,
         url: str = "",
-        headers: Optional[Dict[str, str]] = None,
-        params: Optional[Dict[str, str]] = None,
-        payload: Optional[Dict[str, Any]] = None,
+        headers: Optional[dict[str, str]] = None,
+        params: Optional[dict[str, str]] = None,
+        payload: Optional[dict[str, Any]] = None,
         timeout: Optional[float] = None,
     ) -> requests.models.Response:
         """

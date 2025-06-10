@@ -3,7 +3,7 @@ Test the FortiGate config check class
 """
 
 from pathlib import Path
-from typing import Any, Dict, List
+from typing import Any
 
 import pytest
 
@@ -300,7 +300,7 @@ class TestFortiGateConfigCheck:
         ),
     )
     def test_check_config_generic_missing_type(
-        checks: List[Dict[str, Any]], expected_messages_count: int, config_vdom: FortiGateConfig
+        checks: list[dict[str, Any]], expected_messages_count: int, config_vdom: FortiGateConfig
     ) -> None:
         """
         Test the configuration check functionality

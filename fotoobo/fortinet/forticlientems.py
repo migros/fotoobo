@@ -6,7 +6,7 @@ import logging
 import pickle
 import re
 from pathlib import Path
-from typing import Any, Dict, Optional
+from typing import Any, Optional
 
 import requests
 
@@ -53,9 +53,9 @@ class FortiClientEMS(Fortinet):
         self,
         method: str,
         url: str = "",
-        headers: Optional[Dict[str, str]] = None,
-        params: Optional[Dict[str, str]] = None,
-        payload: Optional[Dict[str, Any]] = None,
+        headers: Optional[dict[str, str]] = None,
+        params: Optional[dict[str, str]] = None,
+        payload: Optional[dict[str, Any]] = None,
         timeout: Optional[float] = None,
     ) -> requests.models.Response:
         """

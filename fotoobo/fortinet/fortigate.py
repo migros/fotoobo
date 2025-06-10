@@ -3,7 +3,7 @@ FortiGate Class
 """
 
 import logging
-from typing import Any, Dict, List, Optional
+from typing import Any, Optional
 
 import requests
 
@@ -23,7 +23,7 @@ class FortiGate(Fortinet):
         self,
         hostname: str = "",
         token: str = "",
-        **kwargs: Dict[str, str],
+        **kwargs: dict[str, str],
     ) -> None:
         """
         Set some initial parameters.
@@ -45,9 +45,9 @@ class FortiGate(Fortinet):
         self,
         method: str,
         url: str = "",
-        headers: Optional[Dict[str, str]] = None,
-        params: Optional[Dict[str, str]] = None,
-        payload: Optional[Dict[str, Any]] = None,
+        headers: Optional[dict[str, str]] = None,
+        params: Optional[dict[str, str]] = None,
+        payload: Optional[dict[str, Any]] = None,
         timeout: Optional[float] = None,
     ) -> requests.models.Response:
         """Native API request to a FortiGate.
@@ -70,7 +70,7 @@ class FortiGate(Fortinet):
             method, url, payload=payload, params=params, timeout=timeout, headers=headers
         )
 
-    def api_get(self, url: str, vdom: str = "*", timeout: Optional[float] = None) -> List[Any]:
+    def api_get(self, url: str, vdom: str = "*", timeout: Optional[float] = None) -> list[Any]:
         """Low level GET request to a FortiGate.
 
         This gets the response from a single API request to a FortiGate and returns it as a fotoobo
@@ -86,7 +86,7 @@ class FortiGate(Fortinet):
         """
         params = {"vdom": vdom}
         response = self.api(method="get", url=url, params=params, timeout=timeout)
-        data: List[Any] = (
+        data: list[Any] = (
             [response.json()] if isinstance(response.json(), dict) else response.json()
         )  # this is to listify the data from the response
 
