@@ -1,9 +1,9 @@
-# type: ignore
 """
 Test the Fortinet class
 """
 
 # pylint: disable=no-member
+# mypy: disable-error-code=attr-defined
 
 from unittest.mock import MagicMock
 
@@ -158,7 +158,7 @@ class TestFortinet:
             f"fotoobo.fortinet.fortinet.requests.Session.{method}",
             MagicMock(
                 side_effect=requests.exceptions.ConnectionError(
-                    MagicMock(reason=NewConnectionError(reason, message="")),
+                    MagicMock(reason=NewConnectionError(reason, message="")),  # type:ignore
                 )
             ),
         )

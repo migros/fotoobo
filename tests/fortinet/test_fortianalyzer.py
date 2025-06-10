@@ -3,6 +3,7 @@ Test the FortiAnalyzer class
 """
 
 # pylint: disable=no-member
+# mypy: disable-error-code=attr-defined
 
 from unittest.mock import MagicMock
 
@@ -40,7 +41,7 @@ class TestFortiAnalyzer:
             MagicMock(return_value=ResponseMock(json=response, status_code=200)),
         )
         assert FortiAnalyzer("host", "", "").get_version() == expected
-        requests.Session.post.assert_called_with(  # type: ignore
+        requests.Session.post.assert_called_with(
             "https://host:443/jsonrpc",
             headers=None,
             json={"method": "get", "params": [{"url": "/sys/status"}], "session": ""},
