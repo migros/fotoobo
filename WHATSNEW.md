@@ -9,7 +9,8 @@
 - Tool "ems get workgroups" has changed its return format
 - Massive optimizations in cli help tests
 - Typer cli commands now use typing_extensions.Annotated 
-- Changed typing for list, dict, set and tuple
+- Change typing for list, dict, set and tuple
+- Update requests due to dependabot warning 
 
 ### Fixed
 
