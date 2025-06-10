@@ -3,7 +3,7 @@ Test the inventory
 """
 
 from pathlib import Path
-from typing import Any, Dict, Optional
+from typing import Any, Optional
 from unittest.mock import MagicMock
 
 import pytest
@@ -128,7 +128,7 @@ class TestInventory:
         ),
     )
     def test_load_data_from_vault(
-        result: Dict[str, Any], expected: Dict[str, Any], monkeypatch: MonkeyPatch
+        result: dict[str, Any], expected: dict[str, Any], monkeypatch: MonkeyPatch
     ) -> None:
         """Test Inventory._laod_data_from_vault"""
         monkeypatch.setattr("fotoobo.helpers.vault.Client.get_data", MagicMock(return_value=result))

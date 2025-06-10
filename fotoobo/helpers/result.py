@@ -7,7 +7,7 @@ import logging
 import re
 import smtplib
 from pathlib import Path
-from typing import Any, Dict, Generic, List, Optional, TypeVar, Union
+from typing import Any, Generic, Optional, TypeVar, Union
 
 import jinja2
 from rich.console import Console
@@ -40,19 +40,19 @@ class Result(Generic[T]):
         Create the FotooboResult object
         """
         # The devices where the processing has been successful
-        self.successful: List[str] = []
+        self.successful: list[str] = []
 
         # The devices where the processing gave an error
-        self.failed: List[str] = []
+        self.failed: list[str] = []
 
         # The total number of devices processed
         self.total: int = 0
 
         # Add messages for each device
-        self.messages: Dict[str, List[Dict[str, str]]] = {}
+        self.messages: dict[str, list[dict[str, str]]] = {}
 
         # The results for each device
-        self.results: Dict[str, T] = {}
+        self.results: dict[str, T] = {}
 
         # Console object for rich output
         self.console = Console(theme=ftb_theme)
@@ -89,7 +89,7 @@ class Result(Generic[T]):
 
         self.messages[host].append({"message": message, "level": level})
 
-    def get_messages(self, host: str) -> List[Dict[str, str]]:
+    def get_messages(self, host: str) -> list[dict[str, str]]:
         """
         Return all the messages for the host given
 
@@ -143,7 +143,7 @@ class Result(Generic[T]):
 
         return self.results[host]
 
-    def all_results(self) -> Dict[str, T]:
+    def all_results(self) -> dict[str, T]:
         """
         Return all results
 
@@ -158,7 +158,7 @@ class Result(Generic[T]):
         self,
         title: str = "",
         auto_header: bool = False,
-        headers: Optional[List[str]] = None,
+        headers: Optional[list[str]] = None,
     ) -> None:
         """
         Print a table from given data as list or dict.
@@ -174,7 +174,7 @@ class Result(Generic[T]):
         if not headers:
             headers = []
 
-        data: List[Dict[str, Any]] = []
+        data: list[dict[str, Any]] = []
         for host, result in self.results.items():
             if isinstance(result, dict):
                 data.append({"key": host, **result})
@@ -186,8 +186,8 @@ class Result(Generic[T]):
 
     def print_table_raw(
         self,
-        data: List[Dict[str, Any]],
-        headers: Optional[List[str]] = None,
+        data: list[dict[str, Any]],
+        headers: Optional[list[str]] = None,
         auto_header: bool = False,
         title: str = "",
     ) -> None:
@@ -216,7 +216,7 @@ class Result(Generic[T]):
             _values = line.values()
 
             # If an item in line is a dict or list we should pretty print it
-            values: List[str] = []
+            values: list[str] = []
 
             for entry in _values:
                 if isinstance(entry, (dict, list)):
@@ -297,7 +297,7 @@ class Result(Generic[T]):
     def send_messages_as_mail(
         self,
         smtp_server: Any,
-        levels: Union[List[str], str, None] = None,
+        levels: Union[list[str], str, None] = None,
         count: bool = False,
         command: bool = False,
     ) -> None:
@@ -314,7 +314,7 @@ class Result(Generic[T]):
                             - ['level1', 'level2'] like 2nd option, but all levels given will get
                             output
         """
-        out_messages: List[str] = []
+        out_messages: list[str] = []
         for host, messages in self.messages.items():
             for message in messages:
                 if not levels or message["level"] in levels:

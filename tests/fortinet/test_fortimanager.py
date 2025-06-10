@@ -5,7 +5,7 @@ Test the FortiManager class
 # pylint: disable=no-member, too-many-lines
 # mypy: disable-error-code=attr-defined
 
-from typing import Any, Dict, List
+from typing import Any
 from unittest.mock import MagicMock
 
 import pytest
@@ -363,9 +363,9 @@ class TestFortiManager:  # pylint: disable=too-many-public-methods
         ),
     )
     def test_delete_global_address(
-        get_global_address_data: Dict[str, Any],
-        get_global_address_status: Dict[str, Any],
-        delete_adom_address_status: Dict[str, Any],
+        get_global_address_data: dict[str, Any],
+        get_global_address_status: dict[str, Any],
+        delete_adom_address_status: dict[str, Any],
         monkeypatch: MonkeyPatch,
     ) -> None:
         """Test fmg delete_global_address"""
@@ -417,9 +417,9 @@ class TestFortiManager:  # pylint: disable=too-many-public-methods
         ),
     )
     def test_delete_global_address_group(
-        get_global_address_group_data: Dict[str, Any],
-        get_global_address_group_status: Dict[str, Any],
-        delete_adom_address_group_status: Dict[str, Any],
+        get_global_address_group_data: dict[str, Any],
+        get_global_address_group_status: dict[str, Any],
+        delete_adom_address_group_status: dict[str, Any],
         monkeypatch: MonkeyPatch,
     ) -> None:
         """Test fmg delete_global_address_group"""
@@ -471,9 +471,9 @@ class TestFortiManager:  # pylint: disable=too-many-public-methods
         ),
     )
     def test_delete_global_service(
-        get_global_service_data: Dict[str, Any],
-        get_global_service_status: Dict[str, Any],
-        delete_adom_service_status: Dict[str, Any],
+        get_global_service_data: dict[str, Any],
+        get_global_service_status: dict[str, Any],
+        delete_adom_service_status: dict[str, Any],
         monkeypatch: MonkeyPatch,
     ) -> None:
         """Test fmg delete_global_service"""
@@ -525,9 +525,9 @@ class TestFortiManager:  # pylint: disable=too-many-public-methods
         ),
     )
     def test_delete_global_service_group(
-        get_global_service_group_data: Dict[str, Any],
-        get_global_service_group_status: Dict[str, Any],
-        delete_adom_service_group_status: Dict[str, Any],
+        get_global_service_group_data: dict[str, Any],
+        get_global_service_group_status: dict[str, Any],
+        delete_adom_service_group_status: dict[str, Any],
         monkeypatch: MonkeyPatch,
     ) -> None:
         """Test fmg delete_global_service_group"""
@@ -600,7 +600,7 @@ class TestFortiManager:  # pylint: disable=too-many-public-methods
         """Test fmg get_global_address"""
         fmg = FortiManager("host", "", "")
         assert fmg.get_global_address("dummy", scope_member=scope_member)["status"]["code"] == 0
-        expected_call: List[Any] = ["/pm/config/global/obj/firewall/address/dummy"]
+        expected_call: list[Any] = ["/pm/config/global/obj/firewall/address/dummy"]
         if scope_member:
             expected_call.append({"option": ["scope member"]})
 
@@ -630,7 +630,7 @@ class TestFortiManager:  # pylint: disable=too-many-public-methods
         assert (
             fmg.get_global_address_group("dummy", scope_member=scope_member)["status"]["code"] == 0
         )
-        expected_call: List[Any] = ["/pm/config/global/obj/firewall/addrgrp/dummy"]
+        expected_call: list[Any] = ["/pm/config/global/obj/firewall/addrgrp/dummy"]
         if scope_member:
             expected_call.append({"option": ["scope member"]})
         FortiManager.api_get.assert_called_with(*expected_call)
@@ -660,7 +660,7 @@ class TestFortiManager:  # pylint: disable=too-many-public-methods
         """Test fmg get_global_service"""
         fmg = FortiManager("host", "", "")
         assert fmg.get_global_service("dummy", scope_member=scope_member)["status"]["code"] == 0
-        expected_call: List[Any] = ["/pm/config/global/obj/firewall/service/custom/dummy"]
+        expected_call: list[Any] = ["/pm/config/global/obj/firewall/service/custom/dummy"]
         if scope_member:
             expected_call.append({"option": ["scope member"]})
         FortiManager.api_get.assert_called_with(*expected_call)
@@ -689,7 +689,7 @@ class TestFortiManager:  # pylint: disable=too-many-public-methods
         assert (
             fmg.get_global_service_group("dummy", scope_member=scope_member)["status"]["code"] == 0
         )
-        expected_call: List[Any] = ["/pm/config/global/obj/firewall/service/group/dummy"]
+        expected_call: list[Any] = ["/pm/config/global/obj/firewall/service/group/dummy"]
         if scope_member:
             expected_call.append({"option": ["scope member"]})
         FortiManager.api_get.assert_called_with(*expected_call)

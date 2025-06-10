@@ -5,7 +5,7 @@ FortiGate backup utility
 import concurrent.futures
 import json
 import logging
-from typing import Optional, Tuple
+from typing import Optional
 
 from rich.progress import Progress
 
@@ -35,7 +35,7 @@ def backup(
     inventory = Inventory(config.inventory_file)
     fgts = inventory.get(host, "fortigate")
 
-    def _get_single_backup(name: str, fgt: FortiGate) -> Tuple[str, str]:
+    def _get_single_backup(name: str, fgt: FortiGate) -> tuple[str, str]:
         """Get the configuration backup from a single FortiGate.
 
         This private method is used for multithreading. It only queries one single FortiGate for its

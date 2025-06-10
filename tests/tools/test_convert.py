@@ -2,7 +2,7 @@
 
 import shutil
 from pathlib import Path
-from typing import Any, Dict
+from typing import Any
 
 import pytest
 
@@ -26,7 +26,7 @@ from fotoobo.tools.convert import checkpoint
 )
 def test_convert(asset_type: str) -> None:
     """Test convert"""
-    checkpoint_assets: Dict[str, Any] = {
+    checkpoint_assets: dict[str, Any] = {
         "hosts": [
             {
                 "uid": "aaaa-aaaa-aaaa-aaaa",
@@ -100,7 +100,7 @@ def test_convert_unsupported_type(asset_type: str) -> None:
 )
 def test_convert_with_cache(asset_type: str, temp_dir: Path) -> None:
     """Test convert with cache"""
-    checkpoint_assets: Dict[str, Any] = {
+    checkpoint_assets: dict[str, Any] = {
         "hosts": [
             {
                 "uid": "aaaa-aaaa-aaaa-aaaa",

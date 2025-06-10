@@ -2,7 +2,7 @@
 This module defines some helpers for the test package. These may be used by every test package.
 """
 
-from typing import Any, Dict, Set, Tuple
+from typing import Any
 from unittest.mock import MagicMock
 
 from requests.exceptions import HTTPError
@@ -41,7 +41,7 @@ class ResponseMock:  # pylint: disable=too-many-instance-attributes
 
 def parse_help_output(  # pylint: disable=too-many-branches
     output: str,
-) -> Tuple[Dict[str, str], Set[str], Dict[str, str]]:
+) -> tuple[dict[str, str], set[str], dict[str, str]]:
     """
     Parse the output of the cli help and return the available arguments, options and commands
 

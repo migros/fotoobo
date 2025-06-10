@@ -4,7 +4,6 @@ The fotoobo get utility
 
 import importlib.metadata
 import logging
-from typing import Dict, List
 
 from rich.text import Text
 from rich.tree import Tree
@@ -18,7 +17,7 @@ from fotoobo.inventory import Inventory
 log = logging.getLogger("fotoobo")
 
 
-def inventory() -> Result[Dict[str, str]]:
+def inventory() -> Result[dict[str, str]]:
     """
     Get the fotoobo inventory
 
@@ -26,7 +25,7 @@ def inventory() -> Result[Dict[str, str]]:
         Result
     """
     log.debug("Print fotoobo inventory information")
-    result = Result[Dict[str, str]]()
+    result = Result[dict[str, str]]()
     _inventory = Inventory(config.inventory_file)
 
     for host, data in _inventory.assets.items():
@@ -35,7 +34,7 @@ def inventory() -> Result[Dict[str, str]]:
     return result
 
 
-def version(verbose: bool = False) -> Result[List[Dict[str, str]]]:
+def version(verbose: bool = False) -> Result[list[dict[str, str]]]:
     """
     Get the fotoobo version
 
@@ -43,7 +42,7 @@ def version(verbose: bool = False) -> Result[List[Dict[str, str]]]:
         verbose: Whether we want verbose output
     """
     log.debug("Print fotoobo version information: '%s'", __version__)
-    result = Result[List[Dict[str, str]]]()
+    result = Result[list[dict[str, str]]]()
     versions = [{"module": "fotoobo", "version": __version__}]
 
     if verbose:
