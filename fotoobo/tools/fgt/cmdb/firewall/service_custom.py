@@ -1,7 +1,7 @@
 """FortiGate CMDB firewall service custom module"""
 
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Optional
 
 from fotoobo.fortinet.fortigate import FortiGate
 from fotoobo.helpers.config import config
@@ -11,14 +11,14 @@ from fotoobo.inventory import Inventory
 
 def get_cmdb_firewall_service_custom(
     host: str, name: str, vdom: str, output_file: Optional[str]
-) -> Result[List[Any]]:
+) -> Result[list[Any]]:
     """Get the firewall service custom object(s)
 
     The FortiGate api endpoint is: /cmdb/firewall.service/custom
     """
     inventory = Inventory(config.inventory_file)
     fgt: FortiGate = inventory.get_item(host, "fortigate")
-    result = Result[List[Any]]()
+    result = Result[list[Any]]()
 
     service_custom_list = fgt.api_get(url=f"/cmdb/firewall.service/custom/{name}", vdom=vdom)
 
@@ -31,7 +31,7 @@ def get_cmdb_firewall_service_custom(
         for vd in service_custom_list:
             for asset in vd["results"]:
 
-                data: Dict[str, str] = {
+                data: dict[str, str] = {
                     "name": asset["name"],
                     "vdom": vd["vdom"],
                     "protocol": asset["protocol"],

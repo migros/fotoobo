@@ -3,7 +3,7 @@ Test the Hashicorp Vault helper
 """
 
 from pathlib import Path
-from typing import Any, Dict
+from typing import Any
 from unittest.mock import MagicMock
 
 import pytest
@@ -270,7 +270,7 @@ class TestClient:
         ),
     )
     def test_get_data(
-        response: ResponseMock, data: Dict[str, Any], monkeypatch: MonkeyPatch
+        response: ResponseMock, data: dict[str, Any], monkeypatch: MonkeyPatch
     ) -> None:
         """Test the Client get_data"""
         monkeypatch.setattr("fotoobo.helpers.vault.Client.get_token", MagicMock(return_value=True))

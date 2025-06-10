@@ -4,7 +4,7 @@ Test the config helper
 
 import os
 from pathlib import Path
-from typing import Any, Callable, Dict, Optional, Union
+from typing import Any, Callable, Optional, Union
 from unittest.mock import MagicMock
 
 import pytest
@@ -108,7 +108,7 @@ class TestConfig:
     )
     def test_config_logging(
         logging_type: str,
-        logging: Optional[Dict[str, Any]],
+        logging: Optional[dict[str, Any]],
         expected: str,
         monkeypatch: MonkeyPatch,
     ) -> None:

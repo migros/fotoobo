@@ -25,7 +25,6 @@ classifiers = [
     "Operating System :: POSIX :: Linux",
     "Operating System :: Unix",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
@@ -40,27 +39,27 @@ classifiers = [
 
 [tool.poetry.dependencies]
 python = ">=3.9.0, <4"
-typer = "~0.15.2"
-rich = "~13.9.0"
-PyYAML = "~6.0.0"
-requests = ">=2.32.3"
-Jinja2 = "~3.1.6"
+typer = "~0.15" # Fixing it because of buggy no_args_is_help=True in Typer 0.16.0
+rich = "*"
+PyYAML = "*"
+requests = "*"
+Jinja2 = "*"
 
 [tool.poetry.group.dev.dependencies]
-pytest = "~8.3.0"
-black = "~24.03.0"
-mypy = "~1.15"
-tox = "~4.24.2"
-pylint = "~3.3.5"
-pytest-cov = "~6.0.0"
-types-requests = "~2.32.0"
-isort = "~6.0.1"
-types-PyYAML = "~6.0.12"
-pygount = ">=2.0.0"
+pytest = "*"
+black = "*"
+mypy = "*"
+tox = "*"
+pylint = "*"
+pytest-cov = "*"
+types-requests = "*"
+isort = "*"
+types-PyYAML = "*"
+pygount = "*"
 
 [tool.poetry.group.docs.dependencies]
-Sphinx = "~6.2.0"
-sphinx-rtd-theme = "~1.2.0"
+Sphinx = "*"
+sphinx-rtd-theme = "*"
 
 [tool.poetry.scripts]
 fotoobo = "fotoobo.main:main"
@@ -103,7 +102,7 @@ description = Code analysis with pylint
 skip_install = true
 allowlist_externals = poetry, pylint
 commands_pre = poetry install
-commands = pylint {posargs} fotoobo 
+commands = pylint {posargs} fotoobo tests
 
 [testenv:mypy]
 description = Check typing with mypy

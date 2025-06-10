@@ -10,7 +10,7 @@ access the asset. The uuid is only supported for network assets and not for serv
 import copy
 import logging
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Optional
 
 from fotoobo.exceptions import GeneralError
 from fotoobo.helpers.files import load_json_file, save_json_file
@@ -25,7 +25,7 @@ class CheckpointConverter:
 
     def __init__(self, assets: Any, cache_file: Optional[Path] = None) -> None:
         self.assets = copy.deepcopy(assets)
-        self.converted: List[Any] = []
+        self.converted: list[Any] = []
         self.supported_types = [
             "hosts",
             "networks",
@@ -39,7 +39,7 @@ class CheckpointConverter:
         ]
         self.cache_file = cache_file
 
-    def convert(self, obj_type: str, bulk_size: int = 100) -> List[Any]:
+    def convert(self, obj_type: str, bulk_size: int = 100) -> list[Any]:
         """
         Convert Checkpoint configuration objects into Fortinet syntax.
 
@@ -68,7 +68,7 @@ class CheckpointConverter:
 
         # Now do the caching if cache_file is given
         if self.cache_file:
-            cache: List[Any] = []
+            cache: list[Any] = []
             if self.cache_file.is_file():
                 log.debug("Found cache file '%s'", self.cache_file)
                 cache = list(load_json_file(self.cache_file) or [])
@@ -121,7 +121,7 @@ class CheckpointConverter:
 
         return assets
 
-    def _convert_networks(self) -> List[Dict[str, Any]]:
+    def _convert_networks(self) -> list[dict[str, Any]]:
         """
         Convert Checkpoint network objects
 
@@ -146,7 +146,7 @@ class CheckpointConverter:
 
         return assets
 
-    def _convert_address_ranges(self) -> List[Dict[str, Any]]:
+    def _convert_address_ranges(self) -> list[dict[str, Any]]:
         """
         Convert Checkpoint address range objects
 
@@ -173,7 +173,7 @@ class CheckpointConverter:
 
         return assets
 
-    def _convert_groups(self) -> List[Dict[str, Any]]:
+    def _convert_groups(self) -> list[dict[str, Any]]:
         """
         Convert Checkpoint group objects
 
@@ -214,7 +214,7 @@ class CheckpointConverter:
 
         return assets
 
-    def _convert_services_icmp(self) -> List[Dict[str, Any]]:
+    def _convert_services_icmp(self) -> list[dict[str, Any]]:
         """
         Convert Checkpoint services_icmp objects
 
@@ -226,7 +226,7 @@ class CheckpointConverter:
         while objects:
             obj = objects.pop(0)
             url_name = obj["name"].replace("/", "\\/")
-            param: Dict[str, Any] = {
+            param: dict[str, Any] = {
                 "data": {
                     "comment": obj["comments"],
                     "name": obj["name"],
@@ -242,7 +242,7 @@ class CheckpointConverter:
 
         return assets
 
-    def _convert_services_icmp6(self) -> List[Dict[str, Any]]:
+    def _convert_services_icmp6(self) -> list[dict[str, Any]]:
         """
         Convert Checkpoint services_icmp6 objects
 
@@ -254,7 +254,7 @@ class CheckpointConverter:
         while objects:
             obj = objects.pop(0)
             url_name = obj["name"].replace("/", "\\/")
-            param: Dict[str, Any] = {
+            param: dict[str, Any] = {
                 "data": {
                     "comment": obj["comments"],
                     "name": obj["name"],
@@ -267,7 +267,7 @@ class CheckpointConverter:
 
         return assets
 
-    def _convert_services_tcp(self) -> List[Dict[str, Any]]:
+    def _convert_services_tcp(self) -> list[dict[str, Any]]:
         """
         Convert Checkpoint services_tcp objects
 
@@ -294,7 +294,7 @@ class CheckpointConverter:
             else:
                 port_range = obj["port"]
 
-            param: Dict[str, Any] = {
+            param: dict[str, Any] = {
                 "data": {
                     "comment": obj["comments"],
                     "name": obj["name"],
@@ -313,7 +313,7 @@ class CheckpointConverter:
 
         return assets
 
-    def _convert_services_udp(self) -> List[Dict[str, Any]]:
+    def _convert_services_udp(self) -> list[dict[str, Any]]:
         """
         Convert Checkpoint services_udp objects
         Even though the UDP services are almost identical to the TCP services we use its own
@@ -339,7 +339,7 @@ class CheckpointConverter:
             else:
                 port_range = obj["port"]
 
-            param: Dict[str, Any] = {
+            param: dict[str, Any] = {
                 "data": {
                     "comment": obj["comments"],
                     "name": obj["name"],
@@ -358,7 +358,7 @@ class CheckpointConverter:
 
         return assets
 
-    def _convert_service_groups(self) -> List[Dict[str, Any]]:
+    def _convert_service_groups(self) -> list[dict[str, Any]]:
         """
         Convert Checkpoint service group objects
 

@@ -3,7 +3,7 @@ Test the FortiGate config class
 """
 
 from pathlib import Path
-from typing import Any, Dict
+from typing import Any
 
 import pytest
 
@@ -29,13 +29,13 @@ def conf_file_empty() -> Path:
 
 
 @pytest.fixture
-def empty_dict() -> Dict[Any, Any]:
+def empty_dict() -> dict[Any, Any]:
     """returns an empty dict"""
     return {}
 
 
 @pytest.fixture
-def config_dict_as_list() -> Dict[str, Dict[str, str]]:
+def config_dict_as_list() -> dict[str, dict[str, str]]:
     """returns a FortiGateConfig dict which contains elements as a list (key is int)"""
     return {
         "1": {"key1": "value1", "key2": "value2"},
@@ -44,7 +44,7 @@ def config_dict_as_list() -> Dict[str, Dict[str, str]]:
 
 
 @pytest.fixture
-def config_dict_as_not_a_list() -> Dict[str, Dict[str, str]]:
+def config_dict_as_not_a_list() -> dict[str, dict[str, str]]:
     """returns a FortiGateConfig dict which contains elements as not a list (key is str)"""
     return {
         "string1": {"key1": "value1", "key2": "value2"},
@@ -70,17 +70,17 @@ class TestFortiGateConfigSingle:
     """Test the FortiGateConfig class with a dummy config which is in single VDOM mode"""
 
     @staticmethod
-    def test_config_is_list_with_list(config_dict_as_list: Dict[str, str]) -> None:
+    def test_config_is_list_with_list(config_dict_as_list: dict[str, str]) -> None:
         """Test the _config_is_list method if the configuration is a list"""
         assert FortiGateConfig._config_is_list(config_dict_as_list)
 
     @staticmethod
-    def test_config_is_list_with_not_list(config_dict_as_not_a_list: Dict[str, Any]) -> None:
+    def test_config_is_list_with_not_list(config_dict_as_not_a_list: dict[str, Any]) -> None:
         """Test the _config_is_list method if the configuration is not a list"""
         assert not FortiGateConfig._config_is_list(config_dict_as_not_a_list)
 
     @staticmethod
-    def test_config_is_list_empty(empty_dict: Dict[Any, Any]) -> None:
+    def test_config_is_list_empty(empty_dict: dict[Any, Any]) -> None:
         """Test the _config_is_list method if the configuration is empty"""
         assert not FortiGateConfig._config_is_list(empty_dict)
 
@@ -101,7 +101,7 @@ class TestFortiGateConfigSingle:
     @staticmethod
     def test_parse_config_comment() -> None:
         """Test the _parse_config_comment method"""
-        info: Dict[str, str] = {}
+        info: dict[str, str] = {}
         comment_line = "#config-version=FGT999-9.9.9-FW-build9999-210217:opmode=1:vdom=2:user=pi"
         FortiGateConfig._parse_config_comment(info, comment_line)
         expect = {
@@ -177,17 +177,17 @@ class TestFortiGateConfigVDOM:
         assert config.vdom_config == {}
 
     @staticmethod
-    def test_config_is_list_with_list(config_dict_as_list: Dict[str, str]) -> None:
+    def test_config_is_list_with_list(config_dict_as_list: dict[str, str]) -> None:
         """Test the _config_is_list method if the configuration is a list"""
         assert FortiGateConfig._config_is_list(config_dict_as_list)
 
     @staticmethod
-    def test_config_is_list_with_not_list(config_dict_as_not_a_list: Dict[str, Any]) -> None:
+    def test_config_is_list_with_not_list(config_dict_as_not_a_list: dict[str, Any]) -> None:
         """Test the _config_is_list method if the configuration is not a list"""
         assert not FortiGateConfig._config_is_list(config_dict_as_not_a_list)
 
     @staticmethod
-    def test_config_is_list_empty(empty_dict: Dict[Any, Any]) -> None:
+    def test_config_is_list_empty(empty_dict: dict[Any, Any]) -> None:
         """Test the _config_is_list method if the configuration is empty"""
         assert not FortiGateConfig._config_is_list(empty_dict)
 
@@ -208,7 +208,7 @@ class TestFortiGateConfigVDOM:
     @staticmethod
     def test_parse_config_comment() -> None:
         """Test the _parse_config_comment method"""
-        info: Dict[str, str] = {}
+        info: dict[str, str] = {}
         comment_line = "#config-version=FGT999-9.9.9-FW-build9999-210217:opmode=1:vdom=2:user=pi"
         FortiGateConfig._parse_config_comment(info, comment_line)
         expect = {

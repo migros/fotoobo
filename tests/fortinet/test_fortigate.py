@@ -5,7 +5,6 @@ Test the FortiGate class
 # pylint: disable=no-member
 # mypy: disable-error-code=attr-defined
 
-from typing import Dict
 from unittest.mock import MagicMock
 
 import pytest
@@ -80,7 +79,7 @@ class TestFortiGate:
             pytest.param({"dummy": ""}, "unknown", id="key not found"),
         ),
     )
-    def test_get_version(response: Dict[str, str], expected: str, monkeypatch: MonkeyPatch) -> None:
+    def test_get_version(response: dict[str, str], expected: str, monkeypatch: MonkeyPatch) -> None:
         """Test get version"""
         monkeypatch.setattr(
             "fotoobo.fortinet.fortigate.FortiGate.api",

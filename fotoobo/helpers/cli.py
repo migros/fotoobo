@@ -2,14 +2,14 @@
 Helper functions for testing the cli
 """
 
-from typing import Any, Dict, List, Optional
+from typing import Any, Optional
 
 from rich.text import Text
 from rich.tree import Tree
 
 
 def walk_cli_info(
-    info: Dict[str, Any], tree: Tree, command_path: Optional[List[str]] = None
+    info: dict[str, Any], tree: Tree, command_path: Optional[list[str]] = None
 ) -> Tree:
     """
     Recursively create the cli command tree from a Typer info dict.

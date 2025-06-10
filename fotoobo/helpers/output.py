@@ -5,7 +5,7 @@ The beautiful output helper
 import os
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List
+from typing import Any
 
 from rich.console import Console
 
@@ -24,7 +24,7 @@ def print_logo() -> None:
     logo_console.print("╰───┘└───┘└───╯")
 
 
-def write_policy_to_html(data: List[Dict[str, Any]], out_file: Path) -> None:
+def write_policy_to_html(data: list[dict[str, Any]], out_file: Path) -> None:
     """
     Write a Firewall policy to a HTML file
 

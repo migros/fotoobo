@@ -4,6 +4,7 @@ Test fgt cmdb firewall service group
 
 # pylint: disable=no-member
 # mypy: disable-error-code=attr-defined
+
 from pathlib import Path
 from unittest.mock import MagicMock
 

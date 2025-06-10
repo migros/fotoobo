@@ -5,7 +5,7 @@ Devices class for storing device information
 import logging
 import re
 from pathlib import Path
-from typing import Any, Dict, Optional
+from typing import Any, Optional
 
 from fotoobo.exceptions import GeneralWarning
 from fotoobo.fortinet.fortianalyzer import FortiAnalyzer
@@ -37,14 +37,14 @@ class Inventory:
         """
         log.debug("Initialize the fotoobo inventory")
         self._inventory_file: Path = inventory_file
-        self._globals: Dict[str, Any] = {
+        self._globals: dict[str, Any] = {
             "fortianalyzer": {},
             "forticlientems": {},
             "fortigate": {},
             "fortimanager": {},
         }
-        self.assets: Dict[str, Any] = {}
-        self.vault_data: Dict[str, Dict[str, str]] = {}
+        self.assets: dict[str, Any] = {}
+        self.vault_data: dict[str, dict[str, str]] = {}
 
         # Load assets from inventory file
         self._load_inventory()
@@ -63,7 +63,7 @@ class Inventory:
         self,
         name: Optional[str] = None,
         type: Optional[str] = None,  # pylint: disable=redefined-builtin
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """
         Get a dictionary of assets from the inventory with given 'filters'.
 
@@ -143,7 +143,7 @@ class Inventory:
         # Expand user home shortcuts in the inventory file path
         expanded_inventory_file = self._inventory_file.expanduser()
         log.debug("Loading assets from '%s'", expanded_inventory_file)
-        inventory_raw: Dict[str, Any] = dict(load_yaml_file(expanded_inventory_file) or {})
+        inventory_raw: dict[str, Any] = dict(load_yaml_file(expanded_inventory_file) or {})
 
         # Set the globals
         # This has to be done before the looping over all inventory items so that the globals are
@@ -198,7 +198,7 @@ class Inventory:
                 self.assets[name] = GenericDevice(**asset)
     """
 
-    def _load_data_from_vault(self, vault_dict: Dict[str, Any]) -> None:
+    def _load_data_from_vault(self, vault_dict: dict[str, Any]) -> None:
         """Load the credentials from a vault
 
         Args:
@@ -224,7 +224,7 @@ class Inventory:
                         except KeyError:
                             log.warning("Vault attribute '%s.%s' not found", name, attribute)
 
-    def _set_globals(self, data: Dict[str, Any]) -> None:
+    def _set_globals(self, data: dict[str, Any]) -> None:
         """
         Set some defaults for device types
 

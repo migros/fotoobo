@@ -4,7 +4,7 @@ The FortiManager get commands
 
 import logging
 from pathlib import Path
-from typing import Dict, List, Union
+from typing import Union
 
 import typer
 from typing_extensions import Annotated
@@ -72,7 +72,7 @@ def devices(
 
     else:
         # Make a string from the list of ha nodes
-        new_result = Result[Dict[str, Union[str, List[str]]]]()
+        new_result = Result[dict[str, Union[str, list[str]]]]()
         for key, value in result.all_results().items():
             value["ha_nodes"] = ", ".join(value["ha_nodes"])
             new_result.push_result(key, value)
