@@ -7,6 +7,7 @@ from pathlib import Path
 from typing import Union
 
 import typer
+from typing_extensions import Annotated
 
 from fotoobo.helpers import cli_path
 from fotoobo.helpers.output import write_policy_to_html
@@ -33,11 +34,13 @@ def callback(context: typer.Context) -> None:
 
 @app.command()
 def adoms(
-    host: str = typer.Argument(
-        "fmg",
-        help=HELP_TEXT_HOST,
-        metavar="[host]",
-    )
+    host: Annotated[
+        str,
+        typer.Argument(
+            help=HELP_TEXT_HOST,
+            metavar="[host]",
+        ),
+    ] = "fmg",
 ) -> None:
     """
     Get the FortiManager ADOM list.
@@ -48,12 +51,14 @@ def adoms(
 
 @app.command()
 def devices(
-    host: str = typer.Argument(
-        "fmg",
-        help=HELP_TEXT_HOST,
-        metavar="[host]",
-    ),
-    raw: bool = typer.Option(False, "-r", "--raw", help="Output raw data."),
+    host: Annotated[
+        str,
+        typer.Argument(
+            help=HELP_TEXT_HOST,
+            metavar="[host]",
+        ),
+    ] = "fmg",
+    raw: Annotated[bool, typer.Option("-r", "--raw", help="Output raw data.")] = False,
 ) -> None:
     """
     Get the FortiManager devices list.
@@ -80,23 +85,27 @@ def devices(
 
 @app.command(no_args_is_help=True)
 def policy(
-    adom: str = typer.Argument(
-        ...,
-        help="The FortiManager ADOM to get the firewall policy from.",
-        metavar="[adom]",
-        show_default=False,
-    ),
-    policy_name: str = typer.Argument(
-        ..., help="The name of the policy to get.", metavar="[policy]", show_default=False
-    ),
-    filename: Path = typer.Argument(
-        ..., help="The filename to write the policy to.", metavar="[file]", show_default=False
-    ),
-    host: str = typer.Argument(
-        "fmg",
-        help=HELP_TEXT_HOST,
-        metavar="[host]",
-    ),
+    adom: Annotated[
+        str,
+        typer.Argument(
+            help="The FortiManager ADOM to get the firewall policy from.",
+            metavar="[adom]",
+            show_default=False,
+        ),
+    ],
+    policy_name: Annotated[
+        str,
+        typer.Argument(
+            help="The name of the policy to get.", metavar="[policy]", show_default=False
+        ),
+    ],
+    filename: Annotated[
+        Path,
+        typer.Argument(
+            help="The filename to write the policy to.", metavar="[file]", show_default=False
+        ),
+    ],
+    host: Annotated[str, typer.Argument(help=HELP_TEXT_HOST, metavar="[host]")] = "fmg",
 ) -> None:
     """
     Get a FortiManager policy.
@@ -106,7 +115,9 @@ def policy(
 
 
 @app.command()
-def version(host: str = typer.Argument("fmg", help=HELP_TEXT_HOST, metavar="[host]")) -> None:
+def version(
+    host: Annotated[str, typer.Argument(help=HELP_TEXT_HOST, metavar="[host]")] = "fmg",
+) -> None:
     """
     Get the FortiManager version.
     """

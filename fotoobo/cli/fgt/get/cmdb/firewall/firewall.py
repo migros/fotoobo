@@ -3,8 +3,10 @@ The FortiGate commands
 """
 
 import logging
+from typing import Optional
 
 import typer
+from typing_extensions import Annotated
 
 from fotoobo.exceptions import GeneralError
 from fotoobo.helpers import cli_path
@@ -28,30 +30,38 @@ def callback(context: typer.Context) -> None:
 
 @app.command()
 def address(
-    host: str = typer.Argument(
-        ...,
-        help="The FortiGate hostname to access (must be defined in the inventory).",
-        metavar="[host]",
-    ),
-    name: str = typer.Argument(
-        "",
-        help="The firewall address object to get.",
-        metavar="[name]",
-    ),
-    vdom: str = typer.Option(
-        "*",
-        "--vdom",
-        help="The vdom to query ('vdom1' or 'vdom1,vdom2').",
-        metavar="[vdom]",
-    ),
-    output_file: str = typer.Option(
-        None,
-        "--output",
-        "-o",
-        help="Output file (format is specified by extension).",
-        metavar="[file]",
-        show_default=False,
-    ),
+    host: Annotated[
+        str,
+        typer.Argument(
+            help="The FortiGate hostname to access (must be defined in the inventory).",
+            metavar="[host]",
+        ),
+    ],
+    name: Annotated[
+        str,
+        typer.Argument(
+            help="The firewall address object to get.",
+            metavar="[name]",
+        ),
+    ] = "",
+    vdom: Annotated[
+        str,
+        typer.Option(
+            "--vdom",
+            help="The vdom to query ('vdom1' or 'vdom1,vdom2').",
+            metavar="[vdom]",
+        ),
+    ] = "*",
+    output_file: Annotated[
+        Optional[str],
+        typer.Option(
+            "--output",
+            "-o",
+            help="Output file (format is specified by extension).",
+            metavar="[file]",
+            show_default=False,
+        ),
+    ] = None,
 ) -> None:
     """Get FortiGate cmdb firewall address."""
     if name and ("*" in vdom or "," in vdom):
@@ -64,30 +74,38 @@ def address(
 
 @app.command()
 def addrgrp(
-    host: str = typer.Argument(
-        ...,
-        help="The FortiGate hostname to access (must be defined in the inventory).",
-        metavar="[host]",
-    ),
-    name: str = typer.Argument(
-        "",
-        help="The firewall address group object to get.",
-        metavar="[name]",
-    ),
-    vdom: str = typer.Option(
-        "*",
-        "--vdom",
-        help="The vdom to query ('vdom1' or 'vdom1,vdom2').",
-        metavar="[vdom]",
-    ),
-    output_file: str = typer.Option(
-        None,
-        "--output",
-        "-o",
-        help="Output file (format is specified by extension).",
-        metavar="[file]",
-        show_default=False,
-    ),
+    host: Annotated[
+        str,
+        typer.Argument(
+            help="The FortiGate hostname to access (must be defined in the inventory).",
+            metavar="[host]",
+        ),
+    ],
+    name: Annotated[
+        str,
+        typer.Argument(
+            help="The firewall address group object to get.",
+            metavar="[name]",
+        ),
+    ] = "",
+    vdom: Annotated[
+        str,
+        typer.Option(
+            "--vdom",
+            help="The vdom to query ('vdom1' or 'vdom1,vdom2').",
+            metavar="[vdom]",
+        ),
+    ] = "*",
+    output_file: Annotated[
+        Optional[str],
+        typer.Option(
+            "--output",
+            "-o",
+            help="Output file (format is specified by extension).",
+            metavar="[file]",
+            show_default=False,
+        ),
+    ] = None,
 ) -> None:
     """Get FortiGate cmdb firewall address group."""
     if name and ("*" in vdom or "," in vdom):
@@ -100,30 +118,38 @@ def addrgrp(
 
 @app.command()
 def service_custom(
-    host: str = typer.Argument(
-        ...,
-        help="The FortiGate hostname to access (must be defined in the inventory).",
-        metavar="[host]",
-    ),
-    name: str = typer.Argument(
-        "",
-        help="The firewall service object to get.",
-        metavar="[name]",
-    ),
-    vdom: str = typer.Option(
-        "*",
-        "--vdom",
-        help="The vdom to query ('vdom1' or 'vdom1,vdom2').",
-        metavar="[vdom]",
-    ),
-    output_file: str = typer.Option(
-        None,
-        "--output",
-        "-o",
-        help="Output file (format is specified by extension).",
-        metavar="[file]",
-        show_default=False,
-    ),
+    host: Annotated[
+        str,
+        typer.Argument(
+            help="The FortiGate hostname to access (must be defined in the inventory).",
+            metavar="[host]",
+        ),
+    ],
+    name: Annotated[
+        str,
+        typer.Argument(
+            help="The firewall service object to get.",
+            metavar="[name]",
+        ),
+    ] = "",
+    vdom: Annotated[
+        str,
+        typer.Option(
+            "--vdom",
+            help="The vdom to query ('vdom1' or 'vdom1,vdom2').",
+            metavar="[vdom]",
+        ),
+    ] = "*",
+    output_file: Annotated[
+        Optional[str],
+        typer.Option(
+            "--output",
+            "-o",
+            help="Output file (format is specified by extension).",
+            metavar="[file]",
+            show_default=False,
+        ),
+    ] = None,
 ) -> None:
     """Get FortiGate cmdb firewall service custom."""
     if name and ("*" in vdom or "," in vdom):
@@ -136,30 +162,38 @@ def service_custom(
 
 @app.command()
 def service_group(
-    host: str = typer.Argument(
-        ...,
-        help="The FortiGate hostname to access (must be defined in the inventory).",
-        metavar="[host]",
-    ),
-    name: str = typer.Argument(
-        "",
-        help="The firewall service group to get.",
-        metavar="[name]",
-    ),
-    vdom: str = typer.Option(
-        "*",
-        "--vdom",
-        help="The vdom to query ('vdom1' or 'vdom1,vdom2').",
-        metavar="[vdom]",
-    ),
-    output_file: str = typer.Option(
-        None,
-        "--output",
-        "-o",
-        help="Output file (format is specified by extension).",
-        metavar="[file]",
-        show_default=False,
-    ),
+    host: Annotated[
+        str,
+        typer.Argument(
+            help="The FortiGate hostname to access (must be defined in the inventory).",
+            metavar="[host]",
+        ),
+    ],
+    name: Annotated[
+        str,
+        typer.Argument(
+            help="The firewall service group to get.",
+            metavar="[name]",
+        ),
+    ] = "",
+    vdom: Annotated[
+        str,
+        typer.Option(
+            "--vdom",
+            help="The vdom to query ('vdom1' or 'vdom1,vdom2').",
+            metavar="[vdom]",
+        ),
+    ] = "*",
+    output_file: Annotated[
+        Optional[str],
+        typer.Option(
+            "--output",
+            "-o",
+            help="Output file (format is specified by extension).",
+            metavar="[file]",
+            show_default=False,
+        ),
+    ] = None,
 ) -> None:
     """Get FortiGate cmdb firewall service group."""
     if name and ("*" in vdom or "," in vdom):

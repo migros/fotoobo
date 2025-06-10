@@ -8,6 +8,7 @@ from typing import Optional
 
 import typer
 from rich.pretty import pprint
+from typing_extensions import Annotated
 
 from fotoobo.helpers import cli_path
 from fotoobo.helpers.config import config
@@ -43,33 +44,41 @@ def callback(context: typer.Context) -> None:
 
 @app.command()
 def hamaster(
-    host: str = typer.Argument(
-        "fmg",
-        help="The FortiManager hostname to access (must be defined in the inventory).",
-        metavar="[host]",
-    ),
-    output_file: Optional[Path] = typer.Option(
-        None,
-        "--output",
-        "-o",
-        help=HELP_TEXT_OPTION_OUTPUT_FILE,
-        metavar="[output]",
-    ),
-    raw: bool = typer.Option(False, "-r", "--raw", help="Output raw data."),
-    smtp_server: str = typer.Option(
-        None,
-        "--smtp",
-        help="The smtp configuration from the inventory.",
-        metavar="[server]",
-        show_default=False,
-    ),
-    template_file: Optional[Path] = typer.Option(
-        None,
-        "--template",
-        "-t",
-        help=HELP_TEXT_OPTION_TEMPLATE,
-        metavar="[template]",
-    ),
+    host: Annotated[
+        str,
+        typer.Argument(
+            help="The FortiManager hostname to access (must be defined in the inventory).",
+            metavar="[host]",
+        ),
+    ] = "fmg",
+    output_file: Annotated[
+        Optional[Path],
+        typer.Option(
+            "--output",
+            "-o",
+            help=HELP_TEXT_OPTION_OUTPUT_FILE,
+            metavar="[output]",
+        ),
+    ] = None,
+    raw: Annotated[bool, typer.Option("-r", "--raw", help="Output raw data.")] = False,
+    smtp_server: Annotated[
+        Optional[str],
+        typer.Option(
+            "--smtp",
+            help="The smtp configuration from the inventory.",
+            metavar="[server]",
+            show_default=False,
+        ),
+    ] = None,
+    template_file: Annotated[
+        Optional[Path],
+        typer.Option(
+            "--template",
+            "-t",
+            help=HELP_TEXT_OPTION_TEMPLATE,
+            metavar="[template]",
+        ),
+    ] = None,
 ) -> None:
     """
     Check the FortiGate HA master.

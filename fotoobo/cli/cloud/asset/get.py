@@ -4,9 +4,10 @@ The FortiCloudAsset get commands
 
 import logging
 from pathlib import Path
-from typing import Any, Union
+from typing import Any, Optional
 
 import typer
+from typing_extensions import Annotated
 
 from fotoobo.exceptions.exceptions import GeneralError
 from fotoobo.helpers import cli_path
@@ -35,14 +36,16 @@ def callback(context: typer.Context) -> None:
 
 @app.command()
 def products(
-    output_file: Union[None, Path] = typer.Option(
-        None,
-        "--output",
-        "-o",
-        help=HELP_TEXT_OPTION_OUTPUT_FILE,
-        metavar="[output]",
-    ),
-    raw: bool = typer.Option(False, "-r", "--raw", help="Output raw data."),
+    output_file: Annotated[
+        Optional[Path],
+        typer.Option(
+            "--output",
+            "-o",
+            help=HELP_TEXT_OPTION_OUTPUT_FILE,
+            metavar="[output]",
+        ),
+    ] = None,
+    raw: Annotated[bool, typer.Option("-r", "--raw", help="Output raw data.")] = False,
 ) -> None:
     """
     Get the FortiCloud products from asset management.

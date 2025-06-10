@@ -4,8 +4,10 @@ The FortiGate get commands
 
 import logging
 from pathlib import Path
+from typing import Optional
 
 import typer
+from typing_extensions import Annotated
 
 from fotoobo.helpers.config import config
 from fotoobo.inventory.inventory import Inventory
@@ -17,25 +19,31 @@ log = logging.getLogger("fotoobo")
 
 @app.command(no_args_is_help=True)
 def check(
-    configuration: Path = typer.Argument(
-        ...,
-        help="The FortiGate configuration file or directory.",
-        metavar="[config]",
-        show_default=False,
-    ),
-    bundles: Path = typer.Argument(
-        ...,
-        help="Filename of the file containing the check bundles.",
-        metavar="[bundles]",
-        show_default=False,
-    ),
-    smtp_server: str = typer.Option(
-        None,
-        "--smtp",
-        help="The smtp configuration from the inventory.",
-        metavar="[server]",
-        show_default=False,
-    ),
+    configuration: Annotated[
+        Path,
+        typer.Argument(
+            help="The FortiGate configuration file or directory.",
+            metavar="[config]",
+            show_default=False,
+        ),
+    ],
+    bundles: Annotated[
+        Path,
+        typer.Argument(
+            help="Filename of the file containing the check bundles.",
+            metavar="[bundles]",
+            show_default=False,
+        ),
+    ],
+    smtp_server: Annotated[
+        Optional[str],
+        typer.Option(
+            "--smtp",
+            help="The smtp configuration from the inventory.",
+            metavar="[server]",
+            show_default=False,
+        ),
+    ] = None,
 ) -> None:
     """
     Check one or more FortiGate configuration files.
@@ -59,16 +67,19 @@ def check(
 
 @app.command(no_args_is_help=True)
 def get(
-    configuration: Path = typer.Argument(
-        ...,
-        help="The FortiGate configuration file or directory.",
-        metavar="[config]",
-        show_default=False,
-    ),
-    scope: str = typer.Argument(
-        ..., help="Scope of the configuration ('global' or 'vdom')", metavar="[scope]"
-    ),
-    path: str = typer.Argument("/", help="Configuration path", metavar="[path]"),
+    configuration: Annotated[
+        Path,
+        typer.Argument(
+            help="The FortiGate configuration file or directory.",
+            metavar="[config]",
+            show_default=False,
+        ),
+    ],
+    scope: Annotated[
+        str,
+        typer.Argument(help="Scope of the configuration ('global' or 'vdom')", metavar="[scope]"),
+    ],
+    path: Annotated[str, typer.Argument(help="Configuration path", metavar="[path]")] = "/",
 ) -> None:
     """Get configuration or parts of it from one or more FortiGate configuration files."""
     result = fgt.config.get(configuration, scope, path)
@@ -77,15 +88,18 @@ def get(
 
 @app.command(no_args_is_help=True)
 def info(
-    configuration: Path = typer.Argument(
-        ...,
-        help="The FortiGate configuration file or directory.",
-        metavar="[config]",
-        show_default=False,
-    ),
-    as_list: bool = typer.Option(
-        False, "--list", "-l", help="Print the result as a list instead of separate blocks."
-    ),
+    configuration: Annotated[
+        Path,
+        typer.Argument(
+            help="The FortiGate configuration file or directory.",
+            metavar="[config]",
+            show_default=False,
+        ),
+    ],
+    as_list: Annotated[
+        bool,
+        typer.Option("--list", "-l", help="Print the result as a list instead of separate blocks."),
+    ] = False,
 ) -> None:
     """
     Get the information from one or more FortiGate configuration files.

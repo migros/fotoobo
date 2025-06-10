@@ -5,6 +5,7 @@ The FortiAnalyzer get commands
 import logging
 
 import typer
+from typing_extensions import Annotated
 
 from fotoobo.helpers import cli_path
 from fotoobo.tools import faz
@@ -27,11 +28,13 @@ def callback(context: typer.Context) -> None:
 
 @app.command()
 def version(
-    host: str = typer.Argument(
-        "faz",
-        help="The FortiAnalyzer hostname to access (must be defined in the inventory).",
-        metavar="[host]",
-    )
+    host: Annotated[
+        str,
+        typer.Argument(
+            help="The FortiAnalyzer hostname to access (must be defined in the inventory).",
+            metavar="[host]",
+        ),
+    ] = "faz",
 ) -> None:
     """
     Get the FortiAnalyzer version.
