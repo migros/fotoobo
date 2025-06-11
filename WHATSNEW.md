@@ -1,3 +1,6 @@
+
+## [3.0.0] - 2025-06-11
+
 ### Added
 
 - Add FortiCloud module for FortiCloud Asset Management
