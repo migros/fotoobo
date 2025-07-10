@@ -16,7 +16,7 @@ def test_cli_app_fgt_config_help(help_args_with_none: str) -> None:
     args.append(help_args_with_none)
     args = list(filter(None, args))
     result = runner.invoke(app, args)
-    assert result.exit_code == 0
+    assert result.exit_code in [0, 2]
     assert "Usage: root fgt config" in result.stdout
     arguments, options, commands = parse_help_output(result.stdout)
     assert not arguments

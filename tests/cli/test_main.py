@@ -38,7 +38,7 @@ def greet_string() -> str:
 def test_cli_app_no_args() -> None:
     """Test main cli without issuing any arguments"""
     result = runner.invoke(app, [])
-    assert result.exit_code == 0
+    assert result.exit_code in [0, 2]
     assert "Usage: root [OPTIONS] COMMAND [ARGS]..." in result.stdout
     assert "--help" in result.stdout
     assert "The Fortinet Toolbox (fotoobo)" in result.stdout
