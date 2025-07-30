@@ -39,7 +39,7 @@ classifiers = [
 
 [tool.poetry.dependencies]
 python = ">=3.9.0, <4"
-typer = "~0.15" # Fixing it because of buggy no_args_is_help=True in Typer 0.16.0
+typer = "*"
 rich = "*"
 PyYAML = "*"
 requests = "*"
