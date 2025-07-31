@@ -1,22 +1,21 @@
 """
-Test the FortiAnalyzer class
+Test the FortiAnalyzer class.
 """
 
-# pylint: disable=no-member
 # mypy: disable-error-code=attr-defined
 
-from unittest.mock import MagicMock
+from unittest.mock import Mock
 
 import pytest
-import requests
-from _pytest.monkeypatch import MonkeyPatch
+from pytest import MonkeyPatch
 
 from fotoobo.fortinet.fortianalyzer import FortiAnalyzer
 from tests.helper import ResponseMock
 
 
 class TestFortiAnalyzer:
-    """Test the FortiAnalyzer class
+    """
+    Test the FortiAnalyzer class.
 
     Should this really be tested as FortiAnalyzer.get_version only calls super().get_version() which
     is the FortiManager.get_version method. This is tested in test_fortimanager.py.
@@ -34,14 +33,18 @@ class TestFortiAnalyzer:
             pytest.param({}, "", id="empty return_value"),
         ),
     )
-    def test_get_version(response: MagicMock, expected: str, monkeypatch: MonkeyPatch) -> None:
-        """Test FortiAnalyzer get version"""
-        monkeypatch.setattr(
-            "fotoobo.fortinet.fortinet.requests.Session.post",
-            MagicMock(return_value=ResponseMock(json=response, status_code=200)),
-        )
+    def test_get_version(response: Mock, expected: str, monkeypatch: MonkeyPatch) -> None:
+        """
+        Test FortiAnalyzer get version.
+        """
+
+        # Arrange
+        response_mock = Mock(return_value=ResponseMock(json=response, status_code=200))
+        monkeypatch.setattr("fotoobo.fortinet.fortinet.requests.Session.post", response_mock)
+
+        # Act & Assert
         assert FortiAnalyzer("host", "", "").get_version() == expected
-        requests.Session.post.assert_called_with(
+        response_mock.assert_called_with(
             "https://host:443/jsonrpc",
             headers=None,
             json={"method": "get", "params": [{"url": "/sys/status"}], "session": ""},

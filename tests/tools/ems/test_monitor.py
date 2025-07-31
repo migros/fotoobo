@@ -1,37 +1,24 @@
-"""Test ems tools monitor module"""
+"""
+Test ems tools monitor module.
+"""
 
-from pathlib import Path
-from unittest.mock import MagicMock
+from unittest.mock import Mock
 
-import pytest
-from _pytest.monkeypatch import MonkeyPatch
+from pytest import MonkeyPatch
 
 from fotoobo.tools.ems import monitor
 from tests.helper import ResponseMock
 
 
-@pytest.fixture(autouse=True)
-def inventory_file(monkeypatch: MonkeyPatch) -> None:
-    """Change inventory file in config to test inventory"""
-    monkeypatch.setattr(
-        "fotoobo.helpers.config.config.inventory_file", Path("tests/data/inventory.yaml")
-    )
-
-
-@pytest.fixture(autouse=True)
-def faz_login(monkeypatch: MonkeyPatch) -> None:
-    """Mock the FortiClient EMS Login to always return 200 without to really login"""
-    monkeypatch.setattr(
-        "fotoobo.fortinet.forticlientems.FortiClientEMS.login",
-        MagicMock(return_value=200),
-    )
-
-
 def test_connections(monkeypatch: MonkeyPatch) -> None:
-    """Test connections"""
+    """
+    Test connections.
+    """
+
+    # Arrange
     monkeypatch.setattr(
         "fotoobo.fortinet.forticlientems.FortiClientEMS.api",
-        MagicMock(
+        Mock(
             return_value=ResponseMock(
                 json={
                     "result": {"retval": 1, "message": None},
@@ -44,7 +31,11 @@ def test_connections(monkeypatch: MonkeyPatch) -> None:
             )
         ),
     )
+
+    # Act
     result = monitor.connections("test_ems")
+
+    # Assert
     data = result.get_result("test_ems")
     assert data["data"][0]["token"] == "offlineNominal"
     assert data["data"][0]["value"] == 1111
@@ -54,10 +45,14 @@ def test_connections(monkeypatch: MonkeyPatch) -> None:
 
 
 def test_endpoint_management_status(monkeypatch: MonkeyPatch) -> None:
-    """Test endpoint_management_status"""
+    """
+    Test endpoint_management_status.
+    """
+
+    # Arrange
     monkeypatch.setattr(
         "fotoobo.fortinet.forticlientems.FortiClientEMS.api",
-        MagicMock(
+        Mock(
             return_value=ResponseMock(
                 json={
                     "result": {"retval": 1, "message": None},
@@ -69,7 +64,11 @@ def test_endpoint_management_status(monkeypatch: MonkeyPatch) -> None:
             )
         ),
     )
+
+    # Act
     result = monitor.endpoint_management_status("test_ems")
+
+    # Assert
     data = result.get_result("test_ems")
     assert data["data"][0]["token"] == "managed"
     assert data["data"][0]["value"] == 1000
@@ -80,10 +79,14 @@ def test_endpoint_management_status(monkeypatch: MonkeyPatch) -> None:
 
 
 def test_endpoint_online_outofsync(monkeypatch: MonkeyPatch) -> None:
-    """Test endpoint_management_status"""
+    """
+    Test endpoint_management_status.
+    """
+
+    # Arrange
     monkeypatch.setattr(
         "fotoobo.fortinet.forticlientems.FortiClientEMS.api",
-        MagicMock(
+        Mock(
             return_value=ResponseMock(
                 json={
                     "result": {"retval": 1, "message": None},
@@ -95,16 +98,24 @@ def test_endpoint_online_outofsync(monkeypatch: MonkeyPatch) -> None:
             )
         ),
     )
+
+    # Act
     result = monitor.endpoint_online_outofsync("test_ems")
+
+    # Assert
     data = result.get_result("test_ems")
     assert data["fotoobo"]["outofsync"] == 999
 
 
 def test_endpoint_os_versions(monkeypatch: MonkeyPatch) -> None:
-    """Test endpoint_os_versions"""
+    """
+    Test endpoint_os_versions.
+    """
+
+    # Arrange
     monkeypatch.setattr(
         "fotoobo.fortinet.forticlientems.FortiClientEMS.api",
-        MagicMock(
+        Mock(
             return_value=ResponseMock(
                 json={
                     "result": {"retval": 1, "message": None},
@@ -116,7 +127,10 @@ def test_endpoint_os_versions(monkeypatch: MonkeyPatch) -> None:
             )
         ),
     )
+    # Act
     result = monitor.endpoint_os_versions("test_ems")
+
+    # Assert
     data = result.get_result("test_ems")
     assert data["fotoobo"]["fctversionwindows"] == 777
     assert data["fotoobo"]["fctversionmac"] == 777
@@ -124,15 +138,18 @@ def test_endpoint_os_versions(monkeypatch: MonkeyPatch) -> None:
 
 
 def test_system(monkeypatch: MonkeyPatch) -> None:
-    """Test system
+    """
+    Test system.
 
     To make it shorter this tests omits the following FortiClient EMS features in the mocked
     response:
         chromebook, ztna, epp, sase, ztna_user, epp_user, sase_user, vpn_only
     """
+
+    # Arrange
     monkeypatch.setattr(
         "fotoobo.fortinet.forticlientems.FortiClientEMS.api",
-        MagicMock(
+        Mock(
             return_value=ResponseMock(
                 json={
                     "result": {"retval": 1, "message": "System info retrieved successfully."},
@@ -162,22 +179,29 @@ def test_system(monkeypatch: MonkeyPatch) -> None:
             )
         ),
     )
+
+    # Act
     result = monitor.system("test_ems")
+
+    # Assert
     data = result.get_result("test_ems")
     assert data["name"] == "dummy_hostname"
     assert data["license"]["seats"]["fabric_agent"] == 1001
 
 
 def test_license(monkeypatch: MonkeyPatch) -> None:
-    """Test license
+    """
+    Test license.
 
     To make it shorter this tests omits the following FortiClient EMS features in the mocked
     response:
         chromebook, ztna, epp, sase, ztna_user, epp_user, sase_user, vpn_only
     """
+
+    # Arrange
     monkeypatch.setattr(
         "fotoobo.fortinet.forticlientems.FortiClientEMS.api",
-        MagicMock(
+        Mock(
             return_value=ResponseMock(
                 json={
                     "result": {"retval": 1, "message": None},
@@ -207,7 +231,11 @@ def test_license(monkeypatch: MonkeyPatch) -> None:
             )
         ),
     )
+
+    # Act
     result = monitor.license("test_ems")
+
+    # Assert
     data = result.get_result("test_ems")
     assert data["data"]["sn"] == "FCTEMS0000000000"
     assert data["fotoobo"]["fabric_agent_usage"] == 10

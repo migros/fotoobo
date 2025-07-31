@@ -1,11 +1,11 @@
 """
-Testing the cli fgt config check
+Testing the cli fgt config check.
 """
 
-from unittest.mock import MagicMock
+from unittest.mock import Mock
 
 import pytest
-from _pytest.monkeypatch import MonkeyPatch
+from pytest import MonkeyPatch
 from typer.testing import CliRunner
 
 from fotoobo.cli.main import app
@@ -16,11 +16,19 @@ runner = CliRunner()
 
 
 def test_cli_app_fgt_config_check_help(help_args_with_none: str) -> None:
-    """Test cli help for fgt config check help"""
+    """
+    Test cli help for fgt config check help.
+    """
+
+    # Arrange
     args = ["-c", "tests/fotoobo.yaml", "fgt", "config", "check"]
     args.append(help_args_with_none)
     args = list(filter(None, args))
+
+    # Act
     result = runner.invoke(app, args)
+
+    # Assert
     assert result.exit_code in [0, 2]
     assert "Usage: root fgt config check" in result.stdout
     arguments, options, commands = parse_help_output(result.stdout)
@@ -30,7 +38,11 @@ def test_cli_app_fgt_config_check_help(help_args_with_none: str) -> None:
 
 
 def test_cli_app_fgt_config_check() -> None:
-    """Test fgt config check"""
+    """
+    Test fgt config check.
+    """
+
+    # Act
     result = runner.invoke(
         app,
         [
@@ -43,14 +55,20 @@ def test_cli_app_fgt_config_check() -> None:
             "tests/data/fortigate_checks.yaml",
         ],
     )
+
+    # Assert
     assert result.exit_code == 0
 
 
 def test_cli_app_fgt_config_check_failed(monkeypatch: MonkeyPatch) -> None:
-    """Test fgt config check when there are failed checks"""
+    """
+    Test fgt config check when there are failed checks.
+    """
+
+    # Arrange
     monkeypatch.setattr(
         "fotoobo.tools.fgt.config.load_yaml_file",
-        MagicMock(
+        Mock(
             return_value=[
                 {
                     "type": "count",
@@ -61,6 +79,8 @@ def test_cli_app_fgt_config_check_failed(monkeypatch: MonkeyPatch) -> None:
             ]
         ),
     )
+
+    # Act
     result = runner.invoke(
         app,
         [
@@ -73,11 +93,17 @@ def test_cli_app_fgt_config_check_failed(monkeypatch: MonkeyPatch) -> None:
             "tests/data/fortigate_checks.yaml",
         ],
     )
+
+    # Assert
     assert result.exit_code == 0
 
 
 def test_cli_app_fgt_config_check_empty_config() -> None:
-    """Test cli options and commands for fgt config check with an empty configuration"""
+    """
+    Test cli options and commands for fgt config check with an empty configuration.
+    """
+
+    # Act
     result = runner.invoke(
         app,
         [
@@ -90,11 +116,17 @@ def test_cli_app_fgt_config_check_empty_config() -> None:
             "tests/data/fortigate_checks.yaml",
         ],
     )
+
+    # Assert
     assert result.exit_code == 0
 
 
 def test_cli_app_fgt_config_check_nonexist_config_file() -> None:
-    """Test cli options and commands for fgt config check with an nonexisting configuration"""
+    """
+    Test cli options and commands for fgt config check with an nonexisting configuration.
+    """
+
+    # Act & Assert
     with pytest.raises(GeneralWarning, match=r"There are no"):
         runner.invoke(
             app,
@@ -112,7 +144,11 @@ def test_cli_app_fgt_config_check_nonexist_config_file() -> None:
 
 
 def test_cli_app_fgt_config_check_dir() -> None:
-    """Test cli options and commands for fgt config check if a directory is given"""
+    """
+    Test cli options and commands for fgt config check if a directory is given.
+    """
+
+    # Act
     result = runner.invoke(
         app,
         [
@@ -125,11 +161,17 @@ def test_cli_app_fgt_config_check_dir() -> None:
             "tests/data/fortigate_checks.yaml",
         ],
     )
+
+    # Assert
     assert result.exit_code == 0
 
 
 def test_cli_app_fgt_config_check_invalid_bundle_file() -> None:
-    """Test cli options and commands for fgt config check with an invalid check bundle file"""
+    """
+    Test cli options and commands for fgt config check with an invalid check bundle file.
+    """
+
+    # Act & Assert
     with pytest.raises(GeneralError, match=r"No valid bundle file"):
         runner.invoke(
             app,

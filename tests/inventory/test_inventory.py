@@ -1,13 +1,13 @@
 """
-Test the inventory
+Test the inventory.
 """
 
 from pathlib import Path
 from typing import Any, Optional
-from unittest.mock import MagicMock
+from unittest.mock import Mock
 
 import pytest
-from _pytest.monkeypatch import MonkeyPatch
+from pytest import MonkeyPatch
 
 from fotoobo.exceptions import GeneralWarning
 from fotoobo.helpers.config import config
@@ -15,19 +15,25 @@ from fotoobo.inventory.inventory import Inventory
 
 
 class TestInventory:
-    """Test inventory"""
+    """
+    Test the Inventory class.
+    """
 
     @staticmethod
     def test_init(monkeypatch: MonkeyPatch) -> None:
         """
-        Test the __init__ method
+        Test the __init__ method.
 
         Here we load the test inventory from the tests directory and check if the resulting
         inventory has the correct entries and options. It also checks if the global options in the
         inventory file are written to the devices and if the options on devices have precedence over
         the global options.
         """
+
+        # Act
         inventory = Inventory(Path("tests/data/inventory.yaml"))
+
+        # Assert
         assert isinstance(inventory.assets, dict)
         assert len(inventory.assets) == 9
         assert len(inventory.fortigates) == 3
@@ -38,14 +44,18 @@ class TestInventory:
         assert inventory.assets["test_fgt_4"].token == ""
         assert "test_fgt_5" not in inventory.assets  # not in inventory due to no hostname
         assert inventory.assets["test_ems"].https_port == 443
+
+        # Arrange
         config.vault = {"dummy": "dummy"}
         monkeypatch.setattr(
-            "fotoobo.inventory.Inventory._load_data_from_vault", MagicMock(return_value=None)
+            "fotoobo.inventory.Inventory._load_data_from_vault", Mock(return_value=None)
         )
         monkeypatch.setattr(
-            "fotoobo.inventory.Inventory._replace_with_vault_data", MagicMock(return_value=None)
+            "fotoobo.inventory.Inventory._replace_with_vault_data", Mock(return_value=None)
         )
+        # Act
         inventory = Inventory(Path("tests/data/inventory.yaml"))
+        assert not inventory.vault_data
         config.vault = {}
 
     @staticmethod
@@ -62,9 +72,17 @@ class TestInventory:
         ),
     )
     def test_get(test_name: Optional[str], test_type: Optional[str], expected_len: int) -> None:
-        """Test Inventory.get()"""
+        """
+        Test Inventory.get() method.
+        """
+
+        # Arrange
         inventory = Inventory(Path("tests/data/inventory.yaml"))
+
+        # Act
         assets = inventory.get(test_name, test_type)
+
+        # Assert
         assert len(assets) == expected_len
 
     @staticmethod
@@ -81,8 +99,14 @@ class TestInventory:
         ),
     )
     def test_get_with_exception(test_name: Optional[str], test_type: Optional[str]) -> None:
-        """Test Inventory.get() when an exception is raised"""
+        """
+        Test Inventory.get() when an exception is raised.
+        """
+
+        # Arrange
         inventory = Inventory(Path("tests/data/inventory.yaml"))
+
+        # Act & Assert
         with pytest.raises(GeneralWarning, match=r"no asset of type .* and name .*"):
             inventory.get(test_name, test_type)
 
@@ -95,9 +119,17 @@ class TestInventory:
         ),
     )
     def test_get_item(test_type: Optional[str]) -> None:
-        """Test Inventory.get_item()"""
+        """
+        Test Inventory.get_item() method.
+        """
+
+        # Arrange
         inventory = Inventory(Path("tests/data/inventory.yaml"))
+
+        # Act
         asset = inventory.get_item("test_fgt_1", test_type)
+
+        # Assert
         assert asset.hostname == "dummy"
 
     @staticmethod
@@ -110,8 +142,14 @@ class TestInventory:
         ),
     )
     def test_get_item_with_exception(test_name: str, test_type: Optional[str]) -> None:
-        """Test Inventory.get_item() when an exception is raised"""
+        """
+        Test Inventory.get_item() when an exception is raised.
+        """
+
+        # Arrange
         inventory = Inventory(Path("tests/data/inventory.yaml"))
+
+        # Act & Assert
         with pytest.raises(GeneralWarning, match=r"Asset with name"):
             inventory.get_item(test_name, test_type)
 
@@ -130,8 +168,13 @@ class TestInventory:
     def test_load_data_from_vault(
         result: dict[str, Any], expected: dict[str, Any], monkeypatch: MonkeyPatch
     ) -> None:
-        """Test Inventory._laod_data_from_vault"""
-        monkeypatch.setattr("fotoobo.helpers.vault.Client.get_data", MagicMock(return_value=result))
+        """
+        Test Inventory._laod_data_from_vault.
+        """
+
+        # Arrange
+        get_data_mock = Mock(return_value=result)
+        monkeypatch.setattr("fotoobo.helpers.vault.Client.get_data", get_data_mock)
         inventory = Inventory(Path("tests/data/inventory.yaml"))
         vault_dict = {
             "url": "https://dummy_url",
@@ -141,17 +184,30 @@ class TestInventory:
             "secret_id": "dummy_secret_id",
         }
         assert inventory.vault_data == {}
+
+        # Act
         inventory._load_data_from_vault(vault_dict)  # pylint: disable=protected-access
+
+        # Assert
         assert inventory.vault_data == expected
+        get_data_mock.assert_called_once_with()
 
     @staticmethod
     def test_replace_with_vault_data() -> None:
-        """Test Inventory._replace_with_vault_data"""
+        """
+        Test Inventory._replace_with_vault_data() method.
+        """
+
+        # Arrange
         inventory = Inventory(Path("tests/data/inventory.yaml"))
         assert inventory.assets["test_fgt_1"].token == "dummy"
         inventory.assets["test_fgt_1"].token = "VAULT"
         inventory.assets["test_fgt_1"].dummy = "VAULT"
         inventory.vault_data = {"test_fgt_1": {"token": "secret_token"}}
+
+        # Act
         inventory._replace_with_vault_data()  # pylint: disable=protected-access
+
+        # Assert
         assert inventory.assets["test_fgt_1"].token == "secret_token"
         assert inventory.assets["test_fgt_1"].dummy == "VAULT"  # because key not in vault_data

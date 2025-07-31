@@ -1,14 +1,14 @@
 """
-Test the Hashicorp Vault helper
+Test the Hashicorp Vault helper.
 """
 
 from pathlib import Path
 from typing import Any
-from unittest.mock import MagicMock
+from unittest.mock import Mock
 
 import pytest
 import requests
-from _pytest.monkeypatch import MonkeyPatch
+from pytest import MonkeyPatch
 
 from fotoobo.exceptions.exceptions import GeneralError
 from fotoobo.helpers.vault import Client
@@ -16,7 +16,9 @@ from tests.helper import ResponseMock
 
 
 class TestClient:
-    """Test the Vault approle client class"""
+    """
+    Test the Vault approle client class.
+    """
 
     @staticmethod
     @pytest.mark.parametrize(
@@ -27,8 +29,14 @@ class TestClient:
         ),
     )
     def test_init(token_file: str, monkeypatch: MonkeyPatch) -> None:
-        """Test the Client __init__"""
-        monkeypatch.setattr("fotoobo.helpers.vault.Client.load_token", MagicMock(result=True))
+        """
+        Test the client __init__ method.
+        """
+
+        # Arrange
+        monkeypatch.setattr("fotoobo.helpers.vault.Client.load_token", Mock(result=True))
+
+        # Act
         client = Client(
             url="dummy_url",
             ssl_verify=False,
@@ -38,6 +46,8 @@ class TestClient:
             secret_id="dummy_secret_id",
             token_file=token_file,
         )
+
+        # Assert
         assert client.url == "dummy_url"
         if token_file:
             assert client.token_file == Path(token_file)
@@ -56,8 +66,14 @@ class TestClient:
         ),
     )
     def test_load_token(token_file: str, expect: str, monkeypatch: MonkeyPatch) -> None:
-        """Test the Client load_token"""
-        monkeypatch.setattr("fotoobo.helpers.vault.Client.validate_token", MagicMock(result=True))
+        """
+        Test the Client load_token.
+        """
+
+        # Arrange
+        monkeypatch.setattr("fotoobo.helpers.vault.Client.validate_token", Mock(result=True))
+
+        # Act
         client = Client(
             url="dummy_url",
             namespace="dummy_namespace",
@@ -66,6 +82,8 @@ class TestClient:
             secret_id="dummy_secret_id",
             token_file=token_file,
         )
+
+        # Assert
         assert client.token == expect
 
     @staticmethod
@@ -76,9 +94,13 @@ class TestClient:
             pytest.param("", False, id="no token"),
         ),
     )
-    def test_save_token(token: str, is_file: bool, temp_dir: Path) -> None:
-        """Test the Client save_token"""
-        token_file: Path = temp_dir / "vault_token.key"
+    def test_save_token(token: str, is_file: bool, function_dir: Path) -> None:
+        """
+        Test the Client save_token.
+        """
+
+        # Arrange
+        token_file: Path = function_dir / "vault_token.key"
         token_file.unlink(missing_ok=True)
         client = Client(
             url="dummy_url",
@@ -90,6 +112,8 @@ class TestClient:
         assert client.token == ""
         client.token = token
         client.token_file = token_file
+
+        # Act & Assert
         assert client.save_token() == is_file
         assert token_file.is_file() == is_file
 
@@ -115,8 +139,12 @@ class TestClient:
         ),
     )
     def test_validate_token(response: ResponseMock, valid: bool, monkeypatch: MonkeyPatch) -> None:
-        """Test the Client validate_token"""
-        monkeypatch.setattr("fotoobo.helpers.vault.requests.get", MagicMock(return_value=response))
+        """
+        Test the Client validate_token.
+        """
+
+        # Arrange
+        monkeypatch.setattr("fotoobo.helpers.vault.requests.get", Mock(return_value=response))
         client = Client(
             url="https://dummy_url",
             namespace="dummy_namespace",
@@ -126,6 +154,8 @@ class TestClient:
             token_ttl_limit=42,
         )
         client.token = "dummy_token"
+
+        # Act & Assert
         assert client.validate_token() == valid
         assert bool(client.token) == valid
 
@@ -134,17 +164,21 @@ class TestClient:
         "mock",
         (
             pytest.param(
-                MagicMock(side_effect=requests.exceptions.SSLError("dummy")),
+                Mock(side_effect=requests.exceptions.SSLError("dummy")),
                 id="SSLError",
             ),
             pytest.param(
-                MagicMock(side_effect=requests.exceptions.ConnectionError("dummy")),
+                Mock(side_effect=requests.exceptions.ConnectionError("dummy")),
                 id="ConnectionError",
             ),
         ),
     )
     def test_validate_token_exception(mock: ResponseMock, monkeypatch: MonkeyPatch) -> None:
-        """Test the Client validate_token with exception"""
+        """
+        Test the Client validate_token with exception.
+        """
+
+        # Arrange
         monkeypatch.setattr("fotoobo.helpers.vault.requests.get", mock)
         client = Client(
             url="https://dummy_url",
@@ -154,6 +188,8 @@ class TestClient:
             secret_id="dummy_secret_id",
         )
         client.token = "dummy_token"
+
+        # Act & Assert
         assert client.validate_token() is False
         assert client.token == ""
 
@@ -174,12 +210,16 @@ class TestClient:
         ),
     )
     def test_get_token(
-        response: ResponseMock, token: str, monkeypatch: MonkeyPatch, temp_dir: Path
+        response: ResponseMock, token: str, monkeypatch: MonkeyPatch, function_dir: Path
     ) -> None:
-        """Test the Client get_token"""
-        monkeypatch.setattr("fotoobo.helpers.vault.Client.load_token", MagicMock(result=True))
-        monkeypatch.setattr("fotoobo.helpers.vault.requests.post", MagicMock(return_value=response))
-        token_file: Path = temp_dir / "vault_token.key"
+        """
+        Test the Client get_token.
+        """
+
+        # Arrange
+        monkeypatch.setattr("fotoobo.helpers.vault.Client.load_token", Mock(result=True))
+        monkeypatch.setattr("fotoobo.helpers.vault.requests.post", Mock(return_value=response))
+        token_file: Path = function_dir / "vault_token.key"
         token_file.unlink(missing_ok=True)
         client = Client(
             url="https://dummy_url",
@@ -190,6 +230,8 @@ class TestClient:
             token_file=token_file.as_posix(),
         )
         client.token = "dummy_token"
+
+        # Act & Assert
         assert client.get_token() == bool(token)
         assert client.token == token
         if token:
@@ -200,17 +242,21 @@ class TestClient:
         "mock",
         (
             pytest.param(
-                MagicMock(side_effect=requests.exceptions.SSLError("dummy")),
+                Mock(side_effect=requests.exceptions.SSLError("dummy")),
                 id="SSLError",
             ),
             pytest.param(
-                MagicMock(side_effect=requests.exceptions.ConnectionError("dummy")),
+                Mock(side_effect=requests.exceptions.ConnectionError("dummy")),
                 id="ConnectionError",
             ),
         ),
     )
     def test_get_token_exception(mock: ResponseMock, monkeypatch: MonkeyPatch) -> None:
-        """Test the Client get_token with exception"""
+        """
+        Test the Client get_token with exception.
+        """
+
+        # Arrange
         monkeypatch.setattr("fotoobo.helpers.vault.requests.post", mock)
         client = Client(
             url="https://dummy_url",
@@ -220,6 +266,8 @@ class TestClient:
             secret_id="dummy_secret_id",
         )
         client.token = "dummy_token"
+
+        # Act & Assert
         assert client.get_token() is False
         assert client.token == ""
 
@@ -272,9 +320,13 @@ class TestClient:
     def test_get_data(
         response: ResponseMock, data: dict[str, Any], monkeypatch: MonkeyPatch
     ) -> None:
-        """Test the Client get_data"""
-        monkeypatch.setattr("fotoobo.helpers.vault.Client.get_token", MagicMock(return_value=True))
-        monkeypatch.setattr("fotoobo.helpers.vault.requests.get", MagicMock(return_value=response))
+        """
+        Test the Client get_data.
+        """
+
+        # Arrange
+        monkeypatch.setattr("fotoobo.helpers.vault.Client.get_token", Mock(return_value=True))
+        monkeypatch.setattr("fotoobo.helpers.vault.requests.get", Mock(return_value=response))
         client = Client(
             url="https://dummy_url",
             namespace="dummy_namespace",
@@ -282,14 +334,20 @@ class TestClient:
             role_id="dummy_role_id",
             secret_id="dummy_secret_id",
         )
+
+        # Act & Assert
         assert client.get_data() == data
 
     @staticmethod
     def test_get_data_no_token(monkeypatch: MonkeyPatch) -> None:
-        """Test the Client get_data when no token could be retrieved"""
-        monkeypatch.setattr("fotoobo.helpers.vault.Client.get_token", MagicMock(return_value=False))
+        """
+        Test the Client get_data when no token could be retrieved.
+        """
+
+        # Arrange
+        monkeypatch.setattr("fotoobo.helpers.vault.Client.get_token", Mock(return_value=False))
         monkeypatch.setattr(
-            "fotoobo.helpers.vault.requests.get", MagicMock(return_value=ResponseMock(ok=True))
+            "fotoobo.helpers.vault.requests.get", Mock(return_value=ResponseMock(ok=True))
         )
         client = Client(
             url="https://dummy_url",
@@ -298,5 +356,7 @@ class TestClient:
             role_id="dummy_role_id",
             secret_id="dummy_secret_id",
         )
+
+        # Act & Assert
         with pytest.raises(GeneralError, match=r"Unable to get vault token"):
             client.get_data()

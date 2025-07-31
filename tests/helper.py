@@ -1,15 +1,17 @@
 """
-This module defines some helpers for the test package. These may be used by every test package.
+This module defines some global helpers for the test package.
 """
 
 from typing import Any
-from unittest.mock import MagicMock
+from unittest.mock import Mock
 
 from requests.exceptions import HTTPError
 
 
 class ResponseMock:  # pylint: disable=too-many-instance-attributes
-    """This class mocks a http response object."""
+    """
+    This class mocks a http response object.
+    """
 
     def __init__(self, **kwargs: Any) -> None:
         """
@@ -26,15 +28,15 @@ class ResponseMock:  # pylint: disable=too-many-instance-attributes
         """
         self.content = kwargs.get("content", "")
         self.headers = kwargs.get("headers", [])
-        self.json = MagicMock(return_value=kwargs.get("json", None))
+        self.json = Mock(return_value=kwargs.get("json", None))
         self.ok = kwargs.get("ok", True)
-        self.raise_for_status = MagicMock()
+        self.raise_for_status = Mock()
         self.reason = kwargs.get("reason", "")
         self.status_code = kwargs.get("status_code", 444)
         self.text = kwargs.get("text", "")
 
         if self.status_code >= 300:
-            self.raise_for_status = MagicMock(
+            self.raise_for_status = Mock(
                 side_effect=HTTPError("mocked HTTPError", response=self)  # type: ignore
             )
 
@@ -43,7 +45,7 @@ def parse_help_output(  # pylint: disable=too-many-branches
     output: str,
 ) -> tuple[dict[str, str], set[str], dict[str, str]]:
     """
-    Parse the output of the cli help and return the available arguments, options and commands
+    Parse the output of the cli help and return the available arguments, options and commands.
 
     Args:
         output: the help output from the cli

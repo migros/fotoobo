@@ -1,29 +1,35 @@
 """
-Test the FortiManager class
+Test the FortiManager class.
 """
 
 # pylint: disable=no-member, too-many-lines
 # mypy: disable-error-code=attr-defined
 
 from typing import Any
-from unittest.mock import MagicMock
+from unittest.mock import Mock
 
 import pytest
-import requests
-from _pytest.monkeypatch import MonkeyPatch
+from pytest import MonkeyPatch
 
 from fotoobo.exceptions import APIError
 from fotoobo.fortinet.fortimanager import FortiManager
 from tests.helper import ResponseMock
 
 
-class TestFortiManager:  # pylint: disable=too-many-public-methods
-    """Test the FortiManager class"""
+class TestFortiManager:
+    """
+    Test the FortiManager class.
+    """
+
+    # pylint: disable=too-many-public-methods
 
     @staticmethod
-    def _response_mock_api_ok() -> MagicMock:
-        """Fixture to return a mocked response for API ok"""
-        return MagicMock(
+    def _response_mock_api_ok() -> Mock:
+        """
+        Fixture to return a mocked response for API ok.
+        """
+
+        return Mock(
             return_value=ResponseMock(
                 json={"result": [{"data": {}, "status": {"code": 0, "message": "OK"}}]},
                 status_code=200,
@@ -33,7 +39,10 @@ class TestFortiManager:  # pylint: disable=too-many-public-methods
     @staticmethod
     @pytest.fixture
     def api_delete_ok(monkeypatch: MonkeyPatch) -> None:
-        """Fixture to patch the FortiManager.api_delete() method"""
+        """
+        Fixture to patch the FortiManager.api_delete() method.
+        """
+
         monkeypatch.setattr(
             "fotoobo.fortinet.fortimanager.FortiManager.api_delete",
             TestFortiManager._response_mock_api_ok(),
@@ -42,7 +51,10 @@ class TestFortiManager:  # pylint: disable=too-many-public-methods
     @staticmethod
     @pytest.fixture
     def api_get_ok(monkeypatch: MonkeyPatch) -> None:
-        """Fixture to patch the FortiManager.api_get() method"""
+        """
+        Fixture to patch the FortiManager.api_get() method.
+        """
+
         monkeypatch.setattr(
             "fotoobo.fortinet.fortimanager.FortiManager.api_get",
             TestFortiManager._response_mock_api_ok(),
@@ -50,27 +62,31 @@ class TestFortiManager:  # pylint: disable=too-many-public-methods
 
     @staticmethod
     def test_api_delete(monkeypatch: MonkeyPatch) -> None:
-        """Test api_delete"""
+        """
+        Test api_delete.
+        """
+
+        # Arrange
         url: str = "/pm/config/adom/dummy/obj/firewall/address/dummy"
-        monkeypatch.setattr(
-            "fotoobo.fortinet.fortinet.requests.Session.post",
-            MagicMock(
-                return_value=ResponseMock(
-                    json={
-                        "result": [
-                            {
-                                "status": {"code": 0, "message": "OK"},
-                                "url": url,
-                            }
-                        ]
-                    },
-                    status_code=200,
-                )
-            ),
+        post_mock = Mock(
+            return_value=ResponseMock(
+                json={
+                    "result": [
+                        {
+                            "status": {"code": 0, "message": "OK"},
+                            "url": url,
+                        }
+                    ]
+                },
+                status_code=200,
+            )
         )
+        monkeypatch.setattr("fotoobo.fortinet.fortinet.requests.Session.post", post_mock)
         fmg = FortiManager("host", "", "")
+
+        # Act & Assert
         assert fmg.api_delete(url).json()["result"][0]["status"]["code"] == 0
-        requests.Session.post.assert_called_with(
+        post_mock.assert_called_with(
             "https://host:443/jsonrpc",
             headers=None,
             json={"method": "delete", "params": [{"url": url}], "session": ""},
@@ -88,29 +104,31 @@ class TestFortiManager:  # pylint: disable=too-many-public-methods
         ),
     )
     def test_api_get(with_params: bool, monkeypatch: MonkeyPatch) -> None:
-        """test api_get"""
+        """
+        Test api_get method.
+        """
+
+        # Arrange
         url: str = "/pm/config/global/obj/firewall/address/dummy"
         params = {"option": ["scope member"]}
-        monkeypatch.setattr(
-            "fotoobo.fortinet.fortinet.requests.Session.post",
-            MagicMock(
-                return_value=ResponseMock(
-                    json={
-                        "result": [
-                            {
-                                "data": {
-                                    "name": "dummy",
-                                    "uuid": "88888888-4444-4444-4444-121212121212",
-                                },
-                                "status": {"code": 0, "message": "OK"},
-                                "url": url,
-                            }
-                        ]
-                    },
-                    status_code=200,
-                )
-            ),
+        post_mock = Mock(
+            return_value=ResponseMock(
+                json={
+                    "result": [
+                        {
+                            "data": {
+                                "name": "dummy",
+                                "uuid": "88888888-4444-4444-4444-121212121212",
+                            },
+                            "status": {"code": 0, "message": "OK"},
+                            "url": url,
+                        }
+                    ]
+                },
+                status_code=200,
+            )
         )
+        monkeypatch.setattr("fotoobo.fortinet.fortinet.requests.Session.post", post_mock)
         fmg = FortiManager("host", "", "")
         expected_call = (
             ["https://host:443/jsonrpc"],
@@ -130,43 +148,49 @@ class TestFortiManager:  # pylint: disable=too-many-public-methods
                 "verify": True,
             },
         )
+
+        # Act & Assert
         if with_params:
             assert fmg.api_get(url, params).json()["result"][0]["status"]["code"] == 0
             expected_call[1]["json"]["params"][0] = {  # type: ignore
                 **expected_call[1]["json"]["params"][0],  # type: ignore
                 **{"option": ["scope member"]},
             }
-            requests.Session.post.assert_called_with(
+            post_mock.assert_called_with(
                 *expected_call[0],
                 **expected_call[1],
             )
 
         else:
             assert fmg.api_get(url).json()["result"][0]["status"]["code"] == 0
-            requests.Session.post.assert_called_with(*expected_call[0], **expected_call[1])
+            post_mock.assert_called_with(*expected_call[0], **expected_call[1])
 
     @staticmethod
     def test_assign_all_objects(monkeypatch: MonkeyPatch) -> None:
-        """Test assign_all_objects"""
-        monkeypatch.setattr(
-            "fotoobo.fortinet.fortinet.requests.Session.post",
-            MagicMock(
-                return_value=ResponseMock(
-                    json={
-                        "result": [
-                            {
-                                "data": {"task": 111},
-                                "status": {"code": 0, "message": "OK"},
-                                "url": "/securityconsole/assign/package",
-                            }
-                        ]
-                    },
-                    status_code=200,
-                )
-            ),
+        """
+        Test assign_all_objects.
+        """
+
+        # Arrange
+        post_mock = Mock(
+            return_value=ResponseMock(
+                json={
+                    "result": [
+                        {
+                            "data": {"task": 111},
+                            "status": {"code": 0, "message": "OK"},
+                            "url": "/securityconsole/assign/package",
+                        }
+                    ]
+                },
+                status_code=200,
+            )
         )
+        monkeypatch.setattr("fotoobo.fortinet.fortinet.requests.Session.post", post_mock)
+
+        # Act & Assert
         assert FortiManager("host", "", "").assign_all_objects("dummy_adom", "dummy_policy") == 111
-        requests.Session.post.assert_called_with(
+        post_mock.assert_called_with(
             "https://host:443/jsonrpc",
             headers=None,
             json={
@@ -190,16 +214,20 @@ class TestFortiManager:  # pylint: disable=too-many-public-methods
 
     @staticmethod
     def test_assign_all_objects_http_404(monkeypatch: MonkeyPatch) -> None:
-        """Test assign_all_objects with http error 404"""
-        monkeypatch.setattr(
-            "fotoobo.fortinet.fortinet.requests.Session.post",
-            MagicMock(return_value=ResponseMock(json={}, status_code=404)),
-        )
+        """
+        Test assign_all_objects with http error 404.
+        """
+
+        # Arrange
+        post_mock = Mock(return_value=ResponseMock(json={}, status_code=404))
+        monkeypatch.setattr("fotoobo.fortinet.fortinet.requests.Session.post", post_mock)
+
+        # Act & Assert
         with pytest.raises(APIError) as err:
             FortiManager("host", "", "").assign_all_objects("dummy_adom", "dummy_policy")
 
         assert "HTTP/404 Resource Not Found" in str(err.value)
-        requests.Session.post.assert_called_with(
+        post_mock.assert_called_with(
             "https://host:443/jsonrpc",
             headers=None,
             json={
@@ -223,26 +251,30 @@ class TestFortiManager:  # pylint: disable=too-many-public-methods
 
     @staticmethod
     def test_assign_all_objects_status_not_ok(monkeypatch: MonkeyPatch) -> None:
-        """Test assign_all_objects with status code != 0"""
-        monkeypatch.setattr(
-            "fotoobo.fortinet.fortinet.requests.Session.post",
-            MagicMock(
-                return_value=ResponseMock(
-                    json={
-                        "result": [
-                            {
-                                "data": {},
-                                "status": {"code": 22, "message": "NOT-OK"},
-                                "url": "/securityconsole/assign/package",
-                            }
-                        ]
-                    },
-                    status_code=200,
-                )
-            ),
+        """
+        Test assign_all_objects with status code != 0.
+        """
+
+        # Arrange
+        post_mock = Mock(
+            return_value=ResponseMock(
+                json={
+                    "result": [
+                        {
+                            "data": {},
+                            "status": {"code": 22, "message": "NOT-OK"},
+                            "url": "/securityconsole/assign/package",
+                        }
+                    ]
+                },
+                status_code=200,
+            )
         )
+        monkeypatch.setattr("fotoobo.fortinet.fortinet.requests.Session.post", post_mock)
+
+        # Act & Assert
         assert FortiManager("host", "", "").assign_all_objects("adom1,adom2", "policy1") == 0
-        requests.Session.post.assert_called_with(
+        post_mock.assert_called_with(
             "https://host:443/jsonrpc",
             headers=None,
             json={
@@ -270,8 +302,14 @@ class TestFortiManager:  # pylint: disable=too-many-public-methods
     @staticmethod
     @pytest.mark.usefixtures("api_delete_ok")
     def test_delete_adom_address() -> None:
-        """Test fmg delete_adom_address"""
+        """
+        Test fmg delete_adom_address.
+        """
+
+        # Arrange
         fmg = FortiManager("host", "", "")
+
+        # Act & Assert
         assert fmg.delete_adom_address("dummy", "dummy")["status"]["code"] == 0
         FortiManager.api_delete.assert_called_with(
             "/pm/config/adom/dummy/obj/firewall/address/dummy"
@@ -280,16 +318,28 @@ class TestFortiManager:  # pylint: disable=too-many-public-methods
     @staticmethod
     @pytest.mark.usefixtures("api_delete_ok")
     def test_delete_adom_address_dry() -> None:
-        """Test fmg delete_adom_address with dry-run"""
+        """
+        Test fmg delete_adom_address with dry-run.
+        """
+
+        # Arrange
         fmg = FortiManager("host", "", "")
+
+        # Act & Assert
         assert fmg.delete_adom_address("dummy", "dummy", dry=True) == {}
         FortiManager.api_delete.assert_not_called()
 
     @staticmethod
     @pytest.mark.usefixtures("api_delete_ok")
     def test_delete_adom_address_group() -> None:
-        """Test fmg delete_adom_address_group"""
+        """
+        Test fmg delete_adom_address_group.
+        """
+
+        # Arrange
         fmg = FortiManager("host", "", "")
+
+        # Act & Assert
         assert fmg.delete_adom_address_group("dummy", "dummy")["status"]["code"] == 0
         FortiManager.api_delete.assert_called_with(
             "/pm/config/adom/dummy/obj/firewall/addrgrp/dummy"
@@ -298,16 +348,28 @@ class TestFortiManager:  # pylint: disable=too-many-public-methods
     @staticmethod
     @pytest.mark.usefixtures("api_delete_ok")
     def test_delete_adom_address_group_dry() -> None:
-        """Test fmg delete_adom_address_group with dry-run"""
+        """
+        Test fmg delete_adom_address_group with dry-run.
+        """
+
+        # Arrange
         fmg = FortiManager("host", "", "")
+
+        # Act & Assert
         assert fmg.delete_adom_address_group("dummy", "dummy", dry=True) == {}
         FortiManager.api_delete.assert_not_called()
 
     @staticmethod
     @pytest.mark.usefixtures("api_delete_ok")
     def test_delete_adom_service() -> None:
-        """Test fmg delete_adom_service"""
+        """
+        Test fmg delete_adom_service.
+        """
+
+        # Arrange
         fmg = FortiManager("host", "", "")
+
+        # Act & Assert
         assert fmg.delete_adom_service("dummy", "dummy")["status"]["code"] == 0
         FortiManager.api_delete.assert_called_with(
             "/pm/config/adom/dummy/obj/firewall/service/custom/dummy"
@@ -316,16 +378,28 @@ class TestFortiManager:  # pylint: disable=too-many-public-methods
     @staticmethod
     @pytest.mark.usefixtures("api_delete_ok")
     def test_delete_adom_service_dry() -> None:
-        """Test fmg delete_adom_service with dry-run"""
+        """
+        Test fmg delete_adom_service with dry-run.
+        """
+
+        # Arrange
         fmg = FortiManager("host", "", "")
+
+        # Act & Assert
         assert fmg.delete_adom_service("dummy", "dummy", dry=True) == {}
         FortiManager.api_delete.assert_not_called()
 
     @staticmethod
     @pytest.mark.usefixtures("api_delete_ok")
     def test_delete_adom_service_group() -> None:
-        """Test fmg delete_adom_service_group"""
+        """
+        Test fmg delete_adom_service_group.
+        """
+
+        # Arrange
         fmg = FortiManager("host", "", "")
+
+        # Act & Assert
         assert fmg.delete_adom_service_group("dummy", "dummy")["status"]["code"] == 0
         FortiManager.api_delete.assert_called_with(
             "/pm/config/adom/dummy/obj/firewall/service/group/dummy"
@@ -334,8 +408,14 @@ class TestFortiManager:  # pylint: disable=too-many-public-methods
     @staticmethod
     @pytest.mark.usefixtures("api_delete_ok")
     def test_delete_adom_service_group_dry() -> None:
-        """Test fmg delete_adom_service_group with dry-run"""
+        """
+        Test fmg delete_adom_service_group with dry-run.
+        """
+
+        # Arrange
         fmg = FortiManager("host", "", "")
+
+        # Act & Assert
         assert fmg.delete_adom_service_group("dummy", "dummy", dry=True) == {}
         FortiManager.api_delete.assert_not_called()
 
@@ -368,10 +448,14 @@ class TestFortiManager:  # pylint: disable=too-many-public-methods
         delete_adom_address_status: dict[str, Any],
         monkeypatch: MonkeyPatch,
     ) -> None:
-        """Test fmg delete_global_address"""
+        """
+        Test fmg delete_global_address.
+        """
+
+        # Arrange
         monkeypatch.setattr(
             "fotoobo.fortinet.fortimanager.FortiManager.get_global_address",
-            MagicMock(
+            Mock(
                 return_value={
                     "data": get_global_address_data,
                     "status": get_global_address_status,
@@ -380,16 +464,24 @@ class TestFortiManager:  # pylint: disable=too-many-public-methods
         )
         monkeypatch.setattr(
             "fotoobo.fortinet.fortimanager.FortiManager.delete_adom_address",
-            MagicMock(return_value={"status": delete_adom_address_status}),
+            Mock(return_value={"status": delete_adom_address_status}),
         )
         fmg = FortiManager("host", "", "")
+
+        # Act & Assert
         assert fmg.delete_global_address("dummy")["status"]["code"] in [0, 7, 601]
 
     @staticmethod
     @pytest.mark.usefixtures("api_get_ok", "api_delete_ok")
     def test_delete_global_address_dry() -> None:
-        """Test fmg delete_global_address with dry-run"""
+        """
+        Test fmg delete_global_address with dry-run.
+        """
+
+        # Arrange
         fmg = FortiManager("host", "", "")
+
+        # Act & Assert
         assert fmg.delete_global_address("dummy", dry=True) == {}
         FortiManager.api_delete.assert_not_called()
 
@@ -422,10 +514,14 @@ class TestFortiManager:  # pylint: disable=too-many-public-methods
         delete_adom_address_group_status: dict[str, Any],
         monkeypatch: MonkeyPatch,
     ) -> None:
-        """Test fmg delete_global_address_group"""
+        """
+        Test fmg delete_global_address_group.
+        """
+
+        # Arrange
         monkeypatch.setattr(
             "fotoobo.fortinet.fortimanager.FortiManager.get_global_address_group",
-            MagicMock(
+            Mock(
                 return_value={
                     "data": get_global_address_group_data,
                     "status": get_global_address_group_status,
@@ -434,16 +530,24 @@ class TestFortiManager:  # pylint: disable=too-many-public-methods
         )
         monkeypatch.setattr(
             "fotoobo.fortinet.fortimanager.FortiManager.delete_adom_address_group",
-            MagicMock(return_value={"status": delete_adom_address_group_status}),
+            Mock(return_value={"status": delete_adom_address_group_status}),
         )
         fmg = FortiManager("host", "", "")
+
+        # Act & Assert
         assert fmg.delete_global_address_group("dummy")["status"]["code"] in [0, 7, 601]
 
     @staticmethod
     @pytest.mark.usefixtures("api_get_ok", "api_delete_ok")
     def test_delete_global_address_group_dry() -> None:
-        """Test fmg delete_global_address_group with dry-run"""
+        """
+        Test fmg delete_global_address_group with dry-run.
+        """
+
+        # Arrange
         fmg = FortiManager("host", "", "")
+
+        # Act & Assert
         assert fmg.delete_global_address_group("dummy", dry=True) == {}
         FortiManager.api_delete.assert_not_called()
 
@@ -476,10 +580,14 @@ class TestFortiManager:  # pylint: disable=too-many-public-methods
         delete_adom_service_status: dict[str, Any],
         monkeypatch: MonkeyPatch,
     ) -> None:
-        """Test fmg delete_global_service"""
+        """
+        Test fmg delete_global_service.
+        """
+
+        # Arrange
         monkeypatch.setattr(
             "fotoobo.fortinet.fortimanager.FortiManager.get_global_service",
-            MagicMock(
+            Mock(
                 return_value={
                     "data": get_global_service_data,
                     "status": get_global_service_status,
@@ -488,16 +596,24 @@ class TestFortiManager:  # pylint: disable=too-many-public-methods
         )
         monkeypatch.setattr(
             "fotoobo.fortinet.fortimanager.FortiManager.delete_adom_service",
-            MagicMock(return_value={"status": delete_adom_service_status}),
+            Mock(return_value={"status": delete_adom_service_status}),
         )
         fmg = FortiManager("host", "", "")
+
+        # Act & Assert
         assert fmg.delete_global_service("dummy")["status"]["code"] in [0, 7, 601]
 
     @staticmethod
     @pytest.mark.usefixtures("api_get_ok", "api_delete_ok")
     def test_delete_global_service_dry() -> None:
-        """Test fmg delete_global_service with dry-run"""
+        """
+        Test fmg delete_global_service with dry-run.
+        """
+
+        # Arrange
         fmg = FortiManager("host", "", "")
+
+        # Act & Assert
         assert fmg.delete_global_service("dummy", dry=True) == {}
         FortiManager.api_delete.assert_not_called()
 
@@ -530,10 +646,14 @@ class TestFortiManager:  # pylint: disable=too-many-public-methods
         delete_adom_service_group_status: dict[str, Any],
         monkeypatch: MonkeyPatch,
     ) -> None:
-        """Test fmg delete_global_service_group"""
+        """
+        Test fmg delete_global_service_group.
+        """
+
+        # Arrange
         monkeypatch.setattr(
             "fotoobo.fortinet.fortimanager.FortiManager.get_global_service_group",
-            MagicMock(
+            Mock(
                 return_value={
                     "data": get_global_service_group_data,
                     "status": get_global_service_group_status,
@@ -542,32 +662,44 @@ class TestFortiManager:  # pylint: disable=too-many-public-methods
         )
         monkeypatch.setattr(
             "fotoobo.fortinet.fortimanager.FortiManager.delete_adom_service_group",
-            MagicMock(return_value={"status": delete_adom_service_group_status}),
+            Mock(return_value={"status": delete_adom_service_group_status}),
         )
         fmg = FortiManager("host", "", "")
+
+        # Act & Assert
         assert fmg.delete_global_service_group("dummy")["status"]["code"] in [0, 7, 601]
 
     @staticmethod
     @pytest.mark.usefixtures("api_get_ok", "api_delete_ok")
     def test_delete_global_service_group_dry() -> None:
-        """Test fmg delete_global_service_group with dry-run"""
+        """
+        Test fmg delete_global_service_group with dry-run.
+        """
+
+        # Arrange
         fmg = FortiManager("host", "", "")
+
+        # Act & Assert
         assert fmg.delete_global_service_group("dummy", dry=True) == {}
         FortiManager.api_delete.assert_not_called()
 
     @staticmethod
     def test_get_adoms(monkeypatch: MonkeyPatch) -> None:
-        """Test fmg get adoms"""
-        monkeypatch.setattr(
-            "fotoobo.fortinet.fortinet.requests.Session.post",
-            MagicMock(
-                return_value=ResponseMock(
-                    json={"result": [{"data": [{"name": "dummy"}]}]}, status_code=200
-                )
-            ),
+        """
+        Test fmg get adoms.
+        """
+
+        # Arrange
+        post_mock = Mock(
+            return_value=ResponseMock(
+                json={"result": [{"data": [{"name": "dummy"}]}]}, status_code=200
+            )
         )
+        monkeypatch.setattr("fotoobo.fortinet.fortinet.requests.Session.post", post_mock)
+
+        # Act & Assert
         assert FortiManager("host", "", "").get_adoms() == [{"name": "dummy"}]
-        requests.Session.post.assert_called_with(
+        post_mock.assert_called_with(
             "https://host:443/jsonrpc",
             headers=None,
             json={"method": "get", "params": [{"url": "/dvmdb/adom"}], "session": ""},
@@ -578,13 +710,20 @@ class TestFortiManager:  # pylint: disable=too-many-public-methods
 
     @staticmethod
     def test_get_adoms_http_error(monkeypatch: MonkeyPatch) -> None:
-        """Test fmg get adoms with a status != 200"""
+        """
+        Test fmg get adoms with a status != 200.
+        """
+
+        # Arrange
         monkeypatch.setattr(
             "fotoobo.fortinet.fortinet.requests.Session.post",
-            MagicMock(return_value=ResponseMock(json={}, status_code=400)),
+            Mock(return_value=ResponseMock(json={}, status_code=400)),
         )
+
+        # Act & Assert
         with pytest.raises(APIError) as err:
             FortiManager("", "", "").get_adoms()
+
         assert "HTTP/400 Bad Request" in str(err.value)
 
     @staticmethod
@@ -597,8 +736,14 @@ class TestFortiManager:  # pylint: disable=too-many-public-methods
         ),
     )
     def test_get_global_address(scope_member: bool) -> None:
-        """Test fmg get_global_address"""
+        """
+        Test fmg get_global_address.
+        """
+
+        # Arrange
         fmg = FortiManager("host", "", "")
+
+        # Act & Assert
         assert fmg.get_global_address("dummy", scope_member=scope_member)["status"]["code"] == 0
         expected_call: list[Any] = ["/pm/config/global/obj/firewall/address/dummy"]
         if scope_member:
@@ -609,7 +754,11 @@ class TestFortiManager:  # pylint: disable=too-many-public-methods
     @staticmethod
     @pytest.mark.usefixtures("api_get_ok")
     def test_get_global_addresses() -> None:
-        """Test fmg get_global_addresses"""
+        """
+        Test fmg get_global_addresses.
+        """
+
+        # Arrange & Act & Assert
         assert FortiManager("host", "", "").get_global_addresses()["status"]["code"] == 0
         FortiManager.api_get.assert_called_with(
             "/pm/config/global/obj/firewall/address", timeout=10
@@ -625,14 +774,21 @@ class TestFortiManager:  # pylint: disable=too-many-public-methods
         ),
     )
     def test_get_global_address_group(scope_member: bool) -> None:
-        """Test fmg get_global_address_group"""
+        """
+        Test fmg get_global_address_group.
+        """
+
+        # Arrange
         fmg = FortiManager("host", "", "")
+
+        # Act & Assert
         assert (
             fmg.get_global_address_group("dummy", scope_member=scope_member)["status"]["code"] == 0
         )
         expected_call: list[Any] = ["/pm/config/global/obj/firewall/addrgrp/dummy"]
         if scope_member:
             expected_call.append({"option": ["scope member"]})
+
         FortiManager.api_get.assert_called_with(*expected_call)
 
         # assert fmg.get_global_address_group("dummy")["status"]["code"] == 0
@@ -641,7 +797,11 @@ class TestFortiManager:  # pylint: disable=too-many-public-methods
     @staticmethod
     @pytest.mark.usefixtures("api_get_ok")
     def test_get_global_address_groups() -> None:
-        """Test fmg get_global_address_groups"""
+        """
+        Test fmg get_global_address_groups.
+        """
+
+        # Arrange & Act & Assert
         assert FortiManager("host", "", "").get_global_address_groups()["status"]["code"] == 0
         FortiManager.api_get.assert_called_with(
             "/pm/config/global/obj/firewall/addrgrp", timeout=10
@@ -657,18 +817,29 @@ class TestFortiManager:  # pylint: disable=too-many-public-methods
         ),
     )
     def test_get_global_service(scope_member: bool) -> None:
-        """Test fmg get_global_service"""
+        """
+        Test fmg get_global_service.
+        """
+
+        # Arrange
         fmg = FortiManager("host", "", "")
+
+        # Act & Assert
         assert fmg.get_global_service("dummy", scope_member=scope_member)["status"]["code"] == 0
         expected_call: list[Any] = ["/pm/config/global/obj/firewall/service/custom/dummy"]
         if scope_member:
             expected_call.append({"option": ["scope member"]})
+
         FortiManager.api_get.assert_called_with(*expected_call)
 
     @staticmethod
     @pytest.mark.usefixtures("api_get_ok")
     def test_get_global_services() -> None:
-        """Test fmg get_global_services"""
+        """
+        Test fmg get_global_services.
+        """
+
+        # Arrange & Act & Assert
         assert FortiManager("host", "", "").get_global_services()["status"]["code"] == 0
         FortiManager.api_get.assert_called_with(
             "/pm/config/global/obj/firewall/service/custom", timeout=10
@@ -684,20 +855,31 @@ class TestFortiManager:  # pylint: disable=too-many-public-methods
         ),
     )
     def test_get_global_service_group(scope_member: bool) -> None:
-        """Test fmg get_global_service_group"""
+        """
+        Test fmg get_global_service_group
+        """
+
+        # Arrange
         fmg = FortiManager("host", "", "")
+
+        # Act & Assert
         assert (
             fmg.get_global_service_group("dummy", scope_member=scope_member)["status"]["code"] == 0
         )
         expected_call: list[Any] = ["/pm/config/global/obj/firewall/service/group/dummy"]
         if scope_member:
             expected_call.append({"option": ["scope member"]})
+
         FortiManager.api_get.assert_called_with(*expected_call)
 
     @staticmethod
     @pytest.mark.usefixtures("api_get_ok")
     def test_get_global_service_groups() -> None:
-        """Test fmg get_global_service_groups"""
+        """
+        Test fmg get_global_service_groups.
+        """
+
+        # Arrange & Act & Assert
         assert FortiManager("host", "", "").get_global_service_groups()["status"]["code"] == 0
         FortiManager.api_get.assert_called_with(
             "/pm/config/global/obj/firewall/service/group", timeout=10
@@ -715,14 +897,18 @@ class TestFortiManager:  # pylint: disable=too-many-public-methods
             pytest.param({}, "", id="empty return_value"),
         ),
     )
-    def test_get_version(response: MagicMock, expected: str, monkeypatch: MonkeyPatch) -> None:
-        """Test FortiManager get version"""
-        monkeypatch.setattr(
-            "fotoobo.fortinet.fortinet.requests.Session.post",
-            MagicMock(return_value=ResponseMock(json=response, status_code=200)),
-        )
+    def test_get_version(response: Mock, expected: str, monkeypatch: MonkeyPatch) -> None:
+        """
+        Test FortiManager get version.
+        """
+
+        # Arrange
+        post_mock = Mock(return_value=ResponseMock(json=response, status_code=200))
+        monkeypatch.setattr("fotoobo.fortinet.fortinet.requests.Session.post", post_mock)
+
+        # Act & Assert
         assert FortiManager("host", "", "").get_version() == expected
-        requests.Session.post.assert_called_with(
+        post_mock.assert_called_with(
             "https://host:443/jsonrpc",
             headers=None,
             json={"method": "get", "params": [{"url": "/sys/status"}], "session": ""},
@@ -733,25 +919,27 @@ class TestFortiManager:  # pylint: disable=too-many-public-methods
 
     @staticmethod
     def test_login(monkeypatch: MonkeyPatch) -> None:
-        """Test the login to a FortiManager"""
-        monkeypatch.setattr(
-            "fotoobo.fortinet.fortinet.requests.Session.post",
-            MagicMock(
-                return_value=ResponseMock(
-                    json={
-                        "id": 1,
-                        "result": [
-                            {"status": {"code": 0, "message": "OK"}, "url": "/sys/login/user"}
-                        ],
-                        "session": "dummy_session_key",
-                    },
-                    status_code=200,
-                )
-            ),
+        """
+        Test the login to a FortiManager.
+        """
+
+        # Arrange
+        post_mock = Mock(
+            return_value=ResponseMock(
+                json={
+                    "id": 1,
+                    "result": [{"status": {"code": 0, "message": "OK"}, "url": "/sys/login/user"}],
+                    "session": "dummy_session_key",
+                },
+                status_code=200,
+            )
         )
+        monkeypatch.setattr("fotoobo.fortinet.fortinet.requests.Session.post", post_mock)
         fmg = FortiManager("host", "user", "pass")
+
+        # Act & Assert
         assert fmg.login() == 200
-        requests.Session.post.assert_called_with(
+        post_mock.assert_called_with(
             "https://host:443/jsonrpc",
             headers=None,
             json={
@@ -765,30 +953,34 @@ class TestFortiManager:  # pylint: disable=too-many-public-methods
 
     @staticmethod
     def test_login_with_session_path(monkeypatch: MonkeyPatch) -> None:
-        """Test the login to a FortiManager when a session_path is given"""
-        monkeypatch.setattr(
-            "fotoobo.fortinet.fortinet.requests.Session.post",
-            MagicMock(
-                return_value=ResponseMock(
-                    json={
-                        "id": 1,
-                        "result": [
-                            {
-                                "status": {"code": 0, "message": "dummy"},
-                                "url": "/sys/status",
-                            }
-                        ],
-                        "session": "dummy_session_key",
-                    },
-                    status_code=200,
-                )
-            ),
+        """
+        Test the login to a FortiManager when a session_path is given.
+        """
+
+        # Arrange
+        post_mock = Mock(
+            return_value=ResponseMock(
+                json={
+                    "id": 1,
+                    "result": [
+                        {
+                            "status": {"code": 0, "message": "dummy"},
+                            "url": "/sys/status",
+                        }
+                    ],
+                    "session": "dummy_session_key",
+                },
+                status_code=200,
+            )
         )
+        monkeypatch.setattr("fotoobo.fortinet.fortinet.requests.Session.post", post_mock)
         fmg = FortiManager("host", "user", "pass")
         fmg.hostname = "test_fmg"
         fmg.session_path = "tests/data"
+
+        # Act & Assert
         assert fmg.login() == 200
-        requests.Session.post.assert_called_with(
+        post_mock.assert_called_with(
             "https://host:443/jsonrpc",
             headers=None,
             json={
@@ -804,31 +996,34 @@ class TestFortiManager:  # pylint: disable=too-many-public-methods
     @staticmethod
     def test_login_with_session_path_invalid_key(monkeypatch: MonkeyPatch) -> None:
         """
-        Test the login to a FortiManager when a session_path is given but the session key is invalid
+        Test the login to a FortiManager when a session_path is given, but the session key is
+        invalid.
         """
-        monkeypatch.setattr(
-            "fotoobo.fortinet.fortinet.requests.Session.post",
-            MagicMock(
-                return_value=ResponseMock(
-                    json={
-                        "id": 1,
-                        "result": [
-                            {
-                                "status": {"code": -11, "message": "dummy"},
-                                "url": "/sys/status",
-                            }
-                        ],
-                        "session": "dummy_session_key",
-                    },
-                    status_code=200,
-                )
-            ),
+
+        # Arrange
+        post_mock = Mock(
+            return_value=ResponseMock(
+                json={
+                    "id": 1,
+                    "result": [
+                        {
+                            "status": {"code": -11, "message": "dummy"},
+                            "url": "/sys/status",
+                        }
+                    ],
+                    "session": "dummy_session_key",
+                },
+                status_code=200,
+            )
         )
+        monkeypatch.setattr("fotoobo.fortinet.fortinet.requests.Session.post", post_mock)
         fmg = FortiManager("host", "user", "pass")
         fmg.hostname = "test_fmg"
         fmg.session_path = "tests/data"
+
+        # Act & Assert
         assert fmg.login() == 200
-        requests.Session.post.assert_called_with(
+        post_mock.assert_called_with(
             "https://host:443/jsonrpc",
             headers=None,
             json={
@@ -841,33 +1036,36 @@ class TestFortiManager:  # pylint: disable=too-many-public-methods
         )
 
     @staticmethod
-    def test_login_with_session_path_not_found(temp_dir: str, monkeypatch: MonkeyPatch) -> None:
+    def test_login_with_session_path_not_found(function_dir: str, monkeypatch: MonkeyPatch) -> None:
         """
-        Test the login to a FortiManager when a session_path is given but the session key is invalid
+        Test the login to a FortiManager when a session_path is given, but the session path is
+        invalid.
         """
-        monkeypatch.setattr(
-            "fotoobo.fortinet.fortinet.requests.Session.post",
-            MagicMock(
-                return_value=ResponseMock(
-                    json={
-                        "id": 1,
-                        "result": [
-                            {
-                                "status": {"code": 0, "message": "dummy"},
-                                "url": "/sys/status",
-                            }
-                        ],
-                        "session": "dummy_session_key",
-                    },
-                    status_code=200,
-                )
-            ),
+
+        # Arrange
+        post_mock = Mock(
+            return_value=ResponseMock(
+                json={
+                    "id": 1,
+                    "result": [
+                        {
+                            "status": {"code": 0, "message": "dummy"},
+                            "url": "/sys/status",
+                        }
+                    ],
+                    "session": "dummy_session_key",
+                },
+                status_code=200,
+            )
         )
+        monkeypatch.setattr("fotoobo.fortinet.fortinet.requests.Session.post", post_mock)
         fmg = FortiManager("host", "user", "pass")
         fmg.hostname = "test_fmg_dummy"
-        fmg.session_path = temp_dir
+        fmg.session_path = function_dir
+
+        # Act & Assert
         assert fmg.login() == 200
-        requests.Session.post.assert_called_with(
+        post_mock.assert_called_with(
             "https://host:443/jsonrpc",
             headers=None,
             json={
@@ -881,23 +1079,27 @@ class TestFortiManager:  # pylint: disable=too-many-public-methods
 
     @staticmethod
     def test_logout(monkeypatch: MonkeyPatch) -> None:
-        """Test the logout of a FortiManager"""
-        monkeypatch.setattr(
-            "fotoobo.fortinet.fortinet.requests.Session.post",
-            MagicMock(
-                return_value=ResponseMock(
-                    json={
-                        "method": "exec",
-                        "params": [{"url": "/sys/logout"}],
-                        "session": "dummy_session_key",
-                    },
-                    status_code=200,
-                )
-            ),
+        """
+        Test the logout of a FortiManager.
+        """
+
+        # Arrange
+        post_mock = Mock(
+            return_value=ResponseMock(
+                json={
+                    "method": "exec",
+                    "params": [{"url": "/sys/logout"}],
+                    "session": "dummy_session_key",
+                },
+                status_code=200,
+            )
         )
+        monkeypatch.setattr("fotoobo.fortinet.fortinet.requests.Session.post", post_mock)
         fortimanager = FortiManager("host", "user", "pass")
+
+        # Act & Assert
         assert fortimanager.logout() == 200
-        requests.Session.post.assert_called_with(
+        post_mock.assert_called_with(
             "https://host:443/jsonrpc",
             headers=None,
             json={
@@ -912,17 +1114,19 @@ class TestFortiManager:  # pylint: disable=too-many-public-methods
 
     @staticmethod
     def test_post_single(monkeypatch: MonkeyPatch) -> None:
-        """Test fmg post with a single dict"""
-        monkeypatch.setattr(
-            "fotoobo.fortinet.fortinet.requests.Session.post",
-            MagicMock(
-                return_value=ResponseMock(
-                    json={"result": [{"status": {"code": 0}}]}, status_code=200
-                )
-            ),
+        """
+        Test fmg post with a single dict.
+        """
+
+        # Arrange
+        post_mock = Mock(
+            return_value=ResponseMock(json={"result": [{"status": {"code": 0}}]}, status_code=200)
         )
+        monkeypatch.setattr("fotoobo.fortinet.fortinet.requests.Session.post", post_mock)
+
+        # Act & Assert
         assert not FortiManager("host", "", "").post("ADOM", {"params": [{"url": "{adom}"}]})
-        requests.Session.post.assert_called_with(
+        post_mock.assert_called_with(
             "https://host:443/jsonrpc",
             headers=None,
             json={"params": [{"url": "adom/ADOM"}], "session": ""},
@@ -933,17 +1137,19 @@ class TestFortiManager:  # pylint: disable=too-many-public-methods
 
     @staticmethod
     def test_post_multiple(monkeypatch: MonkeyPatch) -> None:
-        """Test fmg post with a list of dicts"""
-        monkeypatch.setattr(
-            "fotoobo.fortinet.fortinet.requests.Session.post",
-            MagicMock(
-                return_value=ResponseMock(
-                    json={"result": [{"status": {"code": 0}}]}, status_code=200
-                )
-            ),
+        """
+        Test fmg post with a list of dicts.
+        """
+
+        # Arrange
+        post_mock = Mock(
+            return_value=ResponseMock(json={"result": [{"status": {"code": 0}}]}, status_code=200)
         )
+        monkeypatch.setattr("fotoobo.fortinet.fortinet.requests.Session.post", post_mock)
+
+        # Act & Assert
         assert not FortiManager("host", "", "").post("ADOM", [{"params": [{"url": "{adom}"}]}])
-        requests.Session.post.assert_called_with(
+        post_mock.assert_called_with(
             "https://host:443/jsonrpc",
             headers=None,
             json={"params": [{"url": "adom/ADOM"}], "session": ""},
@@ -954,17 +1160,19 @@ class TestFortiManager:  # pylint: disable=too-many-public-methods
 
     @staticmethod
     def test_post_single_global(monkeypatch: MonkeyPatch) -> None:
-        """Test fmg post with a single dict"""
-        monkeypatch.setattr(
-            "fotoobo.fortinet.fortinet.requests.Session.post",
-            MagicMock(
-                return_value=ResponseMock(
-                    json={"result": [{"status": {"code": 0}}]}, status_code=200
-                )
-            ),
+        """
+        Test fmg post with a single dict.
+        """
+
+        # Arrange
+        post_mock = Mock(
+            return_value=ResponseMock(json={"result": [{"status": {"code": 0}}]}, status_code=200)
         )
+        monkeypatch.setattr("fotoobo.fortinet.fortinet.requests.Session.post", post_mock)
+
+        # Act & Assert
         assert not FortiManager("host", "", "").post("global", {"params": [{"url": "{adom}"}]})
-        requests.Session.post.assert_called_with(
+        post_mock.assert_called_with(
             "https://host:443/jsonrpc",
             headers=None,
             json={"params": [{"url": "global"}], "session": ""},
@@ -975,22 +1183,24 @@ class TestFortiManager:  # pylint: disable=too-many-public-methods
 
     @staticmethod
     def test_post_response_error(monkeypatch: MonkeyPatch) -> None:
-        """Test post set with en error in the response"""
-        monkeypatch.setattr(
-            "fotoobo.fortinet.fortinet.requests.Session.post",
-            MagicMock(
-                return_value=ResponseMock(
-                    json={
-                        "result": [{"status": {"code": 444, "message": "dummy"}, "url": "dummy"}]
-                    },
-                    status_code=200,
-                )
-            ),
+        """
+        Test post set with en error in the response.
+        """
+
+        # Arrange
+        post_mock = Mock(
+            return_value=ResponseMock(
+                json={"result": [{"status": {"code": 444, "message": "dummy"}, "url": "dummy"}]},
+                status_code=200,
+            )
         )
+        monkeypatch.setattr("fotoobo.fortinet.fortinet.requests.Session.post", post_mock)
+
+        # Act & Assert
         assert FortiManager("host", "", "").post("ADOM", [{"params": [{"url": "{adom}"}]}]) == [
             "dummy: dummy (code: 444)"
         ]
-        requests.Session.post.assert_called_with(
+        post_mock.assert_called_with(
             "https://host:443/jsonrpc",
             headers=None,
             json={"params": [{"url": "adom/ADOM"}], "session": ""},
@@ -1001,15 +1211,19 @@ class TestFortiManager:  # pylint: disable=too-many-public-methods
 
     @staticmethod
     def test_post_http_error(monkeypatch: MonkeyPatch) -> None:
-        """Test fmg post with an error in the response"""
-        monkeypatch.setattr(
-            "fotoobo.fortinet.fortinet.requests.Session.post",
-            MagicMock(return_value=ResponseMock(json={}, status_code=444)),
-        )
+        """
+        Test fmg post with an error in the response.
+        """
+
+        # Arrange
+        post_mock = Mock(return_value=ResponseMock(json={}, status_code=444))
+        monkeypatch.setattr("fotoobo.fortinet.fortinet.requests.Session.post", post_mock)
+
+        # Act & Assert
         with pytest.raises(APIError) as err:
             FortiManager("host", "", "").post("ADOM", [{"params": [{"url": "{adom}"}]}])
         assert "HTTP/444 general API Error" in str(err.value)
-        requests.Session.post.assert_called_with(
+        post_mock.assert_called_with(
             "https://host:443/jsonrpc",
             headers=None,
             json={"params": [{"url": "adom/ADOM"}], "session": ""},
@@ -1020,39 +1234,45 @@ class TestFortiManager:  # pylint: disable=too-many-public-methods
 
     @staticmethod
     def test_wait_for_task(monkeypatch: MonkeyPatch) -> None:
-        """Test wait_for_task"""
-        monkeypatch.setattr(
-            "fotoobo.fortinet.fortinet.requests.Session.post",
-            MagicMock(
-                return_value=ResponseMock(
-                    json={
-                        "result": [
-                            {
-                                "data": [
-                                    {
-                                        "history": [
-                                            {"detail": "detail 1", "percent": 10},
-                                            {"detail": "detail 2", "percent": 20},
-                                        ],
-                                        "state": 4,
-                                        "percent": 100,
-                                        "detail": "main detail",
-                                        "task_id": 222,
-                                    },
-                                ],
-                                "status": {"code": 0, "message": "OK"},
-                                "url": "/task/task/222/line",
-                            }
-                        ]
-                    },
-                    status_code=200,
-                )
-            ),
+        """
+        Test the wait_for_task method.
+        """
+
+        # Arrange
+        post_mock = Mock(
+            return_value=ResponseMock(
+                json={
+                    "result": [
+                        {
+                            "data": [
+                                {
+                                    "history": [
+                                        {"detail": "detail 1", "percent": 10},
+                                        {"detail": "detail 2", "percent": 20},
+                                    ],
+                                    "state": 4,
+                                    "percent": 100,
+                                    "detail": "main detail",
+                                    "task_id": 222,
+                                },
+                            ],
+                            "status": {"code": 0, "message": "OK"},
+                            "url": "/task/task/222/line",
+                        }
+                    ]
+                },
+                status_code=200,
+            )
         )
+        monkeypatch.setattr("fotoobo.fortinet.fortinet.requests.Session.post", post_mock)
+
+        # Act
         messages = FortiManager("host", "", "").wait_for_task(222, 0)
+
+        # Assert
         assert isinstance(messages, list)
         assert messages[0]["task_id"] == 222
-        requests.Session.post.assert_called_with(
+        post_mock.assert_called_with(
             "https://host:443/jsonrpc",
             headers=None,
             json={"method": "get", "params": [{"url": "/task/task/222/line"}], "session": ""},

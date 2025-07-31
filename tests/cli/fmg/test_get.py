@@ -1,11 +1,11 @@
 """
-Testing the cli app
+Testing the cli app.
 """
 
-from unittest.mock import MagicMock
+from unittest.mock import Mock
 
 import pytest
-from _pytest.monkeypatch import MonkeyPatch
+from pytest import MonkeyPatch
 from typer.testing import CliRunner
 
 from fotoobo.cli.main import app
@@ -16,11 +16,19 @@ runner = CliRunner()
 
 
 def test_cli_app_fmg_get_help(help_args_with_none: str) -> None:
-    """Test cli help for fmg get"""
+    """
+    Test cli help for fmg get.
+    """
+
+    # Arrange
     args = ["-c", "tests/fotoobo.yaml", "fmg", "get"]
     args.append(help_args_with_none)
     args = list(filter(None, args))
+
+    # Act
     result = runner.invoke(app, args)
+
+    # Assert
     assert result.exit_code in [0, 2]
     arguments, options, commands = parse_help_output(result.stdout)
     assert not arguments
@@ -29,10 +37,18 @@ def test_cli_app_fmg_get_help(help_args_with_none: str) -> None:
 
 
 def test_cli_app_fmg_get_adoms_help(help_args: str) -> None:
-    """Test cli help for fmg get adoms"""
+    """
+    Test cli help for fmg get adoms.
+    """
+
+    # Arrange
     args = ["-c", "tests/fotoobo.yaml", "fmg", "get", "adoms"]
     args.append(help_args)
+
+    # Act
     result = runner.invoke(app, args)
+
+    # Assert
     assert result.exit_code == 0
     arguments, options, commands = parse_help_output(result.stdout)
     assert set(arguments) == {"host"}
@@ -41,10 +57,18 @@ def test_cli_app_fmg_get_adoms_help(help_args: str) -> None:
 
 
 def test_cli_app_fmg_get_devices_help(help_args: str) -> None:
-    """Test cli help for fmg get devices"""
+    """
+    Test cli help for fmg get devices.
+    """
+
+    # Arrange
     args = ["-c", "tests/fotoobo.yaml", "fmg", "get", "devices"]
     args.append(help_args)
+
+    # Act
     result = runner.invoke(app, args)
+
+    # Assert
     assert result.exit_code == 0
     arguments, options, commands = parse_help_output(result.stdout)
     assert set(arguments) == {"host"}
@@ -53,11 +77,19 @@ def test_cli_app_fmg_get_devices_help(help_args: str) -> None:
 
 
 def test_cli_app_fmg_get_policy_help(help_args_with_none: str) -> None:
-    """Test cli help for fmg get policy"""
+    """
+    Test cli help for fmg get policy.
+    """
+
+    # Arrange
     args = ["-c", "tests/fotoobo.yaml", "fmg", "get", "policy"]
     args.append(help_args_with_none)
     args = list(filter(None, args))
+
+    # Act
     result = runner.invoke(app, args)
+
+    # Assert
     assert result.exit_code in [0, 2]
     arguments, options, commands = parse_help_output(result.stdout)
     assert set(arguments) == {"host", "adom", "policy_name", "filename"}
@@ -66,10 +98,18 @@ def test_cli_app_fmg_get_policy_help(help_args_with_none: str) -> None:
 
 
 def test_cli_app_fmg_get_version_help(help_args: str) -> None:
-    """Test cli help for fmg get version"""
+    """
+    Test cli help for fmg get version.
+    """
+
+    # Arrange
     args = ["-c", "tests/fotoobo.yaml", "fmg", "get", "version"]
     args.append(help_args)
+
+    # Act
     result = runner.invoke(app, args)
+
+    # Assert
     assert result.exit_code == 0
     arguments, options, commands = parse_help_output(result.stdout)
     assert set(arguments) == {"host"}
@@ -78,63 +118,99 @@ def test_cli_app_fmg_get_version_help(help_args: str) -> None:
 
 
 def test_cli_app_fmg_get_adoms(monkeypatch: MonkeyPatch) -> None:
-    """Test fmg get adoms"""
+    """
+    Test fmg get adoms.
+    """
+
+    # Artrange
     monkeypatch.setattr(
         "fotoobo.fortinet.fortinet.requests.Session.post",
-        MagicMock(
+        Mock(
             return_value=ResponseMock(
                 json={"result": [{"data": [{"name": "dummy", "os_ver": "1", "mr": "1"}]}]},
                 status_code=200,
             )
         ),
     )
+
+    # Act
     result = runner.invoke(app, ["-c", "tests/fotoobo.yaml", "fmg", "get", "adoms", "test_fmg"])
+
+    # Assert
     assert result.exit_code == 0
     assert result.stdout.count("dummy") == 1
 
 
 def test_cli_app_fmg_get_adoms_unknown_device(monkeypatch: MonkeyPatch) -> None:
-    """Test cli options and commands for fmg get version"""
+    """
+    Test cli options and commands for fmg get version.
+    """
+
+    # Arrange
     monkeypatch.setattr(
         "fotoobo.fortinet.fortinet.requests.Session.post",
-        MagicMock(
+        Mock(
             return_value=ResponseMock(
                 json={"result": [{"data": [{"name": "dummy"}]}]}, status_code=200
             )
         ),
     )
+
+    # Act
     result = runner.invoke(app, ["-c", "tests/fotoobo.yaml", "fmg", "get", "adoms", "dummy_fmg"])
+
+    # Assert
     assert result.exit_code == 1
 
 
 def test_cli_app_fmg_get_version(monkeypatch: MonkeyPatch) -> None:
-    """Test cli options and commands for fmg get version"""
+    """
+    Test cli options and commands for fmg get version.
+    """
+
+    # Arrange
     monkeypatch.setattr(
         "fotoobo.fortinet.fortinet.requests.Session.post",
-        MagicMock(
+        Mock(
             return_value=ResponseMock(
                 json={"result": [{"data": {"Version": "v1.1.1-build1111 111111 (GA)"}}]},
                 status_code=200,
             )
         ),
     )
+
+    # Act
     result = runner.invoke(app, ["-c", "tests/fotoobo.yaml", "fmg", "get", "version", "test_fmg"])
+
+    # Assert
     assert result.exit_code == 0
     assert result.stdout.count("1.1.1") == 1
 
 
 def test_cli_app_fmg_get_version_dummy() -> None:
-    """Test cli options and commands for fmg get version with unknown hostname"""
+    """
+    Test cli options and commands for fmg get version with unknown hostname.
+    """
+
+    # Act
     result = runner.invoke(app, ["-c", "tests/fotoobo.yaml", "fmg", "get", "version", "dummy_fmg"])
+
+    # Assert
     assert result.exit_code == 1
 
 
 def test_cli_app_fmg_get_version_exception_warning(monkeypatch: MonkeyPatch) -> None:
-    """Test cli when it raises a GeneralWarning exception"""
+    """
+    Test cli when it raises a GeneralWarning exception.
+    """
+
+    # Arrange
     monkeypatch.setattr(
         "fotoobo.fortinet.fortimanager.FortiManager.login",
-        MagicMock(side_effect=GeneralWarning("dummy")),
+        Mock(side_effect=GeneralWarning("dummy")),
     )
+
+    # Act & Assert
     with pytest.raises(GeneralWarning, match=r"dummy"):
         runner.invoke(
             app,
@@ -144,11 +220,17 @@ def test_cli_app_fmg_get_version_exception_warning(monkeypatch: MonkeyPatch) -> 
 
 
 def test_cli_app_fmg_get_version_exception_error(monkeypatch: MonkeyPatch) -> None:
-    """Test cli when it raises a GeneralError exception"""
+    """
+    Test cli when it raises a GeneralError exception.
+    """
+
+    # Arrange
     monkeypatch.setattr(
         "fotoobo.fortinet.fortimanager.FortiManager.login",
-        MagicMock(side_effect=GeneralError("dummy")),
+        Mock(side_effect=GeneralError("dummy")),
     )
+
+    # Act & Assert
     with pytest.raises(GeneralError, match=r"dummy"):
         runner.invoke(
             app,

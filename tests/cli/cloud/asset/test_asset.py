@@ -1,5 +1,5 @@
 """
-Testing the cloud asset cli app
+Testing the cloud asset cli app.
 """
 
 from typer.testing import CliRunner
@@ -11,11 +11,19 @@ runner = CliRunner()
 
 
 def test_cli_app_asset_help(help_args_with_none: str) -> None:
-    """Test cli help for asset"""
+    """
+    Test cli help for asset.
+    """
+
+    # Arrange
     args = ["-c", "tests/fotoobo.yaml", "cloud", "asset"]
     args.append(help_args_with_none)
     args = list(filter(None, args))
+
+    # Act
     result = runner.invoke(app, args)
+
+    # Assert
     assert result.exit_code in [0, 2]
     arguments, options, commands = parse_help_output(result.stdout)
     assert not arguments

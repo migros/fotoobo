@@ -1,11 +1,11 @@
 """
-Testing the cli app
+Testing the cli app.
 """
 
 from pathlib import Path
-from unittest.mock import MagicMock
+from unittest.mock import Mock
 
-from _pytest.monkeypatch import MonkeyPatch
+from pytest import MonkeyPatch
 from typer.testing import CliRunner
 
 from fotoobo.cli.main import app
@@ -15,11 +15,19 @@ runner = CliRunner()
 
 
 def test_cli_app_fgt_help(help_args_with_none: str) -> None:
-    """Test cli help for fgt"""
+    """
+    Test cli help for fgt.
+    """
+
+    # Arrange
     args = ["-c", "tests/fotoobo.yaml", "fgt"]
     args.append(help_args_with_none)
     args = list(filter(None, args))
+
+    # Act
     result = runner.invoke(app, args)
+
+    # Assert
     assert result.exit_code in [0, 2]
     arguments, options, commands = parse_help_output(result.stdout)
     assert not arguments
@@ -28,10 +36,18 @@ def test_cli_app_fgt_help(help_args_with_none: str) -> None:
 
 
 def test_cli_app_fgt_backup_help(help_args: str) -> None:
-    """Test cli help for fgt backup"""
+    """
+    Test cli help for fgt backup.
+    """
+
+    # Arrange
     args = ["-c", "tests/fotoobo.yaml", "fgt", "backup"]
     args.append(help_args)
+
+    # Act
     result = runner.invoke(app, args)
+
+    # Assert
     assert result.exit_code == 0
     arguments, options, commands = parse_help_output(result.stdout)
     assert set(arguments) == {"host"}
@@ -39,35 +55,45 @@ def test_cli_app_fgt_backup_help(help_args: str) -> None:
     assert not commands
 
 
-def test_cli_app_fgt_backup_single(monkeypatch: MonkeyPatch, temp_dir: str) -> None:
-    """Test cli fgt backup with no FortiGate given so it backups all"""
+def test_cli_app_fgt_backup_single(monkeypatch: MonkeyPatch, function_dir: Path) -> None:
+    """
+    Test cli fgt backup with no FortiGate given so it backups all.
+    """
+
+    # Arrange
     monkeypatch.setattr(
         "fotoobo.fortinet.fortigate.FortiGate.backup",
-        MagicMock(return_value="#config-version\ntest-1234"),
+        Mock(return_value="#config-version\ntest-1234"),
     )
-    Path(temp_dir / Path("test_fgt_1.conf")).unlink(missing_ok=True)
-    Path(temp_dir / Path("test_fgt_2.conf")).unlink(missing_ok=True)
-    assert not Path.exists(Path(temp_dir / Path("test_fgt_1.conf")))
-    assert not Path.exists(Path(temp_dir / Path("test_fgt_2.conf")))
+
+    # Act
     result = runner.invoke(
-        app, ["-c", "tests/fotoobo.yaml", "fgt", "backup", "test_fgt_1", "-b", temp_dir]
+        app, ["-c", "tests/fotoobo.yaml", "fgt", "backup", "test_fgt_1", "-b", str(function_dir)]
     )
+
+    # Assert
     assert result.exit_code == 0
-    assert Path.exists(Path(temp_dir / Path("test_fgt_1.conf")))
-    assert not Path.exists(Path(temp_dir / Path("test_fgt_2.conf")))
+    assert (function_dir / "test_fgt_1.conf").exists()
+    assert not (function_dir / "test_fgt_2.conf").exists()
 
 
-def test_cli_app_fgt_backup_all(monkeypatch: MonkeyPatch, temp_dir: str) -> None:
-    """Test cli fgt backup with no FortiGate given so it backups all"""
+def test_cli_app_fgt_backup_all(monkeypatch: MonkeyPatch, function_dir: Path) -> None:
+    """
+    Test cli fgt backup with no FortiGate given so it backups all.
+    """
+
+    # Arrange
     monkeypatch.setattr(
         "fotoobo.fortinet.fortigate.FortiGate.backup",
-        MagicMock(return_value="#config-version\ntest-1234"),
+        Mock(return_value="#config-version\ntest-1234"),
     )
-    Path(temp_dir / Path("test_fgt_1.conf")).unlink(missing_ok=True)
-    Path(temp_dir / Path("test_fgt_2.conf")).unlink(missing_ok=True)
-    assert not Path.exists(Path(temp_dir / Path("test_fgt_1.conf")))
-    assert not Path.exists(Path(temp_dir / Path("test_fgt_2.conf")))
-    result = runner.invoke(app, ["-c", "tests/fotoobo.yaml", "fgt", "backup", "-b", temp_dir])
+
+    # Act
+    result = runner.invoke(
+        app, ["-c", "tests/fotoobo.yaml", "fgt", "backup", "-b", str(function_dir)]
+    )
+
+    # Assert
     assert result.exit_code == 0
-    assert Path.exists(Path(temp_dir / Path("test_fgt_1.conf")))
-    assert Path.exists(Path(temp_dir / Path("test_fgt_2.conf")))
+    assert (function_dir / "test_fgt_1.conf").exists()
+    assert (function_dir / "test_fgt_2.conf").exists()

@@ -1,5 +1,5 @@
 """
-Testing the cli fgt config info
+Testing the cli fgt config info.
 """
 
 import pytest
@@ -13,11 +13,19 @@ runner = CliRunner()
 
 
 def test_cli_app_fgt_config_info_help(help_args_with_none: str) -> None:
-    """Test cli help for fgt config info help"""
+    """
+    Test cli help for fgt config info help.
+    """
+
+    # Arrange
     args = ["-c", "tests/fotoobo.yaml", "fgt", "config", "info"]
     args.append(help_args_with_none)
     args = list(filter(None, args))
+
+    # Act
     result = runner.invoke(app, args)
+
+    # Assert
     assert result.exit_code in [0, 2]
     assert "Usage: root fgt config info" in result.stdout
     arguments, options, commands = parse_help_output(result.stdout)
@@ -34,24 +42,27 @@ def test_cli_app_fgt_config_info_help(help_args_with_none: str) -> None:
     ),
 )
 def test_cli_app_fgt_config_info(file: str) -> None:
-    """Test fgt config info"""
+    """
+    Test fgt config info.
+    """
+
+    # Act
     result = runner.invoke(
         app,
-        [
-            "-c",
-            "tests/fotoobo.yaml",
-            "fgt",
-            "config",
-            "info",
-            file,
-        ],
+        ["-c", "tests/fotoobo.yaml", "fgt", "config", "info", file],
     )
+
+    # Assert
     assert result.exit_code == 0
     assert "FGT999" in result.stdout
 
 
 def test_cli_app_fgt_config_info_empty_config() -> None:
-    """Test cli options and commands for fgt config info with an empty configuration"""
+    """
+    Test cli options and commands for fgt config info with an empty configuration.
+    """
+
+    # Act & Assert
     with pytest.raises(GeneralWarning, match=r"There is no info in"):
         runner.invoke(
             app,
@@ -68,7 +79,11 @@ def test_cli_app_fgt_config_info_empty_config() -> None:
 
 
 def test_cli_app_fgt_config_info_nonexist_config_file() -> None:
-    """Test cli options and commands for fgt config info with an nonexisting configuration"""
+    """
+    Test cli options and commands for fgt config info with an nonexisting configuration.
+    """
+
+    # Act & Assert
     with pytest.raises(GeneralWarning, match=r"There are no"):
         runner.invoke(
             app,
@@ -85,17 +100,14 @@ def test_cli_app_fgt_config_info_nonexist_config_file() -> None:
 
 
 def test_cli_app_fgt_config_info_dir() -> None:
-    """Test cli options and commands for fgt config info if a directory is given"""
+    """
+    Test cli options and commands for fgt config info if a directory is given.
+    """
+
+    # Act & Assert
     with pytest.raises(GeneralWarning, match=r"There is no info in"):
         runner.invoke(
             app,
-            [
-                "-c",
-                "tests/fotoobo.yaml",
-                "fgt",
-                "config",
-                "info",
-                "tests/data",
-            ],
+            ["-c", "tests/fotoobo.yaml", "fgt", "config", "info", "tests/data"],
             catch_exceptions=False,
         )

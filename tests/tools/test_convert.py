@@ -1,4 +1,6 @@
-"""Test fotoobo convert tools"""
+"""
+Test fotoobo convert tools.
+"""
 
 import shutil
 from pathlib import Path
@@ -25,7 +27,9 @@ from fotoobo.tools.convert import checkpoint
     ),
 )
 def test_convert(asset_type: str) -> None:
-    """Test convert"""
+    """
+    Test convert.
+    """
     checkpoint_assets: dict[str, Any] = {
         "hosts": [
             {
@@ -62,9 +66,11 @@ def test_convert(asset_type: str) -> None:
         "service_groups": [],
     }
 
+    # Act
     result = checkpoint(checkpoint_assets, asset_type, "out_file_name")
-    converted = result.get_result("fortinet_assets") or []
 
+    # Assert
+    converted = result.get_result("fortinet_assets") or []
     for index in range(len(checkpoint_assets[asset_type])):
         asset = converted[0]["params"][index]["data"]
         assert asset["name"] == checkpoint_assets[asset_type][index]["name"]
@@ -76,10 +82,15 @@ def test_convert(asset_type: str) -> None:
     (
         pytest.param("", id="test with empty type"),
         pytest.param("dummy", id="test type 'dummy'"),
+        pytest.param(..., id="no test type"),
     ),
 )
 def test_convert_unsupported_type(asset_type: str) -> None:
-    """Test convert for unsupported types (which rise a GeneralError exception)"""
+    """
+    Test convert for unsupported types (which rise a GeneralError exception).
+    """
+
+    # Act & Assert
     with pytest.raises(GeneralError, match=r"type '.*' is not supported to convert"):
         checkpoint([], "", asset_type)
 
@@ -98,8 +109,12 @@ def test_convert_unsupported_type(asset_type: str) -> None:
         pytest.param("service_groups", id="test type 'service_groups'"),
     ),
 )
-def test_convert_with_cache(asset_type: str, temp_dir: Path) -> None:
-    """Test convert with cache"""
+def test_convert_with_cache(asset_type: str, function_dir: Path) -> None:
+    """
+    Test convert with cache.
+    """
+
+    # Arrange
     checkpoint_assets: dict[str, Any] = {
         "hosts": [
             {
@@ -128,7 +143,7 @@ def test_convert_with_cache(asset_type: str, temp_dir: Path) -> None:
     }
 
     output_file_name = f"convert_cache_{asset_type}.json"
-    cache_dir = temp_dir / "cache"
+    cache_dir = function_dir / "cache"
 
     if not cache_dir.is_dir():
         cache_dir.mkdir()
@@ -138,8 +153,10 @@ def test_convert_with_cache(asset_type: str, temp_dir: Path) -> None:
         cache_dir / "convert_cache_hosts.json",
     )
 
+    # Act
     result = checkpoint(checkpoint_assets, asset_type, output_file_name, cache_dir)
 
+    # Assert
     converted = result.get_result("fortinet_assets")
     if asset_type == "hosts":
         # We have one ("aaa-*") already in the cache, only need to convert 1

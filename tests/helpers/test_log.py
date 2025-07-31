@@ -1,5 +1,5 @@
 """
-Test the logging helper class
+Test the logging helper class.
 """
 
 import logging
@@ -8,10 +8,10 @@ from datetime import datetime
 from logging.handlers import RotatingFileHandler, SysLogHandler
 from syslog import LOG_USER
 from typing import Type
-from unittest.mock import MagicMock
+from unittest.mock import Mock
 
 import pytest
-from _pytest.monkeypatch import MonkeyPatch
+from pytest import MonkeyPatch
 from rich.logging import RichHandler
 
 from fotoobo.exceptions import GeneralError
@@ -22,7 +22,7 @@ from fotoobo.helpers.log import Log, SysLogFormatter
 @dataclass
 class LoggerConfig:
     """
-    A class for holding the expected LoggerConfig for the configure_logging() tests
+    A class for holding the expected LoggerConfig for the configure_logging() tests.
     """
 
     disabled: bool
@@ -34,6 +34,7 @@ class LoggerConfig:
 def fixture_syslog_formatter() -> SysLogFormatter:
     """
     Returns an initialized SysLogFormatter for testing
+
     Returns:
         SysLogFormatter: An initialized SysLogFormatter instance
     """
@@ -47,7 +48,7 @@ def fixture_syslog_formatter() -> SysLogFormatter:
 
 class TestSysLogFormatter:
     """
-    Class to test the SysLogFormatter class
+    Class to test the SysLogFormatter class.
     """
 
     @pytest.mark.parametrize(
@@ -132,16 +133,15 @@ class TestSysLogFormatter:
         expected_string: str,
     ) -> None:
         """
-        Test the format() method
+        Test the format() method.
+
         Args:
             syslog_formatter:
             log_record:
             expected_string:
-
-        Returns:
-
         """
-        # Patch some log_record parts
+
+        # Arrange
         log_record.created = 0
         log_record.process = 3456
 
@@ -150,12 +150,13 @@ class TestSysLogFormatter:
         hour = datetime.fromtimestamp(0).strftime("%H")
         expected_string = expected_string % (hour, f"{tzinfo[0:3]}:{tzinfo[3:]}")
 
+        # Act & Assert
         assert syslog_formatter.format(log_record) == expected_string
 
 
 class TestLog:
     """
-    Class to test the Log class
+    Class to test the Log class.
     """
 
     @pytest.mark.parametrize(
@@ -223,14 +224,14 @@ class TestLog:
         monkeypatch: MonkeyPatch,
     ) -> None:
         """
-        Test the configure_logging() method
+        Test the configure_logging() method.
+
         Args:
             quiet:
             log_level:
-
-        Returns:
-
         """
+
+        # Arrange
         monkeypatch.setattr("fotoobo.helpers.log.config", config)
 
         # The 3rd party loggers should get the same config in any case
@@ -250,8 +251,10 @@ class TestLog:
         monkeypatch.setattr(fotoobo_logger, "handlers", [])
         monkeypatch.setattr(audit_logger, "handlers", [])
 
+        # Act
         Log.configure_logging(quiet, log_level)
 
+        # Assert
         if expected_fotoobo_logger_config.disabled:
             assert fotoobo_logger.disabled is True
             assert requests_logger.level == logging.CRITICAL
@@ -289,16 +292,18 @@ class TestLog:
         Test the Log.audit() static method.
 
         It should call the info method of the audit logger.
-
-        Returns:
         """
+
+        # Arrange
         logger = logging.getLogger("fotoobo")
         audit_logger = logging.getLogger("audit")
-        audit_patch = MagicMock()
+        audit_patch = Mock()
         monkeypatch.setattr(audit_logger, "info", audit_patch)
 
+        # Act
         logger.audit("test")  # type: ignore
 
+        # Assert
         audit_patch.assert_called_with("test")
 
     @pytest.mark.parametrize(
@@ -350,20 +355,15 @@ class TestLog:
     ) -> None:
         """
         Test that fotoobo closes itself sanely when the configured syslog server is not available.
-
-        Args:
-            monkeypatch:
-
-        Returns:
-
         """
 
+        # Arrange
         monkeypatch.setattr("fotoobo.helpers.log.config", config)
-
         monkeypatch.setattr(
             "fotoobo.helpers.log.SysLogHandler",
-            MagicMock(side_effect=OSError("[Errno 113] No route to host")),
+            Mock(side_effect=OSError("[Errno 113] No route to host")),
         )
 
+        # Act & Assert
         with pytest.raises(GeneralError, match="Cannot configure SysLog logging: *"):
             Log.configure_logging(True, "INFO")

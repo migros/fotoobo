@@ -1,10 +1,10 @@
 """
-Testing the cloud asset get cli app
+Testing the cloud asset get cli app.
 """
 
-from unittest.mock import MagicMock
+from unittest.mock import Mock
 
-from _pytest.monkeypatch import MonkeyPatch
+from pytest import MonkeyPatch
 from typer.testing import CliRunner
 
 from fotoobo.cli.main import app
@@ -14,11 +14,19 @@ runner = CliRunner()
 
 
 def test_cli_app_asset_get_help(help_args_with_none: str) -> None:
-    """Test cli help for asset get"""
+    """
+    Test cli help for asset get.
+    """
+
+    # Arrange
     args = ["-c", "tests/fotoobo.yaml", "cloud", "asset", "get"]
     args.append(help_args_with_none)
     args = list(filter(None, args))
+
+    # Act
     result = runner.invoke(app, args)
+
+    # Assert
     assert result.exit_code in [0, 2]
     arguments, options, commands = parse_help_output(result.stdout)
     assert not arguments
@@ -27,10 +35,18 @@ def test_cli_app_asset_get_help(help_args_with_none: str) -> None:
 
 
 def test_cli_app_asset_get_version_help(help_args: str) -> None:
-    """Test cli help for asset get version"""
+    """
+    Test cli help for asset get version.
+    """
+
+    # Arrange
     args = ["-c", "tests/fotoobo.yaml", "cloud", "asset", "get", "version"]
     args.append(help_args)
+
+    # Act
     result = runner.invoke(app, args)
+
+    # Assert
     assert result.exit_code == 0
     arguments, options, commands = parse_help_output(result.stdout)
     assert not arguments
@@ -39,22 +55,38 @@ def test_cli_app_asset_get_version_help(help_args: str) -> None:
 
 
 def test_cli_app_asset_get_version(monkeypatch: MonkeyPatch) -> None:
-    """Test cli options and commands for asset get version"""
+    """
+    Test cli options and commands for asset get version.
+    """
+
+    # Arrange
     monkeypatch.setattr(
         "fotoobo.fortinet.forticloudasset.FortiCloudAsset.post",
-        MagicMock(return_value={"version": "3.0"}),
+        Mock(return_value={"version": "3.0"}),
     )
+
+    # Act
     result = runner.invoke(app, ["-c", "tests/fotoobo.yaml", "cloud", "asset", "get", "version"])
+
+    # Assert
     assert result.exit_code == 0
     assert "forticloudasset " in result.stdout
     assert " │ 3.0" in result.stdout
 
 
 def test_cli_app_asset_get_products_help(help_args: str) -> None:
-    """Test cli help for asset get products"""
+    """
+    Test cli help for asset get products.
+    """
+
+    # Arrange
     args = ["-c", "tests/fotoobo.yaml", "cloud", "asset", "get", "products"]
     args.append(help_args)
+
+    # Act
     result = runner.invoke(app, args)
+
+    # Assert
     assert result.exit_code == 0
     arguments, options, commands = parse_help_output(result.stdout)
     assert not arguments

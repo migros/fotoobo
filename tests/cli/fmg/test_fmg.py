@@ -1,5 +1,5 @@
 """
-Testing the cli app
+Testing the cli app.
 """
 
 from typer.testing import CliRunner
@@ -11,11 +11,19 @@ runner = CliRunner()
 
 
 def test_cli_app_fmg_help(help_args_with_none: str) -> None:
-    """Test cli help for fmg"""
+    """
+    Test cli help for fmg.
+    """
+
+    # Arrange
     args = ["-c", "tests/fotoobo.yaml", "fmg"]
     args.append(help_args_with_none)
     args = list(filter(None, args))
+
+    # Act
     result = runner.invoke(app, args)
+
+    # Assert
     assert result.exit_code in [0, 2]
     arguments, options, commands = parse_help_output(result.stdout)
     assert not arguments
@@ -24,10 +32,18 @@ def test_cli_app_fmg_help(help_args_with_none: str) -> None:
 
 
 def test_cli_app_fmg_assign_help(help_args: str) -> None:
-    """Test cli help for fmg assign"""
+    """
+    Test cli help for fmg assign.
+    """
+
+    # Arrange
     args = ["-c", "tests/fotoobo.yaml", "fmg", "assign"]
     args.append(help_args)
+
+    # Act
     result = runner.invoke(app, args)
+
+    # Assert
     assert result.exit_code == 0
     arguments, options, commands = parse_help_output(result.stdout)
     assert set(arguments) == {"adoms", "host", "policy"}
@@ -36,10 +52,18 @@ def test_cli_app_fmg_assign_help(help_args: str) -> None:
 
 
 def test_cli_app_fmg_post_help(help_args: str) -> None:
-    """Test cli help for fmg post"""
+    """
+    Test cli help for fmg post.
+    """
+
+    # Arrange
     args = ["-c", "tests/fotoobo.yaml", "fmg", "post"]
     args.append(help_args)
+
+    # Act
     result = runner.invoke(app, args)
+
+    # Assert
     assert result.exit_code == 0
     arguments, options, commands = parse_help_output(result.stdout)
     assert set(arguments) == {"file", "adom", "host"}

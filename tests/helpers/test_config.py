@@ -1,26 +1,34 @@
 """
-Test the config helper
+Test the config helper.
 """
 
 import os
 from pathlib import Path
 from typing import Any, Callable, Optional, Union
-from unittest.mock import MagicMock
+from unittest.mock import Mock
 
 import pytest
-from _pytest.monkeypatch import MonkeyPatch
+from pytest import MonkeyPatch
 
 from fotoobo.exceptions.exceptions import GeneralError
 from fotoobo.helpers.config import Config
 
 
 class TestConfig:
-    """Test the config dataclass"""
+    """
+    Test the config dataclass.
+    """
 
     @staticmethod
     def test_config() -> None:
-        """test the default config settings"""
+        """
+        Test the default config settings.
+        """
+
+        # Act
         config = Config()
+
+        # Assert
         assert config.inventory_file == Path("inventory.yaml")
         assert not config.logging
         assert not config.audit_logging
@@ -32,29 +40,29 @@ class TestConfig:
         (
             pytest.param(
                 None,
-                MagicMock(return_value=False),
-                MagicMock(return_value=None),
+                Mock(return_value=False),
+                Mock(return_value=None),
                 Path("inventory.yaml"),
                 id="No config file given",
             ),
             pytest.param(
                 Path("test/fotoobo.yaml"),
-                MagicMock(return_value=True),
-                MagicMock(return_value={"inventory": "test1", "logging": {"enabled": True}}),
+                Mock(return_value=True),
+                Mock(return_value={"inventory": "test1", "logging": {"enabled": True}}),
                 Path("test/test1"),
                 id="Custom fotoobo.yaml",
             ),
             pytest.param(
                 None,
                 lambda file: file == Path("fotoobo.yaml"),
-                MagicMock(return_value={"inventory": "/test2", "audit_logging": {"enabled": True}}),
+                Mock(return_value={"inventory": "/test2", "audit_logging": {"enabled": True}}),
                 Path("/test2"),
                 id="Use fotoobo.yaml in current directory",
             ),
             pytest.param(
                 None,
                 lambda file: file != Path("fotoobo.yaml"),
-                MagicMock(return_value={"inventory": "test3"}),
+                Mock(return_value={"inventory": "test3"}),
                 Path("~/.config/test3").expanduser(),
                 id="Use fotoobo.yaml in .config/fotoobo.yaml",
             ),
@@ -62,16 +70,24 @@ class TestConfig:
     )
     def test_load_configuration(
         config_file: Optional[Path],
-        isfile_mock: Union[MagicMock, Callable[[str], bool]],
-        load_yaml_file_mock: MagicMock,
+        isfile_mock: Union[Mock, Callable[[str], bool]],
+        load_yaml_file_mock: Mock,
         expected_inventory: Path,
         monkeypatch: MonkeyPatch,
     ) -> None:
-        """test load configuration from file"""
+        """
+        Test load configuration from file.
+        """
+
+        # Arrange
         monkeypatch.setattr("fotoobo.helpers.files.Path.is_file", isfile_mock)
         monkeypatch.setattr("fotoobo.helpers.config.load_yaml_file", load_yaml_file_mock)
         config = Config()
+
+        # Act
         config.load_configuration(config_file)
+
+        # Assert
         assert config.inventory_file == expected_inventory
 
     @staticmethod
@@ -112,11 +128,17 @@ class TestConfig:
         expected: str,
         monkeypatch: MonkeyPatch,
     ) -> None:
-        """test load logging or audit_logging configuration with errors"""
+        """
+        Test load logging or audit_logging configuration with errors.
+        """
+
+        # Arrange
         test_config = Config()
         monkeypatch.setattr(
-            "fotoobo.helpers.config.load_yaml_file", MagicMock(return_value={logging_type: logging})
+            "fotoobo.helpers.config.load_yaml_file", Mock(return_value={logging_type: logging})
         )
+
+        # Act & Assert
         with pytest.raises(GeneralError, match=expected):
             test_config.load_configuration(Path("tests/fotoobo.yaml"))
 
@@ -131,7 +153,11 @@ class TestConfig:
         ),
     )
     def test_config_vault(env: bool, yaml: bool, expected: str, monkeypatch: MonkeyPatch) -> None:
-        """Test the vault part of the configuration"""
+        """
+        Test the vault part of the configuration.
+        """
+
+        # Arrange
         test_config = Config()
         vault_config = {
             "url": "https://vault.local",
@@ -143,9 +169,10 @@ class TestConfig:
             vault_config["secret_id"] = "secret_id_from_yaml"
 
         monkeypatch.setattr(
-            "fotoobo.helpers.config.load_yaml_file", MagicMock(return_value={"vault": vault_config})
+            "fotoobo.helpers.config.load_yaml_file", Mock(return_value={"vault": vault_config})
         )
 
+        # Act
         if env:
             os.environ["FOTOOBO_VAULT_ROLE_ID"] = "role_id_from_env"
             os.environ["FOTOOBO_VAULT_SECRET_ID"] = "secret_id_from_env"
@@ -154,6 +181,7 @@ class TestConfig:
             os.environ.pop("FOTOOBO_VAULT_ROLE_ID", True)
             os.environ.pop("FOTOOBO_VAULT_SECRET_ID", True)
 
+        # Assert
         if env or yaml:
             test_config.load_configuration(Path("tests/fotoobo.yaml"))
             assert test_config.vault["url"] == "https://vault.local"

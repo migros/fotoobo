@@ -1,14 +1,14 @@
 """
-Testing the cli convert app
+Testing the cli convert app.
 """
 
 import shutil
 from pathlib import Path
 from typing import Any
-from unittest.mock import MagicMock
+from unittest.mock import Mock
 
 import pytest
-from _pytest.monkeypatch import MonkeyPatch
+from pytest import MonkeyPatch
 from typer.testing import CliRunner
 
 from fotoobo.cli.main import app
@@ -19,8 +19,14 @@ runner = CliRunner()
 
 
 def test_cli_convert_no_args() -> None:
-    """Test convert cli without issuing any arguments"""
+    """
+    Test convert cli without issuing any arguments.
+    """
+
+    # Act
     result = runner.invoke(app, ["-c", "tests/fotoobo.yaml", "convert"])
+
+    # Assert
     assert result.exit_code in [0, 2]
     assert "Usage: root convert [OPTIONS] COMMAND [ARGS]..." in result.stdout
     assert "--help" in result.stdout
@@ -28,8 +34,14 @@ def test_cli_convert_no_args() -> None:
 
 
 def test_cli_convert_help() -> None:
-    """Test cli help for convert"""
+    """
+    Test cli help for convert.
+    """
+
+    # Act
     result = runner.invoke(app, ["-c", "tests/fotoobo.yaml", "convert", "-h"])
+
+    # Assert
     assert result.exit_code == 0
     arguments, options, commands = parse_help_output(result.stdout)
     assert not arguments
@@ -38,12 +50,20 @@ def test_cli_convert_help() -> None:
 
 
 def test_cli_convert_checkpoint_unsupported(monkeypatch: MonkeyPatch) -> None:
-    """Test convert cli command: convert checkpoint assets with unsupported type"""
-    monkeypatch.setattr("fotoobo.cli.convert.load_json_file", MagicMock(return_value=[]))
+    """
+    Test convert cli command: convert checkpoint assets with unsupported type.
+    """
+
+    # Arrange
+    monkeypatch.setattr("fotoobo.cli.convert.load_json_file", Mock(return_value=[]))
+
+    # Act
     result = runner.invoke(
         app,
         ["-c", "tests/fotoobo.yaml", "convert", "checkpoint", "infile", "outfile", "unsupported"],
     )
+
+    # Assert
     assert result.exit_code == 1
 
 
@@ -61,8 +81,12 @@ def test_cli_convert_checkpoint_unsupported(monkeypatch: MonkeyPatch) -> None:
         pytest.param("service_groups", id="test type 'service_groups'"),
     ),
 )
-def test_cli_convert(asset_type: str, monkeypatch: MonkeyPatch, temp_dir: Path) -> None:
-    """Test convert"""
+def test_cli_convert(asset_type: str, monkeypatch: MonkeyPatch, function_dir: Path) -> None:
+    """
+    Test convert.
+    """
+
+    # Arrange
     return_value: dict[str, Any] = {
         "hosts": [
             {
@@ -98,10 +122,10 @@ def test_cli_convert(asset_type: str, monkeypatch: MonkeyPatch, temp_dir: Path) 
         "services_udp": [],
         "service_groups": [],
     }
+    monkeypatch.setattr("fotoobo.cli.convert.load_json_file", Mock(return_value=return_value))
+    output_file = function_dir / f"convert_{asset_type}.json"
 
-    monkeypatch.setattr("fotoobo.cli.convert.load_json_file", MagicMock(return_value=return_value))
-
-    output_file = temp_dir / f"convert_{asset_type}.json"
+    # Act
     result = runner.invoke(
         app,
         [
@@ -115,6 +139,7 @@ def test_cli_convert(asset_type: str, monkeypatch: MonkeyPatch, temp_dir: Path) 
         ],
     )
 
+    # Assert
     assert result.exit_code == 0
     assert output_file.is_file()
     converted = list(load_json_file(output_file) or [])
@@ -139,8 +164,14 @@ def test_cli_convert(asset_type: str, monkeypatch: MonkeyPatch, temp_dir: Path) 
         pytest.param("service_groups", id="test type 'service_groups'"),
     ),
 )
-def test_cli_convert_with_cache(asset_type: str, monkeypatch: MonkeyPatch, temp_dir: Path) -> None:
-    """Test convert with cache"""
+def test_cli_convert_with_cache(
+    asset_type: str, monkeypatch: MonkeyPatch, function_dir: Path
+) -> None:
+    """
+    Test convert with cache.
+    """
+
+    # Arrange
     return_value: dict[str, Any] = {
         "hosts": [
             {
@@ -167,11 +198,9 @@ def test_cli_convert_with_cache(asset_type: str, monkeypatch: MonkeyPatch, temp_
         "services_udp": [],
         "service_groups": [],
     }
-
-    monkeypatch.setattr("fotoobo.cli.convert.load_json_file", MagicMock(return_value=return_value))
-
-    output_file = temp_dir / f"convert_cache_{asset_type}.json"
-    cache_dir = temp_dir / "cache"
+    monkeypatch.setattr("fotoobo.cli.convert.load_json_file", Mock(return_value=return_value))
+    output_file = function_dir / f"convert_cache_{asset_type}.json"
+    cache_dir = function_dir / "cache"
 
     if not cache_dir.is_dir():
         cache_dir.mkdir()
@@ -181,6 +210,7 @@ def test_cli_convert_with_cache(asset_type: str, monkeypatch: MonkeyPatch, temp_
         cache_dir / "convert_cache_hosts.json",
     )
 
+    # Act
     result = runner.invoke(
         app,
         [
@@ -195,6 +225,7 @@ def test_cli_convert_with_cache(asset_type: str, monkeypatch: MonkeyPatch, temp_
         ],
     )
 
+    # Assert
     assert result.exit_code == 0
     assert output_file.is_file()
 

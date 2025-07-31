@@ -1,13 +1,13 @@
 """
-Test the results helper class
+Test the results helper class.
 """
 
 from pathlib import Path
 from typing import Any, Optional, Union
-from unittest.mock import MagicMock
+from unittest.mock import Mock
 
 import pytest
-from _pytest.monkeypatch import MonkeyPatch
+from pytest import MonkeyPatch
 
 from fotoobo.exceptions import GeneralWarning
 from fotoobo.helpers import cli_path
@@ -16,12 +16,20 @@ from fotoobo.inventory import GenericDevice
 
 
 class TestResults:
-    """Test the results class"""
+    """
+    Test the results class.
+    """
 
     @staticmethod
     def test_init() -> None:
-        """Test the result __init__"""
+        """
+        Test the result __init__ method.
+        """
+
+        # Act
         result = Result[str]()
+
+        # Assert
         assert isinstance(result.messages, dict)
         assert isinstance(result.results, dict)
 
@@ -44,13 +52,21 @@ class TestResults:
         successful: Optional[bool],
         expected_result: dict[str, Any],
     ) -> None:
-        """Test the push_result() method"""
+        """
+        Test the push_result() method.
+        """
+
+        # Arrange
         result = Result[Any]()
+
+        # Act
         if successful is None:
             result.push_result("test_host", inputs)
+
         else:
             result.push_result("test_host", inputs, successful=successful)
 
+        # Assert
         assert result.results == expected_result
 
         if successful in [None, True]:
@@ -72,29 +88,40 @@ class TestResults:
         ),
     )
     def test_push_message(message: str, level: Optional[str]) -> None:
-        """Test the push_message() method"""
+        """
+        Test the push_message() method.
+        """
 
+        # Arrange
         result = Result[Any]()
+
+        # Act
         if level is None:
             result.push_message("test_host", message)
+
         else:
             result.push_message("test_host", message, level)
 
+        # Assert
         assert "test_host" in result.messages
         assert isinstance(result.messages["test_host"], list)
         assert result.messages["test_host"][0] == {"message": message, "level": level or "info"}
 
     @staticmethod
     def test_get_messages() -> None:
-        """Test the get_messages()  method"""
+        """
+        Test the get_messages() method.
+        """
 
+        # Arrange
         result = Result[Any]()
         result.push_message("test_host", "test message 1")
         result.push_message("test_host", "test message 2", level="warning")
 
-        # Check the messages got from get_messages()
+        # Act
         messages = result.get_messages("test_host")
 
+        # Assert
         assert len(messages) == 2
         assert {"message": "test message 1", "level": "info"} in messages
         assert {"message": "test message 2", "level": "warning"} in messages
@@ -132,40 +159,64 @@ class TestResults:
         expected_outputs: list[str],
         capsys: Any,
     ) -> None:
-        """Test print_messages() method"""
+        """
+        Test print_messages() method.
+        """
+
+        # Arrange
         result = Result[Any]()
         for message in messages:
             result.push_message(*message)  # type: ignore
 
+        # Act
         result.print_messages(only_host)
-        out, _ = capsys.readouterr()
 
+        # Assert
+        out, _ = capsys.readouterr()
         for out_message in expected_outputs:
             assert out_message in out
 
     @staticmethod
     def test_get_result() -> None:
-        """Test the get_result() method"""
+        """
+        Test the get_result() method.
+        """
+
+        # Arrange
         result = Result[str]()
         result.push_result("test_host", "test_result")
 
+        # Act & Assert
         assert result.get_result("test_host") == "test_result"
         with pytest.raises(GeneralWarning, match=r"Host nonexisting_host is not in results."):
             result.get_result("nonexisting_host")
 
     @staticmethod
     def test_all_results() -> None:
-        """Test the all_result() method"""
+        """
+        Test the all_result() method.
+        """
+
+        # Arrange
         result = Result[str]()
         result.push_result("test_host", "test_result")
 
+        # Act & Assert
         assert result.all_results() == {"test_host": "test_result"}
 
     @staticmethod
     def test_print_result_as_table_empty(capsys: Any) -> None:
-        """Test print_result_as_table() with no results pushed to the object"""
+        """
+        Test print_result_as_table() with no results pushed to the object.
+        """
+
+        # Arrange
         result = Result[Any]()
+
+        # Act
         result.print_result_as_table()
+
+        # Assert
         out, _ = capsys.readouterr()
         assert len(out) == 1  # There is a "\n" in an empty rich.Table
 
@@ -178,12 +229,18 @@ class TestResults:
         ),
     )
     def test_print_result_as_table(input_data: Any, capsys: Any) -> None:
-        """Test print_result_as_table() with default values for one host"""
+        """
+        Test print_result_as_table() with default values for one host.
+        """
+
+        # Arrange
         result = Result[Any]()
         result.push_result("test_host", input_data)
 
+        # Act
         result.print_result_as_table()
 
+        # Assert
         out, _ = capsys.readouterr()
         assert "test_host" in out
         assert "val1" in out
@@ -191,24 +248,36 @@ class TestResults:
 
     @staticmethod
     def test_print_result_as_table_auto_header(capsys: Any) -> None:
-        """Test print_result_as_table() method with auto_header=True"""
+        """
+        Test print_result_as_table() method with auto_header=True.
+        """
+
+        # Arrange
         result = Result[dict[str, str]]()
         result.push_result("test_host", {"key1": "val1", "key2": "val2"})
 
+        # Act
         result.print_result_as_table("test_host", auto_header=True)
 
+        # Assert
         out, _ = capsys.readouterr()
         assert "key1" in out
         assert "val1" in out
 
     @staticmethod
     def test_print_result_as_table_with_headers(capsys: Any) -> None:
-        """Test print_result_as_table() method with headers given"""
+        """
+        Test print_result_as_table() method with headers given.
+        """
+
+        # Arrange
         result = Result[dict[str, str]]()
         result.push_result("test_host", {"key1": "val1", "key2": "val2"})
 
+        # Act
         result.print_result_as_table("test_host", headers=["keys", "values"])
 
+        # Assert
         out, _ = capsys.readouterr()
         assert "keys" in out
         assert "key1" not in out
@@ -216,12 +285,18 @@ class TestResults:
 
     @staticmethod
     def test_print_result_as_table_with_title(capsys: Any) -> None:
-        """Test print_result_as_table() method with title given"""
+        """
+        Test print_result_as_table() method with title given.
+        """
+
+        # Arrange
         result = Result[dict[str, str]]()
         result.push_result("test_host", {"key1": "val1", "key2": "val2"})
 
+        # Act
         result.print_result_as_table(title="title")
 
+        # Assert
         out, _ = capsys.readouterr()
         assert "title" in out
 
@@ -239,9 +314,14 @@ class TestResults:
         ),
     )
     def test_print_table_raw_with_unsupported_data(input_data: Any) -> None:
-        """Test print_table_raw() when data given is unsupported"""
+        """
+        Test print_table_raw() when data given is unsupported.
+        """
+
+        # Arrange
         result = Result[Any]()
 
+        # Act & Assert
         with pytest.raises(GeneralWarning, match=r"must be a list of dicts"):
             result.print_table_raw(input_data, [])
 
@@ -257,21 +337,31 @@ class TestResults:
         ),
     )
     def test_print_raw(input_data: Any, expect: str, capsys: Any) -> None:
-        """Test print_raw() method"""
+        """
+        Test print_raw() method.
+        """
+
+        # Arrange
         result = Result[Any]()
         result.push_result("test_host_1", input_data)
         result.push_result("test_host_2", "dummy_2")
 
         # Test without key
+        # Act
         result.print_raw()
         out, _ = capsys.readouterr()
+
+        # Assert
         assert "test_host_1" in out
         assert "test_host_2" in out
         assert expect in out
 
         # Test with key
+        # Act
         result.print_raw("test_host_1")
         out, _ = capsys.readouterr()
+
+        # Assert
         assert "test_host_1" in out
         assert "test_host_2" not in out
         assert expect in out
@@ -288,24 +378,40 @@ class TestResults:
             pytest.param("test_save_raw.dummy", "dummy", id="unknown single"),
         ),
     )
-    def test_save_raw(temp_dir: Path, file_name: str, key: str) -> None:
-        """Test save_raw() method"""
+    def test_save_raw(function_dir: Path, file_name: str, key: str) -> None:
+        """
+        Test save_raw() method.
+        """
+
+        # Arrange
         result = Result[Any]()
         result.push_result("dummy", [1, 2, 3])
-        output_file = temp_dir / file_name
+        output_file = function_dir / file_name
         assert not output_file.is_file()
+
+        # Act
         result.save_raw(output_file, key)
+
+        # Assert
         assert output_file.is_file()
         output_file.unlink()
         assert not output_file.is_file()
 
     @staticmethod
-    def test_save_with_template(temp_dir: Path) -> None:
-        """Test save_with_template"""
+    def test_save_with_template(function_dir: Path) -> None:
+        """
+        Test save_with_template.
+        """
+
+        # Arrange
         result = Result[dict[str, dict[str, int]]]()
         result.push_result("dummy_ems", {"fotoobo": {"dummy_var": 42}})
-        output_file = temp_dir / "output.txt"
+        output_file = function_dir / "output.txt"
+
+        # Act
         result.save_with_template("dummy_ems", Path("tests/data/dummy.j2"), output_file)
+
+        # Assert
         assert output_file.is_file()
         content = output_file.read_text(encoding="UTF-8")
         assert "dummy" in content
@@ -322,17 +428,18 @@ class TestResults:
         ),
     )
     def test_send_messages_as_mail(command: bool, count: bool, monkeypatch: MonkeyPatch) -> None:
-        """Test send_messages_as_mail
+        """
+        Test send_messages_as_mail.
+
         Here we check with the assert_called_with method if the mail function was called with
         expected input. No mail will actually be sent.
         """
-        sendmail_mock = MagicMock()
 
+        # Arrange
+        sendmail_mock = Mock()
+        monkeypatch.setattr("fotoobo.helpers.result.smtplib.SMTP.__init__", Mock(return_value=None))
         monkeypatch.setattr(
-            "fotoobo.helpers.result.smtplib.SMTP.__init__", MagicMock(return_value=None)
-        )
-        monkeypatch.setattr(
-            "fotoobo.helpers.result.smtplib.SMTP.__enter__", MagicMock(return_value=sendmail_mock)
+            "fotoobo.helpers.result.smtplib.SMTP.__enter__", Mock(return_value=sendmail_mock)
         )
         smtp = GenericDevice(
             hostname="dummy.local",
@@ -358,7 +465,10 @@ class TestResults:
         cli_path.clear()  # previous cli tests already appended some commands
         cli_path.append("dummy_cli_path")
 
+        # Act
         result.send_messages_as_mail(smtp, command=command, count=count)
+
+        # Assert
         sendmail_mock.sendmail.assert_called_with(
             "fotoobo_sender@domain",
             "fotoobo_recipient@domain",

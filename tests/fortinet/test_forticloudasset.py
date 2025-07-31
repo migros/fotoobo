@@ -1,16 +1,14 @@
 """
-Test the FortiCloudAsset class
+Test the FortiCloudAsset class.
 """
 
-# pylint: disable=no-member
 # mypy: disable-error-code=attr-defined
 
 from pathlib import Path
-from unittest.mock import MagicMock
+from unittest.mock import Mock
 
 import pytest
-import requests
-from _pytest.monkeypatch import MonkeyPatch
+from pytest import MonkeyPatch
 
 from fotoobo.exceptions.exceptions import GeneralWarning
 from fotoobo.fortinet.forticloudasset import FortiCloudAsset
@@ -18,16 +16,23 @@ from tests.helper import ResponseMock
 
 
 class TestFortiCloud:
-    """Test the FortiCloud class"""
+    """
+    Test the FortiCloud class.
+    """
 
     @staticmethod
     def test_init() -> None:
-        """Test the FortiCloud init"""
+        """
+        Test the FortiCloudAsset init.
+        """
+
+        # Act
         cloud = FortiCloudAsset(
             username="dummy_username",
             password="dummy_password",
         )
 
+        # Assert
         assert cloud.api_url == "https://support.fortinet.com:443/ES/api/registration/v3"
         assert cloud.password == "dummy_password"
         assert cloud.username == "dummy_username"
@@ -39,18 +44,21 @@ class TestFortiCloud:
 
     @staticmethod
     def test_api(monkeypatch: MonkeyPatch) -> None:
-        """Test the FortiCloud api method"""
+        """
+        Test the FortiCloud api method.
+        """
+
+        # Arrange
+        post_mock = Mock(return_value=ResponseMock(json={"key": "value"}, status_code=200))
+        monkeypatch.setattr("requests.Session.post", post_mock)
         monkeypatch.setattr(
-            "requests.Session.post",
-            MagicMock(return_value=ResponseMock(json={"key": "value"}, status_code=200)),
-        )
-        monkeypatch.setattr(
-            "fotoobo.fortinet.forticloudasset.FortiCloudAsset.login", MagicMock(return_value=200)
+            "fotoobo.fortinet.forticloudasset.FortiCloudAsset.login", Mock(return_value=200)
         )
         forticloud = FortiCloudAsset("dummy_username", "dummy_password")
-        # forticloud.access_token = "dummy_token"
+
+        # Act & Assert
         assert forticloud.api("post", "dummy").json() == {"key": "value"}
-        requests.Session.post.assert_called_with(
+        post_mock.assert_called_with(
             "https://support.fortinet.com:443/ES/api/registration/v3/dummy",
             headers={"Content-Type": "application/json", "Authorization": "Bearer "},
             json={},
@@ -69,28 +77,37 @@ class TestFortiCloud:
         ),
     )
     def test_get_version(response: dict[str, str], expected: str, monkeypatch: MonkeyPatch) -> None:
-        """Test get version"""
-        monkeypatch.setattr(
-            "fotoobo.fortinet.forticloudasset.FortiCloudAsset.post",
-            MagicMock(return_value=response),
-        )
+        """
+        Test get version.
+        """
+
+        # Arrange
+        post_mock = Mock(return_value=response)
+        monkeypatch.setattr("fotoobo.fortinet.forticloudasset.FortiCloudAsset.post", post_mock)
+
+        # Act & Assert
         assert FortiCloudAsset("dummy_username", "dummy_password").get_version() == expected
-        FortiCloudAsset.post.assert_called_with(url="/folders/list")
+        post_mock.assert_called_with(url="/folders/list")
 
     @staticmethod
     def test_get_version_api_http_error(monkeypatch: MonkeyPatch) -> None:
-        """Test get version with http error"""
+        """
+        Test get version with http error.
+        """
+
+        # Arrange
+        post_mock = Mock(return_value=ResponseMock(json={"version": "dummy"}, status_code=401))
+        monkeypatch.setattr("requests.Session.post", post_mock)
         monkeypatch.setattr(
-            "requests.Session.post",
-            MagicMock(return_value=ResponseMock(json={"version": "dummy"}, status_code=401)),
+            "fotoobo.fortinet.forticloudasset.FortiCloudAsset.login", Mock(return_value=200)
         )
-        monkeypatch.setattr(
-            "fotoobo.fortinet.forticloudasset.FortiCloudAsset.login", MagicMock(return_value=200)
-        )
+
+        # Act & Assert
         with pytest.raises(GeneralWarning, match=r"HTTP/401") as err:
             FortiCloudAsset("dummy_username", "dummy_password").get_version()
+
         assert "support.fortinet.com returned: HTTP/401 Not Authorized" in str(err.value)
-        requests.Session.post.assert_called_with(
+        post_mock.assert_called_with(
             "https://support.fortinet.com:443/ES/api/registration/v3/folders/list",
             headers={"Content-Type": "application/json", "Authorization": "Bearer "},
             json={},
@@ -100,41 +117,56 @@ class TestFortiCloud:
         )
 
     @staticmethod
-    def test_login_with_no_cache(monkeypatch: MonkeyPatch, temp_dir: Path) -> None:
-        """Test login method"""
+    def test_login_with_no_cache(monkeypatch: MonkeyPatch, function_dir: Path) -> None:
+        """
+        Test login method.
+        """
+
+        # Arrange
         monkeypatch.setattr(
             "requests.post",
-            MagicMock(
+            Mock(
                 return_value=ResponseMock(
                     json={"access_token": "dummy_access_token"}, status_code=200
                 )
             ),
         )
+        forticloud = FortiCloudAsset("dummy_username", "dummy_password", token_path=function_dir)
 
-        forticloud = FortiCloudAsset("dummy_username", "dummy_password", token_path=temp_dir)
+        # Act & Assert
         assert forticloud.login() == 200
         assert forticloud.access_token == "dummy_access_token"
 
     @staticmethod
-    def test_login_with_valid_cache(monkeypatch: MonkeyPatch, temp_dir: Path) -> None:
-        """Test login method when a valid token is in the cache"""
+    def test_login_with_valid_cache(monkeypatch: MonkeyPatch, function_dir: Path) -> None:
+        """
+        Test login method when a valid token is in the cache.
+        """
+
+        # Arrange
         monkeypatch.setattr(
             "fotoobo.fortinet.fortinet.requests.post",
-            MagicMock(return_value=ResponseMock(json={}, status_code=200)),
+            Mock(return_value=ResponseMock(json={}, status_code=200)),
         )
 
-        with open(temp_dir / "support.fortinet.com.token", "w", encoding="UTF-8") as file:
+        with open(function_dir / "support.fortinet.com.token", "w", encoding="UTF-8") as file:
             file.write("dummy_access_token")
 
-        forticloud = FortiCloudAsset("dummy_username", "dummy_password", token_path=temp_dir)
+        forticloud = FortiCloudAsset("dummy_username", "dummy_password", token_path=function_dir)
+
+        # Act & Assert
         assert forticloud.login() == 200
         assert forticloud.access_token == "dummy_access_token"
 
     @staticmethod
-    def test_login_with_invalid_cache(monkeypatch: MonkeyPatch, temp_dir: Path) -> None:
-        """Test login method when an invalid token is in the cache"""
-        token_file = temp_dir / "support.fortinet.com.token"
-        responses = MagicMock()
+    def test_login_with_invalid_cache(monkeypatch: MonkeyPatch, function_dir: Path) -> None:
+        """
+        Test login method when an invalid token is in the cache.
+        """
+
+        # Arrange
+        token_file = function_dir / "support.fortinet.com.token"
+        responses = Mock()
         responses.side_effect = [
             ResponseMock(json={}, status_code=401),
             ResponseMock(json={"access_token": "dummy_access_token"}, status_code=200),
@@ -142,19 +174,24 @@ class TestFortiCloud:
         monkeypatch.setattr("requests.post", responses)
         token_file.write_text("invalid,access_token", encoding="UTF-8")
 
-        forticloud = FortiCloudAsset("dummy_username", "dummy_password", token_path=temp_dir)
+        forticloud = FortiCloudAsset("dummy_username", "dummy_password", token_path=function_dir)
+
+        # Act & Assert
         assert forticloud.login() == 200
         assert forticloud.access_token == "dummy_access_token"
         assert token_file.read_text(encoding="UTF-8") == "dummy_access_token"
 
     @staticmethod
     def test_login_with_invalid_cache_and_alue_verror(
-        monkeypatch: MonkeyPatch, temp_dir: Path
+        monkeypatch: MonkeyPatch, function_dir: Path
     ) -> None:
-        """Test login method when an invalid token is in the cache and the auth returns a
-        ValueError"""
-        token_file = temp_dir / "support.fortinet.com.token"
-        responses = MagicMock()
+        """
+        Test login method when an invalid token is in the cache and the auth returns a ValueError.
+        """
+
+        # Arrange
+        token_file = function_dir / "support.fortinet.com.token"
+        responses = Mock()
         responses.side_effect = [
             ValueError("Invalid token"),
             ResponseMock(json={"access_token": "dummy_access_token"}, status_code=200),
@@ -162,27 +199,35 @@ class TestFortiCloud:
         monkeypatch.setattr("requests.post", responses)
         token_file.write_text("invalid,access_token", encoding="UTF-8")
 
-        forticloud = FortiCloudAsset("dummy_username", "dummy_password", token_path=temp_dir)
+        forticloud = FortiCloudAsset("dummy_username", "dummy_password", token_path=function_dir)
+
+        # Act & Assert
         assert forticloud.login() == 200
         assert forticloud.access_token == "dummy_access_token"
         assert token_file.read_text(encoding="UTF-8") == "dummy_access_token"
 
     @staticmethod
     def test_post(monkeypatch: MonkeyPatch) -> None:
-        """Test get version with http error"""
-        monkeypatch.setattr(
-            "requests.Session.post",
-            MagicMock(
-                return_value=ResponseMock(json={"dummy_key": "dummy_value"}, status_code=200)
-            ),
+        """
+        Test get version with http error.
+        """
+
+        # Arrange
+        post_mock = Mock(
+            return_value=ResponseMock(json={"dummy_key": "dummy_value"}, status_code=200)
         )
+        monkeypatch.setattr("requests.Session.post", post_mock)
         monkeypatch.setattr(
-            "fotoobo.fortinet.forticloudasset.FortiCloudAsset.login", MagicMock(return_value=200)
+            "fotoobo.fortinet.forticloudasset.FortiCloudAsset.login", Mock(return_value=200)
         )
         forticloud = FortiCloudAsset("dummy_username", "dummy_password")
+
+        # Act
         response = forticloud.post("/dummy_url")
+
+        # Assert
         assert response == {"dummy_key": "dummy_value"}
-        requests.Session.post.assert_called_with(
+        post_mock.assert_called_with(
             "https://support.fortinet.com:443/ES/api/registration/v3/dummy_url",
             headers={"Content-Type": "application/json", "Authorization": "Bearer "},
             json={},

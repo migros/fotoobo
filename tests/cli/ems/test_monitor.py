@@ -1,10 +1,10 @@
 """
-Testing the ems monitor cli app
+Testing the ems monitor cli app.
 """
 
-from unittest.mock import MagicMock
+from unittest.mock import Mock
 
-from _pytest.monkeypatch import MonkeyPatch
+from pytest import MonkeyPatch
 from typer.testing import CliRunner
 
 from fotoobo.cli.main import app
@@ -14,11 +14,19 @@ runner = CliRunner()
 
 
 def test_cli_app_ems_monitor_help(help_args_with_none: str) -> None:
-    """Test cli help for ems monitor"""
+    """
+    Test cli help for ems monitor.
+    """
+
+    # Arrange
     args = ["-c", "tests/fotoobo.yaml", "ems", "monitor"]
     args.append(help_args_with_none)
     args = list(filter(None, args))
+
+    # Act
     result = runner.invoke(app, args)
+
+    # Assert
     assert result.exit_code in [0, 2]
     arguments, options, commands = parse_help_output(result.stdout)
     assert not arguments
@@ -34,10 +42,18 @@ def test_cli_app_ems_monitor_help(help_args_with_none: str) -> None:
 
 
 def test_cli_app_ems_monitor_connections_help(help_args: str) -> None:
-    """Test cli help for ems monitor connections"""
+    """
+    Test cli help for ems monitor connections.
+    """
+
+    # Arrange
     args = ["-c", "tests/fotoobo.yaml", "ems", "monitor", "connections"]
     args.append(help_args)
+
+    # Act
     result = runner.invoke(app, args)
+
+    # Assert
     assert result.exit_code == 0
     arguments, options, commands = parse_help_output(result.stdout)
     assert set(arguments) == {"host"}
@@ -46,10 +62,14 @@ def test_cli_app_ems_monitor_connections_help(help_args: str) -> None:
 
 
 def test_cli_app_ems_monitor_connections(monkeypatch: MonkeyPatch) -> None:
-    """Test cli for ems monitor connections"""
+    """
+    Test cli for ems monitor connections.
+    """
+
+    # Arrange
     monkeypatch.setattr(
         "fotoobo.fortinet.forticlientems.FortiClientEMS.api",
-        MagicMock(
+        Mock(
             return_value=ResponseMock(
                 json={
                     "result": {"retval": 1, "message": None},
@@ -61,21 +81,31 @@ def test_cli_app_ems_monitor_connections(monkeypatch: MonkeyPatch) -> None:
             )
         ),
     )
+
+    # Act
     result = runner.invoke(
         app, ["-c", "tests/fotoobo.yaml", "ems", "monitor", "connections", "test_ems"]
     )
 
+    # Assert
     assert result.exit_code == 0
-
     assert "managed   │ 1000  │ Managed" in result.stdout
     assert "unmanaged │ 99    │ Unmanaged" in result.stdout
 
 
 def test_cli_app_ems_monitor_endpoint_management_status_help(help_args: str) -> None:
-    """Test cli help for ems monitor endpoint-management-status"""
+    """
+    Test cli help for ems monitor endpoint-management-status.
+    """
+
+    # Arrange
     args = ["-c", "tests/fotoobo.yaml", "ems", "monitor", "endpoint-management-status"]
     args.append(help_args)
+
+    # Act
     result = runner.invoke(app, args)
+
+    # Assert
     assert result.exit_code == 0
     arguments, options, commands = parse_help_output(result.stdout)
     assert set(arguments) == {"host"}
@@ -84,10 +114,14 @@ def test_cli_app_ems_monitor_endpoint_management_status_help(help_args: str) -> 
 
 
 def test_cli_app_ems_monitor_endpoint_management_status(monkeypatch: MonkeyPatch) -> None:
-    """Test cli for ems monitor connections"""
+    """
+    Test cli for ems monitor connections.
+    """
+
+    # Arrange
     monkeypatch.setattr(
         "fotoobo.fortinet.forticlientems.FortiClientEMS.api",
-        MagicMock(
+        Mock(
             return_value=ResponseMock(
                 json={
                     "result": {"retval": 1, "message": None},
@@ -99,22 +133,32 @@ def test_cli_app_ems_monitor_endpoint_management_status(monkeypatch: MonkeyPatch
             )
         ),
     )
+
+    # Act
     result = runner.invoke(
         app,
         ["-c", "tests/fotoobo.yaml", "ems", "monitor", "endpoint-management-status", "test_ems"],
     )
 
+    # Assert
     assert result.exit_code == 0
-
     assert "Managed   │ 1000" in result.stdout
     assert "Unmanaged │ 99" in result.stdout
 
 
 def test_cli_app_ems_monitor_endpoint_os_versions_help(help_args: str) -> None:
-    """Test cli help for ems monitor endpoint-os-versions"""
+    """
+    Test cli help for ems monitor endpoint-os-versions.
+    """
+
+    # Arrange
     args = ["-c", "tests/fotoobo.yaml", "ems", "monitor", "endpoint-os-versions"]
     args.append(help_args)
+
+    # Act
     result = runner.invoke(app, args)
+
+    # Assert
     assert result.exit_code == 0
     arguments, options, commands = parse_help_output(result.stdout)
     assert set(arguments) == {"host"}
@@ -123,10 +167,14 @@ def test_cli_app_ems_monitor_endpoint_os_versions_help(help_args: str) -> None:
 
 
 def test_cli_app_ems_monitor_endpoint_os_versions(monkeypatch: MonkeyPatch) -> None:
-    """Test cli for ems monitor connections"""
+    """
+    Test cli for ems monitor connections.
+    """
+
+    # Arrange
     monkeypatch.setattr(
         "fotoobo.fortinet.forticlientems.FortiClientEMS.api",
-        MagicMock(
+        Mock(
             return_value=ResponseMock(
                 json={
                     "result": {"retval": 1, "message": None},
@@ -138,12 +186,14 @@ def test_cli_app_ems_monitor_endpoint_os_versions(monkeypatch: MonkeyPatch) -> N
             )
         ),
     )
+
+    # Act
     result = runner.invoke(
         app, ["-c", "tests/fotoobo.yaml", "ems", "monitor", "endpoint-os-versions", "test_ems"]
     )
 
+    # Assert
     assert result.exit_code == 0
-
     assert "windows │ dummy_ver_1 │ 333" in result.stdout
     assert "linux   │ dummy_ver_2 │ 444" in result.stdout
     assert "Summary" in result.stdout
@@ -153,10 +203,18 @@ def test_cli_app_ems_monitor_endpoint_os_versions(monkeypatch: MonkeyPatch) -> N
 
 
 def test_cli_app_ems_monitor_endpoint_outofsync_help(help_args: str) -> None:
-    """Test cli help for ems monitor endpoint-outofsync"""
+    """
+    Test cli help for ems monitor endpoint-outofsync.
+    """
+
+    # Arrange
     args = ["-c", "tests/fotoobo.yaml", "ems", "monitor", "endpoint-outofsync"]
     args.append(help_args)
+
+    # Act
     result = runner.invoke(app, args)
+
+    # Assert
     assert result.exit_code == 0
     arguments, options, commands = parse_help_output(result.stdout)
     assert set(arguments) == {"host"}
@@ -165,10 +223,14 @@ def test_cli_app_ems_monitor_endpoint_outofsync_help(help_args: str) -> None:
 
 
 def test_cli_app_ems_monitor_endpoint_outofsync(monkeypatch: MonkeyPatch) -> None:
-    """Test cli for ems monitor connections"""
+    """
+    Test cli for ems monitor connections.
+    """
+
+    # Arrange
     monkeypatch.setattr(
         "fotoobo.fortinet.forticlientems.FortiClientEMS.api",
-        MagicMock(
+        Mock(
             return_value=ResponseMock(
                 json={
                     "result": {"retval": 1, "message": None},
@@ -180,20 +242,30 @@ def test_cli_app_ems_monitor_endpoint_outofsync(monkeypatch: MonkeyPatch) -> Non
             )
         ),
     )
+
+    # Act
     result = runner.invoke(
         app, ["-c", "tests/fotoobo.yaml", "ems", "monitor", "endpoint-outofsync", "test_ems"]
     )
 
+    # Assert
     assert result.exit_code == 0
-
     assert "out of sync │ 999" in result.stdout
 
 
 def test_cli_app_ems_monitor_license_help(help_args: str) -> None:
-    """Test cli help for ems monitor license"""
+    """
+    Test cli help for ems monitor license.
+    """
+
+    # Arrange
     args = ["-c", "tests/fotoobo.yaml", "ems", "monitor", "license"]
     args.append(help_args)
+
+    # Act
     result = runner.invoke(app, args)
+
+    # Assert
     assert result.exit_code == 0
     arguments, options, commands = parse_help_output(result.stdout)
     assert set(arguments) == {"host"}
@@ -202,10 +274,14 @@ def test_cli_app_ems_monitor_license_help(help_args: str) -> None:
 
 
 def test_cli_app_ems_monitor_license(monkeypatch: MonkeyPatch) -> None:
-    """Test cli for ems monitor connections"""
+    """
+    Test cli for ems monitor connections.
+    """
+
+    # Arrange
     monkeypatch.setattr(
         "fotoobo.fortinet.forticlientems.FortiClientEMS.api",
-        MagicMock(
+        Mock(
             return_value=ResponseMock(
                 json={
                     "result": {"retval": 1, "message": None},
@@ -235,24 +311,33 @@ def test_cli_app_ems_monitor_license(monkeypatch: MonkeyPatch) -> None:
             )
         ),
     )
+
+    # Act
     result = runner.invoke(
         app, ["-c", "tests/fotoobo.yaml", "ems", "monitor", "license", "test_ems"]
     )
 
+    # Assert
     assert result.exit_code == 0
-
     assert " sn           │ FCTEMS0000000000 " in result.stdout
-
     assert "license_expiry_days │ " in result.stdout
     assert "fabric_agent_usage  │ 10" in result.stdout
     assert "sandbox_cloud_usage │ 20" in result.stdout
 
 
 def test_cli_app_ems_monitor_system_help(help_args: str) -> None:
-    """Test cli help for ems monitor system"""
+    """
+    Test cli help for ems monitor system.
+    """
+
+    # Arrange
     args = ["-c", "tests/fotoobo.yaml", "ems", "monitor", "system"]
     args.append(help_args)
+
+    # Act
     result = runner.invoke(app, args)
+
+    # Assert
     assert result.exit_code == 0
     arguments, options, commands = parse_help_output(result.stdout)
     assert set(arguments) == {"host"}
@@ -261,10 +346,14 @@ def test_cli_app_ems_monitor_system_help(help_args: str) -> None:
 
 
 def test_cli_app_ems_monitor_system(monkeypatch: MonkeyPatch) -> None:
-    """Test cli for ems monitor connections"""
+    """
+    Test cli for ems monitor connections.
+    """
+
+    # Arrange
     monkeypatch.setattr(
         "fotoobo.fortinet.forticlientems.FortiClientEMS.api",
-        MagicMock(
+        Mock(
             return_value=ResponseMock(
                 json={
                     "result": {"retval": 1, "message": "System info retrieved successfully."},
@@ -294,11 +383,13 @@ def test_cli_app_ems_monitor_system(monkeypatch: MonkeyPatch) -> None:
             )
         ),
     )
+
+    # Act
     result = runner.invoke(
         app, ["-c", "tests/fotoobo.yaml", "ems", "monitor", "system", "test_ems"]
     )
 
+    # Assert
     assert result.exit_code == 0
-
     assert " hostname    │ dummy_hostname " in result.stdout
     assert " system_time │ 2066-06-06 06:06:06 " in result.stdout
