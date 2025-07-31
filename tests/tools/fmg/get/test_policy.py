@@ -1,38 +1,26 @@
-"""Test fmg tools get policy"""
+"""
+Test fmg tools get policy.
+"""
 
-from pathlib import Path
-from unittest.mock import MagicMock
+from unittest.mock import Mock
 
 import pytest
-from _pytest.monkeypatch import MonkeyPatch
+from pytest import MonkeyPatch
 
 from fotoobo.exceptions import GeneralError
 from fotoobo.tools.fmg.get import policy
 from tests.helper import ResponseMock
 
 
-@pytest.fixture(autouse=True)
-def inventory_file(monkeypatch: MonkeyPatch) -> None:
-    """Change inventory file in config to test inventory"""
-    monkeypatch.setattr(
-        "fotoobo.helpers.config.config.inventory_file", Path("tests/data/inventory.yaml")
-    )
-
-
-@pytest.fixture(autouse=True)
-def fmg_login(monkeypatch: MonkeyPatch) -> None:
-    """Mock the FortiManager Login to always return 200 without to really login"""
-    monkeypatch.setattr(
-        "fotoobo.fortinet.fortimanager.FortiManager.login",
-        MagicMock(return_value=200),
-    )
-
-
 def test_policy(monkeypatch: MonkeyPatch) -> None:
-    """Test get policy"""
+    """
+    Test get policy.
+    """
+
+    # Arrange
     monkeypatch.setattr(
         "fotoobo.fortinet.fortimanager.FortiManager.api",
-        MagicMock(
+        Mock(
             return_value=ResponseMock(
                 json={
                     "result": [
@@ -60,8 +48,11 @@ def test_policy(monkeypatch: MonkeyPatch) -> None:
             )
         ),
     )
+
+    # Act
     result = policy("test_fmg", "", "")
 
+    # Assert
     data = result.get_result("test_fmg")
     assert data == [
         {
@@ -80,15 +71,21 @@ def test_policy(monkeypatch: MonkeyPatch) -> None:
 
 
 def test_policy_exception_status_not_0(monkeypatch: MonkeyPatch) -> None:
-    """Test get policy with exception when status is not 200"""
+    """
+    Test get policy with exception when status is not 200.
+    """
+
+    # Arrange
     monkeypatch.setattr(
         "fotoobo.fortinet.fortimanager.FortiManager.api",
-        MagicMock(
+        Mock(
             return_value=ResponseMock(
                 json={"result": [{"status": {"code": 42, "message": "msg"}}]},
                 status=200,
             )
         ),
     )
+
+    # Act & Assert
     with pytest.raises(GeneralError, match=r"FortiManager test_fmg returned 42: msg"):
         policy("test_fmg", "", "")

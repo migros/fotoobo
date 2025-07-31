@@ -1,3 +1,3 @@
 """
-Here we test the fgt cmdb utility
+__init__
 """

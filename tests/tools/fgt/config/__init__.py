@@ -1,3 +1,3 @@
 """
-Here we test the fgt config utility
+__init__
 """

@@ -1,3 +1,3 @@
 """
-Here we test the fmg tools get module
+__init__
 """

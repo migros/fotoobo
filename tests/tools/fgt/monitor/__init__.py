@@ -1,3 +1,3 @@
 """
-Here we test the fgt tools check module
+__init__
 """

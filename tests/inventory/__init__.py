@@ -1,3 +1,3 @@
 """
-Here we test the inventory module
+__init__
 """

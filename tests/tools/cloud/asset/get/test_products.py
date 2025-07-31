@@ -1,36 +1,23 @@
-"""Test fcasset tools get version"""
+"""
+Test fcasset tools get version.
+"""
 
-from pathlib import Path
-from unittest.mock import MagicMock
+from unittest.mock import Mock
 
-import pytest
-from _pytest.monkeypatch import MonkeyPatch
+from pytest import MonkeyPatch
 
 from fotoobo.tools.cloud.asset.get import products
 
 
-@pytest.fixture(autouse=True)
-def inventory_file(monkeypatch: MonkeyPatch) -> None:
-    """Change inventory file in config to test inventory"""
-    monkeypatch.setattr(
-        "fotoobo.helpers.config.config.inventory_file", Path("tests/data/inventory.yaml")
-    )
-
-
-@pytest.fixture(autouse=True)
-def fc_login(monkeypatch: MonkeyPatch) -> None:
-    """Mock the FortiCloud login to always return 200 without to really login"""
-    monkeypatch.setattr(
-        "fotoobo.fortinet.forticloudasset.FortiCloudAsset.login",
-        MagicMock(return_value=200),
-    )
-
-
 def test_products(monkeypatch: MonkeyPatch) -> None:
-    """Test get products"""
+    """
+    Test get products.
+    """
+
+    # Arrange
     monkeypatch.setattr(
         "fotoobo.fortinet.forticloudasset.FortiCloudAsset.post",
-        MagicMock(
+        Mock(
             return_value={
                 "build": "1.0.0",
                 "error": None,
@@ -61,16 +48,24 @@ def test_products(monkeypatch: MonkeyPatch) -> None:
             }
         ),
     )
+
+    # Act
     result = products("forticloudasset")
+
+    # Assert
     data = result.get_result("forticloudasset")
     assert data[0]["description"] == "dummy_fortigate"
 
 
 def test_products_empty(monkeypatch: MonkeyPatch) -> None:
-    """Test get products when there are no products in list"""
+    """
+    Test get products when there are no products in list.
+    """
+
+    # Arrange
     monkeypatch.setattr(
         "fotoobo.fortinet.forticloudasset.FortiCloudAsset.post",
-        MagicMock(
+        Mock(
             return_value={
                 "build": "1.0.0",
                 "error": {
@@ -87,6 +82,10 @@ def test_products_empty(monkeypatch: MonkeyPatch) -> None:
             }
         ),
     )
+
+    # Act
     result = products("forticloudasset")
+
+    # Assert
     msg = result.get_messages("forticloudasset")
     assert msg[0]["message"] == "No product found"

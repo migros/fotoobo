@@ -1,3 +1,3 @@
 """
-Here we test the tools module
+__init__
 """

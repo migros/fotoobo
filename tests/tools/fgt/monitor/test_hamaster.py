@@ -1,41 +1,32 @@
 """
-Test fgt tools check hamaster
+Test fgt tools check hamaster.
 """
 
-from pathlib import Path
-from unittest.mock import MagicMock
+from unittest.mock import Mock
 
 import pytest
-from _pytest.monkeypatch import MonkeyPatch
+from pytest import MonkeyPatch
 
 from fotoobo.tools.fgt.monitor import hamaster
 from tests.helper import ResponseMock
 
 
 @pytest.fixture(autouse=True)
-def inventory_file(monkeypatch: MonkeyPatch) -> None:
-    """Change inventory file in config to test inventory"""
-    monkeypatch.setattr(
-        "fotoobo.helpers.config.config.inventory_file", Path("tests/data/inventory.yaml")
-    )
-
-
-@pytest.fixture(autouse=True)
 def fmg_login(monkeypatch: MonkeyPatch) -> None:
-    """Mock the FortiManager Login to always return 200 without to really login"""
-    monkeypatch.setattr(
-        "fotoobo.fortinet.fortimanager.FortiManager.login",
-        MagicMock(return_value=200),
-    )
+    """
+    Mock the FortiManager login to always return 200 without to really login.
+    """
+
+    monkeypatch.setattr("fotoobo.fortinet.fortimanager.FortiManager.login", Mock(return_value=200))
 
 
 @pytest.fixture(autouse=True)
 def fmg_logout(monkeypatch: MonkeyPatch) -> None:
-    """Mock the FortiManager Login to always return 200 without to really logout"""
-    monkeypatch.setattr(
-        "fotoobo.fortinet.fortimanager.FortiManager.logout",
-        MagicMock(return_value=200),
-    )
+    """
+    Mock the FortiManager logout to always return 200 without to really logout.
+    """
+
+    monkeypatch.setattr("fotoobo.fortinet.fortimanager.FortiManager.logout", Mock(return_value=200))
 
 
 @pytest.mark.parametrize(
@@ -66,10 +57,14 @@ def fmg_logout(monkeypatch: MonkeyPatch) -> None:
     ),
 )
 def test_hamaster(monkeypatch: MonkeyPatch, ret_val: str, expected: str) -> None:
-    """Test check hamaster"""
+    """
+    Test check hamaster.
+    """
+
+    # Arrange
     monkeypatch.setattr(
         "fotoobo.fortinet.fortimanager.FortiManager.api",
-        MagicMock(
+        Mock(
             return_value=ResponseMock(
                 json={
                     "result": [
@@ -103,12 +98,16 @@ def test_hamaster(monkeypatch: MonkeyPatch, ret_val: str, expected: str) -> None
     )
     monkeypatch.setattr(
         "fotoobo.tools.fgt.monitor.FortiGate.api",
-        MagicMock(return_value=ResponseMock(json=ret_val)),
+        Mock(return_value=ResponseMock(json=ret_val)),
     )
     monkeypatch.setattr(
         "fotoobo.helpers.result.Result.send_messages_as_mail",
-        MagicMock(return_value=None),
+        Mock(return_value=None),
     )
+
+    # Act
     result = hamaster("test_fmg")
+
+    # Assert
     assert result.get_result("test_fgt_2") == expected
     assert result.get_result("dummy_2") == "not found in inventory"

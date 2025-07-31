@@ -1,15 +1,14 @@
 """
-Test the Fortinet class
+Test the Fortinet class.
 """
 
-# pylint: disable=no-member
 # mypy: disable-error-code=attr-defined
 
-from unittest.mock import MagicMock
+from unittest.mock import Mock
 
 import pytest
 import requests
-from _pytest.monkeypatch import MonkeyPatch
+from pytest import MonkeyPatch
 from urllib3.exceptions import NewConnectionError, SSLError
 
 from fotoobo.exceptions import APIError, GeneralError
@@ -19,34 +18,55 @@ from tests.helper import ResponseMock
 
 class FortinetTestClass(Fortinet):
     """
-    Represents one Fortinet sub class
+    Represents one Fortinet sub class.
     """
 
     def get_version(self) -> str:
-        """just add it because it's an abstract method"""
+        """
+        Just add it because it's an abstract method.
+        """
+
         return "0.0.0"
 
 
 class TestFortinet:
-    """Test the Fortinet class"""
+    """
+    Test the Fortinet class.
+    """
 
     @staticmethod
     def test_get_vendor() -> None:
-        """Test the get_vendor method"""
+        """
+        Test the get_vendor method.
+        """
+
+        # Act & Assert
         assert Fortinet.get_vendor() == "Fortinet"
 
     @staticmethod
     def test_instantiation_default() -> None:
-        """Test the instantiation with an empty sub class"""
+        """
+        Test the instantiation with an empty sub class.
+        """
+
+        # Act
         fortigate = FortinetTestClass("host")
+
+        # Assert
         assert fortigate.hostname == "host"
         assert fortigate.session.proxies == {"http": None, "https": None}
         assert fortigate.ssl_verify
 
     @staticmethod
     def test_instantiation_with_proxy() -> None:
-        """Test the instantiation with an empty sub class"""
+        """
+        Test the instantiation with an empty sub class.
+        """
+
+        # Act
         fortigate = FortinetTestClass("host", proxy="proxy")
+
+        # Assert
         assert fortigate.session.proxies == {"http": "proxy", "https": "proxy"}
 
     @staticmethod
@@ -57,29 +77,41 @@ class TestFortinet:
 
     @staticmethod
     def test_api_get(monkeypatch: MonkeyPatch) -> None:
-        """Test api get"""
-        monkeypatch.setattr(
-            "fotoobo.fortinet.fortinet.requests.Session.get",
-            MagicMock(return_value=ResponseMock(json={"version": "v1.1.1"}, status_code=200)),
-        )
+        """
+        Test api get.
+        """
+
+        # Arrange
+        get_mock = Mock(return_value=ResponseMock(json={"version": "v1.1.1"}, status_code=200))
+        monkeypatch.setattr("fotoobo.fortinet.fortinet.requests.Session.get", get_mock)
+
+        # Act
         response = FortinetTestClass("dummy").api("get", "url")
+
+        # Assert
         assert response.status_code == 200
         assert response.json() == {"version": "v1.1.1"}
-        requests.Session.get.assert_called_with(
+        get_mock.assert_called_with(
             "url", headers=None, json=None, params=None, timeout=3, verify=True
         )
 
     @staticmethod
     def test_api_post(monkeypatch: MonkeyPatch) -> None:
-        """Test api post"""
-        monkeypatch.setattr(
-            "fotoobo.fortinet.fortinet.requests.Session.post",
-            MagicMock(return_value=ResponseMock(json={"version": "v1.1.1"}, status_code=200)),
-        )
+        """
+        Test api post.
+        """
+
+        # Arrange
+        post_mock = Mock(return_value=ResponseMock(json={"version": "v1.1.1"}, status_code=200))
+        monkeypatch.setattr("fotoobo.fortinet.fortinet.requests.Session.post", post_mock)
+
+        # Act
         response = FortinetTestClass("dummy").api("post", "url")
+
+        # Assert
         assert response.status_code == 200
         assert response.json() == {"version": "v1.1.1"}
-        requests.Session.post.assert_called_with(
+        post_mock.assert_called_with(
             "url", headers=None, json=None, params=None, timeout=3, verify=True
         )
 
@@ -88,11 +120,17 @@ class TestFortinet:
         "method", (pytest.param("get", id="get"), pytest.param("post", id="post"))
     )
     def test_api_get_connection_timeout(method: str, monkeypatch: MonkeyPatch) -> None:
-        """Test api get with connection timeout"""
+        """
+        Test api get with connection timeout.
+        """
+
+        # Arrange
         monkeypatch.setattr(
             f"fotoobo.fortinet.fortinet.requests.Session.{method}",
-            MagicMock(side_effect=requests.exceptions.ConnectTimeout()),
+            Mock(side_effect=requests.exceptions.ConnectTimeout()),
         )
+
+        # Act & Assert
         with pytest.raises(GeneralError, match=r"Connection timeout \(dummy\)"):
             FortinetTestClass("dummy").api(method, "url")
 
@@ -101,17 +139,27 @@ class TestFortinet:
         "method", (pytest.param("get", id="get"), pytest.param("post", id="post"))
     )
     def test_api_get_read_timeout(method: str, monkeypatch: MonkeyPatch) -> None:
-        """Test api get with read timeout"""
+        """
+        Test api get with read timeout.
+        """
+
+        # Arrange
         monkeypatch.setattr(
             f"fotoobo.fortinet.fortinet.requests.Session.{method}",
-            MagicMock(side_effect=requests.exceptions.ReadTimeout()),
+            Mock(side_effect=requests.exceptions.ReadTimeout()),
         )
+
+        # Act & Assert
         with pytest.raises(GeneralError, match=r"Read timeout \(dummy\)"):
             FortinetTestClass("dummy").api(method, "url")
 
     @staticmethod
     def test_api_unknown_method() -> None:
-        """Test api with unknown method"""
+        """
+        Test api with unknown method.
+        """
+
+        # Act & Assert
         with pytest.raises(NotImplementedError, match=r"HTTP method 'DUMMY' is not implemented"):
             FortinetTestClass("dummy").api("dummy", "url")
 
@@ -120,15 +168,22 @@ class TestFortinet:
         "method", (pytest.param("get", id="get"), pytest.param("post", id="post"))
     )
     def test_api_connection_error_unknown(method: str, monkeypatch: MonkeyPatch) -> None:
-        """Test api get with unknown connection error
-        Here we test the exceptions if there is no err.args[0].reason.args[0] object
         """
+        Test api get with unknown connection error.
+
+        Here we test the exceptions if there is no err.args[0].reason.args[0] object.
+        """
+
+        # Arrange
         monkeypatch.setattr(
             f"fotoobo.fortinet.fortinet.requests.Session.{method}",
-            MagicMock(side_effect=requests.exceptions.ConnectionError()),
+            Mock(side_effect=requests.exceptions.ConnectionError()),
         )
+
+        # Act & Assert
         with pytest.raises(GeneralError) as err:
             FortinetTestClass("dummy").api(method, "url")
+
         assert "Unknown connection error" in str(err.value)
 
     @staticmethod
@@ -153,17 +208,24 @@ class TestFortinet:
     def test_api_connection_error(
         method: str, reason: str, expected: str, monkeypatch: MonkeyPatch
     ) -> None:
-        """Test api with connection errors"""
+        """
+        Test api with connection errors.
+        """
+
+        # Arrange
         monkeypatch.setattr(
             f"fotoobo.fortinet.fortinet.requests.Session.{method}",
-            MagicMock(
+            Mock(
                 side_effect=requests.exceptions.ConnectionError(
-                    MagicMock(reason=NewConnectionError(reason, message="")),  # type:ignore
+                    Mock(reason=NewConnectionError(reason, message="")),  # type:ignore
                 )
             ),
         )
+
+        # Act & Assert
         with pytest.raises(GeneralError) as err:
             FortinetTestClass("dummy").api(method, "url")
+
         assert expected in str(err.value)
 
     @staticmethod
@@ -174,12 +236,12 @@ class TestFortinet:
         "ssl_error, expected",
         (
             pytest.param(
-                SSLError(MagicMock(verify_message="unable to get local issuer certificate")),
+                SSLError(Mock(verify_message="unable to get local issuer certificate")),
                 r"Unable to get local issuer certificate \(dummy\)",
                 id="unknown cert",
             ),
             pytest.param(
-                SSLError(MagicMock(spec=())),
+                SSLError(Mock(spec=())),
                 r"Unknown SSL error \(dummy\)",
                 id="unknown error",
             ),
@@ -188,14 +250,20 @@ class TestFortinet:
     def test_api_ssl_error(
         method: str, ssl_error: SSLError, expected: str, monkeypatch: MonkeyPatch
     ) -> None:
-        """Test api with connection errors when the cert is not valid
-        We have to do this test especially for the cert_check because its message is not in
-        err.args[0].reason.args[0] but in err.args[0].reason.args[0].verify_message
         """
+        Test api with connection errors when the cert is not valid.
+
+        We have to do this test especially for the cert_check because its message is not in
+        err.args[0].reason.args[0] but in err.args[0].reason.args[0].verify_message.
+        """
+
+        # Arrange
         monkeypatch.setattr(
             f"fotoobo.fortinet.fortinet.requests.Session.{method}",
-            MagicMock(side_effect=requests.exceptions.SSLError(MagicMock(reason=ssl_error))),
+            Mock(side_effect=requests.exceptions.SSLError(Mock(reason=ssl_error))),
         )
+
+        # Act & Assert
         with pytest.raises(GeneralError, match=expected):
             FortinetTestClass("dummy").api(method, "url")
 
@@ -221,13 +289,20 @@ class TestFortinet:
     def test_api_http_error(
         method: str, status_code: ResponseMock, expected: str, monkeypatch: MonkeyPatch
     ) -> None:
-        """Test api with http errors
+        """
+        Test api with http errors.
+
         Here we test the response from a device if the response.status_code is not 200.
         """
+
+        # Arrange
         monkeypatch.setattr(
             f"fotoobo.fortinet.fortinet.requests.Session.{method}",
-            MagicMock(return_value=ResponseMock(json={"dummy": "dummy"}, status_code=status_code)),
+            Mock(return_value=ResponseMock(json={"dummy": "dummy"}, status_code=status_code)),
         )
+
+        # Act & Assert
         with pytest.raises(APIError) as err:
             FortinetTestClass("dummy").api(method, "url")
+
         assert expected in str(err.value)

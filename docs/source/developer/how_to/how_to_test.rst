@@ -7,6 +7,51 @@ How To Test
 
 To test the code we use `pytest <https://docs.pytest.org/>`_.
 
+Tests Structure
+---------------
+
+According to `Anatomy of a test <https://docs.pytest.org/en/stable/explanation/anatomy.html>`_ we use the Arrange, Act, Assert, (Cleanup) terminology for every test function or method.
+
+**Good Example**
+
+..  code-block:: python
+
+    from pathlib import Path
+
+    def test_good() -> None:
+        """
+        Test something with good style.
+        """
+
+        # Arrange
+        test_file = Path("testfile.txt")
+        test_file.write_text("Hello")
+        assert test_file.exists()
+
+        # Act
+        my_test_function(testfile)
+
+        # Assert
+        text = testfile.read_text()
+        assert "Hello" in text
+
+**Bad Example**
+
+..  code-block:: python
+
+    from pathlib import Path
+
+    def test_bad() -> None:
+        """
+        Test something with bad style.
+        """
+        test_file = Path("testfile.txt")
+        test_file.write_text("Hello")
+        assert test_file.exists()
+        my_test_function(testfile)
+        text = testfile.read_text()
+        assert "Hello" in text
+
 Static Data
 -----------
 
@@ -23,40 +68,52 @@ following example on how to setup a temporary directory.
 
 ..  code-block:: python
 
+    from pathlib import Path
+
+    import pytest
+
     @pytest.fixture(scope="session")
-    def temp_dir(tmp_path_factory: TempPathFactory) -> Path:
-        """creates and maintains a session temp directory"""
-        return tmp_path_factory.mktemp("tests_")
+    def session_dir(tmp_path_factory: pytest.TempPathFactory) -> Path:
+        """
+        Creates and maintains a session temp directory.
+        """
+        
+        return tmp_path_factory.mktemp("session_")
 
-This fixture is predefined in *tests/conftest.py* so you can use it in any test.
-
+There is also the same for module or function scope depending on how long you wish your temp directory exists. These fixtures are predefined in *tests/conftest.py* so you can use it in any test function or method.
 
 Mocking
 -------
 
-For mocking we use the pytest `monkeypatch
-<https://docs.pytest.org/en/7.1.x/reference/reference.html#monkeypatch>`_ method.
+For mocking we use the pytest predefined `monkeypatch
+<https://docs.pytest.org/en/7.1.x/reference/reference.html#monkeypatch>`_ fixture.
 
-**Do not use:**
+**Good Example**
 
 ..  code-block:: python
 
-    from unittest.mock import MagicMock, patch
+    from unittest.mock import Mock
+    
+    import pytest
 
-    @patch("path.to.your.object", MagicMock(return_value=None))
+    def test_something_correct(monkeypatch: pytest.MonkeyPatch):
+        """
+        This tests something the preferred way.
+        """
+        
+        monkeypatch.setattr("path.to.your.object", Mock(return_value=None))
+        ...
+
+**Bad Example**
+
+..  code-block:: python
+
+    from unittest.mock import Mock, patch
+
+    @patch("path.to.your.object", Mock(return_value=None))
     def test_something_wrong():
-        """This tests something the wrong way"""
-        pass
-
-**But instead use:**
-
-..  code-block:: python
-
-    from unittest.mock import MagicMock
-    from _pytest.monkeypatch import MonkeyPatch
-
-    def test_something_correct(monkeypatch: MonkeyPatch):
-        """This tests something the right way"""
-        monkeypatch.setattr("path.to.your.object", MagicMock(return_value=None))
-        pass
-
+        """
+        This tests something the wrong way.
+        """
+        
+        ...

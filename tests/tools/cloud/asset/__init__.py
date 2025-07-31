@@ -1,3 +1,3 @@
 """
-Here we test the cloud asset tools module
+__init__
 """

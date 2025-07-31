@@ -1,55 +1,45 @@
-"""Test fmg tools post"""
+"""
+Test fmg tools post.
+"""
 
 from pathlib import Path
-from unittest.mock import MagicMock
+from unittest.mock import Mock
 
 import pytest
-from _pytest.monkeypatch import MonkeyPatch
+from pytest import MonkeyPatch
 
 from fotoobo.exceptions import GeneralWarning
 from fotoobo.tools.fmg import post
 
 
-@pytest.fixture(autouse=True)
-def inventory_file(monkeypatch: MonkeyPatch) -> None:
-    """Change inventory file in config to test inventory"""
-    monkeypatch.setattr(
-        "fotoobo.helpers.config.config.inventory_file", Path("tests/data/inventory.yaml")
-    )
-
-
-@pytest.fixture(autouse=True)
-def fmg_login(monkeypatch: MonkeyPatch) -> None:
-    """Mock the FortiManager login to always return 200 without to really login"""
-    monkeypatch.setattr(
-        "fotoobo.fortinet.fortimanager.FortiManager.login",
-        MagicMock(return_value=200),
-    )
-
-
-@pytest.fixture(autouse=True)
-def fmg_logout(monkeypatch: MonkeyPatch) -> None:
-    """Mock the FortiManager logout to always return 200 without to really logout"""
-    monkeypatch.setattr(
-        "fotoobo.fortinet.fortimanager.FortiManager.logout",
-        MagicMock(return_value=200),
-    )
-
-
 def test_post(monkeypatch: MonkeyPatch) -> None:
-    """Test POST"""
+    """
+    Test POST.
+    """
+
+    # Arrange
     monkeypatch.setattr(
-        "fotoobo.tools.fmg.main.load_json_file", MagicMock(return_value={"dummy": "dummy"})
+        "fotoobo.tools.fmg.main.load_json_file", Mock(return_value={"dummy": "dummy"})
     )
     monkeypatch.setattr(
-        "fotoobo.fortinet.fortimanager.FortiManager.post", MagicMock(return_value=["dummy_message"])
+        "fotoobo.fortinet.fortimanager.FortiManager.post", Mock(return_value=["dummy_message"])
     )
+
+    # Act
     result = post(file=Path("dummy_file"), adom="dummy_adom", host="test_fmg")
+
+    # Assert
     assert result.get_messages("test_fmg")[0]["message"] == "dummy_message"
 
 
 def test_post_exception_empty_payload_file(monkeypatch: MonkeyPatch) -> None:
-    """Test POST with exception when there is no data in the payload file"""
-    monkeypatch.setattr("fotoobo.tools.fmg.main.load_json_file", MagicMock(return_value=[]))
+    """
+    Test POST with exception when there is no data in the payload file.
+    """
+
+    # Arrange
+    monkeypatch.setattr("fotoobo.tools.fmg.main.load_json_file", Mock(return_value=[]))
+
+    # Act & Assert
     with pytest.raises(GeneralWarning, match=r"There is no data in the given file"):
         post(file=Path("dummy_file"), adom="dummy_adom", host="dummy_host")

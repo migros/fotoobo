@@ -85,6 +85,9 @@ warn_unused_ignores=true
 ignore_missing_imports=true
 disallow_untyped_decorators=false
 
+[tool.pytest.ini_options]
+addopts = "--basetemp=tests/temp/"
+
 
 # here we define the tox settings
 # we do it inline because we don't want to have another tox.ini in the project root
@@ -123,7 +126,7 @@ description = do unit tests with pytest
 skip_install = true
 allowlist_externals = poetry, pytest
 commands_pre = poetry install
-commands = pytest --basetemp=tests/temp/ {posargs}
+commands = pytest {posargs}
 
 [testenv:coverage-integration]
 description = check pytest coverage for integration tests (which are under tests/cli)

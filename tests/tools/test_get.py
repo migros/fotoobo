@@ -1,15 +1,21 @@
-"""Test fotoobo get tools"""
+"""
+Test fotoobo get tools.
+"""
 
-from unittest.mock import MagicMock
+from unittest.mock import Mock
 
-from _pytest.monkeypatch import MonkeyPatch
+from pytest import MonkeyPatch
 from rich.tree import Tree
 
 from fotoobo.tools.get import commands, inventory, version
 
 
 def test_get_commands(monkeypatch: MonkeyPatch) -> None:
-    """Test get commands"""
+    """
+    Test get commands.
+    """
+
+    # Arrange
     monkeypatch.setattr(
         "fotoobo.helpers.config.config.cli_info",
         {
@@ -33,25 +39,35 @@ def test_get_commands(monkeypatch: MonkeyPatch) -> None:
         },
     )
 
+    # Act
     result = commands().get_result("commands")
 
+    # Assert
     assert isinstance(result, Tree)
     assert "level1cmd1" in result.children[0].label.plain  # type: ignore
     assert "help1_1" in result.children[0].label.plain  # type: ignore
 
 
 def test_get_inventory(monkeypatch: MonkeyPatch) -> None:
-    """Test get inventory"""
+    """
+    Test get inventory.
+    """
+
+    # Arrange
     monkeypatch.setattr(
         "fotoobo.inventory.inventory.load_yaml_file",
-        MagicMock(
+        Mock(
             return_value={
                 "dummy_1": {"hostname": "name_1"},
                 "dummy_2": {"hostname": "name_2", "type": "type_2"},
             }
         ),
     )
+
+    # Act
     result = inventory().all_results()
+
+    # Assert
     assert isinstance(result, dict)
     assert len(result) == 2
     assert result["dummy_1"]["hostname"] == "name_1"
@@ -60,17 +76,27 @@ def test_get_inventory(monkeypatch: MonkeyPatch) -> None:
 
 
 def test_get_version() -> None:
-    """Test get version"""
+    """
+    Test get version.
+    """
+
+    # Act
     result = version().get_result("version")
 
+    # Assert
     assert len(result) == 1
     assert result[0]["module"] == "fotoobo"
 
 
 def test_get_version_verbose() -> None:
-    """Test get version with verbose level set"""
+    """
+    Test get version with verbose level set.
+    """
+
+    # Act
     result = version(True).get_result("version")
 
+    # Assert
     assert len(result) >= 1
 
     version_keys = []

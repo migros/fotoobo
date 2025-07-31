@@ -1,5 +1,5 @@
 """
-Test the FortiGate config check class
+Test the FortiGate config check class.
 """
 
 # pylint: disable=redefined-outer-name
@@ -18,66 +18,95 @@ from fotoobo.helpers.result import Result
 
 @pytest.fixture
 def conf_file_vdom() -> Path:
-    """The configuration file with a FortiGate config with VDOMs enabled"""
+    """
+    The configuration file with a FortiGate config with VDOMs enabled.
+    """
+
     return Path("tests/data/fortigate_config_vdom.conf")
 
 
 @pytest.fixture
 def conf_file_single() -> Path:
-    """The configuration file with a FortiGate config with single VDOM mode"""
+    """
+    The configuration file with a FortiGate config with single VDOM mode.
+    """
+
     return Path("tests/data/fortigate_config_single.conf")
 
 
 @pytest.fixture
 def checks_file() -> Path:
-    """The check bundle file for the FortiGate configuration checker"""
+    """
+    The check bundle file for the FortiGate configuration checker.
+    """
+
     return Path("tests/data/fortigate_checks.yaml")
 
 
 @pytest.fixture
 def config_vdom(conf_file_vdom: Path) -> FortiGateConfig:
-    # pylint: disable=redefined-outer-name
-    """A FortiGate configuration with VDOMs enabled"""
+    """
+    A FortiGate configuration with VDOMs enabled.
+    """
+
     return FortiGateConfig.parse_configuration_file(conf_file_vdom)
 
 
 class TestFortiGateConfigCheck:
-    """Test the FortiGateConfigCheck class"""
+    """
+    Test the FortiGateConfigCheck class.
+    """
 
     # start tests with different configuration files
 
     @staticmethod
     def test_check_config_single_global(conf_file_single: Path, checks_file: Path) -> None:
-        """Do a configuration check with a single VDOM FortiGate configuration file"""
+        """
+        Do a configuration check with a single VDOM FortiGate configuration file.
+        """
+
+        # Arrange
         result = Result[Any]()
         config = FortiGateConfig.parse_configuration_file(conf_file_single)
         conf_check = FortiGateConfigCheck(config, load_yaml_file(checks_file), result)
+
+        # Act
         conf_check.execute_checks()
+
+        # Assert
         assert len(result.get_messages(config.info.hostname)) == 0
 
     @staticmethod
     def test_check_config_vdom_global(conf_file_vdom: Path, checks_file: Path) -> None:
-        """Do a configuration check with a multiple VDOM FortiGate configuration file"""
+        """
+        Do a configuration check with a multiple VDOM FortiGate configuration file.
+        """
         result = Result[Any]()
         config = FortiGateConfig.parse_configuration_file(conf_file_vdom)
         conf_check = FortiGateConfigCheck(config, load_yaml_file(checks_file), result)
+
+        # Act
         conf_check.execute_checks()
+
+        # Assert
         assert len(result.get_messages(config.info.hostname)) == 2
 
     # start generic tests for config_check with invalid check definition
 
     @staticmethod
     def test_check_config_empty_bundle_file(config_vdom: FortiGateConfig) -> None:
-        """Do a configuration check with an empty bundle file"""
+        """
+        Do a configuration check with an empty bundle file.
+        """
+
+        # Arrange
         checks = None
         result = Result[Any]()
         conf_check = FortiGateConfigCheck(config_vdom, checks, result)
-        try:
+
+        # Act & Assert
+        with pytest.raises(GeneralError, match=r"There are no checks defined"):
             conf_check.execute_checks()
-            assert False
-        except GeneralError as err:
-            assert True
-            assert "There are no checks defined" in err.message
 
     @staticmethod
     @pytest.mark.parametrize(
@@ -305,18 +334,15 @@ class TestFortiGateConfigCheck:
         checks: list[dict[str, Any]], expected_messages_count: int, config_vdom: FortiGateConfig
     ) -> None:
         """
-        Test the configuration check functionality
-        Args:
-            checks:
-            expected_messages_count:
-            config_vdom:
-
-        Returns:
-
+        Test the configuration check functionality.
         """
-        result = Result[Any]()
 
+        # Arrange
+        result = Result[Any]()
         conf_check = FortiGateConfigCheck(config_vdom, checks, result)
+
+        # Act
         conf_check.execute_checks()
 
+        # Assert
         assert len(result.get_messages(config_vdom.info.hostname)) == expected_messages_count

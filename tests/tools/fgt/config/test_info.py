@@ -1,5 +1,5 @@
 """
-Test fgt tools config info
+Test fgt tools config info.
 """
 
 from pathlib import Path
@@ -18,8 +18,14 @@ from fotoobo.tools.fgt.config import info
     ),
 )
 def test_info(file: Path) -> None:
-    """test the info utility"""
+    """
+    Test the info utility.
+    """
+
+    # Act
     infos = info(file)
+
+    # Assert
     assert infos.get_result("HOSTNAME UNKNOWN").buildno == "8303"
 
 
@@ -31,12 +37,20 @@ def test_info(file: Path) -> None:
     ),
 )
 def test_info_empty(file: Path) -> None:
-    """test the info utility with directory and empty configuration file"""
+    """
+    Test the info utility with directory and empty configuration file.
+    """
+
+    # Act & Assert
     with pytest.raises(GeneralWarning, match=r"There is no info in"):
         info(file)
 
 
 def test_info_no_files_in_dir() -> None:
-    """test the info utility with directory and empty configuration file"""
+    """
+    Test the info utility with directory and empty configuration file.
+    """
+
+    # Act & Assert
     with pytest.raises(GeneralWarning, match=r"There are no configuration files"):
         info(Path("tests/"))

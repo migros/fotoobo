@@ -1,5 +1,5 @@
 """
-test_convert
+Test the convert module
 """
 
 import pytest
@@ -9,21 +9,37 @@ from fotoobo.fortinet.convert import CheckpointConverter
 
 
 def test_convert_hosts_type_not_present() -> None:
-    """Test converting hosts when a supported type is not in the assets dict"""
+    """
+    Test converting hosts when a supported type is not in the assets dict.
+    """
+
+    # Arrange
     assets = CheckpointConverter({})
+
+    # Act & Assert
     with pytest.raises(GeneralError, match=r"type '.*' is not present in the infile"):
         assets.convert("hosts")
 
 
 def test_convert_checkpoint_hosts_type_unsupported() -> None:
-    """Test converting Checkpoint hosts when an unsupported type is given"""
+    """
+    Test converting Checkpoint hosts when an unsupported type is given.
+    """
+
+    # Arrange
     assets = CheckpointConverter({})
+
+    # Act & Assert
     with pytest.raises(GeneralError, match=r"type '.*' is not supported to convert"):
         assets.convert("unsupported")
 
 
 def test_convert_checkpoint_hosts() -> None:
-    """Test converting Checkpoint hosts"""
+    """
+    Test converting Checkpoint hosts.
+    """
+
+    # Arrange
     assets = CheckpointConverter(
         {
             "hosts": [
@@ -37,7 +53,11 @@ def test_convert_checkpoint_hosts() -> None:
             ]
         }
     )
+
+    # Act
     converted = assets.convert("hosts")
+
+    # Assert
     assert converted == [
         {
             "method": "set",
@@ -59,7 +79,11 @@ def test_convert_checkpoint_hosts() -> None:
 
 
 def test_convert_checkpoint_networks() -> None:
-    """Test converting Checkpoint networks"""
+    """
+    Test converting Checkpoint networks.
+    """
+
+    # Arrange
     assets = CheckpointConverter(
         {
             "networks": [
@@ -74,7 +98,11 @@ def test_convert_checkpoint_networks() -> None:
             ]
         }
     )
+
+    # Act
     converted = assets.convert("networks")
+
+    # Assert
     assert converted == [
         {
             "method": "set",
@@ -96,7 +124,11 @@ def test_convert_checkpoint_networks() -> None:
 
 
 def test_convert_checkpoint_address_ranges() -> None:
-    """Test converting Checkpoint address ranges"""
+    """
+    Test converting Checkpoint address ranges.
+    """
+
+    # Arrange
     assets = CheckpointConverter(
         {
             "address_ranges": [
@@ -111,7 +143,10 @@ def test_convert_checkpoint_address_ranges() -> None:
             ]
         }
     )
+    # Act
     converted = assets.convert("address_ranges")
+
+    # Assert
     assert converted == [
         {
             "method": "set",
@@ -135,7 +170,11 @@ def test_convert_checkpoint_address_ranges() -> None:
 
 
 def test_convert_checkpoint_groups() -> None:
-    """Test converting Checkpoint groups"""
+    """
+    Test converting Checkpoint groups.
+    """
+
+    # Arrange
     assets = CheckpointConverter(
         {
             "hosts": [{"uid": "1111-1111", "name": "member_1"}],
@@ -152,7 +191,11 @@ def test_convert_checkpoint_groups() -> None:
             ],
         }
     )
+
+    # Act
     converted = assets.convert("groups")
+
+    # Assert
     assert converted == [
         {
             "method": "set",
@@ -174,7 +217,11 @@ def test_convert_checkpoint_groups() -> None:
 
 
 def test_convert_checkpoint_groups_member_not_found() -> None:
-    """Test converting Checkpoint groups when a member is not found"""
+    """
+    Test converting Checkpoint groups when a member is not found.
+    """
+
+    # Arrange
     assets = CheckpointConverter(
         {
             "hosts": [{"uid": "11111111", "name": "member_1"}],
@@ -191,12 +238,20 @@ def test_convert_checkpoint_groups_member_not_found() -> None:
             ],
         }
     )
+
+    # Act
     converted = assets.convert("groups")
+
+    # Assert
     assert not converted
 
 
 def test_convert_checkpoint_services_icmp() -> None:
-    """Test converting Checkpoint services icmp"""
+    """
+    Test converting Checkpoint services icmp.
+    """
+
+    # Arrange
     assets = CheckpointConverter(
         {
             "services_icmp": [
@@ -211,7 +266,11 @@ def test_convert_checkpoint_services_icmp() -> None:
             ]
         }
     )
+
+    # Act
     converted = assets.convert("services_icmp")
+
+    # Assert
     assert converted == [
         {
             "method": "set",
@@ -234,7 +293,11 @@ def test_convert_checkpoint_services_icmp() -> None:
 
 
 def test_convert_checkpoint_services_icmp6() -> None:
-    """Test converting Checkpoint services icmp6"""
+    """
+    Test converting Checkpoint services icmp6.
+    """
+
+    # Arrange
     assets = CheckpointConverter(
         {
             "services_icmp6": [
@@ -248,7 +311,11 @@ def test_convert_checkpoint_services_icmp6() -> None:
             ]
         }
     )
+
+    # Act
     converted = assets.convert("services_icmp6")
+
+    # Assert
     assert converted == [
         {
             "method": "set",
@@ -270,7 +337,11 @@ def test_convert_checkpoint_services_icmp6() -> None:
 
 
 def test_convert_checkpoint_services_tcp_single() -> None:
-    """Test converting Checkpoint single tcp service"""
+    """
+    Test converting Checkpoint single tcp service.
+    """
+
+    # Arrange
     assets = CheckpointConverter(
         {
             "services_tcp": [
@@ -293,7 +364,11 @@ def test_convert_checkpoint_services_tcp_single() -> None:
             ]
         }
     )
+
+    # Act
     converted = assets.convert("services_tcp")
+
+    # Assert
     assert converted == [
         {
             "method": "set",
@@ -326,7 +401,11 @@ def test_convert_checkpoint_services_tcp_single() -> None:
 
 
 def test_convert_checkpoint_services_tcp_range() -> None:
-    """Test converting Checkpoint single tcp service"""
+    """
+    Test converting Checkpoint single tcp service.
+    """
+
+    # Arrange
     assets = CheckpointConverter(
         {
             "services_tcp": [
@@ -340,7 +419,11 @@ def test_convert_checkpoint_services_tcp_range() -> None:
             ]
         }
     )
+
+    # Act
     converted = assets.convert("services_tcp")
+
+    # Assert
     assert converted == [
         {
             "method": "set",
@@ -362,7 +445,11 @@ def test_convert_checkpoint_services_tcp_range() -> None:
 
 
 def test_convert_checkpoint_services_tcp_gt() -> None:
-    """Test converting Checkpoint tcp service with > syntax"""
+    """
+    Test converting Checkpoint tcp service with > syntax.
+    """
+
+    # Arrange
     assets = CheckpointConverter(
         {
             "services_tcp": [
@@ -376,7 +463,11 @@ def test_convert_checkpoint_services_tcp_gt() -> None:
             ]
         }
     )
+
+    # Act
     converted = assets.convert("services_tcp")
+
+    # Assert
     assert converted == [
         {
             "method": "set",
@@ -398,7 +489,11 @@ def test_convert_checkpoint_services_tcp_gt() -> None:
 
 
 def test_convert_checkpoint_services_tcp_lt() -> None:
-    """Test converting Checkpoint tcp service with < syntax"""
+    """
+    Test converting Checkpoint tcp service with < syntax.
+    """
+
+    # Arrange
     assets = CheckpointConverter(
         {
             "services_tcp": [
@@ -412,7 +507,11 @@ def test_convert_checkpoint_services_tcp_lt() -> None:
             ]
         }
     )
+
+    # Act
     converted = assets.convert("services_tcp")
+
+    # Assert
     assert converted == [
         {
             "method": "set",
@@ -434,7 +533,11 @@ def test_convert_checkpoint_services_tcp_lt() -> None:
 
 
 def test_convert_checkpoint_services_udp_single() -> None:
-    """Test converting Checkpoint single udp service"""
+    """
+    Test converting Checkpoint single udp service.
+    """
+
+    # Arrange
     assets = CheckpointConverter(
         {
             "services_udp": [
@@ -457,7 +560,11 @@ def test_convert_checkpoint_services_udp_single() -> None:
             ]
         }
     )
+
+    # Act
     converted = assets.convert("services_udp")
+
+    # Assert
     assert converted == [
         {
             "method": "set",
@@ -490,7 +597,11 @@ def test_convert_checkpoint_services_udp_single() -> None:
 
 
 def test_convert_checkpoint_services_udp_range() -> None:
-    """Test converting Checkpoint single udp service"""
+    """
+    Test converting Checkpoint single udp service.
+    """
+
+    # Arrange
     assets = CheckpointConverter(
         {
             "services_udp": [
@@ -504,7 +615,11 @@ def test_convert_checkpoint_services_udp_range() -> None:
             ]
         }
     )
+
+    # Act
     converted = assets.convert("services_udp")
+
+    # Assert
     assert converted == [
         {
             "method": "set",
@@ -526,7 +641,11 @@ def test_convert_checkpoint_services_udp_range() -> None:
 
 
 def test_convert_checkpoint_services_udp_gt() -> None:
-    """Test converting Checkpoint udp service with > syntax"""
+    """
+    Test converting Checkpoint udp service with > syntax.
+    """
+
+    # Arrange
     assets = CheckpointConverter(
         {
             "services_udp": [
@@ -540,7 +659,11 @@ def test_convert_checkpoint_services_udp_gt() -> None:
             ]
         }
     )
+
+    # Act
     converted = assets.convert("services_udp")
+
+    # Assert
     assert converted == [
         {
             "method": "set",
@@ -562,7 +685,11 @@ def test_convert_checkpoint_services_udp_gt() -> None:
 
 
 def test_convert_checkpoint_services_udp_lt() -> None:
-    """Test converting Checkpoint udp service with < syntax"""
+    """
+    Test converting Checkpoint udp service with < syntax.
+    """
+
+    # Arrange
     assets = CheckpointConverter(
         {
             "services_udp": [
@@ -576,7 +703,11 @@ def test_convert_checkpoint_services_udp_lt() -> None:
             ]
         }
     )
+
+    # Act
     converted = assets.convert("services_udp")
+
+    # Assert
     assert converted == [
         {
             "method": "set",
@@ -598,7 +729,11 @@ def test_convert_checkpoint_services_udp_lt() -> None:
 
 
 def test_convert_checkpoint_service_groups() -> None:
-    """Test converting Checkpoint service groups"""
+    """
+    Test converting Checkpoint service groups.
+    """
+
+    # Arrange
     assets = CheckpointConverter(
         {
             "services_icmp": [{"uid": "11111111", "name": "member_1"}],
@@ -616,7 +751,11 @@ def test_convert_checkpoint_service_groups() -> None:
             ],
         }
     )
+
+    # Act
     converted = assets.convert("service_groups")
+
+    # Assert
     assert converted == [
         {
             "method": "set",
@@ -637,7 +776,11 @@ def test_convert_checkpoint_service_groups() -> None:
 
 
 def test_convert_checkpoint_service_groups_member_not_found() -> None:
-    """Test converting Checkpoint service groups when the member is not found"""
+    """
+    Test converting Checkpoint service groups when the member is not found.
+    """
+
+    # Arrange
     assets = CheckpointConverter(
         {
             "services_icmp": [{"uid": "11111111", "name": "member_1"}],
@@ -655,5 +798,9 @@ def test_convert_checkpoint_service_groups_member_not_found() -> None:
             ],
         }
     )
+
+    # Act
     converted = assets.convert("service_groups")
+
+    # Assert
     assert not converted
