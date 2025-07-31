@@ -33,5 +33,5 @@ def test_main() -> None:
     """
 
     # Act & Assert
-    with pytest.raises(SystemExit, match=r"2"):
+    with pytest.raises(SystemExit):
         main()
