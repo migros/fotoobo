@@ -92,7 +92,7 @@ class FortiGate(Fortinet):
 
         return data
 
-    def backup(self, timeout: int = 10) -> str:
+    def backup(self, timeout: int = 60) -> str:
         """
         Get the configuration backup from a FortiGate.
 
