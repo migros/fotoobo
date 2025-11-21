@@ -51,7 +51,18 @@ def test_cli_app_fgt_backup_help(help_args: str) -> None:
     assert result.exit_code == 0
     arguments, options, commands = parse_help_output(result.stdout)
     assert set(arguments) == {"host"}
-    assert options == {"--backup-dir", "-b", "--ftp", "-f", "--smtp", "-s", "-h", "--help"}
+    assert options == {
+        "--timeout",
+        "-t",
+        "--backup-dir",
+        "-b",
+        "--ftp",
+        "-f",
+        "--smtp",
+        "-s",
+        "-h",
+        "--help",
+    }
     assert not commands
 
 

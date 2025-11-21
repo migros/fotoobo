@@ -20,13 +20,15 @@ log = logging.getLogger("fotoobo")
 
 def backup(
     host: Optional[str] = None,
+    timeout: int = 60,
 ) -> Result[str]:
     """
     Create a FortiGate configuration backup into a file and optionally upload it to an FTP server.
 
     Args:
-        host: The host from the inventory to get the backup. If no host is given all FortiGate
-              devices in the inventory are backed up.
+        host:    The host from the inventory to get the backup. If no host is given all FortiGate
+                 devices in the inventory are backed up.
+        timeout: Timeout in seconds to wait for each FortiGate to
 
     Returns:
         The Result object with all the results
@@ -53,7 +55,7 @@ def backup(
         data: str = ""
 
         try:
-            data = fgt.backup()
+            data = fgt.backup(timeout=timeout)
             if data.startswith("#config-version"):
                 message = f"Config backup for '{name}' succeeded"
                 log.info(message)

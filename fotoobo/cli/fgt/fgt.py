@@ -53,6 +53,15 @@ def backup(
             metavar="[host]",
         ),
     ] = "",
+    timeout: Annotated[
+        int,
+        typer.Option(
+            "--timeout",
+            "-t",
+            help="Timeout in seconds to wait for each FortiGate to respond.",
+            show_default=True,
+        ),
+    ] = 60,
     backup_dir: Annotated[
         Optional[Path],
         typer.Option(
@@ -91,7 +100,7 @@ def backup(
         backup_dir = Path.cwd()
 
     create_dir(backup_dir)
-    result = tools.fgt.backup(host)
+    result = tools.fgt.backup(host, timeout=timeout)
 
     for name, data in result.all_results().items():
         config_file = backup_dir / Path(name).with_suffix(".conf")
