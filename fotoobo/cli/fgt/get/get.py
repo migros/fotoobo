@@ -3,7 +3,6 @@ The FortiGate commands
 """
 
 import logging
-from typing import Optional
 
 import typer
 from typing_extensions import Annotated
@@ -35,7 +34,7 @@ def callback(context: typer.Context) -> None:
 @app.command()
 def version(
     host: Annotated[
-        Optional[str],
+        str | None,
         typer.Argument(
             help="The FortiGate hostname to access (must be defined in the inventory). ",
             metavar="[host]",

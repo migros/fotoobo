@@ -12,7 +12,7 @@ import socket
 from datetime import datetime
 from logging.handlers import RotatingFileHandler, SysLogHandler
 from syslog import LOG_USER
-from typing import Final, Optional
+from typing import Final
 
 from rich.logging import RichHandler
 
@@ -30,7 +30,7 @@ class SysLogFormatter(logging.Formatter):
     Handles syslog formats
     """
 
-    def __init__(self, facility: int, fmt: str = "%(message)s", datefmt: Optional[str] = None):
+    def __init__(self, facility: int, fmt: str = "%(message)s", datefmt: str | None = None):
         """
         Initialize the logger
 
@@ -84,7 +84,7 @@ class Log:
     """
 
     @staticmethod
-    def configure_logging(quiet: Optional[bool], log_level: Optional[str]) -> None:
+    def configure_logging(quiet: bool | None, log_level: str | None) -> None:
         """
         This function will configure the logging for fotoobo
 

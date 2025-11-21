@@ -10,7 +10,7 @@ access the asset. The uuid is only supported for network assets and not for serv
 import copy
 import logging
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any
 
 from fotoobo.exceptions import GeneralError
 from fotoobo.helpers.files import load_json_file, save_json_file
@@ -23,7 +23,7 @@ class CheckpointConverter:
     The Checkpoint converter class
     """
 
-    def __init__(self, assets: Any, cache_file: Optional[Path] = None) -> None:
+    def __init__(self, assets: Any, cache_file: Path | None = None) -> None:
         self.assets = copy.deepcopy(assets)
         self.converted: list[Any] = []
         self.supported_types = [

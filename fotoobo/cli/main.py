@@ -11,7 +11,6 @@ import logging
 import os
 import sys
 from pathlib import Path
-from typing import Optional
 
 import typer
 from typing_extensions import Annotated
@@ -51,7 +50,7 @@ def version_callback(value: bool) -> None:
 def callback(  # pylint: disable=too-many-arguments, too-many-positional-arguments
     context: typer.Context,
     config_file: Annotated[
-        Optional[Path],
+        Path | None,
         typer.Option(
             "--config",
             "-c",
@@ -61,7 +60,7 @@ def callback(  # pylint: disable=too-many-arguments, too-many-positional-argumen
         ),
     ] = None,
     log_level: Annotated[
-        Optional[str],
+        str | None,
         typer.Option(
             "--loglevel",
             help="Set the log level. Choose from CRITICAL, ERROR, WARNING, INFO, DEBUG.",
@@ -70,13 +69,13 @@ def callback(  # pylint: disable=too-many-arguments, too-many-positional-argumen
         ),
     ] = None,
     nologo: Annotated[
-        Optional[bool], typer.Option("--nologo", help="Do not print the beautiful fotoobo logo.")
+        bool | None, typer.Option("--nologo", help="Do not print the beautiful fotoobo logo.")
     ] = None,
     log_quiet: Annotated[
         bool, typer.Option("--quiet", "-q", help="Disable console logging.", show_default=False)
     ] = False,
     version: Annotated[  # pylint: disable=unused-argument
-        Optional[bool],
+        bool | None,
         typer.Option(
             "--version", "-V", help="Print the fotoobo version.", callback=version_callback
         ),
@@ -132,7 +131,7 @@ def callback(  # pylint: disable=too-many-arguments, too-many-positional-argumen
 @app.command(hidden=True)
 def greet(
     name: Annotated[
-        Optional[str],
+        str | None,
         typer.Argument(
             help="The name of the person to greet.", show_default=False, metavar="[name]"
         ),

@@ -7,7 +7,7 @@ import logging
 import re
 from ftplib import FTP, FTP_TLS
 from pathlib import Path
-from typing import Any, Union
+from typing import Any
 from zipfile import ZIP_DEFLATED, ZipFile
 
 import yaml
@@ -115,7 +115,7 @@ def file_to_zip(src: Path, dst: Path, level: int = 9) -> None:
             archive.write(src, arcname=inner_file.name)
 
 
-def load_json_file(json_file: Path) -> Union[list[Any], dict[str, Any], None]:
+def load_json_file(json_file: Path) -> list[Any] | dict[str, Any] | None:
     """
     Loads the content of a json file into a list or dict.
 
@@ -133,7 +133,7 @@ def load_json_file(json_file: Path) -> Union[list[Any], dict[str, Any], None]:
     return content
 
 
-def load_yaml_file(yaml_file: Path) -> Union[list[Any], dict[str, Any], None]:
+def load_yaml_file(yaml_file: Path) -> list[Any] | dict[str, Any] | None:
     """
     Loads the content of a yaml file into a list or dict.
 
@@ -150,7 +150,7 @@ def load_yaml_file(yaml_file: Path) -> Union[list[Any], dict[str, Any], None]:
     return content
 
 
-def save_json_file(json_file: Path, data: Union[list[Any], dict[Any, Any]]) -> bool:
+def save_json_file(json_file: Path, data: list[Any] | dict[Any, Any]) -> bool:
     """
     Saves the content of a list or dict to a json file.
 
@@ -190,7 +190,7 @@ def save_txt_file(file: Path, data: str) -> bool:
     return status
 
 
-def save_yaml_file(yaml_file: Path, data: Union[list[Any], dict[str, Any]]) -> bool:
+def save_yaml_file(yaml_file: Path, data: list[Any] | dict[str, Any]) -> bool:
     """
     Saves the content of a list or dict to a yaml file.
 

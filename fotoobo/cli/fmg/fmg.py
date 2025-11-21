@@ -4,7 +4,6 @@ The FortiManager commands
 
 import logging
 from pathlib import Path
-from typing import Optional
 
 import typer
 from typing_extensions import Annotated
@@ -59,7 +58,7 @@ def assign(
         ),
     ] = "fmg",
     smtp_server: Annotated[
-        Optional[str],
+        str | None,
         typer.Option(
             "--smtp",
             "-s",
@@ -111,7 +110,7 @@ def post(
         ),
     ] = "fmg",
     smtp_server: Annotated[
-        Optional[str],
+        str | None,
         typer.Option(
             "--smtp",
             "-s",

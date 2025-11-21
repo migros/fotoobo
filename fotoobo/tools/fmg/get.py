@@ -3,7 +3,7 @@ FortiManager get ADOMs utility
 """
 
 import logging
-from typing import Any, Optional, Union
+from typing import Any
 
 from fotoobo.exceptions.exceptions import GeneralError
 from fotoobo.helpers.config import config
@@ -37,7 +37,7 @@ def adoms(host: str) -> Result[str]:
     return result
 
 
-def devices(host: str) -> Result[dict[str, Union[str, list[str]]]]:
+def devices(host: str) -> Result[dict[str, str | list[str]]]:
     """
     FortiManager get logical devices
     In a cluster only the cluster device is returned, not the physical nodes
@@ -65,7 +65,7 @@ def devices(host: str) -> Result[dict[str, Union[str, list[str]]]]:
     }
     response = fmg.api("post", payload=payload)
     fmg.logout()
-    result = Result[dict[str, Union[str, list[str]]]]()
+    result = Result[dict[str, str | list[str]]]()
 
     for device in response.json()["result"][0]["data"]:
         data = {
@@ -85,7 +85,7 @@ def devices(host: str) -> Result[dict[str, Union[str, list[str]]]]:
 
 
 def policy(
-    host: str, adom: str, policy_name: str, fields: Optional[list[str]] = None
+    host: str, adom: str, policy_name: str, fields: list[str] | None = None
 ) -> Result[list[dict[str, Any]]]:
     """
     FortiManager get policy

@@ -2,8 +2,6 @@
 A module for defining a generic device
 """
 
-from typing import Union
-
 
 class GenericDevice:
     """
@@ -13,7 +11,7 @@ class GenericDevice:
     attributes which will be filled with a default value.
     """
 
-    def __init__(self, **kwargs: Union[str, int, bool]) -> None:
+    def __init__(self, **kwargs: str | int | bool) -> None:
         """init"""
         for key, value in kwargs.items():
             setattr(self, key, value)

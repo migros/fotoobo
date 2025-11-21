@@ -7,7 +7,7 @@ import logging
 import re
 import smtplib
 from pathlib import Path
-from typing import Any, Generic, Optional, TypeVar, Union
+from typing import Any, Generic, TypeVar
 
 import jinja2
 from rich.console import Console
@@ -106,7 +106,7 @@ class Result(Generic[T]):
 
         return self.messages[host]
 
-    def print_messages(self, only_host: Union[str, None] = None) -> None:
+    def print_messages(self, only_host: str | None = None) -> None:
         """
         Print the messages to the console
 
@@ -158,7 +158,7 @@ class Result(Generic[T]):
         self,
         title: str = "",
         auto_header: bool = False,
-        headers: Optional[list[str]] = None,
+        headers: list[str] | None = None,
     ) -> None:
         """
         Print a table from given data as list or dict.
@@ -187,7 +187,7 @@ class Result(Generic[T]):
     def print_table_raw(
         self,
         data: list[dict[str, Any]],
-        headers: Optional[list[str]] = None,
+        headers: list[str] | None = None,
         auto_header: bool = False,
         title: str = "",
     ) -> None:
@@ -229,7 +229,7 @@ class Result(Generic[T]):
 
         self.console.print(table)
 
-    def print_raw(self, key: Optional[str] = None) -> None:
+    def print_raw(self, key: str | None = None) -> None:
         """
         Print the raw data from Result() in pretty format.
 
@@ -247,7 +247,7 @@ class Result(Generic[T]):
 
         pprint(data, expand_all=True)
 
-    def save_raw(self, file: Path, key: Optional[str] = None) -> None:
+    def save_raw(self, file: Path, key: str | None = None) -> None:
         """
         Save the raw data in defined format.
 
@@ -297,7 +297,7 @@ class Result(Generic[T]):
     def send_messages_as_mail(
         self,
         smtp_server: Any,
-        levels: Union[list[str], str, None] = None,
+        levels: list[str] | str | None = None,
         count: bool = False,
         command: bool = False,
     ) -> None:
