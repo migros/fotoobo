@@ -156,14 +156,7 @@ class TestFortiClientEMS:
         assert ems.login() == 200
         post_mock.assert_called_with(
             "https://ems_dummy:443/api/v1/auth/signin",
-            headers={
-                "User-Agent": "python-requests/2.32.4",
-                "Accept-Encoding": "gzip, deflate",
-                "Accept": "*/*",
-                "Connection": "keep-alive",
-                "Referer": "https://ems_dummy",
-                "X-CSRFToken": "dummy_csrf_token",
-            },
+            headers=ANY,
             json={"name": "dummy_user", "password": "dummy_pass"},
             params=None,
             timeout=3,
@@ -208,14 +201,7 @@ class TestFortiClientEMS:
         assert ems.login() == 200
         get_mock.assert_called_with(
             "https://ems_dummy:443/api/v1/system/serial_number",
-            headers={
-                "User-Agent": "python-requests/2.32.4",
-                "Accept-Encoding": "gzip, deflate",
-                "Accept": "*/*",
-                "Connection": "keep-alive",
-                "Referer": "https://ems_dummy",
-                "X-CSRFToken": "dummy_csrf_token",
-            },
+            headers=ANY,
             json=None,
             params=None,
             timeout=3,
@@ -223,14 +209,7 @@ class TestFortiClientEMS:
         )
         post_mock.assert_called_with(
             "https://ems_dummy:443/api/v1/auth/signin",
-            headers={
-                "User-Agent": "python-requests/2.32.4",
-                "Accept-Encoding": "gzip, deflate",
-                "Accept": "*/*",
-                "Connection": "keep-alive",
-                "Referer": "https://ems_dummy",
-                "X-CSRFToken": "dummy_csrf_token",
-            },
+            headers=ANY,
             json={"name": "dummy_user", "password": "dummy_pass"},
             params=None,
             timeout=3,

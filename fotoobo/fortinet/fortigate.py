@@ -3,7 +3,7 @@ FortiGate Class
 """
 
 import logging
-from typing import Any, Optional
+from typing import Any
 
 import requests
 
@@ -45,10 +45,10 @@ class FortiGate(Fortinet):
         self,
         method: str,
         url: str = "",
-        headers: Optional[dict[str, str]] = None,
-        params: Optional[dict[str, str]] = None,
-        payload: Optional[dict[str, Any]] = None,
-        timeout: Optional[float] = None,
+        headers: dict[str, str] | None = None,
+        params: dict[str, str] | None = None,
+        payload: dict[str, Any] | None = None,
+        timeout: float | None = None,
     ) -> requests.models.Response:
         """Native API request to a FortiGate.
 
@@ -70,7 +70,7 @@ class FortiGate(Fortinet):
             method, url, payload=payload, params=params, timeout=timeout, headers=headers
         )
 
-    def api_get(self, url: str, vdom: str = "*", timeout: Optional[float] = None) -> list[Any]:
+    def api_get(self, url: str, vdom: str = "*", timeout: float | None = None) -> list[Any]:
         """Low level GET request to a FortiGate.
 
         This gets the response from a single API request to a FortiGate and returns it as a fotoobo

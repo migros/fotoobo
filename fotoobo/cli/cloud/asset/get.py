@@ -4,7 +4,7 @@ The FortiCloudAsset get commands
 
 import logging
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any
 
 import typer
 from typing_extensions import Annotated
@@ -37,7 +37,7 @@ def callback(context: typer.Context) -> None:
 @app.command()
 def products(
     output_file: Annotated[
-        Optional[Path],
+        Path | None,
         typer.Option(
             "--output",
             "-o",

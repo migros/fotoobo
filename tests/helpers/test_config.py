@@ -4,7 +4,7 @@ Test the config helper.
 
 import os
 from pathlib import Path
-from typing import Any, Callable, Optional, Union
+from typing import Any, Callable
 from unittest.mock import Mock
 
 import pytest
@@ -69,8 +69,8 @@ class TestConfig:
         ),
     )
     def test_load_configuration(
-        config_file: Optional[Path],
-        isfile_mock: Union[Mock, Callable[[str], bool]],
+        config_file: Path | None,
+        isfile_mock: Mock | Callable[[str], bool],
         load_yaml_file_mock: Mock,
         expected_inventory: Path,
         monkeypatch: MonkeyPatch,
@@ -124,7 +124,7 @@ class TestConfig:
     )
     def test_config_logging(
         logging_type: str,
-        logging: Optional[dict[str, Any]],
+        logging: dict[str, Any] | None,
         expected: str,
         monkeypatch: MonkeyPatch,
     ) -> None:

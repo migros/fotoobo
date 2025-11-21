@@ -3,7 +3,7 @@ Test the inventory.
 """
 
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any
 from unittest.mock import Mock
 
 import pytest
@@ -71,7 +71,7 @@ class TestInventory:
             pytest.param("forticloudasset", None, 1, id="forticloudasset"),
         ),
     )
-    def test_get(test_name: Optional[str], test_type: Optional[str], expected_len: int) -> None:
+    def test_get(test_name: str | None, test_type: str | None, expected_len: int) -> None:
         """
         Test Inventory.get() method.
         """
@@ -98,7 +98,7 @@ class TestInventory:
             pytest.param("dummy*", None, id="wrong wildcard name 3, no type"),
         ),
     )
-    def test_get_with_exception(test_name: Optional[str], test_type: Optional[str]) -> None:
+    def test_get_with_exception(test_name: str | None, test_type: str | None) -> None:
         """
         Test Inventory.get() when an exception is raised.
         """
@@ -118,7 +118,7 @@ class TestInventory:
             pytest.param("fortigate", id="with type"),
         ),
     )
-    def test_get_item(test_type: Optional[str]) -> None:
+    def test_get_item(test_type: str | None) -> None:
         """
         Test Inventory.get_item() method.
         """
@@ -141,7 +141,7 @@ class TestInventory:
             pytest.param("test_fgt_1", "dummy_type", id="wrong type"),
         ),
     )
-    def test_get_item_with_exception(test_name: str, test_type: Optional[str]) -> None:
+    def test_get_item_with_exception(test_name: str, test_type: str | None) -> None:
         """
         Test Inventory.get_item() when an exception is raised.
         """

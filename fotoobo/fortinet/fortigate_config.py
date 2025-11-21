@@ -4,7 +4,7 @@ The FortiGate configuration class represents the whole or parts of a FortiGate c
 
 import logging
 from pathlib import Path
-from typing import IO, Any, Optional
+from typing import IO, Any
 
 from fotoobo.exceptions import GeneralWarning
 from fotoobo.helpers.files import load_json_file, save_json_file
@@ -23,9 +23,9 @@ class FortiGateConfig:
 
     def __init__(
         self,
-        global_config: Optional[dict[str, Any]] = None,
-        vdom_config: Optional[dict[str, Any]] = None,
-        info: Optional[dict[str, str]] = None,
+        global_config: dict[str, Any] | None = None,
+        vdom_config: dict[str, Any] | None = None,
+        info: dict[str, str] | None = None,
     ) -> None:
         self.global_config = global_config or {}
         self.vdom_config = vdom_config or {}
@@ -245,7 +245,7 @@ class FortiGateConfig:
     @staticmethod
     # pylint: disable=too-many-branches
     def _parse_to_dict(config_file: IO[str]) -> Any:
-        # should be Union[dict[str, Any], list[Any]]
+        # should be dict[str, Any] | list[Any]
         """
         Fabric function to create a FortiGateConfig object from a backup configuration file
         This recursive method parses a FortiGate configuration from a file line by line

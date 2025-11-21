@@ -4,7 +4,6 @@ The fotoobo convert commands
 
 import logging
 from pathlib import Path
-from typing import Optional
 
 import typer
 from typing_extensions import Annotated
@@ -56,7 +55,7 @@ def checkpoint(
         ),
     ],
     cache_dir: Annotated[
-        Optional[Path],
+        Path | None,
         typer.Argument(
             help="The cache directory to use.",
             show_default=False,

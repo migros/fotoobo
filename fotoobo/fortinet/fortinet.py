@@ -6,7 +6,7 @@ variables and methods.
 import logging
 from abc import ABC, abstractmethod
 from time import time
-from typing import Any, Optional, Union
+from typing import Any
 
 import requests
 import urllib3
@@ -63,7 +63,7 @@ class Fortinet(ABC):
         if proxy := kwargs.get("proxy", ""):
             self.session.proxies = {"http": f"{proxy}", "https": f"{proxy}"}
 
-        self.ssl_verify: Union[bool, str] = kwargs.get("ssl_verify", True)
+        self.ssl_verify: bool | str = kwargs.get("ssl_verify", True)
         if not self.ssl_verify:
             urllib3.disable_warnings(category=urllib3.exceptions.InsecureRequestWarning)
 
@@ -74,10 +74,10 @@ class Fortinet(ABC):
         self,
         method: str,
         url: str = "",
-        headers: Optional[dict[str, str]] = None,
-        params: Optional[dict[str, str]] = None,
-        payload: Optional[dict[str, Any]] = None,
-        timeout: Optional[float] = None,
+        headers: dict[str, str] | None = None,
+        params: dict[str, str] | None = None,
+        payload: dict[str, Any] | None = None,
+        timeout: float | None = None,
     ) -> requests.models.Response:
         """
         API request to a Fortinet device.

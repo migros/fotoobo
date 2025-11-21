@@ -4,7 +4,6 @@ The FortiGate check commands
 
 import logging
 from pathlib import Path
-from typing import Optional
 
 import typer
 from rich.pretty import pprint
@@ -52,7 +51,7 @@ def hamaster(
         ),
     ] = "fmg",
     output_file: Annotated[
-        Optional[Path],
+        Path | None,
         typer.Option(
             "--output",
             "-o",
@@ -62,7 +61,7 @@ def hamaster(
     ] = None,
     raw: Annotated[bool, typer.Option("-r", "--raw", help="Output raw data.")] = False,
     smtp_server: Annotated[
-        Optional[str],
+        str | None,
         typer.Option(
             "--smtp",
             help="The smtp configuration from the inventory.",
@@ -71,7 +70,7 @@ def hamaster(
         ),
     ] = None,
     template_file: Annotated[
-        Optional[Path],
+        Path | None,
         typer.Option(
             "--template",
             "-t",

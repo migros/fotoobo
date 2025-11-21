@@ -1,4 +1,5 @@
-"""The Hashicorp Vault helper module for approle
+"""
+The Hashicorp Vault helper module for approle.
 
 The official API documentation is here: https://developer.hashicorp.com/vault/api-docs
 
@@ -8,7 +9,7 @@ makes this module very independent.
 
 import logging
 from pathlib import Path
-from typing import Any, Optional, Union
+from typing import Any
 
 import requests
 import urllib3
@@ -19,7 +20,8 @@ log = logging.getLogger("fotoobo")
 
 
 class Client:  # pylint: disable=too-many-instance-attributes
-    """The approle helper class for the Hashicorp Vault
+    """
+    The approle helper class for the Hashicorp Vault.
 
     This vault client gives you methods for your login with approle and maintaining token and data
     requests.
@@ -32,11 +34,12 @@ class Client:  # pylint: disable=too-many-instance-attributes
         data_path: str,
         role_id: str,
         secret_id: str,
-        ssl_verify: Union[bool, str] = True,
-        token_file: Optional[str] = None,
+        ssl_verify: bool | str = True,
+        token_file: str | None = None,
         token_ttl_limit: int = 0,
     ) -> None:
-        """Initialize the vault client
+        """
+        Initialize the vault client.
 
         Args:
             url:                The URL of your vault service (eg. https://vault.local:443)
@@ -61,10 +64,10 @@ class Client:  # pylint: disable=too-many-instance-attributes
         self.role_id: str = role_id
         self.secret_id: str = secret_id
         self.token: str = ""
-        self.token_file: Optional[Path] = None
+        self.token_file: Path | None = None
         self.token_ttl_limit: int = token_ttl_limit
         self.url: str = url.strip("/")
-        self.ssl_verify: Union[bool, str] = ssl_verify
+        self.ssl_verify: bool | str = ssl_verify
         if not self.ssl_verify:
             log.warning("SSL verify for vault service is disabled which may be a security issue")
             urllib3.disable_warnings(category=urllib3.exceptions.InsecureRequestWarning)
@@ -83,7 +86,8 @@ class Client:  # pylint: disable=too-many-instance-attributes
             self.load_token()
 
     def get_data(self, timeout: int = 3) -> Any:
-        """Get data from the key/value store
+        """
+        Get data from the key/value store.
 
         Args:
             timeout: The time before a request to the vault is cancelled
@@ -121,7 +125,8 @@ class Client:  # pylint: disable=too-many-instance-attributes
         }
 
     def get_token(self, timeout: int = 3) -> bool:
-        """Get a new token from the vault service by providing role_id and secret_id
+        """
+        Get a new token from the vault service by providing role_id and secret_id.
 
         Args:
             timeout: The time before a request to the vault is cancelled
@@ -146,7 +151,8 @@ class Client:  # pylint: disable=too-many-instance-attributes
         return bool(self.token)
 
     def load_token(self) -> bool:
-        """Load the token from a file
+        """
+        Load the token from a file.
 
         Open a text file with a vault token and validate the token against the vault.
 
@@ -164,7 +170,8 @@ class Client:  # pylint: disable=too-many-instance-attributes
         return bool(self.token)
 
     def save_token(self) -> bool:
-        """Save the vault token to a text file
+        """
+        Save the vault token to a text file.
 
         Returns:
             True if a token is set, otherwise False
@@ -176,7 +183,8 @@ class Client:  # pylint: disable=too-many-instance-attributes
         return bool(self.token)
 
     def validate_token(self, timeout: int = 3) -> bool:
-        """Check if the token still is valid
+        """
+        Check if the token still is valid.
 
         Validate the Vault token against the Vault service. If the token ttl is lower then the
         token_ttl_limit the token is cleared. This prevents a token with ttl short before 0 to be

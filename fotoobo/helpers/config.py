@@ -10,7 +10,7 @@ line option, the command line option takes precedence over the global configurat
 import os
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any
 
 from fotoobo.exceptions import GeneralError
 from fotoobo.helpers.files import load_yaml_file
@@ -26,14 +26,14 @@ class Config:
 
     # set default values
     inventory_file: Path = Path("inventory.yaml")
-    logging: Optional[dict[str, Any]] = None
-    audit_logging: Optional[dict[str, Any]] = None
+    logging: dict[str, Any] | None = None
+    audit_logging: dict[str, Any] | None = None
     no_logo: bool = False
     cli_info: dict[str, Any] = field(default_factory=dict)
     vault: dict[str, str] = field(default_factory=dict)
 
     def load_configuration(  # pylint: disable=too-many-branches
-        self, config_file: Optional[Path] = None
+        self, config_file: Path | None = None
     ) -> None:
         """
         Load the global fotoobo configuration file. If the configuration file is not present it just

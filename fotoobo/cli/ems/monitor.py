@@ -4,7 +4,6 @@ The FortiClient EMS monitor commands
 
 import logging
 from pathlib import Path
-from typing import Optional
 
 import typer
 from typing_extensions import Annotated
@@ -51,7 +50,7 @@ def connections(
         ),
     ] = "ems",
     output_file: Annotated[
-        Optional[Path],
+        Path | None,
         typer.Option(
             "--output",
             "-o",
@@ -61,7 +60,7 @@ def connections(
     ] = None,
     raw: Annotated[bool, typer.Option("-r", "--raw", help="Output raw data.")] = False,
     template_file: Annotated[
-        Optional[Path],
+        Path | None,
         typer.Option(
             "--template",
             "-t",
@@ -121,7 +120,7 @@ def endpoint_management_status(
         ),
     ] = "ems",
     output_file: Annotated[
-        Optional[Path],
+        Path | None,
         typer.Option(
             "--output",
             "-o",
@@ -131,7 +130,7 @@ def endpoint_management_status(
     ] = None,
     raw: Annotated[bool, typer.Option("-r", "--raw", help="Output raw data.")] = False,
     template_file: Annotated[
-        Optional[Path],
+        Path | None,
         typer.Option(
             "--template",
             "-t",
@@ -185,7 +184,7 @@ def endpoint_os_versions(
         ),
     ] = "ems",
     output_file: Annotated[
-        Optional[Path],
+        Path | None,
         typer.Option(
             "--output",
             "-o",
@@ -195,7 +194,7 @@ def endpoint_os_versions(
     ] = None,
     raw: Annotated[bool, typer.Option("-r", "--raw", help="Output raw data.")] = False,
     template_file: Annotated[
-        Optional[Path],
+        Path | None,
         typer.Option(
             "--template",
             "-t",
@@ -254,7 +253,7 @@ def endpoint_outofsync(
         ),
     ] = "ems",
     output_file: Annotated[
-        Optional[Path],
+        Path | None,
         typer.Option(
             "--output",
             "-o",
@@ -264,7 +263,7 @@ def endpoint_outofsync(
     ] = None,
     raw: Annotated[bool, typer.Option("-r", "--raw", help="Output raw data.")] = False,
     template_file: Annotated[
-        Optional[Path],
+        Path | None,
         typer.Option(
             "--template",
             "-t",
@@ -312,7 +311,7 @@ def license(  # pylint: disable=redefined-builtin
         ),
     ] = "ems",
     output_file: Annotated[
-        Optional[Path],
+        Path | None,
         typer.Option(
             "--output",
             "-o",
@@ -322,7 +321,7 @@ def license(  # pylint: disable=redefined-builtin
     ] = None,
     raw: Annotated[bool, typer.Option("-r", "--raw", help="Output raw data.")] = False,
     template_file: Annotated[
-        Optional[Path],
+        Path | None,
         typer.Option(
             "--template",
             "-t",

@@ -3,7 +3,6 @@ The FortiGate commands
 """
 
 import logging
-from typing import Optional
 
 import typer
 from typing_extensions import Annotated
@@ -53,7 +52,7 @@ def address(
         ),
     ] = "*",
     output_file: Annotated[
-        Optional[str],
+        str | None,
         typer.Option(
             "--output",
             "-o",
@@ -97,7 +96,7 @@ def addrgrp(
         ),
     ] = "*",
     output_file: Annotated[
-        Optional[str],
+        str | None,
         typer.Option(
             "--output",
             "-o",
@@ -141,7 +140,7 @@ def service_custom(
         ),
     ] = "*",
     output_file: Annotated[
-        Optional[str],
+        str | None,
         typer.Option(
             "--output",
             "-o",
@@ -185,7 +184,7 @@ def service_group(
         ),
     ] = "*",
     output_file: Annotated[
-        Optional[str],
+        str | None,
         typer.Option(
             "--output",
             "-o",

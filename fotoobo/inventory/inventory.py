@@ -5,7 +5,7 @@ Devices class for storing device information
 import logging
 import re
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any
 
 from fotoobo.exceptions import GeneralWarning
 from fotoobo.fortinet.fortianalyzer import FortiAnalyzer
@@ -61,8 +61,8 @@ class Inventory:
 
     def get(
         self,
-        name: Optional[str] = None,
-        type: Optional[str] = None,  # pylint: disable=redefined-builtin
+        name: str | None = None,
+        type: str | None = None,  # pylint: disable=redefined-builtin
     ) -> dict[str, Any]:
         """
         Get a dictionary of assets from the inventory with given 'filters'.
@@ -103,7 +103,7 @@ class Inventory:
     def get_item(
         self,
         name: str = "",
-        type: Optional[str] = None,  # pylint: disable=redefined-builtin
+        type: str | None = None,  # pylint: disable=redefined-builtin
     ) -> Any:
         """
         Get a single asset from the inventory. To be sure the item has the correct type you can

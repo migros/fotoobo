@@ -5,7 +5,6 @@ FortiGate backup utility
 import concurrent.futures
 import json
 import logging
-from typing import Optional
 
 from rich.progress import Progress
 
@@ -19,7 +18,7 @@ log = logging.getLogger("fotoobo")
 
 
 def backup(
-    host: Optional[str] = None,
+    host: str | None = None,
     timeout: int = 60,
 ) -> Result[str]:
     """

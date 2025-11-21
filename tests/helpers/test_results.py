@@ -3,7 +3,7 @@ Test the results helper class.
 """
 
 from pathlib import Path
-from typing import Any, Optional, Union
+from typing import Any
 from unittest.mock import Mock
 
 import pytest
@@ -48,8 +48,8 @@ class TestResults:
         ),
     )
     def test_push_result(
-        inputs: Union[str, list[str]],
-        successful: Optional[bool],
+        inputs: str | list[str],
+        successful: bool | None,
         expected_result: dict[str, Any],
     ) -> None:
         """
@@ -87,7 +87,7 @@ class TestResults:
             pytest.param("test message", "dummy", id="some custom level"),
         ),
     )
-    def test_push_message(message: str, level: Optional[str]) -> None:
+    def test_push_message(message: str, level: str | None) -> None:
         """
         Test the push_message() method.
         """
@@ -155,7 +155,7 @@ class TestResults:
     )
     def test_print_messages(
         messages: list[tuple[str]],
-        only_host: Union[str, None],
+        only_host: str | None,
         expected_outputs: list[str],
         capsys: Any,
     ) -> None:

@@ -6,7 +6,6 @@ import logging
 import os
 from datetime import datetime
 from pathlib import Path
-from typing import Optional
 
 import typer
 from typing_extensions import Annotated
@@ -63,7 +62,7 @@ def backup(
         ),
     ] = 60,
     backup_dir: Annotated[
-        Optional[Path],
+        Path | None,
         typer.Option(
             "--backup-dir",
             "-b",
@@ -73,7 +72,7 @@ def backup(
         ),
     ] = None,
     ftp_server: Annotated[
-        Optional[str],
+        str | None,
         typer.Option(
             "--ftp",
             "-f",
@@ -82,7 +81,7 @@ def backup(
         ),
     ] = None,
     smtp_server: Annotated[
-        Optional[str],
+        str | None,
         typer.Option(
             "--smtp",
             "-s",

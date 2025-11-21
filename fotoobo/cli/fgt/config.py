@@ -4,7 +4,6 @@ The FortiGate get commands
 
 import logging
 from pathlib import Path
-from typing import Optional
 
 import typer
 from typing_extensions import Annotated
@@ -36,7 +35,7 @@ def check(
         ),
     ],
     smtp_server: Annotated[
-        Optional[str],
+        str | None,
         typer.Option(
             "--smtp",
             help="The smtp configuration from the inventory.",

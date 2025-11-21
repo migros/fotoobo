@@ -6,7 +6,7 @@ import logging
 import re
 from pathlib import Path
 from time import sleep
-from typing import Any, Optional
+from typing import Any
 
 import requests
 
@@ -84,7 +84,7 @@ class FortiManager(Fortinet):  # pylint: disable=too-many-public-methods
         return self.api("post", payload=payload)
 
     def api_get(
-        self, url: str, params: Optional[dict[str, Any]] = None, timeout: Optional[float] = None
+        self, url: str, params: dict[str, Any] | None = None, timeout: float | None = None
     ) -> requests.models.Response:
         """GET method for API requests
 
@@ -110,10 +110,10 @@ class FortiManager(Fortinet):  # pylint: disable=too-many-public-methods
         self,
         method: str,
         url: str = "",
-        headers: Optional[dict[str, str]] = None,
-        params: Optional[dict[str, str]] = None,
-        payload: Optional[dict[str, Any]] = None,
-        timeout: Optional[float] = None,
+        headers: dict[str, str] | None = None,
+        params: dict[str, str] | None = None,
+        payload: dict[str, Any] | None = None,
+        timeout: float | None = None,
     ) -> requests.models.Response:
         """
         API request to a FortiManager device.
@@ -563,7 +563,7 @@ class FortiManager(Fortinet):  # pylint: disable=too-many-public-methods
 
         return result
 
-    def get_adoms(self, ignored_adoms: Optional[list[str]] = None) -> list[Any]:
+    def get_adoms(self, ignored_adoms: list[str] | None = None) -> list[Any]:
         """
         Get FortiManager ADOM list
 
@@ -754,7 +754,7 @@ class FortiManager(Fortinet):  # pylint: disable=too-many-public-methods
 
         if response.status_code == 200:
             try:
-                match: Optional[re.Match[Any]] = re.search(
+                match: re.Match[Any] | None = re.search(
                     r"(v\d+\.\d+\.\d+)-", response.json()["result"][0]["data"]["Version"]
                 )
                 fmg_version = str(match.group(1))  # type: ignore
