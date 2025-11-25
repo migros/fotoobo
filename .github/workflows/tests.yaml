@@ -48,6 +48,7 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.14"
+      - run: poetry install --extras dev
       - name: Check code coverage
         run: |
           poetry run tox -- -e coverage -- --cov-report=xml
@@ -73,6 +74,7 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.14"
+      - run: poetry install --extras docs
       - name: Create documentation
         run: |
           poetry run tox -e docs
