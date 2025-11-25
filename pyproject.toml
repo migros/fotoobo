@@ -47,7 +47,6 @@ dev = [
     "tox",
     "pylint",
     "pytest-cov",
-    "coverage",
     "types-requests",
     "isort",
     "types-PyYAML",
