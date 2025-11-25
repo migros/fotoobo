@@ -136,7 +136,7 @@ description = check pytest coverage for unit tests (without cli because these ar
 skip_install = true
 allowlist_externals = poetry, pytest
 commands_pre = poetry install
-commands = pytest --cov-report term-missing --cov-fail-under 90 --cov=fotoobo --cov-config=.coverage_unittests_rc --ignore=tests/cli tests/ {posargs}
+commands = pytest --cov-report=term-missing --cov-fail-under 90 --cov=fotoobo --cov-config=.coverage_unittests_rc --ignore=tests/cli tests/ {posargs}
 
 [testenv:docs]
 description = Create the documentation with sphinx
