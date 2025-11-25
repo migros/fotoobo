@@ -1604,10 +1604,10 @@ docs = ["furo (>=2023.7.26)", "proselint (>=0.13)", "sphinx (>=7.1.2,!=7.3)", "s
 test = ["covdefaults (>=2.3)", "coverage (>=7.2.7)", "coverage-enable-subprocess (>=1)", "flaky (>=3.7)", "packaging (>=23.1)", "pytest (>=7.4)", "pytest-env (>=0.8.2)", "pytest-freezer (>=0.4.8) ; platform_python_implementation == \"PyPy\" or platform_python_implementation == \"GraalVM\" or platform_python_implementation == \"CPython\" and sys_platform == \"win32\" and python_version >= \"3.13\"", "pytest-mock (>=3.11.1)", "pytest-randomly (>=3.12)", "pytest-timeout (>=2.1)", "setuptools (>=68)", "time-machine (>=2.10) ; platform_python_implementation == \"CPython\""]
 
 [extras]
-dev = ["black", "isort", "mypy", "pygount", "pylint", "pytest", "pytest-cov", "tox", "types-PyYAML", "types-requests"]
+dev = ["black", "coverage", "isort", "mypy", "pygount", "pylint", "pytest", "pytest-cov", "tox", "types-PyYAML", "types-requests"]
 docs = ["Sphinx", "sphinx-rtd-theme", "tox"]
 
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.10, <4"
-content-hash = "0074fe62a5c806a192c5dc6a3243af62abd8ebac487365a1b101f5ad23fd0fe3"
+content-hash = "47864cc205b57e06c03fc0e93d8edcaa04366fe246b4f1a7563e050da18a7a86"
