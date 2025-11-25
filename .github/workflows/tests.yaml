@@ -61,7 +61,6 @@ jobs:
         uses: codecov/codecov-action@v4
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          file: coverage.xml
 
   docs:
     runs-on: ubuntu-latest

@@ -53,6 +53,7 @@ dev = [
     "pygount",
 ]
 docs = [
+    "tox",
     "Sphinx",
     "sphinx-rtd-theme",
 ]
