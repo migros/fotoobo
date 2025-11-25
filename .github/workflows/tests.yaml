@@ -18,7 +18,7 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
           # cache: poetry
-      - run: poetry install
+      - run: poetry install --extras dev --extras docs
       - name: Analyzing the code with pylint
         run: |
           poetry run tox -e pylint

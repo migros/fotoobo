@@ -2,19 +2,20 @@
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
 
-[tool.poetry]
+[project]
 name = "fotoobo"
 version = "3.1.0"
 description = "The awesome Fortinet Toolbox"
-authors = ["Patrik Spiess <patrik.spiess@mgb.ch>", "Lukas Murer-Jäckle <lukas.murer@mgb.ch>"]
+authors = [
+    { name = "Patrik Spiess", email = "patrik.spiess@mgb.ch" }, 
+    { name = "Lukas Murer-Jäckle", email = "lukas.murer@mgb.ch" },
+]
 readme = "README.md"
 license = "LGPL-3.0-only"
 repository = "https://github.com/migros/fotoobo"
 classifiers = [
     "Framework :: Pytest",
     "Framework :: Sphinx",
-    "Framework :: Sphinx :: Extension",
-    "Framework :: Sphinx :: Theme",
     "Framework :: tox",
     "Intended Audience :: Developers",
     "Intended Audience :: Information Technology",
@@ -36,32 +37,34 @@ classifiers = [
     "Topic :: System :: Networking :: Monitoring",
     "Topic :: System :: Systems Administration"
 ]
+requires-python = ">=3.10, <4"
+dependencies = [
+    "typer",
+    "rich",
+    "PyYAML",
+    "requests",
+    "Jinja2",
+]
 
-[tool.poetry.dependencies]
-python = ">=3.10.0, <4"
-typer = "*"
-rich = "*"
-PyYAML = "*"
-requests = "*"
-Jinja2 = "*"
+[project.optional-dependencies]
+dev = [
+    "pytest",
+    "black",
+    "mypy",
+    "tox",
+    "pylint",
+    "pytest-cov",
+    "types-requests",
+    "isort",
+    "types-PyYAML",
+    "pygount",
+]
+docs = [
+    "Sphinx",
+    "sphinx-rtd-theme",
+]
 
-[tool.poetry.group.dev.dependencies]
-pytest = "*"
-black = "*"
-mypy = "*"
-tox = "*"
-pylint = "*"
-pytest-cov = "*"
-types-requests = "*"
-isort = "*"
-types-PyYAML = "*"
-pygount = "*"
-
-[tool.poetry.group.docs.dependencies]
-Sphinx = "*"
-sphinx-rtd-theme = "*"
-
-[tool.poetry.scripts]
+[project.scripts]
 fotoobo = "fotoobo.main:main"
 
 # isort is used to organize-imports
