@@ -1,3 +1,6 @@
+
+## [3.1.1] - 2026-03-27
+
 ### Changed
 
 - Update pyproject.toml to new format and remove deprecated settings
