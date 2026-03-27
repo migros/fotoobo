@@ -217,7 +217,7 @@ class TestFortinet:
             f"fotoobo.fortinet.fortinet.requests.Session.{method}",
             Mock(
                 side_effect=requests.exceptions.ConnectionError(
-                    Mock(reason=NewConnectionError(reason, message="")),  # type:ignore
+                    Mock(reason=NewConnectionError(reason, message="")),  # type: ignore
                 )
             ),
         )

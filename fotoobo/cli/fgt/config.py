@@ -4,9 +4,9 @@ The FortiGate get commands
 
 import logging
 from pathlib import Path
+from typing import Annotated
 
 import typer
-from typing import Annotated
 
 from fotoobo.helpers.config import config
 from fotoobo.inventory.inventory import Inventory

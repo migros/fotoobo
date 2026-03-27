@@ -4,9 +4,9 @@ The FortiManager commands
 
 import logging
 from pathlib import Path
+from typing import Annotated
 
 import typer
-from typing import Annotated
 
 from fotoobo.helpers import cli_path
 from fotoobo.helpers.config import config as fotoobo_config

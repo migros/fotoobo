@@ -4,10 +4,9 @@ The FortiCloudAsset get commands
 
 import logging
 from pathlib import Path
-from typing import Any
+from typing import Any, Annotated
 
 import typer
-from typing import Annotated
 
 from fotoobo.exceptions.exceptions import GeneralError
 from fotoobo.helpers import cli_path

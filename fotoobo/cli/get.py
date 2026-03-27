@@ -3,11 +3,11 @@ The fotoobo get commands
 """
 
 import logging
+from typing import Annotated
 
 import typer
 from rich import print as rich_print
 from rich.panel import Panel
-from typing import Annotated
 
 from fotoobo.helpers import cli_path
 from fotoobo.tools import get
