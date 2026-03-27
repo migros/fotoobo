@@ -11,9 +11,9 @@ import logging
 import os
 import sys
 from pathlib import Path
+from typing import Annotated
 
 import typer
-from typing_extensions import Annotated
 
 from fotoobo import tools
 from fotoobo.helpers import cli_path

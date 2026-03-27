@@ -6,9 +6,9 @@ import logging
 import os
 from datetime import datetime
 from pathlib import Path
+from typing import Annotated
 
 import typer
-from typing_extensions import Annotated
 
 from fotoobo import tools
 from fotoobo.exceptions import GeneralWarning

@@ -3,9 +3,9 @@ The FortiGate commands
 """
 
 import logging
+from typing import Annotated
 
 import typer
-from typing_extensions import Annotated
 
 from fotoobo.helpers import cli_path
 from fotoobo.tools import fgt
