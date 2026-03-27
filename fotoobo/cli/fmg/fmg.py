@@ -6,7 +6,7 @@ import logging
 from pathlib import Path
 
 import typer
-from typing_extensions import Annotated
+from typing import Annotated
 
 from fotoobo.helpers import cli_path
 from fotoobo.helpers.config import config as fotoobo_config

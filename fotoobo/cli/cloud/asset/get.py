@@ -7,7 +7,7 @@ from pathlib import Path
 from typing import Any
 
 import typer
-from typing_extensions import Annotated
+from typing import Annotated
 
 from fotoobo.exceptions.exceptions import GeneralError
 from fotoobo.helpers import cli_path

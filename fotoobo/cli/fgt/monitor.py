@@ -7,7 +7,7 @@ from pathlib import Path
 
 import typer
 from rich.pretty import pprint
-from typing_extensions import Annotated
+from typing import Annotated
 
 from fotoobo.helpers import cli_path
 from fotoobo.helpers.config import config

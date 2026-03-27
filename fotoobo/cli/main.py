@@ -13,7 +13,7 @@ import sys
 from pathlib import Path
 
 import typer
-from typing_extensions import Annotated
+from typing import Annotated
 
 from fotoobo import tools
 from fotoobo.helpers import cli_path

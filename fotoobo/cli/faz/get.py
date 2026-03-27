@@ -5,7 +5,7 @@ The FortiAnalyzer get commands
 import logging
 
 import typer
-from typing_extensions import Annotated
+from typing import Annotated
 
 from fotoobo.helpers import cli_path
 from fotoobo.tools import faz

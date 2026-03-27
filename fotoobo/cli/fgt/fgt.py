@@ -8,7 +8,7 @@ from datetime import datetime
 from pathlib import Path
 
 import typer
-from typing_extensions import Annotated
+from typing import Annotated
 
 from fotoobo import tools
 from fotoobo.exceptions import GeneralWarning
