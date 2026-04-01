@@ -818,7 +818,6 @@ class FortiManager(Fortinet):  # pylint: disable=too-many-public-methods
             response = super().api("post", payload=payload)
             if response.status_code == 200:
                 if "session" in response.json():
-                    log.debug("Storing session key")
                     self.session_key = response.json()["session"]
 
                     if self.session_path:
