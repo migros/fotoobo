@@ -1222,7 +1222,7 @@ class TestFortiManager:
         # Act & Assert
         with pytest.raises(APIError) as err:
             FortiManager("host", "", "").post("ADOM", [{"params": [{"url": "{adom}"}]}])
-        assert "HTTP/444 general API Error" in str(err.value)
+        assert "HTTP/444 General API Error" in str(err.value)
         post_mock.assert_called_with(
             "https://host:443/jsonrpc",
             headers=None,

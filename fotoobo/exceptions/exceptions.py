@@ -19,7 +19,9 @@ class GeneralException(Exception):
 
 
 class APIError(GeneralException):
-    """Exception for errors with the network API"""
+    """
+    Exception for errors with the network API.
+    """
 
     def __init__(self, err: Any) -> None:
         """init"""
@@ -35,13 +37,12 @@ class APIError(GeneralException):
             429: "Access temporarily blocked",
             500: "Internal Server Error",
         }
-        # self.message = "general API Error"
         self.code = 999
         self.message = "unknown"
 
         if isinstance(err, HTTPError):
             self.code = err.response.status_code
-            message = self.http_status_codes.get(self.code, "general API Error")
+            message = self.http_status_codes.get(self.code, "General API Error")
             self.message = f"HTTP/{str(self.code)} {message}"
 
         super().__init__(self.message)
@@ -50,6 +51,7 @@ class APIError(GeneralException):
 class GeneralError(GeneralException):
     """
     The exception to raise if a general error occurred.
+
     The class does not have any methods as the only one (__init__) is inherited from its parent.
     Raise a GeneralError when it does not make sense to do further processing and the program should
     stop and exit.
@@ -59,6 +61,7 @@ class GeneralError(GeneralException):
 class GeneralWarning(GeneralException):
     """
     The exception to raise if a general warning occurred.
+
     The class does not have any methods as the only one (__init__) is inherited from its parent.
     Raise a GeneralWarning if a part of the program fails but it is safe to do further processing.
     """
