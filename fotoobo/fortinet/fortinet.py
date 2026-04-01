@@ -163,6 +163,7 @@ class Fortinet(ABC):
             response.raise_for_status()
 
         except requests.exceptions.HTTPError as err:
+            log.debug(err)
             raise APIError(err) from err
 
         return response

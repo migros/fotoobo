@@ -283,7 +283,7 @@ class TestFortinet:
             pytest.param(424, "HTTP/424 Failed Dependency", id="HTTP/424"),
             pytest.param(429, "HTTP/429 Access temporarily blocked", id="HTTP/429"),
             pytest.param(500, "HTTP/500 Internal Server Error", id="HTTP/500"),
-            pytest.param(999, "HTTP/999 general API Error", id="HTTP/999"),
+            pytest.param(999, "HTTP/999 General API Error", id="HTTP/999"),
         ),
     )
     def test_api_http_error(
