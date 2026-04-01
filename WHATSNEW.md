@@ -1,6 +1,6 @@
-
-## [3.1.2] - 2026-04-01
+### Added
 
 ### Added
 
-- Add debug log for requests HTTP errors
+### Removed
+
