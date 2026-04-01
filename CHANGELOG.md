@@ -16,6 +16,10 @@ For unreleased changes see [WHATSNEW.md](WHATSNEW.md)
 
 - Add debug log for requests HTTP errors
 
+### Changed
+
+- Change Github Actions to newer version
+
 ## [3.1.1] - 2026-03-27
 
 ### Changed
