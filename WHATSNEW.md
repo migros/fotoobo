@@ -1,6 +1,6 @@
 ### Added
 
-### Added
+### Changed
 
 ### Removed
 
