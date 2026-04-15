@@ -91,6 +91,8 @@ disallow_untyped_decorators=false
 [tool.pytest.ini_options]
 addopts = "--basetemp=tests/temp/"
 
+[tool.setuptools.package-data]
+fotoobo = ["py.typed"]
 
 # here we define the tox settings
 # we do it inline because we don't want to have another tox.ini in the project root
