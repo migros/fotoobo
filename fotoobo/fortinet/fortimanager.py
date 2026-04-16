@@ -68,7 +68,7 @@ class FortiManager(Fortinet):  # pylint: disable=too-many-public-methods
             "rootp",
         ]
 
-    def api_delete(self, url: str) -> requests.models.Response:
+    def api_delete(self, url: str) -> requests.Response:
         """DELETE method for API requests
 
         Args:
@@ -85,7 +85,7 @@ class FortiManager(Fortinet):  # pylint: disable=too-many-public-methods
 
     def api_get(
         self, url: str, params: dict[str, Any] | None = None, timeout: float | None = None
-    ) -> requests.models.Response:
+    ) -> requests.Response:
         """GET method for API requests
 
         Args:
@@ -114,7 +114,7 @@ class FortiManager(Fortinet):  # pylint: disable=too-many-public-methods
         params: dict[str, str] | None = None,
         payload: dict[str, Any] | None = None,
         timeout: float | None = None,
-    ) -> requests.models.Response:
+    ) -> requests.Response:
         """
         API request to a FortiManager device.
 

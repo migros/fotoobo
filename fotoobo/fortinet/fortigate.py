@@ -49,7 +49,7 @@ class FortiGate(Fortinet):
         params: dict[str, str] | None = None,
         payload: dict[str, Any] | None = None,
         timeout: float | None = None,
-    ) -> requests.models.Response:
+    ) -> requests.Response:
         """Native API request to a FortiGate.
 
         It uses the super.api method but it has to enrich the payload in post requests with the

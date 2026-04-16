@@ -57,7 +57,7 @@ class FortiClientEMS(Fortinet):
         params: dict[str, str] | None = None,
         payload: dict[str, Any] | None = None,
         timeout: float | None = None,
-    ) -> requests.models.Response:
+    ) -> requests.Response:
         """
         API request to a FortiClientEMS device.
 
