@@ -4,7 +4,7 @@ build-backend = "poetry.core.masonry.api"
 
 [project]
 name = "fotoobo"
-version = "3.1.2"
+version = "3.1.3"
 description = "The awesome Fortinet Toolbox"
 authors = [
     { name = "Patrik Spiess", email = "patrik.spiess@mgb.ch" }, 
