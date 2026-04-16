@@ -74,7 +74,7 @@ Logging
 
 NOTE: The settings here apply the same to normal logging and audit logging.
 
-If you configure a logging setting it is automatically enabled. Otherwise defaut logging will be
+If you configure a logging setting it is automatically enabled. Otherwise default logging will be
 used. Default logging is set to log to **console** with log-level **WARNING**.
 
 .. _logging_level:
