@@ -92,7 +92,7 @@ Using a configuration file
 
 You can read your fotoobo :ref:`configuration file<usage_configuration>`. This is useful if you wish to load and change settings like :ref:`inventory file<usage_inventory>`, :ref:`logging options<logging>` or a :ref:`vault configuration<vault_service>`.
 
-Use the inventory file ``~/.config/inventory.yaml`` with the string ``VAULT`` as the toke or password for your assets.
+Use the inventory file ``~/.config/inventory.yaml`` with the string ``VAULT`` as the token or password for your assets.
 
 .. code-block:: yaml
 
