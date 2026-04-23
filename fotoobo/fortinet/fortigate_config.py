@@ -4,7 +4,7 @@ The FortiGate configuration class represents the whole or parts of a FortiGate c
 
 import logging
 from pathlib import Path
-from typing import IO, Any
+from typing import Any, IO
 
 from fotoobo.exceptions import GeneralWarning
 from fotoobo.helpers.files import load_json_file, save_json_file

@@ -5,7 +5,6 @@ FortiGate CMDB firewall address module
 from pathlib import Path
 from typing import Any
 
-
 from fotoobo.fortinet.fortigate import FortiGate
 from fotoobo.helpers.config import config
 from fotoobo.helpers.result import Result
