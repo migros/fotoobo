@@ -67,9 +67,14 @@ docs = [
 [project.scripts]
 fotoobo = "fotoobo.main:main"
 
-# isort is used to organize-imports
+[tool.black]
+line-length = 100
+
 [tool.isort]
 sections = ['FUTURE', 'STDLIB', 'THIRDPARTY', 'FIRSTPARTY', 'LOCALFOLDER']
+profile = "black" 
+line_length = 100
+order_by_type = false
 
 [tool.pylint.'MESSAGES CONTROL']
 disable = [
@@ -78,9 +83,6 @@ disable = [
     "too-few-public-methods"
 ]
 enable = [ "useless-suppression" ]
-
-[tool.black]
-line-length = 100
 
 [tool.mypy]
 strict=true
@@ -99,8 +101,22 @@ addopts = "--basetemp=tests/temp/"
 legacy_tox_ini = """[tox]
 
 isolated_build = True
-envlist = pylint, mypy, black, pytest, coverage, docs, stats
+envlist = black, isort, pylint, mypy, pytest, coverage, docs, stats
 testpaths = "tests"
+
+[testenv:black]
+description = Check formatting with black
+skip_install = true
+allowlist_externals = poetry, black
+commands_pre = poetry install
+commands = black --check --diff {posargs} .
+
+[testenv:isort]
+description = Check imports with isort
+skip_install = true
+allowlist_externals = poetry, isort
+commands_pre = poetry install
+commands = isort --check-only {posargs} .
 
 [testenv:pylint]
 description = Code analysis with pylint
@@ -115,13 +131,6 @@ skip_install = true
 allowlist_externals = poetry, mypy
 commands_pre = poetry install
 commands = mypy fotoobo tests {posargs}
-
-[testenv:black]
-description = Check formatting with black
-skip_install = true
-allowlist_externals = poetry, black
-commands_pre = poetry install
-commands = black --check --diff {posargs} .
 
 [testenv:pytest]
 description = do unit tests with pytest

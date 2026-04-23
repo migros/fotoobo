@@ -4,7 +4,7 @@ The FortiCloudAsset get commands
 
 import logging
 from pathlib import Path
-from typing import Any, Annotated
+from typing import Annotated, Any
 
 import typer
 
