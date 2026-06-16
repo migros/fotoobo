@@ -11,47 +11,58 @@ jobs:
         python-version: ["3.10", "3.11", "3.12", "3.13", "3.14"]
     steps:
       - uses: actions/checkout@v6
+
       - name: Install poetry
-        run: |
-          pipx install poetry
+        run: pipx install poetry
+
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v6
         with:
           python-version: ${{ matrix.python-version }}
-      - run: poetry install --extras dev --extras docs
+
+      - name: Install the project with dev dependencies
+        run: poetry install --extras dev
+
+      - name: Check formatting with black
+        run: poetry run tox -e black
+
+      - name: Check imports with isort
+        run: poetry run tox -e isort
+
       - name: Analyzing the code with pylint
-        run: |
-          poetry run tox -e pylint
+        run: poetry run tox -e pylint
+
       - name: Type checking with mypy
-        run: |
-          poetry run tox -- -e mypy -- --junit-xml mypy.xml
+        run: poetry run tox -- -e mypy -- --junit-xml mypy.xml
+
       - name: Upload mypy report
         uses: actions/upload-artifact@v7
         with:
           name: mypy-report-${{ matrix.python-version }}
           path: mypy.xml
-      - name: Check formatting with black
-        run: |
-          poetry run tox -e black
-      - name: Unittests with pytest
-        run: |
-          poetry run tox -e pytest
+
+      - name: Unit-tests with pytest
+        run: poetry run tox -e pytest
 
   coverage:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
+
       - name: Install poetry
-        run: |
-          pipx install poetry
+        run: pipx install poetry
+
       - name: Set up Python
         uses: actions/setup-python@v6
         with:
           python-version: "3.14"
-      - run: poetry install --extras dev
+
+      - name: Install the project with dev dependencies
+        run: poetry install --extras dev
+
       - name: Check code coverage
-        run: |
-          poetry run tox -- -e coverage -- --cov-report=xml
+        run: poetry run tox -- -e coverage -- --cov-report=xml
+
       - name: Upload covearge report
         uses: actions/upload-artifact@v7
         with:
@@ -63,27 +74,29 @@ jobs:
     continue-on-error: true
     steps:
       - uses: actions/checkout@v6
-      - name: Install poetry
-        run: |
-          pipx install poetry
-      - name: Check pyproject.toml
-        run: |
-          poetry check --strict
 
+      - name: Install poetry
+        run: pipx install poetry
+
+      - name: Check pyproject.toml
+        run: poetry check --strict
 
   docs:
     runs-on: ubuntu-latest
     needs: tests
     steps:
       - uses: actions/checkout@v6
+
       - name: Install poetry
-        run: |
-          pipx install poetry
+        run: pipx install poetry
+
       - name: Set up Python
         uses: actions/setup-python@v6
         with:
           python-version: "3.14"
-      - run: poetry install --extras docs
+
+      - name: Install the project with docs dependencies
+        run: poetry install --extras docs
+
       - name: Create documentation
-        run: |
-          poetry run tox -e docs
+        run: poetry run tox -e docs
