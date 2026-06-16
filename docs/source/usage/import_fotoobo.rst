@@ -77,7 +77,7 @@ Imagine you created the inventory file ``~/.config/inventory.yaml``:
         password: the_fortimanager_password
         type: fortimanager
 
-With this inventory file you can use the asset ```fmg-test`` in your code:
+With this inventory file you can use the asset ``fmg-test`` in your code:
 
 .. code-block:: python
 
@@ -122,7 +122,6 @@ With these preparations you can use the fotoobo configuration to access your ass
     from fotoobo.helpers.config import config
     from fotoobo.inventory import Inventory
     config.load_configuration()
-    config.vault["ssl_verify"] = False
     inventory = Inventory(config.inventory_file)
     fmg = inventory.get_item("fmg-test")
     print(fmg.get_version())
