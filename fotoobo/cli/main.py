@@ -17,6 +17,7 @@ import typer
 
 from fotoobo import tools
 from fotoobo.helpers import cli_path
+from fotoobo.helpers.cli import command_to_cli_info
 from fotoobo.helpers.config import config
 from fotoobo.helpers.log import Log
 from fotoobo.helpers.output import print_logo
@@ -125,7 +126,10 @@ def callback(  # pylint: disable=too-many-arguments, too-many-positional-argumen
     cli_path.append(str(context.invoked_subcommand))
     log.debug("About to execute command: '%s'", context.invoked_subcommand)
     log.audit(f'command="{" ".join(sys.argv)}"')  # type: ignore
-    config.cli_info = context.to_info_dict()
+    config.cli_info = {
+        "info_name": context.info_name or "root",
+        "command": command_to_cli_info(context.command),
+    }
 
 
 @app.command(hidden=True)
