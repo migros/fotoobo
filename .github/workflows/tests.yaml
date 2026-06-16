@@ -21,7 +21,7 @@ jobs:
           python-version: ${{ matrix.python-version }}
 
       - name: Install the project with dev dependencies
-        run: poetry install --extras dev
+        run: poetry install --with dev
 
       - name: Check formatting with black
         run: poetry run tox -e black
@@ -58,7 +58,7 @@ jobs:
           python-version: "3.14"
 
       - name: Install the project with dev dependencies
-        run: poetry install --extras dev
+        run: poetry install --with dev
 
       - name: Check code coverage
         run: poetry run tox -- -e coverage -- --cov-report=xml
@@ -96,7 +96,7 @@ jobs:
           python-version: "3.14"
 
       - name: Install the project with docs dependencies
-        run: poetry install --extras docs
+        run: poetry install --with docs
 
       - name: Create documentation
         run: poetry run tox -e docs
