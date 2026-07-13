@@ -186,7 +186,7 @@ def test_cli_app_greet_help(help_args: str) -> None:
     # Assert
     assert result.exit_code == 0
     arguments, options, commands = parse_help_output(result.stdout)
-    assert set(arguments) == {"name"}
+    assert set(arguments) == {"[name]"}
     assert options == {"-b", "--bye", "-l", "--log", "-h", "--help"}
     assert not commands
 

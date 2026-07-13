@@ -56,7 +56,7 @@ def test_cli_app_ems_monitor_connections_help(help_args: str) -> None:
     # Assert
     assert result.exit_code == 0
     arguments, options, commands = parse_help_output(result.stdout)
-    assert set(arguments) == {"host"}
+    assert set(arguments) == {"[host]"}
     assert options == {"-h", "--help", "-o", "--output", "-r", "--raw", "-t", "--template"}
     assert not commands
 
@@ -108,7 +108,7 @@ def test_cli_app_ems_monitor_endpoint_management_status_help(help_args: str) -> 
     # Assert
     assert result.exit_code == 0
     arguments, options, commands = parse_help_output(result.stdout)
-    assert set(arguments) == {"host"}
+    assert set(arguments) == {"[host]"}
     assert options == {"-h", "--help", "-o", "--output", "-r", "--raw", "-t", "--template"}
     assert not commands
 
@@ -161,7 +161,7 @@ def test_cli_app_ems_monitor_endpoint_os_versions_help(help_args: str) -> None:
     # Assert
     assert result.exit_code == 0
     arguments, options, commands = parse_help_output(result.stdout)
-    assert set(arguments) == {"host"}
+    assert set(arguments) == {"[host]"}
     assert options == {"-h", "--help", "-o", "--output", "-r", "--raw", "-t", "--template"}
     assert not commands
 
@@ -217,7 +217,7 @@ def test_cli_app_ems_monitor_endpoint_outofsync_help(help_args: str) -> None:
     # Assert
     assert result.exit_code == 0
     arguments, options, commands = parse_help_output(result.stdout)
-    assert set(arguments) == {"host"}
+    assert set(arguments) == {"[host]"}
     assert options == {"-h", "--help", "-o", "--output", "-r", "--raw", "-t", "--template"}
     assert not commands
 
@@ -268,7 +268,7 @@ def test_cli_app_ems_monitor_license_help(help_args: str) -> None:
     # Assert
     assert result.exit_code == 0
     arguments, options, commands = parse_help_output(result.stdout)
-    assert set(arguments) == {"host"}
+    assert set(arguments) == {"[host]"}
     assert options == {"-h", "--help", "-o", "--output", "-r", "--raw", "-t", "--template"}
     assert not commands
 
@@ -340,7 +340,7 @@ def test_cli_app_ems_monitor_system_help(help_args: str) -> None:
     # Assert
     assert result.exit_code == 0
     arguments, options, commands = parse_help_output(result.stdout)
-    assert set(arguments) == {"host"}
+    assert set(arguments) == {"[host]"}
     assert options == {"-h", "--help", "-r", "--raw"}
     assert not commands
 

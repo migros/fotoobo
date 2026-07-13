@@ -29,7 +29,7 @@ def test_cli_app_fgt_config_get_help(help_args_with_none: str) -> None:
     assert result.exit_code in [0, 2]
     assert "Usage: root fgt config get" in result.stdout
     arguments, options, commands = parse_help_output(result.stdout)
-    assert set(arguments) == {"configuration", "scope", "path"}
+    assert set(arguments) == {"[config]", "[scope]", "[path]"}
     assert options == {"-h", "--help"}
     assert not commands
 
