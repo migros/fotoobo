@@ -46,7 +46,7 @@ def test_cli_app_fmg_assign_help(help_args: str) -> None:
     # Assert
     assert result.exit_code == 0
     arguments, options, commands = parse_help_output(result.stdout)
-    assert set(arguments) == {"adoms", "host", "policy"}
+    assert set(arguments) == {"[adoms]", "[host]", "[policy]"}
     assert options == {"-h", "--help", "-s", "--smtp", "-t", "--timeout"}
     assert not commands
 
@@ -66,6 +66,6 @@ def test_cli_app_fmg_post_help(help_args: str) -> None:
     # Assert
     assert result.exit_code == 0
     arguments, options, commands = parse_help_output(result.stdout)
-    assert set(arguments) == {"file", "adom", "host"}
+    assert set(arguments) == {"[file]", "[adom]", "[host]"}
     assert options == {"-h", "--help", "-s", "--smtp"}
     assert not commands

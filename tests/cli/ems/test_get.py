@@ -49,7 +49,7 @@ def test_cli_app_ems_get_version_help(help_args: str) -> None:
     # Assert
     assert result.exit_code == 0
     arguments, options, commands = parse_help_output(result.stdout)
-    assert set(arguments) == {"host"}
+    assert set(arguments) == {"[host]"}
     assert options == {"-h", "--help"}
     assert not commands
 
@@ -69,7 +69,7 @@ def test_cli_app_ems_get_workgroups_help(help_args: str) -> None:
     # Assert
     assert result.exit_code == 0
     arguments, options, commands = parse_help_output(result.stdout)
-    assert set(arguments) == {"host"}
+    assert set(arguments) == {"[host]"}
     assert options == {"-c", "--custom", "-h", "--help"}
     assert not commands
 

@@ -51,7 +51,7 @@ def test_cli_app_fgt_get_version_help(help_args: str) -> None:
     assert result.exit_code == 0
     assert "Usage: root fgt get version" in result.stdout
     arguments, options, commands = parse_help_output(result.stdout)
-    assert set(arguments) == {"host"}
+    assert set(arguments) == {"[host]"}
     assert options == {"-h", "--help"}
     assert not commands
 

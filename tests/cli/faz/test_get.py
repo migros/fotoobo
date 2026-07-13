@@ -49,7 +49,7 @@ def test_cli_app_faz_get_version_help(help_args: str) -> None:
     # Assert
     assert result.exit_code == 0
     arguments, options, commands = parse_help_output(result.stdout)
-    assert set(arguments) == {"host"}
+    assert set(arguments) == {"[host]"}
     assert options == {"-h", "--help"}
     assert not commands
 

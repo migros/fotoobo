@@ -1,3 +1,6 @@
+
+## [3.1.4] - 2026-07-13
+
 ### Added
 
 - Add isort to organize and sort imports
@@ -12,4 +15,4 @@
 
 ### Fixed
 
-- Fix CLI command "get commands" after typer upgrade to v0.26.x
+- Fix CLI command "get commands" and tests after typer upgrade to v0.26.x

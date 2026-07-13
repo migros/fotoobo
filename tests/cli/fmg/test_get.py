@@ -51,7 +51,7 @@ def test_cli_app_fmg_get_adoms_help(help_args: str) -> None:
     # Assert
     assert result.exit_code == 0
     arguments, options, commands = parse_help_output(result.stdout)
-    assert set(arguments) == {"host"}
+    assert set(arguments) == {"[host]"}
     assert options == {"-h", "--help"}
     assert not commands
 
@@ -71,7 +71,7 @@ def test_cli_app_fmg_get_devices_help(help_args: str) -> None:
     # Assert
     assert result.exit_code == 0
     arguments, options, commands = parse_help_output(result.stdout)
-    assert set(arguments) == {"host"}
+    assert set(arguments) == {"[host]"}
     assert options == {"-h", "--help", "-r", "--raw"}
     assert not commands
 
@@ -92,7 +92,7 @@ def test_cli_app_fmg_get_policy_help(help_args_with_none: str) -> None:
     # Assert
     assert result.exit_code in [0, 2]
     arguments, options, commands = parse_help_output(result.stdout)
-    assert set(arguments) == {"host", "adom", "policy_name", "filename"}
+    assert set(arguments) == {"[host]", "[adom]", "[policy]", "[file]"}
     assert options == {"-h", "--help"}
     assert not commands
 
@@ -112,7 +112,7 @@ def test_cli_app_fmg_get_version_help(help_args: str) -> None:
     # Assert
     assert result.exit_code == 0
     arguments, options, commands = parse_help_output(result.stdout)
-    assert set(arguments) == {"host"}
+    assert set(arguments) == {"[host]"}
     assert options == {"-h", "--help"}
     assert not commands
 

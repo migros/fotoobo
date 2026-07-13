@@ -1,5 +1,5 @@
 """
-FortiGate Class
+FortiGate class.
 """
 
 import logging
@@ -16,15 +16,10 @@ log = logging.getLogger("fotoobo")
 
 class FortiGate(Fortinet):
     """
-    Represents one FortiGate (digital twin)
+    Represents one FortiGate (digital twin).
     """
 
-    def __init__(
-        self,
-        hostname: str = "",
-        token: str = "",
-        **kwargs: dict[str, str],
-    ) -> None:
+    def __init__(self, hostname: str = "", token: str = "", **kwargs: str | int | bool) -> None:
         """
         Set some initial parameters.
 
@@ -33,11 +28,11 @@ class FortiGate(Fortinet):
             token:    API access token from the FortiGate
             **kwargs: See Fortinet class for available arguments
         """
+
         if not hostname:
             raise GeneralWarning("No hostname specified")
 
         super().__init__(hostname=hostname, **kwargs)
-        self.api_url = f"https://{self.hostname}:{self.https_port}/api/v2"
         self.token = token
         self.type = "fortigate"
 
@@ -50,7 +45,8 @@ class FortiGate(Fortinet):
         payload: dict[str, Any] | None = None,
         timeout: float | None = None,
     ) -> requests.Response:
-        """Native API request to a FortiGate.
+        """
+        Native API request to a FortiGate.
 
         It uses the super.api method but it has to enrich the payload in post requests with the
         needed session key.
@@ -65,13 +61,17 @@ class FortiGate(Fortinet):
         Returns:
             Response from the request
         """
+
+        self.api_url = f"https://{self.hostname}:{self.https_port}/api/v2"
         self.session.headers.update({"Authorization": f"Bearer {self.token}"})
+
         return super().api(
             method, url, payload=payload, params=params, timeout=timeout, headers=headers
         )
 
     def api_get(self, url: str, vdom: str = "*", timeout: float | None = None) -> list[Any]:
-        """Low level GET request to a FortiGate.
+        """
+        Low level GET request to a FortiGate.
 
         This gets the response from a single API request to a FortiGate and returns it as a fotoobo
         Results object.
@@ -84,6 +84,7 @@ class FortiGate(Fortinet):
         Returns:
             The Result object with all the results as list (even if only one result is returned)
         """
+
         params = {"vdom": vdom}
         response = self.api(method="get", url=url, params=params, timeout=timeout)
         data: list[Any] = (
@@ -102,18 +103,21 @@ class FortiGate(Fortinet):
         Returns:
             Configuration backup as text
         """
+
         data = self.api(
             "get", "monitor/system/config/backup", params={"scope": "global"}, timeout=timeout
         )
+
         return data.text
 
     def get_version(self) -> str:
         """
-        Get FortiGate version
+        Get FortiGate version.
 
         Returns:
             FortiGate version
         """
+
         fgt_version: str = ""
 
         try:
@@ -124,4 +128,5 @@ class FortiGate(Fortinet):
             raise GeneralWarning(f"{self.hostname} returned: {err.message}") from err
 
         fgt_version = response.json().get("version", "unknown")
+
         return fgt_version

@@ -1,5 +1,5 @@
 """
-FortiManager Class
+FortiManager class.
 """
 
 import logging
@@ -17,15 +17,22 @@ log = logging.getLogger("fotoobo")
 
 class FortiManager(Fortinet):  # pylint: disable=too-many-public-methods
     """
-    Represents one FortiManager (digital twin)
+    Represents one FortiManager (digital twin).
     """
 
     def __del__(self) -> None:
-        """The destructor"""
+        """
+        The destructor.
+
+        We ensure that logout is called when die object gets deleted.
+        """
+
         if self.session_key and not self.session_path:
             self.logout()
 
-    def __init__(self, hostname: str, username: str, password: str, **kwargs: Any) -> None:
+    def __init__(
+        self, hostname: str, username: str, password: str, **kwargs: str | int | bool
+    ) -> None:
         """
         Set some initial parameters.
 
@@ -43,7 +50,7 @@ class FortiManager(Fortinet):  # pylint: disable=too-many-public-methods
         self.password = password
         self.username = username
         self.session_key: str = ""
-        self.session_path: str = kwargs.get("session_path", "")
+        self.session_path: str = str(kwargs.get("session_path", ""))
         self.type = "fortimanager"
         self.ignored_adoms = [
             "FortiAnalyzer",
@@ -69,7 +76,8 @@ class FortiManager(Fortinet):  # pylint: disable=too-many-public-methods
         ]
 
     def api_delete(self, url: str) -> requests.Response:
-        """DELETE method for API requests
+        """
+        DELETE method for API requests.
 
         Args:
             url: API endpoint to access
@@ -77,16 +85,19 @@ class FortiManager(Fortinet):  # pylint: disable=too-many-public-methods
         Result:
             FortiManager result item
         """
+
         payload = {
             "method": "delete",
             "params": [{"url": f"{url}"}],
         }
+
         return self.api("post", payload=payload)
 
     def api_get(
         self, url: str, params: dict[str, Any] | None = None, timeout: float | None = None
     ) -> requests.Response:
-        """GET method for API requests
+        """
+        GET method for API requests.
 
         Args:
             url:     API endpoint to access
@@ -96,6 +107,7 @@ class FortiManager(Fortinet):  # pylint: disable=too-many-public-methods
         Result:
             FortiManager result item
         """
+
         _params = {"url": f"{url}"}
         if params:
             _params = {**_params, **params}
@@ -104,6 +116,7 @@ class FortiManager(Fortinet):  # pylint: disable=too-many-public-methods
             "method": "get",
             "params": [_params],
         }
+
         return self.api("post", payload=payload, timeout=timeout)
 
     def api(  # pylint: disable=too-many-arguments, too-many-positional-arguments
@@ -132,8 +145,13 @@ class FortiManager(Fortinet):  # pylint: disable=too-many-public-methods
         Returns:
             Response from the request
         """
+
         if not self.session_key:
             self.login()
+
+        # We need to create api_url again here in case someone changed the https_port after
+        # object initialization.
+        self.api_url = f"https://{self.hostname}:{self.https_port}/jsonrpc"
 
         payload = payload or {}
         if method.lower() == "post":
@@ -155,8 +173,8 @@ class FortiManager(Fortinet):  # pylint: disable=too-many-public-methods
 
         Returns:
             The id of the FortiManager task created or 0 (zero) if unsuccessful
-
         """
+
         task_id = 0
         adom_payload = []
 
@@ -195,7 +213,7 @@ class FortiManager(Fortinet):  # pylint: disable=too-many-public-methods
 
     def delete_adom_address(self, adom: str, address: str, dry: bool = False) -> dict[str, Any]:
         """
-        Delete an address from an ADOM in FortiManager
+        Delete an address from an ADOM in FortiManager.
 
         Args:
             adom:    The ADOM to delete the address from
@@ -205,6 +223,7 @@ class FortiManager(Fortinet):  # pylint: disable=too-many-public-methods
         Returns:
             FortiManager result item
         """
+
         result: dict[str, Any] = {}
         if not dry:
             url: str = f"/pm/config/adom/{adom}/obj/firewall/address/{address}"
@@ -217,7 +236,7 @@ class FortiManager(Fortinet):  # pylint: disable=too-many-public-methods
 
     def delete_adom_address_group(self, adom: str, group: str, dry: bool = False) -> dict[str, Any]:
         """
-        Delete an address group from an ADOM in FortiManager
+        Delete an address group from an ADOM in FortiManager.
 
         Args:
             adom:  The ADOM to delete the address group from
@@ -227,6 +246,7 @@ class FortiManager(Fortinet):  # pylint: disable=too-many-public-methods
         Returns:
             FortiManager result item
         """
+
         result: dict[str, Any] = {}
         if not dry:
             url: str = f"/pm/config/adom/{adom}/obj/firewall/addrgrp/{group}"
@@ -239,7 +259,7 @@ class FortiManager(Fortinet):  # pylint: disable=too-many-public-methods
 
     def delete_adom_service(self, adom: str, service: str, dry: bool = False) -> dict[str, Any]:
         """
-        Delete a service from an ADOM in FortiManager
+        Delete a service from an ADOM in FortiManager.
 
         Args:
             adom:    The ADOM to delete the address from
@@ -249,6 +269,7 @@ class FortiManager(Fortinet):  # pylint: disable=too-many-public-methods
         Returns:
             FortiManager result item
         """
+
         result: dict[str, Any] = {}
         if not dry:
             url: str = f"/pm/config/adom/{adom}/obj/firewall/service/custom/{service}"
@@ -261,7 +282,7 @@ class FortiManager(Fortinet):  # pylint: disable=too-many-public-methods
 
     def delete_adom_service_group(self, adom: str, group: str, dry: bool = False) -> dict[str, Any]:
         """
-        Delete a service group from an ADOM in FortiManager
+        Delete a service group from an ADOM in FortiManager.
 
         Args:
             adom:  The ADOM to delete the address group from
@@ -271,6 +292,7 @@ class FortiManager(Fortinet):  # pylint: disable=too-many-public-methods
         Returns:
             FortiManager result item
         """
+
         result: dict[str, Any] = {}
         if not dry:
             url: str = f"/pm/config/adom/{adom}/obj/firewall/service/group/{group}"
@@ -283,7 +305,7 @@ class FortiManager(Fortinet):  # pylint: disable=too-many-public-methods
 
     def delete_global_address(self, address: str, dry: bool = False) -> dict[str, Any]:
         """
-        Delete a global address from FortiManager
+        Delete a global address from FortiManager.
 
         To be sure to not delete used objects we configure the FortiManager as follows:
 
@@ -306,6 +328,7 @@ class FortiManager(Fortinet):  # pylint: disable=too-many-public-methods
         Returns:
             FortiManager result item
         """
+
         result: dict[str, Any] = {}
 
         # Get the address object with 'scope member' information
@@ -355,7 +378,7 @@ class FortiManager(Fortinet):  # pylint: disable=too-many-public-methods
 
     def delete_global_address_group(self, group: str, dry: bool = False) -> dict[str, Any]:
         """
-        Delete a global address group from FortiManager
+        Delete a global address group from FortiManager.
 
         To be sure to not delete used objects we configure the FortiManager as follows:
 
@@ -378,6 +401,7 @@ class FortiManager(Fortinet):  # pylint: disable=too-many-public-methods
         Returns:
             FortiManager result item
         """
+
         result: dict[str, Any] = {}
 
         # Get the address group object with 'scope member' information
@@ -425,7 +449,7 @@ class FortiManager(Fortinet):  # pylint: disable=too-many-public-methods
 
     def delete_global_service(self, service: str, dry: bool = False) -> dict[str, Any]:
         """
-        Delete a global service from FortiManager
+        Delete a global service from FortiManager.
 
         To be sure to not delete used objects we configure the FortiManager as follows:
 
@@ -448,6 +472,7 @@ class FortiManager(Fortinet):  # pylint: disable=too-many-public-methods
         Returns:
             FortiManager result item
         """
+
         result: dict[str, Any] = {}
 
         # Get the service object with 'scope member' information
@@ -495,7 +520,7 @@ class FortiManager(Fortinet):  # pylint: disable=too-many-public-methods
 
     def delete_global_service_group(self, group: str, dry: bool = False) -> dict[str, Any]:
         """
-        Delete a global service group from FortiManager
+        Delete a global service group from FortiManager.
 
         To be sure to not delete used objects we configure the FortiManager as follows:
 
@@ -518,6 +543,7 @@ class FortiManager(Fortinet):  # pylint: disable=too-many-public-methods
         Returns:
             FortiManager result item
         """
+
         result: dict[str, Any] = {}
 
         # Get the service group object with 'scope member' information
@@ -565,13 +591,14 @@ class FortiManager(Fortinet):  # pylint: disable=too-many-public-methods
 
     def get_adoms(self, ignored_adoms: list[str] | None = None) -> list[Any]:
         """
-        Get FortiManager ADOM list
+        Get FortiManager ADOM list.
 
         Some of the ADOMs are ignored by default as the are not used in most cases
 
         Returns:
             List of FortiManager ADOMs
         """
+
         if not ignored_adoms:
             ignored_adoms = self.ignored_adoms
 
@@ -587,7 +614,7 @@ class FortiManager(Fortinet):  # pylint: disable=too-many-public-methods
 
     def get_global_address(self, address: str, scope_member: bool = False) -> dict[str, Any]:
         """
-        Get an address object from global ADOM
+        Get an address object from global ADOM.
 
         Args:
             address:      The address to get
@@ -596,6 +623,7 @@ class FortiManager(Fortinet):  # pylint: disable=too-many-public-methods
         Returns:
             FortiManager result item
         """
+
         result: dict[str, Any] = {}
         url: str = f"/pm/config/global/obj/firewall/address/{address}"
 
@@ -612,11 +640,12 @@ class FortiManager(Fortinet):  # pylint: disable=too-many-public-methods
 
     def get_global_addresses(self) -> dict[str, Any]:
         """
-        Get the global address database
+        Get the global address database.
 
         Returns:
             FortiManager result item
         """
+
         result: dict[str, Any] = self.api_get(
             "/pm/config/global/obj/firewall/address",
             timeout=10,
@@ -626,7 +655,7 @@ class FortiManager(Fortinet):  # pylint: disable=too-many-public-methods
 
     def get_global_address_group(self, group: str, scope_member: bool = False) -> dict[str, Any]:
         """
-        Get an address group object from the global ADOM
+        Get an address group object from the global ADOM.
 
         Args:
             group:        The address group to get
@@ -635,6 +664,7 @@ class FortiManager(Fortinet):  # pylint: disable=too-many-public-methods
         Returns:
             FortiManager result item
         """
+
         result: dict[str, Any] = {}
         url: str = f"/pm/config/global/obj/firewall/addrgrp/{group}"
 
@@ -651,11 +681,12 @@ class FortiManager(Fortinet):  # pylint: disable=too-many-public-methods
 
     def get_global_address_groups(self) -> dict[str, Any]:
         """
-        Get the global address group database
+        Get the global address group database.
 
         Returns:
             FortiManager result item
         """
+
         result: dict[str, Any] = self.api_get(
             "/pm/config/global/obj/firewall/addrgrp",
             timeout=10,
@@ -665,7 +696,7 @@ class FortiManager(Fortinet):  # pylint: disable=too-many-public-methods
 
     def get_global_service(self, service: str, scope_member: bool = False) -> dict[str, Any]:
         """
-        Get a service object from global ADOM
+        Get a service object from global ADOM.
 
         Args:
             service:      The service to get
@@ -674,6 +705,7 @@ class FortiManager(Fortinet):  # pylint: disable=too-many-public-methods
         Returns:
             FortiManager result item
         """
+
         result: dict[str, Any] = {}
         url: str = f"/pm/config/global/obj/firewall/service/custom/{service}"
 
@@ -690,7 +722,7 @@ class FortiManager(Fortinet):  # pylint: disable=too-many-public-methods
 
     def get_global_services(self) -> dict[str, Any]:
         """
-        Get the global services database
+        Get the global services database.
 
         Returns:
             FortiManager result item
@@ -704,7 +736,7 @@ class FortiManager(Fortinet):  # pylint: disable=too-many-public-methods
 
     def get_global_service_group(self, group: str, scope_member: bool = False) -> dict[str, Any]:
         """
-        Get a service group object from the global ADOM
+        Get a service group object from the global ADOM.
 
         Args:
             group:        The address group to get
@@ -713,6 +745,7 @@ class FortiManager(Fortinet):  # pylint: disable=too-many-public-methods
         Returns:
             FortiManager result item
         """
+
         result: dict[str, Any] = {}
         url: str = f"/pm/config/global/obj/firewall/service/group/{group}"
 
@@ -729,11 +762,12 @@ class FortiManager(Fortinet):  # pylint: disable=too-many-public-methods
 
     def get_global_service_groups(self) -> dict[str, Any]:
         """
-        Get the global network service group database
+        Get the global network service group database.
 
         Returns:
             FortiManager result item
         """
+
         result: dict[str, Any] = self.api_get(
             "/pm/config/global/obj/firewall/service/group",
             timeout=10,
@@ -748,6 +782,7 @@ class FortiManager(Fortinet):  # pylint: disable=too-many-public-methods
         Returns:
             FortiManager version
         """
+
         fmg_version: str = ""
         payload = {"method": "get", "params": [{"url": "/sys/status"}]}
         response = self.api("post", payload=payload)
@@ -774,6 +809,7 @@ class FortiManager(Fortinet):  # pylint: disable=too-many-public-methods
         Returns:
             Status code from the FortiManager login
         """
+
         status: int = 401
 
         if self.session_path:
@@ -837,6 +873,7 @@ class FortiManager(Fortinet):  # pylint: disable=too-many-public-methods
         Returns:
             Status code from the FortiManager logout
         """
+
         payload: dict[str, Any] = {
             "method": "exec",
             "params": [{"url": "/sys/logout"}],
@@ -860,6 +897,7 @@ class FortiManager(Fortinet):  # pylint: disable=too-many-public-methods
         Returns:
             Amount of errors occurred during the set command
         """
+
         # if payload is a dict convert it to a list with one dict in it.
         if isinstance(payloads, dict):
             payloads = [payloads]
