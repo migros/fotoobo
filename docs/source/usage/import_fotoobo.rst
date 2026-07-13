@@ -39,7 +39,6 @@ FortiManager
     from fotoobo import FortiManager
     fmg = FortiManager("<HOSTNAME>", "<USERNAME>", "<PASSWORD>", ssl_verify=False)
     print(fmg.get_version())
-    fmg.logout()
 
 FortiAnalyzer
 ^^^^^^^^^^^^^
@@ -49,7 +48,6 @@ FortiAnalyzer
     from fotoobo import FortiAnalyzer
     faz = FortiAnalyzer("<HOSTNAME>", "<USERNAME>", "<PASSWORD>", ssl_verify=False)
     print(faz.get_version())
-    faz.logout()
 
 FortiClient EMS
 ^^^^^^^^^^^^^^^
