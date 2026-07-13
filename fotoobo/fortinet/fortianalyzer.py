@@ -3,7 +3,6 @@ FortiAnalyzer Class
 """
 
 import logging
-from typing import Any
 
 from .fortimanager import FortiManager
 
@@ -17,7 +16,9 @@ class FortiAnalyzer(FortiManager):
     This class is inherited from FortiManager. Only the type of the object differs.
     """
 
-    def __init__(self, hostname: str, username: str, password: str, **kwargs: Any) -> None:
+    def __init__(
+        self, hostname: str, username: str, password: str, **kwargs: str | int | bool
+    ) -> None:
         """
         Set some initial parameters.
 
