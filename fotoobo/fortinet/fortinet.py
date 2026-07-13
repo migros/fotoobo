@@ -1,6 +1,7 @@
 """
-This is the Fortinet abstract base class (ABC) which is used to define some global and generic
-variables and methods.
+This is the Fortinet base module.
+
+This module is used to define some global and generic variables and methods.
 """
 
 import logging
@@ -18,9 +19,11 @@ log = logging.getLogger("fotoobo")
 
 class Fortinet(ABC):
     """
-    This is the Fortinet abstract base class. All other Fortinet product classes should inherit
-    from this class. If there are methods which have to be defined in every subclass it has to be
-    defined here with the abstractmethod decorator.
+    This is the Fortinet abstract base class.
+
+    All other Fortinet product classes should inherit from this class. If there are methods which
+    have to be defined in every subclass it has to be defined here with the abstractmethod
+    decorator.
     """
 
     # Use the ALLOWED_HTTP_METHODS class constant to define the supported HTTP methods. By default
@@ -53,6 +56,7 @@ class Fortinet(ABC):
                 logged.
             timeout: Connection timeout in seconds
         """
+
         self.api_url: str = ""
         self.hostname: str = hostname
         self.https_port: int = kwargs.get("https_port", 443)
@@ -93,6 +97,7 @@ class Fortinet(ABC):
         Returns:
             Response from the request
         """
+
         full_url = f"{self.api_url}/{url.strip('/')}".strip("/")
         timeout = timeout or self.timeout
         start = time()
@@ -176,6 +181,7 @@ class Fortinet(ABC):
         Returns:
             Always returns "Fortinet" (what a cool method ;-)
         """
+
         return "Fortinet"
 
     @abstractmethod
