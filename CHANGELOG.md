@@ -10,6 +10,14 @@ For unreleased changes see [WHATSNEW.md](WHATSNEW.md)
 
 # [Released]
 
+## [3.1.5] - 2026-09-10
+
+### Added
+
+### Changed
+
+### Removed
+
 ## [3.1.4] - 2026-07-13
 
 ### Added
