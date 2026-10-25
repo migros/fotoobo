@@ -47,8 +47,8 @@ class Fortinet(ABC):
                 If you do not specify a port number it is set to 443 by default.
             proxy: The Proxy server to use to connect to the Fortinet device
                 If you need to connect to your Fortinet device through a proxy server you can
-                set it here as as string. If needed you may append the proxy server port with a
-                column to the proxy server. e.g. "proxy.local:8000".
+                set it here as a string. If needed you may append the proxy server port with a
+                colon to the proxy server. e.g. "proxy.local:8000".
             ssl_verify: Enable or disable SSL certificate check
                 When ssl_verify is enabled you have to install a trusted SSL certificate onto
                 the device you wish to connect to. If you set ssl_verify to false it will also

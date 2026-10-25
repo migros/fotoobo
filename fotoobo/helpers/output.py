@@ -43,7 +43,7 @@ def write_policy_to_html(data: list[dict[str, Any]], out_file: Path) -> None:
         if header not in ignored_rows:
             table += f"<th>{header}</th>\n"
 
-    table += '</tr><thead><tbody id="myTable">\n'
+    table += '</tr></thead><tbody id="myTable">\n'
 
     # Create the table's row data
     label = ""

@@ -41,7 +41,7 @@ def file_to_ftp(file: Path, server: Any) -> int:
 
     Args:
         file:   The source file to upload
-        server: The ftp sever definition dict containing the following keys:
+        server: The ftp server definition dict containing the following keys:
             * hostname
             * directory
             * username
@@ -138,7 +138,7 @@ def load_yaml_file(yaml_file: Path) -> list[Any] | dict[str, Any] | None:
     Loads the content of a yaml file into a list or dict.
 
     Args:
-        yaml_file: The file of the yaml file to load
+        yaml_file: The path to the yaml file to load
 
     Returns:
         Yaml data from filename
